@@ -1,0 +1,665 @@
+.saved-charts-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: var(--text-primary);
+}
+
+.saved-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.table-container {
+    overflow: auto;
+    max-height: 70vh;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    border: 1px solid var(--glass-border);
+    padding: 0;
+    /* Remove padding to let header touch edges */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+}
+
+.charts-table {
+    width: 100%;
+    border-collapse: separate;
+    /* Required for sticky to work well with borders */
+    border-spacing: 0;
+    color: var(--text-primary);
+}
+
+.charts-table th,
+.charts-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    vertical-align: middle;
+}
+
+.charts-table th {
+    color: var(--accent-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    /* Opaque background for sticky header */
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+/* Sticky Header Logic for Two Rows */
+.charts-table thead tr:first-child th {
+    top: 0;
+    z-index: 20;
+    border-bottom: none;
+}
+
+.charts-table thead tr:nth-child(2) th {
+    top: 3.5rem;
+    /* Approximate height of first row */
+    z-index: 15;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.3rem;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.charts-table tr:last-child td {
+    border-bottom: none;
+}
+
+.charts-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.gear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.gear-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.action-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #1e293b;
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    min-width: 200px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-menu div {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.action-menu div:hover {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.action-menu .delete-option {
+    color: #ef4444;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-menu .delete-option:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.editing-row {
+    background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.editing-row input,
+.editing-row select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid var(--accent-color) !important;
+    border-radius: 0.3rem !important;
+    color: white !important;
+    font-size: 0.9rem !important;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.save-btn,
+.cancel-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    border: 1px solid var(--glass-border);
+}
+
+.create-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: var(--accent-hover);
+}
+
+.new-row {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 2px dashed rgba(16, 185, 129, 0.4);
+}
+
+.sortable-th {}
+
+.charts-table thead tr:nth-child(2) th {
+    top: 3.5rem;
+    /* Approximate height of first row */
+    z-index: 15;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.3rem;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.charts-table tr:last-child td {
+    border-bottom: none;
+}
+
+.charts-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.gear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.gear-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.action-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #1e293b;
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    min-width: 200px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-menu div {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.action-menu div:hover {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.action-menu .delete-option {
+    color: #ef4444;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-menu .delete-option:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.editing-row {
+    background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.editing-row input,
+.editing-row select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid var(--accent-color) !important;
+    border-radius: 0.3rem !important;
+    color: white !important;
+    font-size: 0.9rem !important;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.save-btn,
+.cancel-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    border: 1px solid var(--glass-border);
+}
+
+.create-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: var(--accent-hover);
+}
+
+.new-row {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 2px dashed rgba(16, 185, 129, 0.4);
+}
+
+.sortable-th {
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: var(--accent-hover);
+}
+
+.new-row {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 2px dashed rgba(16, 185, 129, 0.4);
+}
+
+.sortable-th {}
+
+.charts-table thead tr:nth-child(2) th {
+    top: 3.5rem;
+    /* Approximate height of first row */
+    z-index: 15;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.3rem;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.charts-table tr:last-child td {
+    border-bottom: none;
+}
+
+.charts-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.gear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.gear-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.action-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #1e293b;
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    min-width: 200px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-menu div {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.action-menu div:hover {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.action-menu .delete-option {
+    color: #ef4444;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-menu .delete-option:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.editing-row {
+    background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.editing-row input,
+.editing-row select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid var(--accent-color) !important;
+    border-radius: 0.3rem !important;
+    color: white !important;
+    font-size: 0.9rem !important;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.save-btn,
+.cancel-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    border: 1px solid var(--glass-border);
+}
+
+.create-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: var(--accent-hover);
+}
+
+.new-row {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 2px dashed rgba(16, 185, 129, 0.4);
+}
+
+.sortable-th {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.sortable-th:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Column Menu */
+.column-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    z-index: 100;
+    min-width: 150px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.column-menu label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.column-menu label:hover {
+    background: rgba(255, 255, 255, 0.1);
+}

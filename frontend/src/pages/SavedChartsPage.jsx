@@ -1,0 +1,781 @@
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import axios from 'axios';
+import CitySearch from '../components/CitySearch';
+import { calculateHappinessIndex, getHappinessDetails, calculateWealthIndex, getWealthDetails, calculateHealthIndex, getHealthDetails } from '../utils/traitUtils';
+import './SavedChartsPage.css';
+
+const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
+    const [charts, setCharts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    // Inline Editing State
+    const [editingId, setEditingId] = useState(null);
+    const [isAddingNew, setIsAddingNew] = useState(false);
+    const [editFormData, setEditFormData] = useState({});
+
+    // Action Menu State
+    const [actionMenuOpen, setActionMenuOpen] = useState(null);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showColumnMenu, setShowColumnMenu] = useState(false);
+    const [visibleColumns, setVisibleColumns] = useState({
+        happiness: true,
+        wealth: true,
+        health: true,
+        savedOn: true,
+        ayanamsa: true
+    });
+
+    const toggleColumn = (col) => {
+        setVisibleColumns(prev => ({ ...prev, [col]: !prev[col] }));
+    };
+
+    // Sorting & Filtering State
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+    const [filterConfig, setFilterConfig] = useState({
+        name: '',
+        gender: '',
+        city: ''
+    });
+
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        const fetchCharts = async () => {
+            const token = localStorage.getItem('token');
+            const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+
+            if (!token) {
+                setCharts(localCharts);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                const response = await axios.get(`${API_URL}/api/charts`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setCharts([...response.data, ...localCharts]);
+            } catch (err) {
+                console.error('Error fetching charts:', err);
+                setError('Failed to load cloud charts. Showing local charts only.');
+                setCharts(localCharts);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCharts();
+    }, []);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => setActionMenuOpen(null);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+    const handleSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedCharts = useMemo(() => {
+        let sortableItems = [...charts];
+
+        // 1. Filter
+        if (filterConfig.name) {
+            sortableItems = sortableItems.filter(c => c.name.toLowerCase().includes(filterConfig.name.toLowerCase()));
+        }
+        if (filterConfig.gender) {
+            sortableItems = sortableItems.filter(c => (c.gender || '').toLowerCase().includes(filterConfig.gender.toLowerCase()));
+        }
+        if (filterConfig.city) {
+            sortableItems = sortableItems.filter(c => (c.placeOfBirth?.city || '').toLowerCase().includes(filterConfig.city.toLowerCase()));
+        }
+
+        // 2. Sort
+        if (sortConfig.key !== null) {
+            sortableItems.sort((a, b) => {
+                try {
+                    let aValue, bValue;
+
+                    if (sortConfig.key === 'happiness') {
+                        aValue = a.chartData ? parseFloat(calculateHappinessIndex(a.chartData)) : -Infinity;
+                        bValue = b.chartData ? parseFloat(calculateHappinessIndex(b.chartData)) : -Infinity;
+                    } else if (sortConfig.key === 'wealth') {
+                        aValue = a.chartData ? parseFloat(calculateWealthIndex(a.chartData)) : -Infinity;
+                        bValue = b.chartData ? parseFloat(calculateWealthIndex(b.chartData)) : -Infinity;
+                    } else if (sortConfig.key === 'health') {
+                        aValue = a.chartData ? parseFloat(calculateHealthIndex(a.chartData)) : -Infinity;
+                        bValue = b.chartData ? parseFloat(calculateHealthIndex(b.chartData)) : -Infinity;
+                    } else if (sortConfig.key === 'city') {
+                        aValue = (a.placeOfBirth?.city || '').toLowerCase();
+                        bValue = (b.placeOfBirth?.city || '').toLowerCase();
+                    } else if (sortConfig.key === 'name') {
+                        aValue = (a.name || '').toLowerCase();
+                        bValue = (b.name || '').toLowerCase();
+                    } else {
+                        aValue = a[sortConfig.key];
+                        bValue = b[sortConfig.key];
+                    }
+
+                    // Handle null/undefined
+                    if (aValue === undefined || aValue === null) aValue = '';
+                    if (bValue === undefined || bValue === null) bValue = '';
+
+                    if (aValue < bValue) {
+                        return sortConfig.direction === 'ascending' ? -1 : 1;
+                    }
+                    if (aValue > bValue) {
+                        return sortConfig.direction === 'ascending' ? 1 : -1;
+                    }
+                    return 0;
+                } catch (e) {
+                    return 0;
+                }
+            });
+        }
+        return sortableItems;
+    }, [charts, sortConfig, filterConfig]);
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedIds(charts.map(c => c._id));
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const handleSelectRow = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter(sid => sid !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
+
+    const executeBulkDelete = () => {
+        // Local Delete
+        const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+        const updatedLocal = localCharts.filter(c => !selectedIds.includes(c._id));
+        localStorage.setItem('savedCharts', JSON.stringify(updatedLocal));
+
+        // State Update
+        setCharts(prev => prev.filter(c => !selectedIds.includes(c._id)));
+        setSelectedIds([]);
+        setShowDeleteConfirm(false);
+    };
+
+    const handleExport = () => {
+        const chartsToExport = selectedIds.length > 0
+            ? charts.filter(c => selectedIds.includes(c._id))
+            : charts;
+
+        if (chartsToExport.length === 0) {
+            alert("No charts to export.");
+            return;
+        }
+
+        // CSV Header
+        let csvContent = "Name,Gender,Date (YYYY-MM-DD),Time (HH:MM),City,Latitude,Longitude,Timezone\n";
+
+        // CSV Rows
+        chartsToExport.forEach(chart => {
+            const row = [
+                `"${(chart.name || '').replace(/"/g, '""')}"`,
+                chart.gender || 'male',
+                chart.dateOfBirth ? new Date(chart.dateOfBirth).toISOString().split('T')[0] : '',
+                chart.timeOfBirth || '',
+                `"${(chart.placeOfBirth?.city || '').replace(/"/g, '""')}"`,
+                chart.placeOfBirth?.lat || '',
+                chart.placeOfBirth?.lng || '',
+                chart.placeOfBirth?.timezone || ''
+            ].join(",");
+            csvContent += row + "\n";
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `charts_export_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleDownloadTemplate = () => {
+        const csvContent = "Name,Gender,Date (YYYY-MM-DD),Time (HH:MM),City\nJohn Doe,male,1990-01-01,12:00,New York";
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'chart_template.csv';
+        a.click();
+    };
+
+    const handleImport = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const text = event.target.result;
+            const rows = text.split('\n').slice(1);
+
+            const newCharts = [];
+            rows.forEach(row => {
+                const cols = row.split(',');
+                if (cols.length >= 5) {
+                    const [name, gender, date, time, city] = cols.map(c => c.trim());
+                    if (name && date && time) {
+                        newCharts.push({
+                            _id: Date.now().toString() + Math.random().toString().substr(2, 5),
+                            isLocal: true,
+                            name,
+                            gender: gender || 'male',
+                            dateOfBirth: date,
+                            timeOfBirth: time,
+                            placeOfBirth: { city },
+                            chartData: null,
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                }
+            });
+
+            if (newCharts.length > 0) {
+                const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+                const updatedCharts = [...localCharts, ...newCharts];
+                localStorage.setItem('savedCharts', JSON.stringify(updatedCharts));
+                setCharts(prev => [...prev, ...newCharts]);
+                alert(`Imported ${newCharts.length} charts. Please edit them to confirm city and calculate.`);
+            }
+        };
+        reader.readAsText(file);
+        e.target.value = null;
+    };
+
+    const handleDelete = async (id, isLocal) => {
+        if (!window.confirm('Are you sure you want to delete this chart? This action cannot be undone.')) return;
+
+        if (isLocal) {
+            const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+            const updatedCharts = localCharts.filter(chart => chart._id !== id);
+            localStorage.setItem('savedCharts', JSON.stringify(updatedCharts));
+            setCharts(prev => prev.filter(chart => chart._id !== id));
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            await axios.delete(`${API_URL}/api/charts/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCharts(charts.filter(chart => chart._id !== id));
+        } catch (err) {
+            console.error('Error deleting chart:', err);
+            alert('Failed to delete chart');
+        }
+    };
+
+    const handleStartEdit = (e, chart) => {
+        e.stopPropagation();
+        setEditingId(chart._id);
+        setIsAddingNew(false);
+        setEditFormData({
+            name: chart.name,
+            gender: chart.gender || 'male',
+            dateOfBirth: chart.dateOfBirth ? new Date(chart.dateOfBirth).toISOString().split('T')[0] : '',
+            timeOfBirth: chart.timeOfBirth,
+            city: chart.placeOfBirth?.city || '',
+            latitude: chart.placeOfBirth?.lat,
+            longitude: chart.placeOfBirth?.lng,
+            longitude: chart.placeOfBirth?.lng,
+            timezone: chart.placeOfBirth?.timezone,
+            ayanamsa: chart.ayanamsa || 'lahiri'
+        });
+        setActionMenuOpen(null);
+    };
+
+    const handleAddNew = () => {
+        setIsAddingNew(true);
+        setEditingId(null);
+        setEditFormData({
+            name: '',
+            gender: 'male',
+            dateOfBirth: '',
+            timeOfBirth: '',
+            city: '',
+            latitude: '',
+            longitude: '',
+            longitude: '',
+            timezone: 5.5,
+            ayanamsa: 'lahiri'
+        });
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setIsAddingNew(false);
+        setEditFormData({});
+    };
+
+    const handleSaveNew = async () => {
+        if (!editFormData.name || !editFormData.dateOfBirth || !editFormData.timeOfBirth || !editFormData.city) {
+            alert("Please fill all fields (Name, Date, Time, City)");
+            return;
+        }
+
+        if (!editFormData.latitude || !editFormData.longitude) {
+            alert("Please select a city from the dropdown to get coordinates.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const payload = {
+                name: editFormData.name,
+                date: editFormData.dateOfBirth,
+                time: editFormData.timeOfBirth,
+                latitude: editFormData.latitude,
+                longitude: editFormData.longitude,
+                timezone: editFormData.timezone || 5.5,
+                longitude: editFormData.longitude,
+                timezone: editFormData.timezone || 5.5,
+                city: editFormData.city,
+                ayanamsa: editFormData.ayanamsa || 'lahiri'
+            };
+
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const response = await axios.post(`${API_URL}/api/calculate`, payload);
+
+            if (response.data.success) {
+                const newChart = {
+                    _id: Date.now().toString(),
+                    isLocal: true,
+                    name: payload.name,
+                    gender: editFormData.gender,
+                    ayanamsa: payload.ayanamsa,
+                    dateOfBirth: payload.date,
+                    timeOfBirth: payload.time,
+                    placeOfBirth: {
+                        city: payload.city,
+                        lat: payload.latitude,
+                        lng: payload.longitude,
+                        timezone: payload.timezone
+                    },
+                    chartData: response.data.data,
+                    createdAt: new Date().toISOString()
+                };
+
+                const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+                localCharts.push(newChart);
+                localStorage.setItem('savedCharts', JSON.stringify(localCharts));
+
+                setCharts([newChart, ...charts]);
+                setIsAddingNew(false);
+                setEditFormData({});
+            } else {
+                alert("Calculation failed: " + response.data.error);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error calculating chart. Ensure backend is running.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSaveEdit = async (id, isLocal) => {
+        const originalChart = charts.find(c => c._id === id);
+        if (!originalChart) return;
+
+        const payload = {
+            name: editFormData.name || originalChart.name,
+            date: editFormData.dateOfBirth || originalChart.dateOfBirth,
+            time: editFormData.timeOfBirth || originalChart.timeOfBirth,
+            city: editFormData.city || originalChart.placeOfBirth?.city,
+            latitude: editFormData.latitude || originalChart.placeOfBirth?.lat,
+            longitude: editFormData.longitude || originalChart.placeOfBirth?.lng,
+            latitude: editFormData.latitude || originalChart.placeOfBirth?.lat,
+            longitude: editFormData.longitude || originalChart.placeOfBirth?.lng,
+            timezone: editFormData.timezone || originalChart.placeOfBirth?.timezone || 5.5,
+            ayanamsa: editFormData.ayanamsa || originalChart.ayanamsa || 'lahiri'
+        };
+
+        if (!payload.latitude || !payload.longitude) {
+            alert("Please select the City from the dropdown to fetch coordinates before saving.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const response = await axios.post(`${API_URL}/api/calculate`, payload);
+
+            if (response.data.success) {
+                const updatedChart = {
+                    ...originalChart,
+                    name: payload.name,
+                    gender: editFormData.gender || originalChart.gender,
+                    ayanamsa: payload.ayanamsa,
+                    dateOfBirth: payload.date,
+                    timeOfBirth: payload.time,
+                    placeOfBirth: {
+                        city: payload.city,
+                        lat: payload.latitude,
+                        lng: payload.longitude,
+                        timezone: payload.timezone
+                    },
+                    chartData: response.data.data,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (isLocal) {
+                    const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+                    const updatedList = localCharts.map(c => c._id === id ? updatedChart : c);
+                    localStorage.setItem('savedCharts', JSON.stringify(updatedList));
+                }
+
+                setCharts(prev => prev.map(c => c._id === id ? updatedChart : c));
+                setEditingId(null);
+                setEditFormData({});
+            } else {
+                alert("Calculation failed: " + response.data.error);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error calculating chart.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleEditInForm = (e, chart) => {
+        if (e) e.stopPropagation();
+        const formData = {
+            name: chart.name,
+            date: chart.dateOfBirth ? new Date(chart.dateOfBirth).toISOString().split('T')[0] : '',
+            time: chart.timeOfBirth,
+            city: chart.placeOfBirth?.city,
+            latitude: chart.placeOfBirth?.lat,
+            longitude: chart.placeOfBirth?.lng,
+            timezone: 5.5,
+            gender: chart.gender || 'male'
+        };
+        onEditChart(formData);
+    };
+
+    const handleLoad = (chart) => {
+        if (!chart.chartData) {
+            alert("This chart has not been calculated yet. Please click the 'Edit' button (pencil icon), confirm the City to fetch coordinates, and click the 'Save' icon to generate the chart.");
+            return;
+        }
+
+        const formData = {
+            name: chart.name,
+            date: chart.dateOfBirth,
+            time: chart.timeOfBirth,
+            city: chart.placeOfBirth?.city,
+            latitude: chart.placeOfBirth?.lat,
+            longitude: chart.placeOfBirth?.lng
+        };
+        onLoadChart(chart.chartData, formData);
+    };
+
+    const toggleActionMenu = (e, id) => {
+        e.stopPropagation();
+        setActionMenuOpen(actionMenuOpen === id ? null : id);
+    };
+
+    if (loading && !isAddingNew) return <div className="loading-container">Loading charts...</div>;
+
+    return (
+        <div className="saved-charts-container">
+            <header className="saved-header">
+                <div>
+                    <button className="back-btn" onClick={onBack}>← Back</button>
+                </div>
+                <h1>📂 Saved Charts</h1>
+                <div>
+                    {selectedIds.length > 0 && (
+                        <button className="delete-btn-bulk" onClick={() => setShowDeleteConfirm(true)} style={{ marginRight: '1rem', background: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', cursor: 'pointer' }}>
+                            Delete ({selectedIds.length})
+                        </button>
+                    )}
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <button className="add-btn" onClick={() => setShowColumnMenu(!showColumnMenu)} style={{ marginRight: '0.5rem', background: '#4b5563' }}>
+                            Columns ▾
+                        </button>
+                        {showColumnMenu && (
+                            <div className="column-menu">
+                                <label><input type="checkbox" checked={visibleColumns.savedOn} onChange={() => toggleColumn('savedOn')} /> Last Save Date</label>
+                                <label><input type="checkbox" checked={visibleColumns.ayanamsa} onChange={() => toggleColumn('ayanamsa')} /> Ayanamsa</label>
+                                <label><input type="checkbox" checked={visibleColumns.happiness} onChange={() => toggleColumn('happiness')} /> Happiness</label>
+                                <label><input type="checkbox" checked={visibleColumns.wealth} onChange={() => toggleColumn('wealth')} /> Wealth</label>
+                                <label><input type="checkbox" checked={visibleColumns.health} onChange={() => toggleColumn('health')} /> Health</label>
+                            </div>
+                        )}
+                    </div>
+                    <button className="add-btn" onClick={handleDownloadTemplate} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Template</button>
+                    <button className="add-btn" onClick={handleExport} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Export</button>
+                    <button className="add-btn" onClick={() => fileInputRef.current.click()} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Import</button>
+                    <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".csv" onChange={handleImport} />
+                    <button className="add-btn" onClick={handleAddNew}>+ Add New</button>
+                </div>
+            </header>
+
+            {error && <div className="error-msg">{error}</div>}
+
+            {charts.length === 0 && !loading && !isAddingNew ? (
+                <div className="empty-state">
+                    <h3>No saved charts found</h3>
+                    <button className="create-btn" onClick={handleAddNew}>Create New Chart</button>
+                </div>
+            ) : (
+                <div className="table-container">
+                    <table className="charts-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" onChange={handleSelectAll} checked={charts.length > 0 && selectedIds.length === charts.length} /></th>
+                                <th onClick={() => handleSort('name')} className="sortable-th">Name {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                <th>Gender</th>
+                                <th onClick={() => handleSort('dateOfBirth')} className="sortable-th">Date of Birth {sortConfig.key === 'dateOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                <th onClick={() => handleSort('timeOfBirth')} className="sortable-th">Time {sortConfig.key === 'timeOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                <th onClick={() => handleSort('city')} className="sortable-th">Place {sortConfig.key === 'city' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                {visibleColumns.ayanamsa && <th>Ayanamsa</th>}
+                                {visibleColumns.happiness && <th onClick={() => handleSort('happiness')} className="sortable-th">Happiness {sortConfig.key === 'happiness' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                {visibleColumns.wealth && <th onClick={() => handleSort('wealth')} className="sortable-th">Wealth {sortConfig.key === 'wealth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                {visibleColumns.health && <th onClick={() => handleSort('health')} className="sortable-th">Health {sortConfig.key === 'health' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                {visibleColumns.savedOn && <th>Saved On</th>}
+                                <th>Actions</th>
+                            </tr>
+                            <tr className="filter-row">
+                                <th></th>
+                                <th><input placeholder="Filter Name" value={filterConfig.name} onChange={e => setFilterConfig({ ...filterConfig, name: e.target.value })} className="filter-input" /></th>
+                                <th><input placeholder="Filter Gender" value={filterConfig.gender} onChange={e => setFilterConfig({ ...filterConfig, gender: e.target.value })} className="filter-input" /></th>
+                                <th></th>
+                                <th></th>
+                                <th><input placeholder="Filter City" value={filterConfig.city} onChange={e => setFilterConfig({ ...filterConfig, city: e.target.value })} className="filter-input" /></th>
+                                {visibleColumns.ayanamsa && <th></th>}
+                                {visibleColumns.happiness && <th></th>}
+                                {visibleColumns.wealth && <th></th>}
+                                {visibleColumns.health && <th></th>}
+                                {visibleColumns.savedOn && <th></th>}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* New Row Input */}
+                            {isAddingNew && (
+                                <tr className="editing-row new-row">
+                                    <td></td>
+                                    <td><input placeholder="Name" value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
+                                    <td>
+                                        <select value={editFormData.gender} onChange={e => setEditFormData({ ...editFormData, gender: e.target.value })}>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="date" value={editFormData.dateOfBirth} onChange={e => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })} /></td>
+                                    <td><input type="time" value={editFormData.timeOfBirth} onChange={e => setEditFormData({ ...editFormData, timeOfBirth: e.target.value })} /></td>
+                                    <td>
+                                        <div style={{ minWidth: '200px', position: 'relative' }}>
+                                            <CitySearch
+                                                defaultValue={editFormData.city}
+                                                onCitySelect={(cityData) => setEditFormData({
+                                                    ...editFormData,
+                                                    city: cityData.name,
+                                                    latitude: cityData.latitude,
+                                                    longitude: cityData.longitude,
+                                                    timezone: cityData.timezone
+                                                })}
+                                            />
+                                        </div>
+                                    </td>
+                                    {visibleColumns.ayanamsa && (
+                                        <td>
+                                            <select value={editFormData.ayanamsa} onChange={e => setEditFormData({ ...editFormData, ayanamsa: e.target.value })} style={{ maxWidth: '100px' }}>
+                                                <option value="lahiri">Lahiri</option>
+                                                <option value="raman">Raman</option>
+                                                <option value="krishnamurti">KP</option>
+                                                <option value="tropical">Tropical</option>
+                                            </select>
+                                        </td>
+                                    )}
+                                    {visibleColumns.happiness && <td>-</td>}
+                                    {visibleColumns.wealth && <td>-</td>}
+                                    {visibleColumns.health && <td>-</td>}
+                                    {visibleColumns.savedOn && <td>Now</td>}
+                                    <td>
+                                        <div className="action-buttons">
+                                            <button className="save-btn" onClick={handleSaveNew} title="Calculate & Save">💾</button>
+                                            <button className="cancel-btn" onClick={handleCancelEdit}>❌</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+
+                            {sortedCharts.map((chart) => (
+                                <tr key={chart._id} className={editingId === chart._id ? 'editing-row' : ''}>
+                                    <td><input type="checkbox" checked={selectedIds.includes(chart._id)} onChange={() => handleSelectRow(chart._id)} /></td>
+                                    {editingId === chart._id ? (
+                                        <>
+                                            <td><input value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
+                                            <td>
+                                                <select value={editFormData.gender} onChange={e => setEditFormData({ ...editFormData, gender: e.target.value })}>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="date" value={editFormData.dateOfBirth} onChange={e => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })} /></td>
+                                            <td><input type="time" value={editFormData.timeOfBirth} onChange={e => setEditFormData({ ...editFormData, timeOfBirth: e.target.value })} /></td>
+                                            <td>
+                                                <div style={{ minWidth: '200px', position: 'relative' }}>
+                                                    <CitySearch
+                                                        defaultValue={editFormData.city}
+                                                        onCitySelect={(cityData) => setEditFormData({
+                                                            ...editFormData,
+                                                            city: cityData.name,
+                                                            latitude: cityData.latitude,
+                                                            longitude: cityData.longitude,
+                                                            timezone: cityData.timezone
+                                                        })}
+                                                    />
+                                                </div>
+                                            </td>
+                                            {visibleColumns.ayanamsa && (
+                                                <td>
+                                                    <select value={editFormData.ayanamsa} onChange={e => setEditFormData({ ...editFormData, ayanamsa: e.target.value })} style={{ maxWidth: '100px' }}>
+                                                        <option value="lahiri">Lahiri</option>
+                                                        <option value="raman">Raman</option>
+                                                        <option value="krishnamurti">KP</option>
+                                                        <option value="tropical">Tropical</option>
+                                                    </select>
+                                                </td>
+                                            )}
+                                            {visibleColumns.happiness && <td>-</td>}
+                                            {visibleColumns.wealth && <td>-</td>}
+                                            {visibleColumns.health && <td>-</td>}
+                                            {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
+                                            <td>
+                                                <div className="action-buttons">
+                                                    <button className="save-btn" onClick={() => handleSaveEdit(chart._id, chart.isLocal)}>💾</button>
+                                                    <button className="cancel-btn" onClick={handleCancelEdit}>❌</button>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <td onClick={() => handleLoad(chart)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>{chart.name}</td>
+                                            <td>{chart.gender || '-'}</td>
+                                            <td>{new Date(chart.dateOfBirth).toLocaleDateString()}</td>
+                                            <td>{chart.timeOfBirth}</td>
+                                            <td>{chart.placeOfBirth?.city}</td>
+                                            {visibleColumns.ayanamsa && <td>{chart.ayanamsa || 'lahiri'}</td>}
+                                            {visibleColumns.happiness && (
+                                                <td>
+                                                    <span
+                                                        title={chart.chartData ? getHappinessDetails(chart.chartData) : ''}
+                                                        style={{
+                                                            fontWeight: 'bold',
+                                                            cursor: 'help',
+                                                            color: (chart.chartData && calculateHappinessIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                (chart.chartData && calculateHappinessIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                        }}
+                                                    >
+                                                        {chart.chartData ? calculateHappinessIndex(chart.chartData) : '-'}
+                                                    </span>
+                                                </td>
+                                            )}
+                                            {visibleColumns.wealth && (
+                                                <td>
+                                                    <span
+                                                        title={chart.chartData ? getWealthDetails(chart.chartData) : ''}
+                                                        style={{
+                                                            fontWeight: 'bold',
+                                                            cursor: 'help',
+                                                            color: (chart.chartData && calculateWealthIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                (chart.chartData && calculateWealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                        }}
+                                                    >
+                                                        {chart.chartData ? calculateWealthIndex(chart.chartData) : '-'}
+                                                    </span>
+                                                </td>
+                                            )}
+                                            {visibleColumns.health && (
+                                                <td>
+                                                    <span
+                                                        title={chart.chartData ? getHealthDetails(chart.chartData) : ''}
+                                                        style={{
+                                                            fontWeight: 'bold',
+                                                            cursor: 'help',
+                                                            color: (chart.chartData && calculateHealthIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                (chart.chartData && calculateHealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                        }}
+                                                    >
+                                                        {chart.chartData ? calculateHealthIndex(chart.chartData) : '-'}
+                                                    </span>
+                                                </td>
+                                            )}
+                                            {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
+                                            <td style={{ position: 'relative' }}>
+                                                <button className="gear-btn" onClick={(e) => toggleActionMenu(e, chart._id)}>⚙️</button>
+                                                {actionMenuOpen === chart._id && (
+                                                    <div className="action-menu">
+                                                        <div onClick={() => handleLoad(chart)}>👁️ Show Chart</div>
+                                                        <div onClick={(e) => handleStartEdit(e, chart)}>✏️ Quick Edit</div>
+                                                        <div onClick={(e) => handleEditInForm(e, chart)}>📝 Full Edit (Recalculate)</div>
+                                                        <div onClick={() => handleDelete(chart._id, chart.isLocal)} className="delete-option">🗑️ Delete</div>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div >
+            )}
+
+            {
+                showDeleteConfirm && (
+                    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                        <div className="modal-content" style={{ background: '#1e293b', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '400px', textAlign: 'center' }}>
+                            <h3 style={{ marginTop: 0, color: 'white' }}>Confirm Deletion</h3>
+                            <p style={{ color: '#cbd5e1' }}>You are about to delete {selectedIds.length} records. Do you want to proceed?</p>
+                            <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                                <button
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                    autoFocus
+                                    style={{ padding: '0.5rem 1.5rem', background: 'transparent', border: '1px solid #cbd5e1', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={executeBulkDelete}
+                                    style={{ padding: '0.5rem 1.5rem', background: '#ef4444', border: 'none', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
+                                >
+                                    Yes, Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
+    );
+};
+
+export default SavedChartsPage;

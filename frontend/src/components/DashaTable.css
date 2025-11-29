@@ -1,0 +1,209 @@
+.dasha-container {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.dasha-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    text-align: center;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.balance-info {
+    background: rgba(15, 23, 42, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.balance-info .label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.balance-info .value {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.dasha-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dasha-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.dasha-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-color);
+}
+
+.dasha-item.current {
+    border: 2px solid var(--accent-color);
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), transparent);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+}
+
+.dasha-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.dasha-planet {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.planet-icon {
+    font-size: 1.2em;
+}
+
+.planet-name {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: var(--text-primary);
+}
+
+.current-badge {
+    background: var(--accent-color);
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dasha-dates {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    flex: 1;
+    text-align: center;
+}
+
+.dasha-duration {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    flex: 1;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.arrow {
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+
+/* Antardasha List */
+.antardasha-list {
+    background: rgba(15, 23, 42, 0.3);
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.antardasha-title {
+    margin: 0 0 15px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.antardasha-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.antardasha-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.antardasha-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.antardasha-item.current-sub {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: var(--accent-color);
+}
+
+.ad-planet {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ad-dates {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dasha-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .dasha-dates,
+    .dasha-duration {
+        text-align: left;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .dasha-duration {
+        justify-content: space-between;
+    }
+
+    .antardasha-grid {
+        grid-template-columns: 1fr;
+    }
+}

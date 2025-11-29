@@ -1,0 +1,1097 @@
+:root {
+  --bg-color: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-2: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  --border-color: rgba(148, 163, 184, 0.2);
+  --input-bg: rgba(15, 23, 42, 0.5);
+  --retrograde-color: #f59e0b;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.05em;
+}
+
+.app-header p {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  /* Fix padding issue */
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: var(--accent-hover);
+}
+
+.results-card {
+  max-width: 800px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.results-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.ascendant-info {
+  background: rgba(139, 92, 246, 0.1);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.results-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.results-table tr:last-child td {
+  border-bottom: none;
+}
+
+.results-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.loading {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.app-footer {
+  margin-top: auto;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* City Search Styles */
+.city-search {
+  margin-bottom: 1rem;
+}
+
+.search-container {
+  position: relative;
+}
+
+.city-input {
+  width: 100%;
+}
+
+.search-loading {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+  font-size: 0.85rem;
+}
+
+.city-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  margin-top: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.city-option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--glass-border);
+  transition: background 0.2s ease;
+}
+
+.city-option:last-child {
+  border-bottom: none;
+}
+
+.city-option:hover {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.city-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.city-details {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+input[readonly] {
+  background: rgba(15, 23, 42, 0.4);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Birth Chart Styles */
+.birth-chart-container {
+  width: 100%;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-header h2 {
+  margin: 0;
+}
+
+.chart-style-selector {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.chart-style-selector button {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.chart-style-selector button:hover {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--text-primary);
+}
+
+.chart-style-selector button.active {
+  background: var(--accent-color);
+  color: white;
+}
+
+.division-selector {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
+}
+
+.division-selector button {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.division-selector button:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--text-primary);
+}
+
+.division-selector button.active {
+  background: #3b82f6;
+  /* Blue for division selector to distinguish from style */
+  color: white;
+}
+
+.division-note {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.chart-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.birth-chart {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  aspect-ratio: 1;
+}
+
+.chart-row {
+  display: flex;
+  flex: 1;
+}
+
+.chart-cell {
+  flex: 1;
+  border: 2px solid var(--glass-border);
+  padding: 0.75rem 0.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: rgba(15, 23, 42, 0.3);
+  transition: background 0.3s ease;
+  min-height: 120px;
+}
+
+.chart-cell:hover {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.center-cell {
+  background: rgba(139, 92, 246, 0.15);
+  border: none;
+}
+
+.ascendant-house {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.house-number {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  background: var(--accent-color);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+.rasi-name {
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+.house-planets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.planet-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.planet-abbr {
+  background: var(--accent-color);
+  color: white;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.planet-deg {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+}
+
+.chart-center {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.chart-legend {
+  margin-top: 2rem;
+}
+
+.chart-legend h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 0.5rem;
+  border: 1px solid var(--glass-border);
+}
+
+.legend-abbr {
+  background: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.legend-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.legend-position {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .birth-chart {
+    max-width: 350px;
+  }
+
+  .chart-cell {
+    padding: 0.25rem;
+  }
+
+  .rasi-name {
+    font-size: 0.65rem;
+  }
+
+  .planet-abbr {
+    font-size: 0.55rem;
+    padding: 0.1rem 0.3rem;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-style-selector {
+    width: 100%;
+  }
+
+  .chart-style-selector button {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.5rem;
+  }
+}
+
+/* South Indian Chart */
+.south-indian-chart {
+  max-width: 700px;
+  margin: 2rem auto;
+}
+
+.chart-grid-south {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 140px);
+  border: 3px solid var(--text-primary);
+  background: var(--bg-color);
+  gap: 0;
+}
+
+.chart-row-south {
+  display: contents;
+}
+
+.chart-cell-south {
+  border: 2px solid var(--text-primary);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: var(--card-bg);
+  position: relative;
+}
+
+.chart-cell-south.center-merged {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.15) 100%);
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.chart-cell-south.ascendant-cell-south {
+  background: rgba(59, 130, 246, 0.2);
+  border: 3px solid rgba(59, 130, 246, 0.8);
+}
+
+.cell-header-south {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.rasi-label-south {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.house-label-south {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+  background: var(--accent-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.3rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.cell-content-south {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.planet-item-south {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chart-title-south {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.birth-details {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem;
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.detail-row strong {
+  color: var(--accent-color);
+  font-weight: 700;
+  min-width: 60px;
+}
+
+.detail-row.lagna-highlight {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 0.4rem;
+  padding: 0.6rem;
+  margin-top: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* East Indian Chart */
+.east-indian {
+  max-width: 500px;
+}
+
+.chart-grid-east {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 120px);
+  gap: 0;
+}
+
+.chart-grid-east .chart-cell:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.chart-grid-east .chart-cell:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.chart-grid-east .chart-cell:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.chart-grid-east .chart-cell:nth-child(4) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.chart-grid-east .chart-cell:nth-child(6) {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.chart-grid-east .chart-cell:nth-child(7) {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.chart-grid-east .chart-cell:nth-child(8) {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.chart-grid-east .chart-cell:nth-child(9) {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.chart-grid-east .chart-cell:nth-child(10) {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.chart-grid-east .chart-cell:nth-child(11) {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+/* Western Chart */
+.western-chart-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.western-chart {
+  max-width: 500px;
+  width: 100%;
+}
+
+.western-svg {
+  width: 100%;
+  height: auto;
+}
+
+.western-svg text {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Results Page Styles */
+.results-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.back-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: var(--accent-hover);
+  transform: translateX(-5px);
+}
+
+.birth-info h1 {
+  margin: 0;
+  font-size: 2rem;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.birth-info p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-secondary);
+}
+
+.results-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.chart-card,
+.table-card,
+.nakshatra-card,
+.dasha-card,
+.aspects-card,
+.strength-card-full,
+.yogas-card-full,
+.house-analysis-card-full {
+  width: 100%;
+  max-width: none;
+}
+
+.input-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+/* North Indian Chart */
+.north-indian-chart {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.north-indian-svg {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+
+.north-indian-svg text {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Retrograde & Nakshatra Styling */
+.retrograde-row {
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.retrograde-badge {
+  color: var(--retrograde-color);
+  font-weight: 700;
+  font-size: 11px;
+  background: rgba(245, 158, 11, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.speed-retrograde {
+  color: var(--retrograde-color) !important;
+  font-weight: 600;
+}
+
+@import './styles/header.css';
+
+.varga-select {
+  background: var(--bg-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.varga-select:hover {
+  border-color: var(--accent-color);
+}
+
+
+/* Enhanced Form Styles */
+.input-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Name Field */
+.input-form>.form-group:nth-of-type(1) {
+  grid-column: 1 / -1;
+}
+
+/* City Search */
+.city-search {
+  grid-column: 1 / -1;
+}
+
+/* Lat/Long Row */
+.form-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Timezone */
+.input-form>.form-group:last-of-type {
+  grid-column: 1 / -1;
+}
+
+/* Submit Button */
+.submit-btn {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1.2rem;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+/* Input & Select Face Lift */
+input,
+select,
+.city-input {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.9rem 1rem !important;
+  color: #fff !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(5px);
+}
+
+input:focus,
+select:focus {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2) !important;
+  outline: none;
+}
+
+label {
+  color: #e2e8f0 !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.6rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Card Face Lift */
+.card {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Placeholder Color */
+::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Date/Time Inputs */
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+
+/* Results Page Layout */
+.results-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+  position: relative;
+}
+
+.sticky-sidebar {
+  position: sticky;
+  top: 2rem;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--glass-border);
+  z-index: 50;
+  height: fit-content;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.sidebar-header h3 {
+  margin: 0 0 1rem 0;
+  color: #fcd34d;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar-item label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.sidebar-item .value {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.sidebar-item .value.highlight {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.results-content-column {
+  min-width: 0;
+  /* Prevent grid overflow */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .results-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sticky-sidebar {
+    position: static;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}

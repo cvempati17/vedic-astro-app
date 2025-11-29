@@ -1,0 +1,19 @@
+.detailed-btn {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    color: #a78bfa;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.detailed-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: #a78bfa;
+    transform: translateY(-1px);
+}

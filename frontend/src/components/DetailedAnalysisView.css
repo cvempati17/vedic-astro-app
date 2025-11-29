@@ -1,0 +1,70 @@
+.detailed-analysis-container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analysis-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.analysis-header h2 {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.analysis-section {
+    margin-bottom: 3rem;
+}
+
+.section-head {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--accent-color);
+    font-size: 1.2rem;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.analysis-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.analysis-item h4 {
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+}
+
+.analysis-item p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.analysis-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+@media (min-width: 768px) {
+    .analysis-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -1,0 +1,153 @@
+.aspects-container {
+    margin-top: 2rem;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.aspects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.aspect-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aspect-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Conjunctions */
+.conjunction-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.sign-badge {
+    display: inline-block;
+    background: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.planet-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.planet-pill {
+    background: rgba(15, 23, 42, 0.6);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+}
+
+/* Ascendant Aspects */
+.aspect-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.aspect-list li {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aspect-list li:last-child {
+    border-bottom: none;
+}
+
+.aspect-type {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Full Table */
+.full-aspects {
+    grid-column: 1 / -1;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.aspect-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.aspect-table th,
+.aspect-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.aspect-table th {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.planet-cell {
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.aspect-targets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.aspect-tag {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.empty-text {
+    color: var(--text-secondary);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .full-aspects {
+        grid-column: auto;
+    }
+}

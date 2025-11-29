@@ -1,0 +1,317 @@
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 2rem;
+    padding: 3rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+    width: 100%;
+    animation: float 3s ease-in-out infinite;
+    z-index: 10;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.app-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.login-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.oauth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--glass-border);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.oauth-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.oauth-btn:hover::before {
+    left: 100%;
+}
+
+.oauth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    border-color: var(--accent-color);
+}
+
+.oauth-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.oauth-btn svg {
+    flex-shrink: 0;
+}
+
+.google-btn:hover {
+    border-color: #4285F4;
+    box-shadow: 0 8px 24px rgba(66, 133, 244, 0.3);
+}
+
+.google-signin-custom {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.google-signin-custom>div {
+    width: 100% !important;
+}
+
+#g_id_onload {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.zoho-btn:hover {
+    border-color: #D32F2F;
+    box-shadow: 0 8px 24px rgba(211, 47, 47, 0.3);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+    padding: 0 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.email-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.email-btn:hover {
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.login-footer {
+    text-align: center;
+}
+
+.demo-note {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+}
+
+.demo-note strong {
+    font-weight: 700;
+}
+
+.privacy-note {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Decorative stars */
+.login-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    font-size: 2rem;
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+.star-1 {
+    top: 10%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.star-2 {
+    top: 20%;
+    right: 20%;
+    font-size: 1.5rem;
+    animation-delay: 0.5s;
+}
+
+.star-3 {
+    bottom: 25%;
+    left: 10%;
+    font-size: 2.5rem;
+    animation-delay: 1s;
+}
+
+.star-4 {
+    bottom: 15%;
+    right: 15%;
+    animation-delay: 1.5s;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* User info and logout */
+.user-info {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--card-bg);
+    padding: 0.75rem 1.25rem;
+    border-radius: 2rem;
+    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 2rem;
+        margin: 1rem;
+    }
+
+    .login-header h1,
+    .app-title {
+        font-size: 2rem;
+    }
+
+    .oauth-btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .user-info {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .star {
+        font-size: 1.5rem;
+    }
+}
+@import './GuestLogin.css';
+

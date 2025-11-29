@@ -1,0 +1,247 @@
+.nakshatra-info-container {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.nakshatra-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 25px;
+    text-align: center;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Birth Star Section */
+.birth-star-section {
+    margin-bottom: 25px;
+}
+
+.nakshatra-card {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.nakshatra-card.highlighted {
+    border-color: var(--accent-color);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.1));
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+}
+
+.nakshatra-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(139, 92, 246, 0.3);
+}
+
+.nakshatra-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nakshatra-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.nakshatra-pada {
+    background: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.nakshatra-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.detail-row .label {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.detail-row .value {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Ascendant Nakshatra */
+.ascendant-nakshatra-section {
+    margin-bottom: 25px;
+}
+
+/* All Nakshatras Grid */
+.all-nakshatras-section {
+    margin-bottom: 25px;
+}
+
+.nakshatra-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.nakshatra-item {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.nakshatra-item:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.planet-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+}
+
+.nakshatra-compact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.nak-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.nak-pada {
+    font-size: 10px;
+    background: rgba(139, 92, 246, 0.2);
+    padding: 2px 6px;
+    border-radius: 8px;
+    color: var(--accent-color);
+}
+
+.nakshatra-lord {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* Nakshatra Legend */
+.nakshatra-legend {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border-color);
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.legend-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: var(--accent-color);
+}
+
+.legend-item.active {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.2));
+    border-color: var(--accent-color);
+    border-width: 2px;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+}
+
+.legend-number {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.legend-name {
+    font-size: 11px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nakshatra-info-container {
+        padding: 20px;
+    }
+
+    .nakshatra-title {
+        font-size: 20px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .nakshatra-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .legend-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 6px;
+    }
+
+    .nakshatra-card {
+        padding: 15px;
+    }
+}
