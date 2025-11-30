@@ -1,168 +1,139 @@
 import { calculateNakshatra } from './nakshatraUtils';
 
-// Dasha periods in years
-const DASHA_YEARS = {
-    'Ketu': 7,
-    'Venus': 20,
-    'Sun': 6,
-    'Moon': 10,
-    'Mars': 7,
-    'Rahu': 18,
-    'Jupiter': 16,
-    'Saturn': 19,
-    'Mercury': 17
-};
-
-// Order of Dashas
-const DASHA_ORDER = [
-    'Ketu', 'Venus', 'Sun', 'Moon', 'Mars', 'Rahu', 'Jupiter', 'Saturn', 'Mercury'
+const DASHA_PERIODS = [
+    { planet: 'Ketu', years: 7 },
+    { planet: 'Venus', years: 20 },
+    { planet: 'Sun', years: 6 },
+    { planet: 'Moon', years: 10 },
+    { planet: 'Mars', years: 7 },
+    { planet: 'Rahu', years: 18 },
+    { planet: 'Jupiter', years: 16 },
+    { planet: 'Saturn', years: 19 },
+    { planet: 'Mercury', years: 17 }
 ];
 
-/**
- * Calculate Vimshottari Dasha details
- * @param {number} moonLongitude - Moon's longitude in degrees
- * @param {string} birthDateStr - Birth date string (YYYY-MM-DD)
- * @returns {object} - Dasha calculations
- */
-export const calculateVimshottariDasha = (moonLongitude, birthDateStr) => {
-    if (!moonLongitude || !birthDateStr) return null;
+export const formatDate = (date) => {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+};
 
-    const birthDate = new Date(birthDateStr);
+// Helper to add fractional years to date
+const addYears = (date, years) => {
+    const newDate = new Date(date);
+    const fullYears = Math.floor(years);
+    const remaining = years - fullYears;
+    const days = Math.round(remaining * 365.25);
 
-    // 1. Get Birth Nakshatra info
-    const nakshatra = calculateNakshatra(moonLongitude);
-    const lord = nakshatra.lord;
+    newDate.setFullYear(newDate.getFullYear() + fullYears);
+    newDate.setDate(newDate.getDate() + days);
+    return newDate;
+};
 
-    // 2. Calculate Balance of Dasha
-    // How much of the nakshatra is remaining?
-    // Each nakshatra is 13°20' = 13.3333 degrees
-    // Position in nakshatra is returned by calculateNakshatra as 'degrees' (string)
-    const degreesTraversed = parseFloat(nakshatra.degrees);
-    const totalNakshatraLength = 13.333333;
-    const degreesRemaining = totalNakshatraLength - degreesTraversed;
+// Helper to convert fractional years to YMD
+const getDurationDetails = (years) => {
+    const y = Math.floor(years);
+    const rem1 = (years - y) * 12;
+    const m = Math.floor(rem1);
+    const rem2 = (rem1 - m) * 30;
+    const d = Math.round(rem2);
+    return { years: y, months: m, days: d };
+};
 
-    // Fraction remaining
-    const fractionRemaining = degreesRemaining / totalNakshatraLength;
+export const calculateVimshottariDasha = (moonLongitude, birthDate) => {
+    const nakshatraData = calculateNakshatra(moonLongitude);
+    const birthStarLord = nakshatraData.lord;
 
-    // Total years for the birth lord
-    const totalYears = DASHA_YEARS[lord];
+    // Find starting index in Dasha sequence
+    const startIndex = DASHA_PERIODS.findIndex(d => d.planet === birthStarLord);
+    if (startIndex === -1) return null;
 
-    // Years remaining at birth
-    const balanceYears = totalYears * fractionRemaining;
+    const startDasha = DASHA_PERIODS[startIndex];
+    const nakshatraLength = 360 / 27; // 13.3333...
+    const positionInNakshatra = parseFloat(nakshatraData.degrees);
+    const remainingDegrees = nakshatraLength - positionInNakshatra;
 
-    // 3. Generate Dasha Timeline
+    // Calculate balance of first Dasha
+    const balanceYears = (remainingDegrees / nakshatraLength) * startDasha.years;
+    const balanceDetails = getDurationDetails(balanceYears);
+
     const dashas = [];
-    let currentYear = birthDate.getFullYear();
-    let currentMonth = birthDate.getMonth();
-    let currentDay = birthDate.getDate();
+    let currentDate = new Date(birthDate);
+    const now = new Date();
 
-    // Add balance years to birth date to get end of first dasha
-    // Convert balance years to milliseconds for more precision or just add roughly
-    // Let's do precise date addition
-    let endDate = addYearsToDate(birthDate, balanceYears);
+    // First Dasha (Partial)
+    const firstEndDate = addYears(currentDate, balanceYears);
 
-    // Start index in the cycle
-    let startIndex = DASHA_ORDER.indexOf(lord);
+    dashas.push({
+        planet: startDasha.planet,
+        startDate: new Date(currentDate),
+        endDate: new Date(firstEndDate),
+        fullDuration: startDasha.years, // Used for Antardasha calc
+        isCurrent: now >= currentDate && now <= firstEndDate
+    });
 
-    // Generate current and future dashas (covering 120 years of life)
-    for (let i = 0; i < 9; i++) {
-        const dashaIndex = (startIndex + i) % 9;
-        const planet = DASHA_ORDER[dashaIndex];
-        const duration = DASHA_YEARS[planet];
+    currentDate = new Date(firstEndDate);
 
-        // For the first dasha, duration is the balance
-        const actualDuration = (i === 0) ? balanceYears : duration;
+    // Generate for 120 years
+    let currentIndex = (startIndex + 1) % 9;
+    const maxDate = new Date(birthDate);
+    maxDate.setFullYear(maxDate.getFullYear() + 120);
 
-        // Start date is previous end date (or birth date for first)
-        const startDate = (i === 0) ? birthDate : dashas[i - 1].endDate;
-
-        // Calculate end date
-        // If it's the first one, we already calculated endDate based on balance
-        const currentEndDate = (i === 0) ? endDate : addYearsToDate(startDate, duration);
+    while (currentDate < maxDate) {
+        const dasha = DASHA_PERIODS[currentIndex];
+        const endDate = addYears(currentDate, dasha.years);
 
         dashas.push({
-            planet,
-            startDate: startDate,
-            endDate: currentEndDate,
-            duration: actualDuration,
-            fullDuration: duration,
-            isCurrent: isDateInRange(new Date(), startDate, currentEndDate)
+            planet: dasha.planet,
+            startDate: new Date(currentDate),
+            endDate: new Date(endDate),
+            fullDuration: dasha.years,
+            isCurrent: now >= currentDate && now <= endDate
         });
+
+        currentDate = new Date(endDate);
+        currentIndex = (currentIndex + 1) % 9;
     }
 
     return {
-        birthNakshatra: nakshatra,
         balance: {
-            planet: lord,
-            years: Math.floor(balanceYears),
-            months: Math.floor((balanceYears % 1) * 12),
-            days: Math.floor(((balanceYears % 1) * 12 % 1) * 30)
+            planet: startDasha.planet,
+            ...balanceDetails
         },
         dashas
     };
 };
 
-/**
- * Calculate Antardashas (Sub-periods) for a Mahadasha
- * @param {string} mahadashaLord - Planet ruling the Mahadasha
- * @param {Date} startDate - Start date of the Mahadasha
- * @returns {Array} - List of Antardashas
- */
-export const calculateAntardashas = (mahadashaLord, startDate) => {
+export const calculateAntardashas = (mahadashaPlanet, startDate) => {
+    const mdIndex = DASHA_PERIODS.findIndex(d => d.planet === mahadashaPlanet);
+    if (mdIndex === -1) return [];
+
+    const mdDuration = DASHA_PERIODS[mdIndex].years;
     const antardashas = [];
-    const mahaDuration = DASHA_YEARS[mahadashaLord];
+    let currentDate = new Date(startDate);
+    const now = new Date();
 
-    let startIndex = DASHA_ORDER.indexOf(mahadashaLord);
-    let currentStartDate = new Date(startDate);
-
+    // Antardasha sequence starts from the Mahadasha lord itself
     for (let i = 0; i < 9; i++) {
-        const dashaIndex = (startIndex + i) % 9;
-        const planet = DASHA_ORDER[dashaIndex];
-        const subDuration = DASHA_YEARS[planet];
+        const currentIndex = (mdIndex + i) % 9;
+        const adPlanet = DASHA_PERIODS[currentIndex];
 
-        // Formula: (Maha Years * Antara Years) / 120 = Years of Antardasha
-        const durationYears = (mahaDuration * subDuration) / 120;
-
-        const endDate = addYearsToDate(currentStartDate, durationYears);
+        // Formula: (MD Years * AD Years) / 120 = Years duration
+        const adDurationYears = (mdDuration * adPlanet.years) / 120;
+        const endDate = addYears(currentDate, adDurationYears);
 
         antardashas.push({
-            planet,
-            startDate: new Date(currentStartDate),
+            planet: adPlanet.planet,
+            startDate: new Date(currentDate),
             endDate: new Date(endDate),
-            isCurrent: isDateInRange(new Date(), currentStartDate, endDate)
+            isCurrent: now >= currentDate && now <= endDate
         });
 
-        currentStartDate = endDate;
+        currentDate = new Date(endDate);
     }
 
     return antardashas;
-};
-
-// Helper: Add years (float) to date
-const addYearsToDate = (date, years) => {
-    const result = new Date(date);
-    const wholeYears = Math.floor(years);
-    const fraction = years - wholeYears;
-
-    result.setFullYear(result.getFullYear() + wholeYears);
-
-    // Add remaining fraction as milliseconds
-    const msInYear = 365.25 * 24 * 60 * 60 * 1000;
-    const remainingMs = fraction * msInYear;
-
-    return new Date(result.getTime() + remainingMs);
-};
-
-// Helper: Check if date is in range
-const isDateInRange = (checkDate, start, end) => {
-    return checkDate >= start && checkDate <= end;
-};
-
-// Helper: Format date
-export const formatDate = (date) => {
-    return date.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-    });
 };

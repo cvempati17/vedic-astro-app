@@ -388,7 +388,8 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             }
         } catch (err) {
             console.error(err);
-            alert("Error calculating chart. Ensure backend is running.");
+            const errorMessage = err.response?.data?.error || err.message || "Unknown error";
+            alert(`Error calculating chart: ${errorMessage}`);
         } finally {
             setLoading(false);
         }
@@ -453,7 +454,8 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             }
         } catch (err) {
             console.error(err);
-            alert("Error calculating chart.");
+            const errorMessage = err.response?.data?.error || err.message || "Unknown error";
+            alert(`Error calculating chart: ${errorMessage}`);
         } finally {
             setLoading(false);
         }

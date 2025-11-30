@@ -49,39 +49,26 @@ function App() {
         if (shouldSave) {
           const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
 
-          // Check for duplicates
-          const isDuplicate = localCharts.some(chart =>
-            chart.name.toLowerCase() === data.name.toLowerCase() &&
-            chart.dateOfBirth === data.date &&
-            chart.timeOfBirth === data.time &&
-            chart.placeOfBirth.city.toLowerCase() === data.city.toLowerCase()
-          );
+          const newChart = {
+            _id: Date.now().toString(),
+            isLocal: true,
+            name: data.name,
+            gender: data.gender,
+            dateOfBirth: data.date,
+            timeOfBirth: data.time,
+            placeOfBirth: {
+              city: data.city,
+              lat: data.latitude,
+              lng: data.longitude,
+              timezone: data.timezone
+            },
+            ayanamsa: data.ayanamsa || 'lahiri',
+            chartData: responseData.data,
+            createdAt: new Date().toISOString()
+          };
 
-          if (isDuplicate) {
-            console.log("Chart already exists, skipping save.");
-            // Optional: alert("Chart already saved!"); 
-          } else {
-            const newChart = {
-              _id: Date.now().toString(),
-              isLocal: true,
-              name: data.name,
-              gender: data.gender,
-              dateOfBirth: data.date,
-              timeOfBirth: data.time,
-              placeOfBirth: {
-                city: data.city,
-                lat: data.latitude,
-                lng: data.longitude,
-                timezone: data.timezone
-              },
-              ayanamsa: data.ayanamsa || 'lahiri',
-              chartData: responseData.data,
-              createdAt: new Date().toISOString()
-            };
-
-            localCharts.push(newChart);
-            localStorage.setItem('savedCharts', JSON.stringify(localCharts));
-          }
+          localCharts.push(newChart);
+          localStorage.setItem('savedCharts', JSON.stringify(localCharts));
         }
       } else {
         alert('Error: ' + responseData.error);

@@ -1,0 +1,122 @@
+.dasha-container {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--glass-border);
+    margin-top: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.dasha-header {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+    font-size: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.current-dasha-card {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dasha-label {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.dasha-planet {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dasha-dates {
+    font-family: monospace;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    background: rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.dasha-timeline {
+    overflow-x: auto;
+}
+
+.dasha-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.dasha-table th {
+    text-align: left;
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dasha-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.active-dasha-row {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 3px solid #10b981;
+}
+
+.active-dasha-row td {
+    color: white;
+    font-weight: 500;
+}
+
+.planet-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.planet-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Planet Colors */
+.planet-sun { background-color: #fbbf24; box-shadow: 0 0 5px #fbbf24; }
+.planet-moon { background-color: #e2e8f0; box-shadow: 0 0 5px #e2e8f0; }
+.planet-mars { background-color: #ef4444; box-shadow: 0 0 5px #ef4444; }
+.planet-mercury { background-color: #10b981; box-shadow: 0 0 5px #10b981; }
+.planet-jupiter { background-color: #f59e0b; box-shadow: 0 0 5px #f59e0b; }
+.planet-venus { background-color: #ec4899; box-shadow: 0 0 5px #ec4899; }
+.planet-saturn { background-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
+.planet-rahu { background-color: #8b5cf6; box-shadow: 0 0 5px #8b5cf6; }
+.planet-ketu { background-color: #a855f7; box-shadow: 0 0 5px #a855f7; }
+
+@media (max-width: 768px) {
+    .dasha-table th, .dasha-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .dasha-planet {
+        font-size: 1.5rem;
+    }
+}

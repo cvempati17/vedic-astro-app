@@ -9,6 +9,7 @@ import StrengthView from '../components/StrengthView';
 import YogasView from '../components/YogasView';
 import HouseAnalysisView from '../components/HouseAnalysisView';
 import { generatePDF } from '../utils/pdfUtils';
+import PredictionsView from '../components/PredictionsView';
 
 const ResultsPage = ({ results, formData, onBack, onViewDetailed }) => {
     const [saving, setSaving] = useState(false);
@@ -162,8 +163,23 @@ const ResultsPage = ({ results, formData, onBack, onViewDetailed }) => {
                         <BirthChart data={results} formData={formData} />
                     </div>
 
+                    <div className="card chart-card">
+                        <BirthChart
+                            data={results}
+                            formData={formData}
+                            defaultDivision="d9"
+                            hideControls={true}
+                        />
+                    </div>
+
+
+
                     <div className="card nakshatra-card">
                         <NakshatraInfo data={results} />
+                    </div>
+
+                    <div className="card predictions-card">
+                        <PredictionsView data={results} />
                     </div>
 
                     <div className="card dasha-card">

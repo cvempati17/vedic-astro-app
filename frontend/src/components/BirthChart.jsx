@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { transformToVarga, getDivisionalChartName } from '../utils/divisionalCharts';
 import './NorthIndianChart.css';
 
-const BirthChart = ({ data, formData }) => {
+const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = false }) => {
     const [chartStyle, setChartStyle] = useState('south');
-    const [division, setDivision] = useState('d1');
+    const [division, setDivision] = useState(defaultDivision);
 
     if (!data) return null;
 
@@ -424,17 +424,19 @@ const BirthChart = ({ data, formData }) => {
             <div className="chart-header">
                 <h2>{getDivisionalChartName(division)}</h2>
 
-                <div className="division-selector">
-                    <select
-                        value={division}
-                        onChange={(e) => setDivision(e.target.value)}
-                        className="varga-select"
-                    >
-                        {vargaOptions.map(opt => (
-                            <option key={opt.id} value={opt.id}>{opt.label}</option>
-                        ))}
-                    </select>
-                </div>
+                {!hideControls && (
+                    <div className="division-selector">
+                        <select
+                            value={division}
+                            onChange={(e) => setDivision(e.target.value)}
+                            className="varga-select"
+                        >
+                            {vargaOptions.map(opt => (
+                                <option key={opt.id} value={opt.id}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 <div className="chart-style-selector">
                     {['north', 'south', 'east', 'western'].map(style => (
