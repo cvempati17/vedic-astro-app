@@ -109,22 +109,31 @@
 
 .analyze-btn {
     padding: 1rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: var(--accent-color);
     border: none;
     border-radius: 0.5rem;
-    color: white;
+    color: #ffffff;
     font-weight: bold;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     align-self: center;
     width: 100%;
     max-width: 300px;
 }
 
 .analyze-btn:hover {
+    background: var(--accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+.analyze-btn:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
 .results-section {

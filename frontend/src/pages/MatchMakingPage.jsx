@@ -325,7 +325,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                             {result.compatibilityDetails && result.compatibilityDetails.length > 0 && (
                                 <div className="compatibility-section" style={{ margin: '0 0 1.5rem 0', padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
                                     <h4 style={{ margin: '0 0 0.5rem 0', color: '#10b981' }}>❤️ Compatibility Analysis (Synastry)</h4>
-                                    <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#e2e8f0' }}>
+                                    <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#065f46' }}>
                                         {result.compatibilityDetails.map((detail, i) => (
                                             <li key={i}>{detail}</li>
                                         ))}
