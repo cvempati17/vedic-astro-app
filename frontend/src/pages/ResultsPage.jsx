@@ -15,6 +15,7 @@ const ResultsPage = ({ results, formData, onBack, onViewDetailed }) => {
     const [saving, setSaving] = useState(false);
     const [saveMessage, setSaveMessage] = useState('');
     const [exporting, setExporting] = useState(false);
+    const [activeTab, setActiveTab] = useState('charts');
     const contentRef = useRef(null);
 
     const handleSaveChart = async () => {
@@ -129,26 +130,67 @@ const ResultsPage = ({ results, formData, onBack, onViewDetailed }) => {
             </header>
 
             <main className="results-main results-layout" ref={contentRef}>
-                {/* Sticky Sidebar */}
                 <aside className="sticky-sidebar">
                     <div className="sidebar-header">
-                        <h3>Profile Details</h3>
+                        <h3>Sections</h3>
                     </div>
-
-                    <div className="sidebar-content">
-                        <div className="sidebar-item">
-                            <label>Name</label>
-                            <div className="value">{formData?.name || 'Unknown'}</div>
-                        </div>
-
-                        <div className="sidebar-item">
-                            <label>Ascendant</label>
-                            <div className="value highlight">
-                                {results?.Ascendant ? (
-                                    ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'][Math.floor(results.Ascendant.longitude / 30)]
-                                ) : '-'}
-                            </div>
-                        </div>
+                    <div className="sidebar-tabs">
+                        <button
+                            type="button"
+                            className={activeTab === 'charts' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('charts')}
+                        >
+                            Charts
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'nakshatra' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('nakshatra')}
+                        >
+                            Nakshatra & Predictions
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'dasha' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('dasha')}
+                        >
+                            Dasha
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'aspects' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('aspects')}
+                        >
+                            Aspects
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'strengths' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('strengths')}
+                        >
+                            Strengths
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'yogas' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('yogas')}
+                        >
+                            Yogas
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'houses' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('houses')}
+                        >
+                            Houses
+                        </button>
+                        <button
+                            type="button"
+                            className={activeTab === 'positions' ? 'sidebar-tab active' : 'sidebar-tab'}
+                            onClick={() => setActiveTab('positions')}
+                        >
+                            Positions Table
+                        </button>
                     </div>
                 </aside>
 
@@ -159,56 +201,73 @@ const ResultsPage = ({ results, formData, onBack, onViewDetailed }) => {
                         <p>{formData?.date} | {formData?.time} | {formData?.city}</p>
                     </div>
 
-                    <div className="card chart-card">
-                        <BirthChart data={results} formData={formData} />
-                    </div>
+                    {activeTab === 'charts' && (
+                        <>
+                            <div className="card chart-card">
+                                <BirthChart data={results} formData={formData} />
+                            </div>
 
-                    <div className="card chart-card">
-                        <BirthChart
-                            data={results}
-                            formData={formData}
-                            defaultDivision="d9"
-                            hideControls={true}
-                        />
-                    </div>
+                            <div className="card chart-card">
+                                <BirthChart
+                                    data={results}
+                                    formData={formData}
+                                    defaultDivision="d9"
+                                    hideControls={true}
+                                />
+                            </div>
+                        </>
+                    )}
 
+                    {activeTab === 'nakshatra' && (
+                        <>
+                            <div className="card nakshatra-card">
+                                <NakshatraInfo data={results} />
+                            </div>
+                            <div className="card predictions-card">
+                                <PredictionsView data={results} />
+                            </div>
+                        </>
+                    )}
 
+                    {activeTab === 'dasha' && (
+                        <div className="card dasha-card">
+                            <DashaTable
+                                moonLongitude={results?.Moon?.longitude}
+                                birthDate={formData?.date}
+                            />
+                        </div>
+                    )}
 
-                    <div className="card nakshatra-card">
-                        <NakshatraInfo data={results} />
-                    </div>
+                    {activeTab === 'aspects' && (
+                        <div className="card aspects-card">
+                            <AspectsView data={results} />
+                        </div>
+                    )}
 
-                    <div className="card predictions-card">
-                        <PredictionsView data={results} />
-                    </div>
+                    {activeTab === 'strengths' && (
+                        <div className="card strength-card-full">
+                            <StrengthView data={results} />
+                        </div>
+                    )}
 
-                    <div className="card dasha-card">
-                        <DashaTable
-                            moonLongitude={results?.Moon?.longitude}
-                            birthDate={formData?.date}
-                        />
-                    </div>
+                    {activeTab === 'yogas' && (
+                        <div className="card yogas-card-full">
+                            <YogasView data={results} />
+                        </div>
+                    )}
 
-                    <div className="card aspects-card">
-                        <AspectsView data={results} />
-                    </div>
+                    {activeTab === 'houses' && (
+                        <div className="card house-analysis-card-full">
+                            <HouseAnalysisView data={results} />
+                        </div>
+                    )}
 
-                    <div className="card strength-card-full">
-                        <StrengthView data={results} />
-                    </div>
-
-                    <div className="card yogas-card-full">
-                        <YogasView data={results} />
-                    </div>
-
-                    <div className="card house-analysis-card-full">
-                        <HouseAnalysisView data={results} />
-                    </div>
-
-                    <div className="card table-card">
-                        <h2>Planetary Positions</h2>
-                        <ResultsTable data={results} />
-                    </div>
+                    {activeTab === 'positions' && (
+                        <div className="card table-card">
+                            <h2>Planetary Positions</h2>
+                            <ResultsTable data={results} />
+                        </div>
+                    )}
                 </div>
             </main>
 

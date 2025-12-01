@@ -11,10 +11,10 @@
 }
 
 .match-controls {
-    background: var(--card-bg);
+    background: #ffffff;
     padding: 1.5rem;
     border-radius: 1rem;
-    border: 1px solid var(--glass-border);
+    border: 1px solid #e5e7eb;
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
@@ -29,15 +29,15 @@
 
 .control-group label {
     font-weight: 600;
-    color: var(--accent-color);
+    color: #111827;
 }
 
 .perspective-select {
     padding: 0.8rem;
     border-radius: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    color: white;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #111827;
     font-size: 1rem;
 }
 
@@ -49,19 +49,19 @@
 
 .multi-select-header {
     padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
+    background: #ffffff;
+    border: 1px solid #d1d5db;
     border-radius: 0.5rem;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: #111827;
     transition: background 0.2s;
 }
 
 .multi-select-header:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #f3f4f6;
 }
 
 .multi-select-options {

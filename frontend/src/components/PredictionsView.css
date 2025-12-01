@@ -1,8 +1,8 @@
 .predictions-container {
-    background: rgba(30, 41, 59, 0.6);
+    background: #ffffff;
     border-radius: 1rem;
     padding: 1.5rem;
-    border: 1px solid var(--glass-border);
+    border: 1px solid #e5e7eb;
     margin-top: 2rem;
     backdrop-filter: blur(10px);
 }
@@ -10,9 +10,9 @@
 .predictions-header {
     margin-top: 0;
     margin-bottom: 1.5rem;
-    color: var(--accent-color);
+    color: #111827;
     font-size: 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #e5e7eb;
     padding-bottom: 0.5rem;
 }
 
@@ -20,7 +20,7 @@
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: #e5e7eb;
     padding: 0.25rem;
     border-radius: 0.5rem;
 }
@@ -29,7 +29,7 @@
     flex: 1;
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: #4b5563;
     padding: 0.75rem;
     border-radius: 0.25rem;
     cursor: pointer;
@@ -38,21 +38,21 @@
 }
 
 .pred-tab:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
+    color: #111827;
+    background: #e5e7eb;
 }
 
 .pred-tab.active {
-    background: var(--accent-color);
-    color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
 }
 
 .prediction-content {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    background: #ffffff;
     padding: 1.5rem;
     border-radius: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #e5e7eb;
     position: relative;
     overflow: hidden;
 }
@@ -61,10 +61,10 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    background: #16a34a;
+    color: #ffffff;
     padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
+    border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -73,27 +73,27 @@
 
 .prediction-content h4 {
     margin-top: 0;
-    color: white;
+    color: #111827;
     font-size: 1.1rem;
     margin-bottom: 1rem;
 }
 
 .prediction-text {
-    color: var(--text-primary);
+    color: #111827;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     font-size: 1rem;
 }
 
 .traits-box {
-    background: rgba(0, 0, 0, 0.2);
+    background: #f3f4f6;
     padding: 1rem;
     border-radius: 0.5rem;
-    color: var(--text-secondary);
+    color: #111827;
     font-size: 0.9rem;
-    border-left: 3px solid var(--accent-color);
+    border-left: 3px solid #2563eb;
 }
 
 .traits-box strong {
-    color: white;
+    color: #111827;
 }

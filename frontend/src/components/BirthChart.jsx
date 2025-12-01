@@ -386,7 +386,8 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                         return (
                             <g key={sign.num}>
                                 <text x={sign.x} y={sign.y - 15} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight="700">{sign.name}</text>
-                                <text x={sign.x} y={sign.y} textAnchor="middle" fill={isAscendant ? "#3b82f6" : "var(--accent-color)"} fontSize="14" fontWeight="800" opacity="0.3">{houseNum}</text>
+                                <rect x={sign.x - 16} y={sign.y - 12} width="32" height="20" rx="4" ry="4" fill="#2563eb" />
+                                <text x={sign.x} y={sign.y + 3} textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="800">{houseNum}</text>
                                 {planetsInSign.map((planet, idx) => (
                                     <text key={idx} x={sign.x} y={sign.y + 15 + (idx * 10)} textAnchor="middle" fill="#8b5cf6" fontSize="9" fontWeight="600">{planet.abbr} {planet.degrees}</text>
                                 ))}

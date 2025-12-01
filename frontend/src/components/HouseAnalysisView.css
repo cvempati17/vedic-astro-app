@@ -119,11 +119,17 @@
 }
 
 .rel-good .rel-quality {
-    color: #4ade80;
+    color: #ffffff;
+    background: #16a34a;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
 }
 
 .rel-bad .rel-quality {
-    color: #f87171;
+    color: #ffffff;
+    background: #dc2626;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
 }
 
 .rel-bad {

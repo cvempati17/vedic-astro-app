@@ -23,7 +23,7 @@ const AspectsView = ({ data }) => {
 
     return (
         <div className="aspects-container">
-            <h2 className="section-title">👁️ Planetary Aspects (Drishti)</h2>
+            <h2 className="results-section-title">👁️ Planetary Aspects (Drishti)</h2>
 
             <div className="aspects-grid">
                 {/* Conjunctions Card */}
