@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CitySearch = ({ onCitySelect, defaultValue }) => {
+    const { t } = useTranslation();
     const [query, setQuery] = useState(defaultValue || '');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -87,16 +89,16 @@ const CitySearch = ({ onCitySelect, defaultValue }) => {
 
     return (
         <div className="city-search">
-            <label>Birth Place (City)</label>
+            <label>{t('inputForm.cityLabel')}</label>
             <div className="search-container">
                 <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Start typing city name..."
+                    placeholder={t('inputForm.cityPlaceholder')}
                     className="city-input"
                 />
-                {loading && <span className="search-loading">Searching...</span>}
+                {loading && <span className="search-loading">{t('inputForm.searching')}</span>}
 
                 {showDropdown && results.length > 0 && (
                     <div className="city-dropdown">

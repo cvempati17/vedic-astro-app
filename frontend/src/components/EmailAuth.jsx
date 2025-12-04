@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './EmailAuth.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const EmailAuth = ({ onAuthSuccess }) => {
+    const { t } = useTranslation();
     const [step, setStep] = useState('email'); // 'email', 'otp', 'register'
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
@@ -34,15 +36,15 @@ const EmailAuth = ({ onAuthSuccess }) => {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage('OTP sent to your email!');
+                setMessage(t('auth.otpSentMsg'));
                 setStep('otp');
                 setTimer(600); // 10 minutes countdown
                 startCountdown();
             } else {
-                setError(data.error || 'Failed to send OTP');
+                setError(data.error || t('auth.failedToSendOtp'));
             }
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(t('auth.networkError'));
         } finally {
             setLoading(false);
         }
@@ -86,10 +88,10 @@ const EmailAuth = ({ onAuthSuccess }) => {
                     handleLogin();
                 }
             } else {
-                setError(data.error || 'Invalid OTP');
+                setError(data.error || t('auth.invalidOtp'));
             }
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(t('auth.networkError'));
         } finally {
             setLoading(false);
         }
@@ -118,10 +120,10 @@ const EmailAuth = ({ onAuthSuccess }) => {
                 // Call success callback
                 onAuthSuccess(data.user);
             } else {
-                setError(data.error || 'Registration failed');
+                setError(data.error || t('auth.registrationFailed'));
             }
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(t('auth.networkError'));
         } finally {
             setLoading(false);
         }
@@ -148,10 +150,10 @@ const EmailAuth = ({ onAuthSuccess }) => {
                 // Call success callback
                 onAuthSuccess(data.user);
             } else {
-                setError(data.error || 'Login failed');
+                setError(data.error || t('auth.loginFailed'));
             }
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(t('auth.networkError'));
         } finally {
             setLoading(false);
         }
@@ -174,9 +176,9 @@ const EmailAuth = ({ onAuthSuccess }) => {
         <div className="email-auth-container">
             <div className="email-auth-card">
                 <h2 className="email-auth-title">
-                    {step === 'email' && 'Sign In with Email'}
-                    {step === 'otp' && 'Verify OTP'}
-                    {step === 'register' && 'Complete Registration'}
+                    {step === 'email' && t('auth.signInTitle')}
+                    {step === 'otp' && t('auth.verifyOtpTitle')}
+                    {step === 'register' && t('auth.registerTitle')}
                 </h2>
 
                 {error && <div className="email-auth-error">{error}</div>}
@@ -186,18 +188,18 @@ const EmailAuth = ({ onAuthSuccess }) => {
                 {step === 'email' && (
                     <form onSubmit={handleSendOTP} className="email-auth-form">
                         <div className="email-auth-field">
-                            <label>Email Address</label>
+                            <label>{t('auth.emailLabel')}</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
+                                placeholder={t('auth.emailPlaceholder')}
                                 required
                                 autoFocus
                             />
                         </div>
                         <button type="submit" className="email-auth-btn" disabled={loading}>
-                            {loading ? 'Sending...' : 'Send OTP'}
+                            {loading ? t('auth.sendingBtn') : t('auth.sendOtpBtn')}
                         </button>
                     </form>
                 )}
@@ -206,15 +208,15 @@ const EmailAuth = ({ onAuthSuccess }) => {
                 {step === 'otp' && (
                     <form onSubmit={handleVerifyOTP} className="email-auth-form">
                         <div className="email-auth-info">
-                            OTP sent to <strong>{email}</strong>
+                            {t('auth.otpSentToMsg')} <strong>{email}</strong>
                         </div>
                         <div className="email-auth-field">
-                            <label>Enter OTP</label>
+                            <label>{t('auth.otpLabel')}</label>
                             <input
                                 type="text"
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                placeholder="Enter 6-digit OTP"
+                                placeholder={t('auth.otpPlaceholder')}
                                 maxLength="6"
                                 required
                                 autoFocus
@@ -222,11 +224,11 @@ const EmailAuth = ({ onAuthSuccess }) => {
                         </div>
                         {timer > 0 && (
                             <div className="email-auth-timer">
-                                Time remaining: {formatTime(timer)}
+                                {t('auth.timeRemaining')}: {formatTime(timer)}
                             </div>
                         )}
                         <button type="submit" className="email-auth-btn" disabled={loading}>
-                            {loading ? 'Verifying...' : 'Verify OTP'}
+                            {loading ? t('auth.verifyingBtn') : t('auth.verifyOtpBtn')}
                         </button>
                         <button
                             type="button"
@@ -234,14 +236,14 @@ const EmailAuth = ({ onAuthSuccess }) => {
                             onClick={handleResendOTP}
                             disabled={timer > 540} // Disable for first 60 seconds
                         >
-                            Resend OTP
+                            {t('auth.resendOtpBtn')}
                         </button>
                         <button
                             type="button"
                             className="email-auth-link-btn"
                             onClick={() => setStep('email')}
                         >
-                            Change Email
+                            {t('auth.changeEmailBtn')}
                         </button>
                     </form>
                 )}
@@ -250,21 +252,21 @@ const EmailAuth = ({ onAuthSuccess }) => {
                 {step === 'register' && (
                     <form onSubmit={handleRegister} className="email-auth-form">
                         <div className="email-auth-info">
-                            Welcome! Please complete your registration
+                            {t('auth.welcomeMsg')}
                         </div>
                         <div className="email-auth-field">
-                            <label>Full Name *</label>
+                            <label>{t('auth.nameLabel')}</label>
                             <input
                                 type="text"
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Enter your full name"
+                                placeholder={t('auth.namePlaceholder')}
                                 required
                                 autoFocus
                             />
                         </div>
                         <div className="email-auth-field">
-                            <label>Email *</label>
+                            <label>{t('auth.emailReadOnlyLabel')}</label>
                             <input
                                 type="email"
                                 value={email}
@@ -273,25 +275,25 @@ const EmailAuth = ({ onAuthSuccess }) => {
                             />
                         </div>
                         <div className="email-auth-field">
-                            <label>Phone Number</label>
+                            <label>{t('auth.phoneLabel')}</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                placeholder="Enter your phone number"
+                                placeholder={t('auth.phonePlaceholder')}
                             />
                         </div>
                         <div className="email-auth-field">
-                            <label>Address</label>
+                            <label>{t('auth.addressLabel')}</label>
                             <textarea
                                 value={formData.address}
                                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                placeholder="Enter your address"
+                                placeholder={t('auth.addressPlaceholder')}
                                 rows="3"
                             />
                         </div>
                         <button type="submit" className="email-auth-btn" disabled={loading}>
-                            {loading ? 'Registering...' : 'Complete Registration'}
+                            {loading ? t('auth.registeringBtn') : t('auth.completeRegBtn')}
                         </button>
                     </form>
                 )}

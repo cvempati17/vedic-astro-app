@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { calculateVimshottariDasha, calculateAntardashas, formatDate } from '../utils/dashaUtils';
 import './DashaTable.css';
 
 const DashaTable = ({ moonLongitude, birthDate }) => {
+    const { t } = useTranslation();
     const [expandedDasha, setExpandedDasha] = useState(null);
 
     if (!moonLongitude || !birthDate) return null;
@@ -19,15 +21,27 @@ const DashaTable = ({ moonLongitude, birthDate }) => {
         }
     };
 
+    const getPlanetIcon = (planet) => {
+        const icons = {
+            'Sun': '☀️', 'Moon': '🌙', 'Mars': '♂️', 'Mercury': '☿️',
+            'Jupiter': '♃', 'Venus': '♀️', 'Saturn': '♄', 'Rahu': '🐲', 'Ketu': '🐉'
+        };
+        return icons[planet] || '🪐';
+    };
+
     return (
         <div className="dasha-container">
-            <h3 className="dasha-title">⏳ Vimshottari Dasha</h3>
+            <h3 className="dasha-title">⏳ {t('dasha.title')}</h3>
 
             <div className="balance-info">
-                <span className="label">Birth Balance:</span>
+                <span className="label">{t('dasha.birthBalance')}</span>
                 <span className="value">
-                    {dashaData.balance.planet} Dasha remaining for{' '}
-                    {dashaData.balance.years}y {dashaData.balance.months}m {dashaData.balance.days}d
+                    {t('dasha.remaining', {
+                        planet: t(`planets.${dashaData.balance.planet}`),
+                        years: dashaData.balance.years,
+                        months: dashaData.balance.months,
+                        days: dashaData.balance.days
+                    })}
                 </span>
             </div>
 
@@ -47,21 +61,21 @@ const DashaTable = ({ moonLongitude, birthDate }) => {
                             >
                                 <div className="dasha-planet">
                                     <span className="planet-icon">{getPlanetIcon(dasha.planet)}</span>
-                                    <span className="planet-name">{dasha.planet}</span>
-                                    {dasha.isCurrent && <span className="current-badge">Current</span>}
+                                    <span className="planet-name">{t(`planets.${dasha.planet}`)}</span>
+                                    {dasha.isCurrent && <span className="current-badge">{t('dasha.current')}</span>}
                                 </div>
                                 <div className="dasha-dates">
                                     {formatDate(dasha.startDate)} — {formatDate(dasha.endDate)}
                                 </div>
                                 <div className="dasha-duration">
-                                    {index === 0 ? 'Balance' : `${dasha.fullDuration} Years`}
+                                    {index === 0 ? t('dasha.balance') : t('dasha.fullYears', { years: dasha.fullDuration })}
                                     <span className="arrow">{isExpanded ? '▲' : '▼'}</span>
                                 </div>
                             </div>
 
                             {isExpanded && (
                                 <div className="antardasha-list">
-                                    <h4 className="antardasha-title">Antardashas (Sub-periods)</h4>
+                                    <h4 className="antardasha-title">{t('dasha.antardashas')}</h4>
                                     <div className="antardasha-grid">
                                         {antardashas.map((ad) => (
                                             <div
@@ -69,7 +83,7 @@ const DashaTable = ({ moonLongitude, birthDate }) => {
                                                 className={`antardasha-item ${ad.isCurrent ? 'current-sub' : ''}`}
                                             >
                                                 <div className="ad-planet">
-                                                    {dasha.planet} — {ad.planet}
+                                                    {t(`planets.${dasha.planet}`)} — {t(`planets.${ad.planet}`)}
                                                 </div>
                                                 <div className="ad-dates">
                                                     {formatDate(ad.startDate)} — {formatDate(ad.endDate)}
@@ -85,14 +99,6 @@ const DashaTable = ({ moonLongitude, birthDate }) => {
             </div>
         </div>
     );
-};
-
-const getPlanetIcon = (planet) => {
-    const icons = {
-        'Sun': '☀️', 'Moon': '🌙', 'Mars': '♂️', 'Mercury': '☿️',
-        'Jupiter': '♃', 'Venus': '♀️', 'Saturn': '♄', 'Rahu': '🐲', 'Ketu': '🐉'
-    };
-    return icons[planet] || '🪐';
 };
 
 export default DashaTable;

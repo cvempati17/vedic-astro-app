@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CitySearch from './CitySearch';
 
 const InputForm = ({ onCalculate, initialData }) => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState(initialData || {
         name: '',
         date: '',
@@ -46,7 +48,7 @@ const InputForm = ({ onCalculate, initialData }) => {
 
         // Validate required fields
         if (!formData.date || !formData.time) {
-            alert('Please fill in Date and Time fields');
+            alert(t('inputForm.fillDateAndTime'));
             return;
         }
 
@@ -57,7 +59,7 @@ const InputForm = ({ onCalculate, initialData }) => {
         e.preventDefault();
         // Validate required fields
         if (!formData.date || !formData.time) {
-            alert('Please fill in Date and Time fields');
+            alert(t('inputForm.fillDateAndTime'));
             return;
         }
         onCalculate(formData, true);
@@ -67,18 +69,18 @@ const InputForm = ({ onCalculate, initialData }) => {
         <form onSubmit={handleSubmit} className="input-form">
             <div className="form-row">
                 <div className="form-group" style={{ flex: 2 }}>
-                    <label>Name</label>
+                    <label>{t('inputForm.nameLabel')}</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Enter your name"
+                        placeholder={t('inputForm.namePlaceholder')}
                     />
                 </div>
 
                 <div className="form-group" style={{ flex: 1 }}>
-                    <label>Gender</label>
+                    <label>{t('inputForm.genderLabel')}</label>
                     <select
                         name="gender"
                         value={formData.gender}
@@ -93,16 +95,16 @@ const InputForm = ({ onCalculate, initialData }) => {
                             fontSize: '0.9rem'
                         }}
                     >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="male">{t('gender.male')}</option>
+                        <option value="female">{t('gender.female')}</option>
+                        <option value="other">{t('gender.other')}</option>
                     </select>
                 </div>
             </div>
 
             <div className="form-row">
                 <div className="form-group">
-                    <label>Date of Birth</label>
+                    <label>{t('inputForm.dobLabel')}</label>
                     <input
                         type="date"
                         name="date"
@@ -113,7 +115,7 @@ const InputForm = ({ onCalculate, initialData }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>Time of Birth</label>
+                    <label>{t('inputForm.tobLabel')}</label>
                     <input
                         type="time"
                         name="time"
@@ -129,12 +131,12 @@ const InputForm = ({ onCalculate, initialData }) => {
                     <CitySearch onCitySelect={handleCitySelect} />
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
-                    <label>Timezone</label>
+                    <label>{t('inputForm.timezoneLabel')}</label>
                     <input
                         type="number"
                         step="any"
                         name="timezone"
-                        placeholder="TZ"
+                        placeholder={t('inputForm.tzPlaceholder')}
                         value={formData.timezone}
                         onChange={handleChange}
                         readOnly
@@ -144,24 +146,24 @@ const InputForm = ({ onCalculate, initialData }) => {
 
             <div className="form-row">
                 <div className="form-group">
-                    <label>Latitude</label>
+                    <label>{t('inputForm.latitudeLabel')}</label>
                     <input
                         type="number"
                         step="any"
                         name="latitude"
-                        placeholder="Lat"
+                        placeholder={t('inputForm.latPlaceholder')}
                         value={formData.latitude}
                         onChange={handleChange}
                         readOnly
                     />
                 </div>
                 <div className="form-group">
-                    <label>Longitude</label>
+                    <label>{t('inputForm.longitudeLabel')}</label>
                     <input
                         type="number"
                         step="any"
                         name="longitude"
-                        placeholder="Long"
+                        placeholder={t('inputForm.longPlaceholder')}
                         value={formData.longitude}
                         onChange={handleChange}
                         readOnly
@@ -170,7 +172,7 @@ const InputForm = ({ onCalculate, initialData }) => {
             </div>
 
             <div className="form-group">
-                <label>Kundali Ayanamsa</label>
+                <label>{t('inputForm.ayanamsaLabel')}</label>
                 <select
                     name="ayanamsa"
                     value={formData.ayanamsa || 'lahiri'}
@@ -185,16 +187,16 @@ const InputForm = ({ onCalculate, initialData }) => {
                         fontSize: '0.9rem'
                     }}
                 >
-                    <option value="lahiri">Lahiri/Chitrapaksha</option>
-                    <option value="raman">B.V. Raman</option>
-                    <option value="krishnamurti">Krishnamurthi</option>
-                    <option value="tropical">No Ayanamsa/Tropical</option>
+                    <option value="lahiri">{t('ayanamsa.lahiri')}/Chitrapaksha</option>
+                    <option value="raman">{t('ayanamsa.raman')}</option>
+                    <option value="krishnamurti">{t('ayanamsa.kp')}</option>
+                    <option value="tropical">{t('ayanamsa.tropical')}</option>
                 </select>
             </div>
 
             <div className="button-group" style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" className="submit-btn" onClick={handleSaveAndGenerate} style={{ background: '#10b981', flex: 1 }}>Save & Generate</button>
-                <button type="submit" className="submit-btn" style={{ flex: 1 }}>Generate</button>
+                <button type="button" className="submit-btn" onClick={handleSaveAndGenerate} style={{ background: '#10b981', flex: 1 }}>{t('inputForm.saveAndGenerate')}</button>
+                <button type="submit" className="submit-btn" style={{ flex: 1 }}>{t('inputForm.generate')}</button>
             </div>
         </form>
     );

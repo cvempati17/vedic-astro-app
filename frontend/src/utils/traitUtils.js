@@ -1,4 +1,5 @@
 import { calculateDignity, getPlanetNature } from './strengthUtils';
+import { TRAIT_RULES } from './traitRules';
 import { calculateAspects, getAspectsOnSign } from './aspectUtils';
 
 // --- Helpers ---
@@ -15,6 +16,50 @@ const SIGN_LORDS = [
 
 const ELEMENTS = ['Fire', 'Earth', 'Air', 'Water'];
 const DUAL_SIGNS = [2, 5, 8, 11];
+
+const isKendra = (house) => [1, 4, 7, 10].includes(house);
+const isTrikona = (house) => [1, 5, 9].includes(house);
+const isDusthana = (house) => [6, 8, 12].includes(house);
+
+const getPlanetHouse = (planetName, data, ascLong) => {
+    const info = data[planetName];
+    if (!info || info.longitude === undefined) return null;
+    return getHouseNum(info.longitude, ascLong);
+};
+
+const getHouseLordInfo = (houseNum, data, ascLong) => {
+    const ascRasi = Math.floor(ascLong / 30);
+    const houseRasi = (ascRasi + houseNum - 1) % 12;
+    const lordName = SIGN_LORDS[houseRasi];
+    const lordInfo = data[lordName];
+    if (!lordInfo || lordInfo.longitude === undefined) return null;
+
+    const dignity = calculateDignity(lordName, lordInfo.longitude, ascLong);
+    const lordHouse = getHouseNum(lordInfo.longitude, ascLong);
+
+    return {
+        lordName,
+        dignity,
+        house: lordHouse
+    };
+};
+
+const bucketStrength = (dignityScore) => {
+    if (dignityScore >= 90) return 'VERY_STRONG';
+    if (dignityScore >= 70) return 'STRONG';
+    if (dignityScore >= 50) return 'AVERAGE';
+    if (dignityScore >= 30) return 'WEAK';
+    return 'VERY_WEAK';
+};
+
+const isDebilitatedStatus = (status) => status === 'Debilitated (Neecha)';
+
+const hasHeavyAffliction = (dignity, house) => {
+    if (isDebilitatedStatus(dignity.status)) return true;
+    if (isDusthana(house) && dignity.score <= 30) return true;
+    if (dignity.score <= 20) return true;
+    return false;
+};
 
 // --- Trait Definitions ---
 const TRAIT_DEFS = {
@@ -453,7 +498,7 @@ const PROFILES = {
 };
 
 // --- Evaluation Logic ---
-const evaluateTrait = (traitId, data, ascLong, allAspects) => {
+const evaluateTrait = (traitId, data, ascLong, allAspects, t) => {
     const trait = TRAIT_DEFS[traitId];
     if (!trait) return null;
 
@@ -473,8 +518,14 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
             let planetScore = dignity.score / 10;
 
             const house = getHouseNum(info.longitude, ascLong);
-            if ([1, 4, 7, 10, 5, 9].includes(house)) { planetScore += 1; indicators.push(`${planetName} in good house (${house}th)`); }
-            if ([6, 8, 12].includes(house)) { planetScore -= 1.5; indicators.push(`${planetName} in difficult house (${house}th)`); }
+            if ([1, 4, 7, 10, 5, 9].includes(house)) {
+                planetScore += 1;
+                indicators.push(t ? t('traitUtils.planetGoodHouse', { planet: planetName, house }) : `${planetName} in good house (${house}th)`);
+            }
+            if ([6, 8, 12].includes(house)) {
+                planetScore -= 1.5;
+                indicators.push(t ? t('traitUtils.planetBadHouse', { planet: planetName, house }) : `${planetName} in difficult house (${house}th)`);
+            }
 
             // Aspects
             const rasiIndex = Math.floor(info.longitude / 30);
@@ -486,7 +537,7 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
             });
 
             score = Math.max(1, Math.min(10, planetScore));
-            reasons.push(`${planetName}: ${score.toFixed(1)}/10 (${dignity.status})`);
+            reasons.push(t ? t('traitUtils.planetScore', { planet: planetName, score: score.toFixed(1), status: dignity.status }) : `${planetName}: ${score.toFixed(1)}/10 (${dignity.status})`);
 
         } else if (factor.type === 'house') {
             const houseNum = factor.num;
@@ -500,7 +551,10 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
                 let houseScore = dignity.score / 10;
 
                 const lordHouse = getHouseNum(lordInfo.longitude, ascLong);
-                if ([6, 8, 12].includes(lordHouse)) { houseScore -= 1.5; indicators.push(`${houseNum}th Lord in Dusthana`); }
+                if ([6, 8, 12].includes(lordHouse)) {
+                    houseScore -= 1.5;
+                    indicators.push(t ? t('traitUtils.houseLordDusthana', { house: houseNum }) : `${houseNum}th Lord in Dusthana`);
+                }
                 else if ([1, 4, 7, 10, 5, 9].includes(lordHouse)) { houseScore += 1; }
 
                 const planetsInHouse = Object.entries(data).filter(([p, info]) => {
@@ -510,13 +564,19 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
                 if (planetsInHouse.length > 0) {
                     planetsInHouse.forEach(([p]) => {
                         const nature = getPlanetNature(p, ascLong);
-                        if (nature.isBenefic) { houseScore += 1; indicators.push(`Benefic ${p} in ${houseNum}th`); }
-                        else { houseScore -= 1; indicators.push(`Malefic ${p} in ${houseNum}th`); }
+                        if (nature.isBenefic) {
+                            houseScore += 1;
+                            indicators.push(t ? t('traitUtils.beneficInHouse', { planet: p, house: houseNum }) : `Benefic ${p} in ${houseNum}th`);
+                        }
+                        else {
+                            houseScore -= 1;
+                            indicators.push(t ? t('traitUtils.maleficInHouse', { planet: p, house: houseNum }) : `Malefic ${p} in ${houseNum}th`);
+                        }
                     });
                 }
 
                 score = Math.max(1, Math.min(10, houseScore));
-                reasons.push(`${houseNum}th House: ${score.toFixed(1)}/10`);
+                reasons.push(t ? t('traitUtils.houseScore', { house: houseNum, score: score.toFixed(1) }) : `${houseNum}th House: ${score.toFixed(1)}/10`);
             }
         } else if (factor.type === 'earth_influence') {
             let earthCount = 0;
@@ -527,7 +587,7 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
                 }
             });
             score = Math.min(10, 4 + earthCount);
-            reasons.push(`${earthCount} planets in Earth signs.`);
+            reasons.push(t ? t('traitUtils.earthSigns', { count: earthCount }) : `${earthCount} planets in Earth signs.`);
         } else if (factor.type === 'dual_sign_influence') {
             let dualCount = 0;
             Object.entries(data).forEach(([p, info]) => {
@@ -537,7 +597,7 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
                 }
             });
             score = Math.min(10, 5 + dualCount);
-            reasons.push(`${dualCount} planets in Dual signs.`);
+            reasons.push(t ? t('traitUtils.dualSigns', { count: dualCount }) : `${dualCount} planets in Dual signs.`);
         }
 
         totalScore += score * factor.weight;
@@ -547,15 +607,15 @@ const evaluateTrait = (traitId, data, ascLong, allAspects) => {
 
     return {
         id: traitId,
-        name: trait.name,
-        description: trait.description,
+        name: t ? t(`traits.${traitId}.name`, trait.name) : trait.name,
+        description: t ? t(`traits.${traitId}.description`, trait.description) : trait.description,
         score: totalScore.toFixed(1),
         reasons,
         indicators: [...new Set(indicators)]
     };
 };
 
-export const calculateProfiles = (data) => {
+export const calculateProfiles = (data, t) => {
     if (!data || !data.Ascendant) return null;
 
     const ascLong = data.Ascendant.longitude;
@@ -565,16 +625,245 @@ export const calculateProfiles = (data) => {
 
     Object.entries(PROFILES).forEach(([profileKey, profileDef]) => {
         results[profileKey] = {
-            title: profileDef.title,
+            title: t ? t(`profiles.${profileKey}.title`, profileDef.title) : profileDef.title,
             sections: profileDef.sections.map(section => ({
-                title: section.title,
-                traits: section.traits.map(traitId => evaluateTrait(traitId, data, ascLong, allAspects)).filter(t => t)
+                title: t ? t(`profiles.sections.${section.title.replace(/\s+/g, '_').replace(/[&]/g, '').replace(/_+/g, '_').toLowerCase()}`, section.title) : section.title,
+                traits: section.traits.map(traitId => evaluateTrait(traitId, data, ascLong, allAspects, t)).filter(t => t)
             }))
         };
     });
 
     return results;
 };
+
+export const calculateAdvancedTraits = (data, t) => {
+    if (!data || !data.Ascendant) return null;
+
+    const ascLong = data.Ascendant.longitude;
+    const allAspects = calculateAspects(data);
+
+    const evalTrait = (id) => evaluateTrait(id, data, ascLong, allAspects, t);
+
+    const makeTraitList = (ids) => ids
+        .map(id => evalTrait(id))
+        .filter(t => t);
+
+    const categories = [
+        {
+            id: 'personal_character',
+            title: t ? t('advancedTraits.personalCharacter', 'Personal Character & Ethics') : 'Personal Character & Ethics',
+            traits: makeTraitList([
+                'honesty',
+                'respect',
+                'loyalty',
+                'responsibility',
+                'fairness',
+                'generosity',
+                'neutral',
+                'patient',
+                'shared_values'
+            ])
+        },
+        {
+            id: 'emotional_relationship',
+            title: t ? t('advancedTraits.emotionalRelationship', 'Emotional & Relationship Traits') : 'Emotional & Relationship Traits',
+            traits: makeTraitList([
+                'emotional_stability',
+                'kindness',
+                'communication',
+                'supportiveness',
+                'affection',
+                'humor',
+                'empathy_wellbeing'
+            ])
+        },
+        {
+            id: 'mental_growth',
+            title: t ? t('advancedTraits.mentalGrowth', 'Mental Growth & Adaptability') : 'Mental Growth & Adaptability',
+            traits: makeTraitList([
+                'independence',
+                'adaptability',
+                'curious',
+                'learning_ability',
+                'observant',
+                'problem_solving',
+                'improvisor'
+            ])
+        },
+        {
+            id: 'work_collaboration',
+            title: t ? t('advancedTraits.workCollaboration', 'Work & Collaboration Traits') : 'Work & Collaboration Traits',
+            traits: makeTraitList([
+                'work_ethic',
+                'positive_attitude',
+                'teamwork',
+                'leadership',
+                'vision',
+                'project_management',
+                'risk_taking'
+            ])
+        },
+        {
+            id: 'skills_professional',
+            title: t ? t('advancedTraits.skillsProfessional', 'Skills & Professional Traits') : 'Skills & Professional Traits',
+            traits: makeTraitList([
+                'technical_skills',
+                'data_analysis',
+                'business_acumen',
+                'financial_responsibility',
+                'perfectionist',
+                'wealth_potential',
+                'health_vitality'
+            ])
+        }
+    ];
+
+    return { categories };
+};
+
+
+
+// Helper to determine Planet Strength Level (0=Best, 1=Good, 2=Weak, 3=Worst)
+const getPlanetStrengthLevel = (planetName, data, ascLong, keyHouses = []) => {
+    const info = data[planetName];
+    if (!info) return 1; // Default to average if missing
+
+    const dignity = calculateDignity(planetName, info.longitude, ascLong);
+    const house = getHouseNum(info.longitude, ascLong);
+    const strength = bucketStrength(dignity.score);
+
+    // Check for heavy affliction
+    if (hasHeavyAffliction(dignity, house)) return 3;
+
+    // Check for very strong
+    const isKeyHouse = keyHouses.includes(house);
+    const isKendraTrikona = [1, 4, 7, 10, 5, 9].includes(house);
+    if ((dignity.status === 'Exalted (Ucha)' || dignity.status === 'Own Sign (Swakshetra)') && (isKeyHouse || isKendraTrikona)) {
+        return 0;
+    }
+
+    // Check for strong
+    if (strength === 'STRONG' || strength === 'VERY_STRONG') return 1;
+
+    // Check for weak
+    if (strength === 'WEAK' || strength === 'VERY_WEAK' || [6, 8, 12].includes(house)) return 2;
+
+    return 1; // Default average
+};
+
+// Helper to determine House Strength Level (0=Best, 1=Good, 2=Weak, 3=Worst)
+const getHouseStrengthLevel = (houseNum, data, ascLong) => {
+    const lordInfo = getHouseLordInfo(houseNum, data, ascLong);
+    if (!lordInfo) return 1;
+
+    const { dignity, house: lordHouse } = lordInfo;
+    const strength = bucketStrength(dignity.score);
+
+    // Check for heavy affliction
+    if (hasHeavyAffliction(dignity, lordHouse)) return 3;
+
+    // Check for very strong
+    if ((dignity.status === 'Exalted (Ucha)' || dignity.status === 'Own Sign (Swakshetra)') && [1, 4, 7, 10, 5, 9].includes(lordHouse)) {
+        return 0;
+    }
+
+    // Check for strong
+    if (strength === 'STRONG' || strength === 'VERY_STRONG') return 1;
+
+    // Check for weak
+    if (strength === 'WEAK' || strength === 'VERY_WEAK' || [6, 8, 12].includes(lordHouse)) return 2;
+
+    return 1; // Default average
+};
+
+export const calculateAdvancedTraitsCsv = (data, t) => {
+    if (!data || !data.Ascendant) return null;
+
+    const ascLong = data.Ascendant.longitude;
+    const categories = {};
+
+    Object.entries(TRAIT_RULES).forEach(([traitName, ruleDef]) => {
+        const { category, keyHouses, factors } = ruleDef;
+
+        // Map category to translation key
+        let categoryKey = 'personalCharacter';
+        if (category.includes('Emotional')) categoryKey = 'emotionalRelationship';
+        else if (category.includes('Mental')) categoryKey = 'mentalGrowth';
+        else if (category.includes('Work')) categoryKey = 'workCollaboration';
+        else if (category.includes('Skills')) categoryKey = 'skillsProfessional';
+
+        const translatedCategory = t ? t(`advancedTraits.${categoryKey}`) : category;
+        const categoryId = category.replace(/\s+/g, '_').toLowerCase();
+
+        if (!categories[category]) {
+            categories[category] = {
+                id: categoryId,
+                title: translatedCategory,
+                traits: []
+            };
+        }
+
+        let totalPoints = 0;
+        const breakdown = [];
+
+        Object.values(factors).forEach(factor => {
+            let ruleIndex = 0;
+            let matchedRule = null;
+
+            if (factor.type === 'base') {
+                ruleIndex = 0;
+            } else if (factor.type === 'planet') {
+                ruleIndex = getPlanetStrengthLevel(factor.name, data, ascLong, keyHouses);
+            } else if (factor.type === 'house') {
+                // Parse house number from name "3rd house & lord" -> 3
+                const houseNum = parseInt(factor.name);
+                ruleIndex = getHouseStrengthLevel(houseNum, data, ascLong);
+            } else if (factor.type === 'lagna') {
+                // Simplified Lagna check
+                const lagnaLordInfo = getHouseLordInfo(1, data, ascLong);
+                if (lagnaLordInfo && bucketStrength(lagnaLordInfo.dignity.score) === 'VERY_STRONG') ruleIndex = 0;
+                else ruleIndex = 1;
+            }
+
+            // Safety check for index
+            if (ruleIndex >= factor.rules.length) ruleIndex = factor.rules.length - 1;
+
+            matchedRule = factor.rules[ruleIndex];
+
+            if (matchedRule) {
+                totalPoints += matchedRule.points;
+                breakdown.push({
+                    factor: matchedRule.originalFactor,
+                    status: matchedRule.status,
+                    points: matchedRule.points,
+                    allStatuses: factor.rules.map(r => r.status)
+                });
+            }
+        });
+
+        // Clamp score 1-10
+        const finalScore = Math.max(1, Math.min(10, totalPoints));
+
+        // Translate trait name if possible
+        // We need to add keys for all traits, for now fallback to English
+        // const traitKey = traitName.replace(/[&\s]+/g, '_').toLowerCase();
+        // const translatedTraitName = t ? t(`advancedTraits.traits.${traitKey}`, traitName) : traitName;
+
+        categories[category].traits.push({
+            id: traitName.replace(/\s+/g, '_').toLowerCase(),
+            name: traitName, // Keep English for now as we don't have all keys
+            description: `Score: ${finalScore}/10`, // Simplified description
+            score: finalScore,
+            breakdown: breakdown
+        });
+    });
+
+    return {
+        categories: Object.values(categories)
+    };
+};
+
+
 
 export const calculateHappinessIndex = (data) => {
     if (!data || !data.Ascendant) return 0;

@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { calculateYogas } from '../utils/yogaUtils';
 import './YogasView.css';
 
 const YogasView = ({ data }) => {
+    const { t } = useTranslation();
     if (!data) return null;
 
     const yogas = calculateYogas(data);
@@ -10,8 +12,8 @@ const YogasView = ({ data }) => {
     if (yogas.length === 0) {
         return (
             <div className="yogas-container">
-                <h2 className="section-title">Vedic Yogas</h2>
-                <div className="no-yogas">No major Yogas detected in this simplified analysis.</div>
+                <h2 className="section-title">{t('yogas.title')}</h2>
+                <div className="no-yogas">{t('yogas.noYogas')}</div>
             </div>
         );
     }
@@ -25,9 +27,9 @@ const YogasView = ({ data }) => {
 
     return (
         <div className="yogas-container">
-            <h2 className="section-title">Vedic Yogas (Planetary Combinations)</h2>
+            <h2 className="section-title">{t('yogas.titleFull')}</h2>
             <p className="section-subtitle">
-                Special planetary unions that grant specific powers, wealth, or challenges.
+                {t('yogas.subtitle')}
             </p>
 
             <div className="yogas-grid">

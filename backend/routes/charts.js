@@ -91,4 +91,28 @@ router.delete('/:id', protect, async (req, res) => {
     }
 });
 
+// @desc    Bulk delete charts
+// @route   POST /api/charts/bulk-delete
+// @access  Private
+router.post('/bulk-delete', protect, async (req, res) => {
+    try {
+        const { ids } = req.body;
+
+        if (!ids || !Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ error: 'Please provide an array of chart IDs' });
+        }
+
+        // Delete charts where _id is in ids AND user is the authenticated user
+        const result = await Chart.deleteMany({
+            _id: { $in: ids },
+            user: req.user.id
+        });
+
+        res.json({ message: 'Charts deleted', count: result.deletedCount });
+    } catch (error) {
+        console.error('Error bulk deleting charts:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;

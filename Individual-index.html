@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vedic Astrology – Trait Scoring Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #050816;
+      color: #f5f5f5;
+    }
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    h1, h2, h3 {
+      margin: 0 0 0.5rem;
+      font-weight: 600;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    p {
+      margin: 0 0 0.75rem;
+      font-size: 0.9rem;
+      color: #d0d0d0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      margin: 0.4rem 0 0.2rem;
+      color: #e5e7eb;
+    }
+    select {
+      width: 100%;
+      padding: 0.35rem 0.45rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #f9fafb;
+      font-size: 0.8rem;
+    }
+    select:focus {
+      outline: 2px solid #38bdf8;
+      outline-offset: 1px;
+    }
+    .hint {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-bottom: 0.25rem;
+    }
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #e0f2fe;
+    }
+    .score-value {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .btn-row {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.6);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.75);
+    }
+    .results {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.09), rgba(15,23,42,0.95));
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+    }
+    .results-table th,
+    .results-table td {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.45rem 0.2rem;
+      text-align: left;
+    }
+    .results-table th {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+    .results-table td.trait-name {
+      font-weight: 500;
+      color: #f9fafb;
+    }
+    .results-table td.score-col {
+      text-align: center;
+    }
+    .tagline {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      .app {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Vedic Astrology Trait Engine</h1>
+    <p class="tagline">
+      Manually set qualitative astrological conditions for one chart. The engine converts them into 1–10 scores using the rule system.
+    </p>
+
+    <!-- TRAIT CARDS -->
+    <div class="grid">
+
+      <!-- Work Ethic -->
+      <div class="card" id="card-work-ethic">
+        <div class="card-header">
+          <h2>Work Ethic</h2>
+          <span class="badge">Saturn · Mars · 6H · 10H · Lagna</span>
+        </div>
+        <p class="hint">Base = 5, then Saturn + Mars + 6H + 10H + Lagna → clamp 1–10.</p>
+
+        <label for="we-saturn">Saturn (discipline & endurance)</label>
+        <select id="we-saturn">
+          <option value="0">Select condition…</option>
+          <option value="3">Exalted/own in 1/6/10 (+3)</option>
+          <option value="2">Strong in 3/9/11 (+2)</option>
+          <option value="1">Connected to 6th or 10th (+1)</option>
+          <option value="-1">Weak/afflicted (−1)</option>
+          <option value="-2">Debilitated & heavily afflicted (−2)</option>
+        </select>
+
+        <label for="we-mars">Mars (drive & execution)</label>
+        <select id="we-mars">
+          <option value="0">Select condition…</option>
+          <option value="2">Exalted/own & linked to 6th/10th (+2)</option>
+          <option value="1">Strong but not work-linked (+1)</option>
+          <option value="-1">Debilitated & harms Moon/Lagna (−1)</option>
+        </select>
+
+        <label for="we-h6">6th house & lord (daily work)</label>
+        <select id="we-h6">
+          <option value="0">Select condition…</option>
+          <option value="2">Lord strong + links to Saturn/Mars, clean (+2)</option>
+          <option value="1">Lord average, benefic support, not afflicted (+1)</option>
+          <option value="-1">Lord weak in 8/12 and somewhat afflicted (−1)</option>
+          <option value="-2">Lord debilitated + heavily afflicted 6th (−2)</option>
+        </select>
+
+        <label for="we-h10">10th house & lord (career work)</label>
+        <select id="we-h10">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong 10th lord in Kendra/Trikona (+2)</option>
+          <option value="1">10th lord average, supported by Saturn/Jupiter (+1)</option>
+          <option value="-1">10th lord weak or in 6/8/12 (−1)</option>
+          <option value="-2">Debilitated 10th lord + heavy affliction (−2)</option>
+        </select>
+
+        <label for="we-lagna">Lagna & lord (nature)</label>
+        <select id="we-lagna">
+          <option value="0">Select condition…</option>
+          <option value="1">Fixed/earth Lagna with strong lord (+1)</option>
+          <option value="-1">Dual Lagna with weak lord (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            WE:
+            <span class="score-value" id="we-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Leadership -->
+      <div class="card" id="card-leadership">
+        <div class="card-header">
+          <h2>Leadership Ability</h2>
+          <span class="badge">Sun · 10H · Lagna · Mars · Jupiter</span>
+        </div>
+        <p class="hint">Base = 5, then Sun + 10H + Lagna + Mars + Jupiter → clamp 1–10.</p>
+
+        <label for="lead-sun">Sun (authority & confidence)</label>
+        <select id="lead-sun">
+          <option value="0">Select condition…</option>
+          <option value="3">Exalted/own in 1/9/10 (+3)</option>
+          <option value="2">Strong in Kendra/Trikona (+2)</option>
+          <option value="1">Average but supported by Jupiter (+1)</option>
+          <option value="-1">Debilitated or in 6/8/12 (−1)</option>
+          <option value="-2">Debilitated + heavily afflicted (−2)</option>
+        </select>
+
+        <label for="lead-h10">10th house & lord</label>
+        <select id="lead-h10">
+          <option value="0">Select condition…</option>
+          <option value="3">Strong 10th lord + rāja yogas (+3)</option>
+          <option value="2">Strong 10th or benefics in 10th (+2)</option>
+          <option value="1">Average 10th, not harmed (+1)</option>
+          <option value="-1">Weak 10th lord in 6/8/12 (−1)</option>
+          <option value="-2">Debilitated 10th + malefic 10th (−2)</option>
+        </select>
+
+        <label for="lead-lagna">Lagna & lord</label>
+        <select id="lead-lagna">
+          <option value="0">Select condition…</option>
+          <option value="2">Fire/fixed Lagna & strong lord (+2)</option>
+          <option value="1">Other Lagna, strong lord (+1)</option>
+          <option value="-1">Lagna lord weak (−1)</option>
+          <option value="-2">Lagna lord debilitated & afflicted (−2)</option>
+        </select>
+
+        <label for="lead-mars">Mars (assertiveness)</label>
+        <select id="lead-mars">
+          <option value="0">Select condition…</option>
+          <option value="1.5">Strong & linked to 10th/Lagna (+1.5)</option>
+          <option value="0.5">Strong but no clear link (+0.5)</option>
+          <option value="-1">Debilitated/harsh Mars vs Moon/Lagna (−1)</option>
+        </select>
+
+        <label for="lead-jupiter">Jupiter (wisdom)</label>
+        <select id="lead-jupiter">
+          <option value="0">Select condition…</option>
+          <option value="1.5">Strong Jupiter aspecting Lagna/10th (+1.5)</option>
+          <option value="0.5">Strong elsewhere (+0.5)</option>
+          <option value="-1">Weak Jupiter in 6/8/12 (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            LEAD:
+            <span class="score-value" id="lead-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Financial Discipline -->
+      <div class="card" id="card-financial">
+        <div class="card-header">
+          <h2>Financial Discipline</h2>
+          <span class="badge">2H · 11H · Saturn · Jupiter · Venus</span>
+        </div>
+        <p class="hint">Base = 5, then 2H + 11H + Saturn + Jupiter + Venus → clamp 1–10.</p>
+
+        <label for="fd-h2">2nd house & lord (savings)</label>
+        <select id="fd-h2">
+          <option value="0">Select condition…</option>
+          <option value="3">Strong 2nd lord + benefics (+3)</option>
+          <option value="1">Average, not afflicted (+1)</option>
+          <option value="-2">Weak lord + afflictions (−2)</option>
+          <option value="-3">Debilitated lord + Rahu/Ketu + malefics (−3)</option>
+        </select>
+
+        <label for="fd-h11">11th house & lord (income)</label>
+        <select id="fd-h11">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong 11th lord linked to 2nd/10th (+2)</option>
+          <option value="1">Average, not afflicted (+1)</option>
+          <option value="-2">Weak 11th lord + afflictions (−2)</option>
+        </select>
+
+        <label for="fd-saturn">Saturn (frugality)</label>
+        <select id="fd-saturn">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong Saturn aspecting 2nd/11th (+2)</option>
+          <option value="1">Strong Saturn elsewhere (+1)</option>
+          <option value="-2">Weak Saturn + Rahu over 2nd/11th (−2)</option>
+        </select>
+
+        <label for="fd-jupiter">Jupiter (financial judgment)</label>
+        <select id="fd-jupiter">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong Jupiter in 2/5/9/11 (+2)</option>
+          <option value="1">Strong elsewhere (+1)</option>
+          <option value="-2">Weak/debilitated in 6/8/12 (−2)</option>
+        </select>
+
+        <label for="fd-venus">Venus (spending style)</label>
+        <select id="fd-venus">
+          <option value="0">Select condition…</option>
+          <option value="1">Strong Venus in good house (+1)</option>
+          <option value="-1">Over-indulgent Venus (12th/6th with malefics) (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            FD:
+            <span class="score-value" id="fd-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Emotional Stability -->
+      <div class="card" id="card-emotional">
+        <div class="card-header">
+          <h2>Emotional Stability</h2>
+          <span class="badge">Moon · 4H · Lagna · Benefic Aspects</span>
+        </div>
+        <p class="hint">Base = 5, then Moon + 4H + Lagna + Benefics → clamp 1–10.</p>
+
+        <label for="es-moon">Moon (mental state)</label>
+        <select id="es-moon">
+          <option value="0">Select condition…</option>
+          <option value="4">Waxing, strong, benefic-supported (+4)</option>
+          <option value="2">Average, not afflicted (+2)</option>
+          <option value="0">Mixed / unclear (0)</option>
+          <option value="-2">Weak with some malefics (−2)</option>
+          <option value="-3">Debilitated + heavy malefics (−3)</option>
+        </select>
+
+        <label for="es-h4">4th house & lord (inner peace)</label>
+        <select id="es-h4">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong 4th lord + benefics in/asp. 4th (+2)</option>
+          <option value="1">Average, not afflicted (+1)</option>
+          <option value="-2">Weak 4th lord + malefics in 4th (−2)</option>
+        </select>
+
+        <label for="es-lagna">Lagna & lord</label>
+        <select id="es-lagna">
+          <option value="0">Select condition…</option>
+          <option value="2">Fixed Lagna & strong lord (+2)</option>
+          <option value="1">Other Lagna, strong lord (+1)</option>
+          <option value="-1">Weak Lagna lord (−1)</option>
+          <option value="-2">Debilitated Lagna lord & afflicted (−2)</option>
+        </select>
+
+        <label for="es-benefics">Jupiter / Venus aspects</label>
+        <select id="es-benefics">
+          <option value="0">Select condition…</option>
+          <option value="2">Jupiter aspects Moon or 4th (+2)</option>
+          <option value="1">Venus aspects Moon/4th (+1)</option>
+          <option value="-1">Strong malefic aspects with no relief (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            ES:
+            <span class="score-value" id="es-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Career Success Potential -->
+      <div class="card" id="card-career">
+        <div class="card-header">
+          <h2>Career Success Potential</h2>
+          <span class="badge">10H · 9H · Lagna · Su · Sa · Ju · Yogas</span>
+        </div>
+        <p class="hint">Base = 5, then 10H + 9H + Lagna + (Su/Sa/Ju combo) + Yogas → clamp 1–10.</p>
+
+        <label for="csp-h10">10th house & lord</label>
+        <select id="csp-h10">
+          <option value="0">Select condition…</option>
+          <option value="4">Strong 10th + major rāja yogas (+4)</option>
+          <option value="2">Strong 10th or benefics in 10th (+2)</option>
+          <option value="0">Average, no big help/harm (0)</option>
+          <option value="-2">Weak 10th + afflictions (−2)</option>
+          <option value="-3">Debilitated 10th lord + heavy affliction (−3)</option>
+        </select>
+
+        <label for="csp-h9">9th house & lord</label>
+        <select id="csp-h9">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong 9th lord & good 9th (+2)</option>
+          <option value="1">Average, not harmed (+1)</option>
+          <option value="-2">Weak/debilitated & afflicted (−2)</option>
+        </select>
+
+        <label for="csp-lagna">Lagna & lord</label>
+        <select id="csp-lagna">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong Lagna & lord (+2)</option>
+          <option value="1">Average but okay (+1)</option>
+          <option value="-1">Weak Lagna/lord (−1)</option>
+          <option value="-2">Debilitated & afflicted (−2)</option>
+        </select>
+
+        <label for="csp-core">Sun · Saturn · Jupiter combo</label>
+        <select id="csp-core">
+          <option value="0">Select condition…</option>
+          <option value="3">All three strong & tied to 10th/9th/1st (+3)</option>
+          <option value="2">Two strong, one average (+2)</option>
+          <option value="0">All average (0)</option>
+          <option value="-2">Two or more very weak (−2)</option>
+        </select>
+
+        <label for="csp-yogas">Special yogas</label>
+        <select id="csp-yogas">
+          <option value="0">Select condition…</option>
+          <option value="2">Strong dharma–karma yogas (+2)</option>
+          <option value="1">Moderate yogas (+1)</option>
+          <option value="-1">Strong career-blocking signatures (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            CSP:
+            <span class="score-value" id="csp-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Luck Factor -->
+      <div class="card" id="card-luck">
+        <div class="card-header">
+          <h2>Luck Factor</h2>
+          <span class="badge">9H · Jupiter · Lagna · Moon · Yogas</span>
+        </div>
+        <p class="hint">Base = 5, then 9H + Jupiter + (Lagna/Moon) + Yogas → clamp 1–10.</p>
+
+        <label for="luck-h9">9th house & lord</label>
+        <select id="luck-h9">
+          <option value="0">Select condition…</option>
+          <option value="4">Very strong 9th (+4)</option>
+          <option value="2">Strong with minor issues (+2)</option>
+          <option value="0">Average (0)</option>
+          <option value="-2">Weak + some affliction (−2)</option>
+          <option value="-3">Debilitated + heavy affliction (−3)</option>
+        </select>
+
+        <label for="luck-jupiter">Jupiter</label>
+        <select id="luck-jupiter">
+          <option value="0">Select condition…</option>
+          <option value="3">Strong in 1/5/9 with good aspects (+3)</option>
+          <option value="2">Strong in other dharma / 11th (+2)</option>
+          <option value="0">Neutral (0)</option>
+          <option value="-2">Weak/debilitated in 6/8/12 (−2)</option>
+        </select>
+
+        <label for="luck-lm">Lagna & Moon</label>
+        <select id="luck-lm">
+          <option value="0">Select condition…</option>
+          <option value="2">Both strong & mostly clean (+2)</option>
+          <option value="1">One strong, one average (+1)</option>
+          <option value="0">Both average (0)</option>
+          <option value="-2">One or both heavily afflicted (−2)</option>
+        </select>
+
+        <label for="luck-yogas">Bhāgya / dharma yogas</label>
+        <select id="luck-yogas">
+          <option value="0">Select condition…</option>
+          <option value="1">Good dharmic yogas (+1)</option>
+          <option value="0">None obvious (0)</option>
+          <option value="-1">Strong misfortune yogas (−1)</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="calculateAll()">Calculate All Traits</button>
+          <span class="score-chip">
+            LUCK:
+            <span class="score-value" id="luck-score">–</span>/10
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results">
+      <h2>Summary for This Chart</h2>
+      <p class="hint">
+        Uses the same rule engine as the cards above. You can plug these scores into a pairing/synergy calculator later.
+      </p>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Trait</th>
+            <th class="score-col">Score (1–10)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="trait-name">Work Ethic</td>
+            <td class="score-col" id="summary-we">–</td>
+          </tr>
+          <tr>
+            <td class="trait-name">Leadership Ability</td>
+            <td class="score-col" id="summary-lead">–</td>
+          </tr>
+          <tr>
+            <td class="trait-name">Financial Discipline</td>
+            <td class="score-col" id="summary-fd">–</td>
+          </tr>
+          <tr>
+            <td class="trait-name">Emotional Stability</td>
+            <td class="score-col" id="summary-es">–</td>
+          </tr>
+          <tr>
+            <td class="trait-name">Career Success Potential</td>
+            <td class="score-col" id="summary-csp">–</td>
+          </tr>
+          <tr>
+            <td class="trait-name">Luck Factor</td>
+            <td class="score-col" id="summary-luck">–</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="resetForm()">Reset All Inputs</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function clamp(x, lo = 1, hi = 10) {
+      return Math.max(lo, Math.min(hi, x));
+    }
+
+    function val(id) {
+      const el = document.getElementById(id);
+      return el ? parseFloat(el.value || "0") : 0;
+    }
+
+    // --- BUSINESS RULES IMPLEMENTATION ---
+
+    function scoreWorkEthic() {
+      let score = 5;
+      score += val("we-saturn");
+      score += val("we-mars");
+      score += val("we-h6");
+      score += val("we-h10");
+      score += val("we-lagna");
+      return clamp(score);
+    }
+
+    function scoreLeadership() {
+      let score = 5;
+      score += val("lead-sun");
+      score += val("lead-h10");
+      score += val("lead-lagna");
+      score += val("lead-mars");
+      score += val("lead-jupiter");
+      return clamp(score);
+    }
+
+    function scoreFinancialDiscipline() {
+      let score = 5;
+      score += val("fd-h2");
+      score += val("fd-h11");
+      score += val("fd-saturn");
+      score += val("fd-jupiter");
+      score += val("fd-venus");
+      return clamp(score);
+    }
+
+    function scoreEmotionalStability() {
+      let score = 5;
+      score += val("es-moon");
+      score += val("es-h4");
+      score += val("es-lagna");
+      score += val("es-benefics");
+      return clamp(score);
+    }
+
+    function scoreCareerSuccess() {
+      let score = 5;
+      score += val("csp-h10");
+      score += val("csp-h9");
+      score += val("csp-lagna");
+      score += val("csp-core");
+      score += val("csp-yogas");
+      return clamp(score);
+    }
+
+    function scoreLuck() {
+      let score = 5;
+      score += val("luck-h9");
+      score += val("luck-jupiter");
+      score += val("luck-lm");
+      score += val("luck-yogas");
+      return clamp(score);
+    }
+
+    function calculateAll() {
+      const we = scoreWorkEthic();
+      const lead = scoreLeadership();
+      const fd = scoreFinancialDiscipline();
+      const es = scoreEmotionalStability();
+      const csp = scoreCareerSuccess();
+      const luck = scoreLuck();
+
+      document.getElementById("we-score").textContent = we;
+      document.getElementById("lead-score").textContent = lead;
+      document.getElementById("fd-score").textContent = fd;
+      document.getElementById("es-score").textContent = es;
+      document.getElementById("csp-score").textContent = csp;
+      document.getElementById("luck-score").textContent = luck;
+
+      document.getElementById("summary-we").textContent = we;
+      document.getElementById("summary-lead").textContent = lead;
+      document.getElementById("summary-fd").textContent = fd;
+      document.getElementById("summary-es").textContent = es;
+      document.getElementById("summary-csp").textContent = csp;
+      document.getElementById("summary-luck").textContent = luck;
+    }
+
+    function resetForm() {
+      const selects = document.querySelectorAll("select");
+      selects.forEach((s) => (s.value = "0"));
+
+      const scoreIds = [
+        "we-score", "lead-score", "fd-score", "es-score", "csp-score", "luck-score",
+        "summary-we", "summary-lead", "summary-fd", "summary-es", "summary-csp", "summary-luck"
+      ];
+      scoreIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = "–";
+      });
+    }
+  </script>
+</body>
+</html>

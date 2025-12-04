@@ -1,4 +1,5 @@
 import { calculateProfiles } from './traitUtils';
+import { computeAshtakootaScore } from './ashtakootaUtils';
 
 // --- Compatibility Helpers ---
 const SIGNS = [
@@ -20,26 +21,26 @@ const getElement = (signIndex) => {
     return null;
 };
 
-const getSignCompatibility = (sign1, sign2) => {
+const getSignCompatibility = (sign1, sign2, t) => {
     const el1 = getElement(sign1);
     const el2 = getElement(sign2);
 
-    if (el1 === el2) return { score: 10, label: 'Excellent (Same Element)' };
+    if (el1 === el2) return { score: 10, label: t('matchUtils.excellentSameElement') };
 
     // Compatible Pairs
-    if ((el1 === 'Fire' && el2 === 'Air') || (el1 === 'Air' && el2 === 'Fire')) return { score: 8, label: 'Good (Fire-Air)' };
-    if ((el1 === 'Earth' && el2 === 'Water') || (el1 === 'Water' && el2 === 'Earth')) return { score: 8, label: 'Good (Earth-Water)' };
+    if ((el1 === 'Fire' && el2 === 'Air') || (el1 === 'Air' && el2 === 'Fire')) return { score: 8, label: t('matchUtils.goodFireAir') };
+    if ((el1 === 'Earth' && el2 === 'Water') || (el1 === 'Water' && el2 === 'Earth')) return { score: 8, label: t('matchUtils.goodEarthWater') };
 
     // Neutral
-    if ((el1 === 'Fire' && el2 === 'Earth') || (el1 === 'Earth' && el2 === 'Fire')) return { score: 5, label: 'Average' };
-    if ((el1 === 'Air' && el2 === 'Water') || (el1 === 'Water' && el2 === 'Air')) return { score: 5, label: 'Average' };
+    if ((el1 === 'Fire' && el2 === 'Earth') || (el1 === 'Earth' && el2 === 'Fire')) return { score: 5, label: t('matchUtils.average') };
+    if ((el1 === 'Air' && el2 === 'Water') || (el1 === 'Water' && el2 === 'Air')) return { score: 5, label: t('matchUtils.average') };
 
     // Incompatible (Square/Opposite elements usually clash, but keeping simple)
-    return { score: 3, label: 'Challenging' };
+    return { score: 3, label: t('matchUtils.challenging') };
 };
 
-const calculateCompatibility = (baseData, candidateData, perspective) => {
-    if (!baseData || !candidateData) return { score: 0, details: [] };
+const calculateCompatibility = (baseData, candidateData, perspective, t) => {
+    if (!baseData || !candidateData) return { score: 0, details: [], components: null };
 
     const baseAsc = Math.floor(baseData.Ascendant.longitude / 30);
     const candAsc = Math.floor(candidateData.Ascendant.longitude / 30);
@@ -50,37 +51,43 @@ const calculateCompatibility = (baseData, candidateData, perspective) => {
     let totalScore = 0;
     let details = [];
 
+    const components = {};
+
     // 1. Moon Sign Compatibility (Emotional/Mental Sync) - High Weight
-    const moonComp = getSignCompatibility(baseMoon, candMoon);
+    const moonComp = getSignCompatibility(baseMoon, candMoon, t);
     totalScore += moonComp.score * 0.4;
-    details.push(`Moon Compatibility: ${moonComp.label} (${moonComp.score}/10)`);
+    details.push(t('matchUtils.moonCompatibility', { label: moonComp.label, score: moonComp.score }));
+    components.moon = { rawScore: moonComp.score, weight: 0.4 };
 
     // 2. Ascendant Compatibility (Personality/Outlook)
-    const ascComp = getSignCompatibility(baseAsc, candAsc);
+    const ascComp = getSignCompatibility(baseAsc, candAsc, t);
     totalScore += ascComp.score * 0.3;
-    details.push(`Ascendant Compatibility: ${ascComp.label} (${ascComp.score}/10)`);
+    details.push(t('matchUtils.ascendantCompatibility', { label: ascComp.label, score: ascComp.score }));
+    components.asc = { rawScore: ascComp.score, weight: 0.3 };
 
     // 3. Perspective Specific
     if (perspective.includes('business') || perspective.includes('employer')) {
         // Mercury (Communication) & Jupiter (Values)
         const baseMerc = Math.floor(baseData.Mercury.longitude / 30);
         const candMerc = Math.floor(candidateData.Mercury.longitude / 30);
-        const mercComp = getSignCompatibility(baseMerc, candMerc);
+        const mercComp = getSignCompatibility(baseMerc, candMerc, t);
         totalScore += mercComp.score * 0.3;
-        details.push(`Intellectual Sync (Mercury): ${mercComp.label} (${mercComp.score}/10)`);
+        details.push(t('matchUtils.intellectualSync', { label: mercComp.label, score: mercComp.score }));
+        components.relation = { rawScore: mercComp.score, weight: 0.3, label: 'Intellectual Sync (Mercury)' };
     } else {
         // Venus (Love) & Mars (Passion) for Relationships
         const baseVenus = Math.floor(baseData.Venus.longitude / 30);
         const candVenus = Math.floor(candidateData.Venus.longitude / 30);
-        const venusComp = getSignCompatibility(baseVenus, candVenus);
+        const venusComp = getSignCompatibility(baseVenus, candVenus, t);
         totalScore += venusComp.score * 0.3;
-        details.push(`Romantic Sync (Venus): ${venusComp.label} (${venusComp.score}/10)`);
+        details.push(t('matchUtils.romanticSync', { label: venusComp.label, score: venusComp.score }));
+        components.relation = { rawScore: venusComp.score, weight: 0.3, label: 'Romantic Sync (Venus)' };
     }
 
-    return { score: totalScore, details };
+    return { score: totalScore, details, components };
 };
 
-export const analyzeCandidates = (candidates, perspective, baseProfileData) => {
+export const analyzeCandidates = (candidates, perspective, baseProfileData, traditionalMode = false, t) => {
     // Map perspective to profile key in traitUtils
     const profileMap = {
         'girl_looking_boy': 'husband_potential',
@@ -95,7 +102,7 @@ export const analyzeCandidates = (candidates, perspective, baseProfileData) => {
 
     return candidates.map(candidate => {
         // 1. Individual Merit Score
-        const profiles = calculateProfiles(candidate.data);
+        const profiles = calculateProfiles(candidate.data, t);
         const targetProfile = profiles[profileKey];
 
         let traitTotal = 0;
@@ -111,22 +118,43 @@ export const analyzeCandidates = (candidates, perspective, baseProfileData) => {
         const individualScore = traitCount > 0 ? (traitTotal / traitCount) : 0;
 
         // 2. Compatibility Score (Synastry)
-        let compatibility = { score: 0, details: [] };
+        let compatibility = { score: 0, details: [], components: null };
         if (baseProfileData) {
-            compatibility = calculateCompatibility(baseProfileData, candidate.data, perspective);
+            compatibility = calculateCompatibility(baseProfileData, candidate.data, perspective, t);
         }
 
         // 3. Final Weighted Score
-        // If base profile exists: 60% Individual, 40% Compatibility
-        // If no base profile: 100% Individual
-        const finalScore = baseProfileData
-            ? (individualScore * 0.6) + (compatibility.score * 0.4)
-            : individualScore;
+        // If traditionalMode is enabled (relationship perspectives only), use
+        // full Ashtakoota 36-point scoring based on Moon sign & nakshatra.
+        // Otherwise, keep existing 60/40 blended score.
+
+        const isRelationshipPerspective =
+            perspective === 'girl_looking_boy' ||
+            perspective === 'boy_looking_girl';
+
+        let traditional = null;
+        let finalScore;
+
+        if (traditionalMode && baseProfileData && isRelationshipPerspective) {
+            const ashta = computeAshtakootaScore(baseProfileData, candidate.data);
+            traditional = {
+                total: ashta.total,
+                parts: ashta.kootas
+            };
+
+            finalScore = traditional.total; // use 0–36 for ranking
+        } else {
+            // Existing blended logic: If base profile exists: 60% Individual, 40% Compatibility
+            // If no base profile: 100% Individual
+            finalScore = baseProfileData
+                ? (individualScore * 0.6) + (compatibility.score * 0.4)
+                : individualScore;
+        }
 
         // Business Role Suggestion
         let role = null;
         if (perspective === 'business_partner') {
-            role = suggestRole(candidate.data);
+            role = suggestRole(candidate.data, t);
         }
 
         return {
@@ -137,13 +165,14 @@ export const analyzeCandidates = (candidates, perspective, baseProfileData) => {
             compatibilityScore: compatibility.score.toFixed(1),
             compatibilityDetails: compatibility.details,
             details: targetProfile,
-            role: role
+            role: role,
+            traditional
         };
     }).sort((a, b) => b.score - a.score);
 };
 
-const suggestRole = (data) => {
-    const profiles = calculateProfiles(data);
+const suggestRole = (data, t) => {
+    const profiles = calculateProfiles(data, t);
     const prof = profiles.professional_profile; // Use professional traits for role
     const partner = profiles.partnership_potential;
 
@@ -164,11 +193,11 @@ const suggestRole = (data) => {
     const teamwork = getScore(prof, 'teamwork');
 
     // Logic
-    if (leadership >= 8 && vision >= 8) return 'CEO (Chief Executive Officer)';
-    if (finance >= 8 && leadership >= 6) return 'CFO (Chief Financial Officer)';
-    if (tech >= 8 && vision >= 7) return 'CTO (Chief Technology Officer)';
-    if (comms >= 8 && teamwork >= 8) return 'COO / Operations Manager';
-    if (vision >= 8 && tech >= 7) return 'Chief Architect / Strategist';
+    if (leadership >= 8 && vision >= 8) return t('matchUtils.ceo');
+    if (finance >= 8 && leadership >= 6) return t('matchUtils.cfo');
+    if (tech >= 8 && vision >= 7) return t('matchUtils.cto');
+    if (comms >= 8 && teamwork >= 8) return t('matchUtils.coo');
+    if (vision >= 8 && tech >= 7) return t('matchUtils.chiefArchitect');
 
-    return 'Team Member / Specialist';
+    return t('matchUtils.teamMember');
 };

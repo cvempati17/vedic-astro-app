@@ -32,7 +32,9 @@ router.post('/send-otp', async (req, res) => {
         }
 
         // Generate OTP
-        const otp = generateOTP();
+        const otp = '123456'; // Fixed for testing
+        // const otp = generateOTP();
+        console.log('DEBUG OTP:', otp); // Temporary logging for testing
         const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes expiry
 
         // Store OTP

@@ -1,0 +1,804 @@
+Group,Trait,House and Planets,Status,Points
+Work & Collaboration Trait,Work Ethic,Base,Base,5
+Work & Collaboration Trait,Work Ethic,Saturn (discipline & endurance),Exalted/own in 1/6/10,3
+Work & Collaboration Trait,Work Ethic,Saturn (discipline & endurance),Strong in 3/9/11,2
+Work & Collaboration Trait,Work Ethic,Saturn (discipline & endurance),Connected to 6th or 10th,1
+Work & Collaboration Trait,Work Ethic,Saturn (discipline & endurance),Weak/afflicted,-1
+Work & Collaboration Trait,Work Ethic,Saturn (discipline & endurance),Debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Work Ethic,Mars (drive & execution),Exalted/own & linked to 6th/10th,2
+Work & Collaboration Trait,Work Ethic,Mars (drive & execution),Strong but not work-linked,1
+Work & Collaboration Trait,Work Ethic,Mars (drive & execution),Debilitated & harms Moon/Lagna,-1
+Work & Collaboration Trait,Work Ethic,6th house & lord (daily work),"Lord strong + links to Saturn/Mars, clear (+2)",2
+Work & Collaboration Trait,Work Ethic,6th house & lord (daily work),"Lord average, benefic support, not afflicted (+1)",1
+Work & Collaboration Trait,Work Ethic,6th house & lord (daily work),Lord weak in 8/12 and somewhat afflicted (–1),-1
+Work & Collaboration Trait,Work Ethic,6th house & lord (daily work),Lord debilitated + heavily afflicted 6th (–2),-2
+Work & Collaboration Trait,Work Ethic,10th house & lord (career work),Strong 10th lord in Kendra/Trikona,2
+Work & Collaboration Trait,Work Ethic,10th house & lord (career work),"10th lord average, supported by Saturn/Jupiter",1
+Work & Collaboration Trait,Work Ethic,10th house & lord (career work),10th lord weak or in 6/8/12,-1
+Work & Collaboration Trait,Work Ethic,10th house & lord (career work),Debilitated 10th lord + heavy affliction,-2
+Work & Collaboration Trait,Work Ethic,Lagna & lord (nature),Fixed/Earth Lagna with strong lord,1
+Work & Collaboration Trait,Work Ethic,Lagna & lord (nature),Dual Lagna with weak lord,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Base,Base,5
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Ketu (detachment & intuition),Ketu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Ketu (detachment & intuition),Ketu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Ketu (detachment & intuition),Ketu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,Ketu (detachment & intuition),Ketu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Trustworthiness & Honesty,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Trustworthiness & Honesty,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Respectful Behavior,Base,Base,5
+Personal Character & Ethics Trait,Respectful Behavior,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Respectful Behavior,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Respectful Behavior,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Respectful Behavior,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Respectful Behavior,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Respectful Behavior,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Respectful Behavior,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Respectful Behavior,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Respectful Behavior,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Respectful Behavior,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Respectful Behavior,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Respectful Behavior,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Respectful Behavior,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Respectful Behavior,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Respectful Behavior,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Respectful Behavior,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Respectful Behavior,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Respectful Behavior,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Respectful Behavior,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Respectful Behavior,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Loyalty & Commitment,Base,Base,5
+Personal Character & Ethics Trait,Loyalty & Commitment,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Loyalty & Commitment,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Loyalty & Commitment,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Loyalty & Commitment,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Loyalty & Commitment,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Loyalty & Commitment,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Loyalty & Commitment,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Loyalty & Commitment,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Loyalty & Commitment,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Loyalty & Commitment,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Loyalty & Commitment,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Loyalty & Commitment,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Loyalty & Commitment,Ketu (detachment & intuition),Ketu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Loyalty & Commitment,Ketu (detachment & intuition),Ketu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Loyalty & Commitment,Ketu (detachment & intuition),Ketu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Loyalty & Commitment,Ketu (detachment & intuition),Ketu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Loyalty & Commitment,7th house & lord (partnerships),7H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Loyalty & Commitment,7th house & lord (partnerships),"7H lord average, some benefic support",1
+Personal Character & Ethics Trait,Loyalty & Commitment,7th house & lord (partnerships),7H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Loyalty & Commitment,7th house & lord (partnerships),7H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Emotional Maturity,Base,Base,5
+Emotional & Relationship Trait,Emotional Maturity,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Emotional Maturity,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Emotional Maturity,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Emotional Maturity,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Emotional Maturity,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Emotional Maturity,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Emotional Maturity,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Emotional Maturity,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Emotional Maturity,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Emotional Maturity,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Emotional Maturity,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Emotional Maturity,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Emotional Maturity,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Emotional Maturity,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Emotional Maturity,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Emotional Maturity,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Emotional Maturity,Ketu (detachment & intuition),Ketu very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Emotional Maturity,Ketu (detachment & intuition),Ketu strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Emotional Maturity,Ketu (detachment & intuition),Ketu weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Emotional Maturity,Ketu (detachment & intuition),Ketu very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Kindness & Compassion,Base,Base,5
+Emotional & Relationship Trait,Kindness & Compassion,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Kindness & Compassion,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Kindness & Compassion,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Kindness & Compassion,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Kindness & Compassion,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Kindness & Compassion,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Kindness & Compassion,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Kindness & Compassion,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Kindness & Compassion,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Kindness & Compassion,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Kindness & Compassion,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Kindness & Compassion,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Effective Communication,Base,Base,5
+Emotional & Relationship Trait,Effective Communication,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Effective Communication,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Effective Communication,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Effective Communication,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Effective Communication,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Effective Communication,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Effective Communication,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Effective Communication,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Effective Communication,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Effective Communication,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Emotional & Relationship Trait,Effective Communication,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Effective Communication,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Effective Communication,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Effective Communication,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Emotional & Relationship Trait,Effective Communication,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Effective Communication,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Effective Communication,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Effective Communication,10th house & lord (career/status),"10H lord average, some benefic support",1
+Emotional & Relationship Trait,Effective Communication,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Effective Communication,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Supportiveness,Base,Base,5
+Emotional & Relationship Trait,Supportiveness,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Supportiveness,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Supportiveness,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Supportiveness,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Supportiveness,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Supportiveness,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Supportiveness,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Supportiveness,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Supportiveness,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Supportiveness,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Supportiveness,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Supportiveness,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Supportiveness,4th house & lord (home/heart),4H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Supportiveness,4th house & lord (home/heart),"4H lord average, some benefic support",1
+Emotional & Relationship Trait,Supportiveness,4th house & lord (home/heart),4H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Supportiveness,4th house & lord (home/heart),4H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Supportiveness,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Supportiveness,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Emotional & Relationship Trait,Supportiveness,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Supportiveness,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Problem-Solving,Base,Base,5
+Mental Growth & Adaptability Trait,Problem-Solving,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Problem-Solving,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Problem-Solving,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Problem-Solving,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Problem-Solving,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Problem-Solving,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Problem-Solving,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Problem-Solving,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Problem-Solving,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Problem-Solving,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Problem-Solving,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Problem-Solving,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Problem-Solving,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Problem-Solving,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Problem-Solving,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Problem-Solving,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Affection & Intimacy,Base,Base,5
+Emotional & Relationship Trait,Affection & Intimacy,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Affection & Intimacy,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Affection & Intimacy,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Affection & Intimacy,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Affection & Intimacy,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Affection & Intimacy,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Affection & Intimacy,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Affection & Intimacy,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Affection & Intimacy,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Affection & Intimacy,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Affection & Intimacy,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Affection & Intimacy,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Affection & Intimacy,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Affection & Intimacy,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Affection & Intimacy,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Affection & Intimacy,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Affection & Intimacy,7th house & lord (partnerships),7H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Affection & Intimacy,7th house & lord (partnerships),"7H lord average, some benefic support",1
+Emotional & Relationship Trait,Affection & Intimacy,7th house & lord (partnerships),7H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Affection & Intimacy,7th house & lord (partnerships),7H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Responsibility & Reliability,Base,Base,5
+Personal Character & Ethics Trait,Responsibility & Reliability,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Responsibility & Reliability,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Responsibility & Reliability,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Responsibility & Reliability,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Responsibility & Reliability,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Responsibility & Reliability,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Responsibility & Reliability,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Responsibility & Reliability,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Responsibility & Reliability,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Responsibility & Reliability,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Personal Character & Ethics Trait,Responsibility & Reliability,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Responsibility & Reliability,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Responsibility & Reliability,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Responsibility & Reliability,10th house & lord (career/status),"10H lord average, some benefic support",1
+Personal Character & Ethics Trait,Responsibility & Reliability,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Responsibility & Reliability,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Shared Values,Base,Base,5
+Personal Character & Ethics Trait,Shared Values,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Shared Values,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Shared Values,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Shared Values,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Shared Values,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Shared Values,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Shared Values,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Shared Values,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Shared Values,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Shared Values,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Personal Character & Ethics Trait,Shared Values,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Shared Values,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Shared Values,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Shared Values,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Personal Character & Ethics Trait,Shared Values,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Shared Values,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Sense of Humor,Base,Base,5
+Emotional & Relationship Trait,Sense of Humor,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Sense of Humor,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Sense of Humor,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Sense of Humor,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Sense of Humor,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Sense of Humor,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Sense of Humor,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Sense of Humor,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Sense of Humor,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Sense of Humor,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Sense of Humor,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Sense of Humor,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Sense of Humor,5th house & lord (intellect/creativity),5H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Sense of Humor,5th house & lord (intellect/creativity),"5H lord average, some benefic support",1
+Emotional & Relationship Trait,Sense of Humor,5th house & lord (intellect/creativity),5H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Sense of Humor,5th house & lord (intellect/creativity),5H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Base,Base,5
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Independence / Self-Motivation,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Base,Base,5
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Adaptability & Flexibility,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Strong Work Ethic,Base,Base,5
+Work & Collaboration Trait,Strong Work Ethic,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Strong Work Ethic,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Strong Work Ethic,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Strong Work Ethic,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Strong Work Ethic,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Strong Work Ethic,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Strong Work Ethic,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Strong Work Ethic,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Strong Work Ethic,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Strong Work Ethic,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Work & Collaboration Trait,Strong Work Ethic,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Strong Work Ethic,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Strong Work Ethic,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Strong Work Ethic,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Strong Work Ethic,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Strong Work Ethic,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Strong Work Ethic,Lagna & lord (core nature),Lagna strong & well supported,1
+Work & Collaboration Trait,Strong Work Ethic,Lagna & lord (core nature),Lagna weak or afflicted,-1
+Personal Character & Ethics Trait,Positive Attitude,Base,Base,5
+Personal Character & Ethics Trait,Positive Attitude,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Positive Attitude,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Positive Attitude,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Positive Attitude,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Positive Attitude,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Positive Attitude,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Positive Attitude,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Positive Attitude,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Positive Attitude,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Positive Attitude,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Positive Attitude,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Positive Attitude,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Positive Attitude,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Positive Attitude,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Positive Attitude,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Positive Attitude,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Risk Taking Ability,Base,Base,5
+Work & Collaboration Trait,Risk Taking Ability,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Risk Taking Ability,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Risk Taking Ability,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Risk Taking Ability,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Risk Taking Ability,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Risk Taking Ability,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Risk Taking Ability,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Risk Taking Ability,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Risk Taking Ability,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Risk Taking Ability,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Risk Taking Ability,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Risk Taking Ability,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Risk Taking Ability,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Risk Taking Ability,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Risk Taking Ability,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Risk Taking Ability,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Risk Taking Ability,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Risk Taking Ability,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Work & Collaboration Trait,Risk Taking Ability,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Risk Taking Ability,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Risk Taking Ability,5th house & lord (intellect/creativity),5H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Risk Taking Ability,5th house & lord (intellect/creativity),"5H lord average, some benefic support",1
+Work & Collaboration Trait,Risk Taking Ability,5th house & lord (intellect/creativity),5H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Risk Taking Ability,5th house & lord (intellect/creativity),5H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Risk Taking Ability,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Risk Taking Ability,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Risk Taking Ability,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Risk Taking Ability,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Teamwork & Collaboration,Base,Base,5
+Emotional & Relationship Trait,Teamwork & Collaboration,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Teamwork & Collaboration,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Teamwork & Collaboration,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Teamwork & Collaboration,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Teamwork & Collaboration,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Teamwork & Collaboration,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Teamwork & Collaboration,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Teamwork & Collaboration,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Teamwork & Collaboration,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Teamwork & Collaboration,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Teamwork & Collaboration,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Teamwork & Collaboration,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Teamwork & Collaboration,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Teamwork & Collaboration,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Emotional & Relationship Trait,Teamwork & Collaboration,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Teamwork & Collaboration,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Teamwork & Collaboration,7th house & lord (partnerships),7H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Teamwork & Collaboration,7th house & lord (partnerships),"7H lord average, some benefic support",1
+Emotional & Relationship Trait,Teamwork & Collaboration,7th house & lord (partnerships),7H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Teamwork & Collaboration,7th house & lord (partnerships),7H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Willingness to Learn,Base,Base,5
+Mental Growth & Adaptability Trait,Willingness to Learn,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Willingness to Learn,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Willingness to Learn,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Willingness to Learn,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Willingness to Learn,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Willingness to Learn,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Willingness to Learn,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Willingness to Learn,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Willingness to Learn,5th house & lord (intellect/creativity),5H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Willingness to Learn,5th house & lord (intellect/creativity),"5H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Willingness to Learn,5th house & lord (intellect/creativity),5H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Willingness to Learn,5th house & lord (intellect/creativity),5H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Willingness to Learn,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Willingness to Learn,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Willingness to Learn,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Willingness to Learn,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Technical/Digital Literacy,Base,Base,5
+Skill & Professional Trait,Technical/Digital Literacy,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Technical/Digital Literacy,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Skill & Professional Trait,Technical/Digital Literacy,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Technical/Digital Literacy,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Technical/Digital Literacy,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Technical/Digital Literacy,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Skill & Professional Trait,Technical/Digital Literacy,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Technical/Digital Literacy,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Technical/Digital Literacy,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Technical/Digital Literacy,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Skill & Professional Trait,Technical/Digital Literacy,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Technical/Digital Literacy,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Technical/Digital Literacy,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Technical/Digital Literacy,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Skill & Professional Trait,Technical/Digital Literacy,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Technical/Digital Literacy,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Technical/Digital Literacy,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Technical/Digital Literacy,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Skill & Professional Trait,Technical/Digital Literacy,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Technical/Digital Literacy,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Technical/Digital Literacy,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Technical/Digital Literacy,10th house & lord (career/status),"10H lord average, some benefic support",1
+Skill & Professional Trait,Technical/Digital Literacy,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Technical/Digital Literacy,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Technical/Digital Literacy,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Technical/Digital Literacy,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Skill & Professional Trait,Technical/Digital Literacy,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Technical/Digital Literacy,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Project Management,Base,Base,5
+Work & Collaboration Trait,Project Management,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Project Management,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Project Management,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Project Management,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Project Management,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Project Management,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Project Management,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Project Management,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Project Management,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Project Management,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Project Management,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Project Management,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Project Management,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Project Management,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Project Management,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Project Management,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Data Analysis,Base,Base,5
+Skill & Professional Trait,Data Analysis,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Data Analysis,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Skill & Professional Trait,Data Analysis,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Data Analysis,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Data Analysis,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Data Analysis,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Skill & Professional Trait,Data Analysis,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Data Analysis,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Data Analysis,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Data Analysis,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Skill & Professional Trait,Data Analysis,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Data Analysis,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Fairness & Justice,Base,Base,5
+Personal Character & Ethics Trait,Fairness & Justice,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Fairness & Justice,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Fairness & Justice,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Fairness & Justice,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Fairness & Justice,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Fairness & Justice,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Fairness & Justice,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Fairness & Justice,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Fairness & Justice,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Fairness & Justice,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Personal Character & Ethics Trait,Fairness & Justice,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Fairness & Justice,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Fairness & Justice,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Fairness & Justice,10th house & lord (career/status),"10H lord average, some benefic support",1
+Personal Character & Ethics Trait,Fairness & Justice,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Fairness & Justice,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Generosity (Compensation),Base,Base,5
+Personal Character & Ethics Trait,Generosity (Compensation),Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Generosity (Compensation),Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Generosity (Compensation),Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Generosity (Compensation),Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Generosity (Compensation),Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Generosity (Compensation),Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Generosity (Compensation),Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Generosity (Compensation),Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Generosity (Compensation),Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Generosity (Compensation),Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Generosity (Compensation),Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Generosity (Compensation),Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Generosity (Compensation),2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Generosity (Compensation),2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Personal Character & Ethics Trait,Generosity (Compensation),2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Generosity (Compensation),2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Generosity (Compensation),11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Personal Character & Ethics Trait,Generosity (Compensation),11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Personal Character & Ethics Trait,Generosity (Compensation),11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Personal Character & Ethics Trait,Generosity (Compensation),11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Base,Base,5
+Personal Character & Ethics Trait,Neutrality & Objectivity,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Neutrality & Objectivity,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Neutrality & Objectivity,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Patience & Tolerance,Base,Base,5
+Personal Character & Ethics Trait,Patience & Tolerance,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Patience & Tolerance,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Patience & Tolerance,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Patience & Tolerance,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Patience & Tolerance,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Patience & Tolerance,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Patience & Tolerance,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Patience & Tolerance,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Patience & Tolerance,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Patience & Tolerance,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Patience & Tolerance,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Patience & Tolerance,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Personal Character & Ethics Trait,Patience & Tolerance,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Personal Character & Ethics Trait,Patience & Tolerance,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Personal Character & Ethics Trait,Patience & Tolerance,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Personal Character & Ethics Trait,Patience & Tolerance,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership,Base,Base,5
+Work & Collaboration Trait,Leadership,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Leadership,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Leadership,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Leadership,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Vision & Direction,Base,Base,5
+Work & Collaboration Trait,Vision & Direction,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Vision & Direction,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Vision & Direction,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Vision & Direction,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Vision & Direction,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Vision & Direction,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Vision & Direction,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Vision & Direction,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Vision & Direction,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Vision & Direction,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Vision & Direction,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Vision & Direction,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Vision & Direction,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Vision & Direction,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Work & Collaboration Trait,Vision & Direction,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Vision & Direction,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Vision & Direction,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Vision & Direction,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Vision & Direction,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Vision & Direction,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Observation & Awareness,Base,Base,5
+Mental Growth & Adaptability Trait,Observation & Awareness,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Observation & Awareness,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Observation & Awareness,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Observation & Awareness,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Observation & Awareness,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Observation & Awareness,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Observation & Awareness,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Observation & Awareness,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Observation & Awareness,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Observation & Awareness,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Observation & Awareness,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Observation & Awareness,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Observation & Awareness,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Observation & Awareness,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Observation & Awareness,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Observation & Awareness,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Mentorship & Growth,Base,Base,5
+Mental Growth & Adaptability Trait,Mentorship & Growth,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Mentorship & Growth,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Mentorship & Growth,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Mentorship & Growth,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Mentorship & Growth,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Mentorship & Growth,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Mentorship & Growth,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Mentorship & Growth,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Mentorship & Growth,5th house & lord (intellect/creativity),5H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Mentorship & Growth,5th house & lord (intellect/creativity),"5H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Mentorship & Growth,5th house & lord (intellect/creativity),5H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Mentorship & Growth,5th house & lord (intellect/creativity),5H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Mentorship & Growth,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Mentorship & Growth,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Mentorship & Growth,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Mentorship & Growth,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Base,Base,5
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,5th house & lord (intellect/creativity),5H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,5th house & lord (intellect/creativity),"5H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,5th house & lord (intellect/creativity),5H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,5th house & lord (intellect/creativity),5H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Mental Growth & Adaptability Trait,Curiosity & Inquisitiveness,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Perfectionism & Detail,Base,Base,5
+Work & Collaboration Trait,Perfectionism & Detail,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Perfectionism & Detail,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Perfectionism & Detail,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Perfectionism & Detail,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Perfectionism & Detail,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Perfectionism & Detail,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Perfectionism & Detail,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Perfectionism & Detail,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Perfectionism & Detail,3rd house & lord (effort/communication),3H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Perfectionism & Detail,3rd house & lord (effort/communication),"3H lord average, some benefic support",1
+Work & Collaboration Trait,Perfectionism & Detail,3rd house & lord (effort/communication),3H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Perfectionism & Detail,3rd house & lord (effort/communication),3H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Perfectionism & Detail,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Perfectionism & Detail,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Work & Collaboration Trait,Perfectionism & Detail,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Perfectionism & Detail,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Perfectionism & Detail,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Perfectionism & Detail,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Perfectionism & Detail,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Perfectionism & Detail,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Base,Base,5
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Mental Growth & Adaptability Trait,Improvisation & Adaptability,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Focus on Well-being,Base,Base,5
+Emotional & Relationship Trait,Focus on Well-being,1st house & lord (self/body),1H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Focus on Well-being,1st house & lord (self/body),"1H lord average, some benefic support",1
+Emotional & Relationship Trait,Focus on Well-being,1st house & lord (self/body),1H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Focus on Well-being,1st house & lord (self/body),1H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Focus on Well-being,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Focus on Well-being,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Emotional & Relationship Trait,Focus on Well-being,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Focus on Well-being,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Focus on Well-being,12th house & lord (loss/spirituality),12H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Focus on Well-being,12th house & lord (loss/spirituality),"12H lord average, some benefic support",1
+Emotional & Relationship Trait,Focus on Well-being,12th house & lord (loss/spirituality),12H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Focus on Well-being,12th house & lord (loss/spirituality),12H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Focus on Well-being,Lagna & lord (core nature),Lagna strong & well supported,1
+Emotional & Relationship Trait,Focus on Well-being,Lagna & lord (core nature),Lagna weak or afflicted,-1
+Skill & Professional Trait,Business Acumen,Base,Base,5
+Skill & Professional Trait,Business Acumen,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Business Acumen,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Skill & Professional Trait,Business Acumen,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Business Acumen,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Business Acumen,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Business Acumen,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Skill & Professional Trait,Business Acumen,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Business Acumen,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Business Acumen,Mercury (intellect & communication),Mercury very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Business Acumen,Mercury (intellect & communication),Mercury strong or benefic-supported for this trait,1
+Skill & Professional Trait,Business Acumen,Mercury (intellect & communication),Mercury weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Business Acumen,Mercury (intellect & communication),Mercury very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Business Acumen,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Business Acumen,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Skill & Professional Trait,Business Acumen,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Business Acumen,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Business Acumen,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Business Acumen,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Skill & Professional Trait,Business Acumen,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Business Acumen,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Business Acumen,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Business Acumen,10th house & lord (career/status),"10H lord average, some benefic support",1
+Skill & Professional Trait,Business Acumen,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Business Acumen,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Financial Responsibility,Base,Base,5
+Wealth & Resources Trait,Financial Responsibility,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Financial Responsibility,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Financial Responsibility,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Financial Responsibility,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Financial Responsibility,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Financial Responsibility,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Financial Responsibility,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Financial Responsibility,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Financial Responsibility,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Financial Responsibility,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Financial Responsibility,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Financial Responsibility,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Financial Responsibility,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Financial Responsibility,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Wealth & Resources Trait,Financial Responsibility,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Financial Responsibility,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Financial Responsibility,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Financial Responsibility,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Wealth & Resources Trait,Financial Responsibility,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Financial Responsibility,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Leadership Ability,Base,Base,5
+Work & Collaboration Trait,Leadership Ability,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership Ability,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership Ability,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership Ability,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership Ability,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership Ability,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership Ability,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership Ability,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership Ability,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Work & Collaboration Trait,Leadership Ability,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Work & Collaboration Trait,Leadership Ability,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Work & Collaboration Trait,Leadership Ability,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Work & Collaboration Trait,Leadership Ability,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Work & Collaboration Trait,Leadership Ability,10th house & lord (career/status),"10H lord average, some benefic support",1
+Work & Collaboration Trait,Leadership Ability,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Work & Collaboration Trait,Leadership Ability,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Work & Collaboration Trait,Leadership Ability,Lagna & lord (core nature),Lagna strong & well supported,1
+Work & Collaboration Trait,Leadership Ability,Lagna & lord (core nature),Lagna weak or afflicted,-1
+Skill & Professional Trait,Financial Discipline,Base,Base,5
+Skill & Professional Trait,Financial Discipline,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Financial Discipline,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Skill & Professional Trait,Financial Discipline,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Financial Discipline,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Financial Discipline,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Financial Discipline,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Skill & Professional Trait,Financial Discipline,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Financial Discipline,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Financial Discipline,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Skill & Professional Trait,Financial Discipline,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Skill & Professional Trait,Financial Discipline,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Skill & Professional Trait,Financial Discipline,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Skill & Professional Trait,Financial Discipline,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Financial Discipline,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Skill & Professional Trait,Financial Discipline,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Financial Discipline,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Skill & Professional Trait,Financial Discipline,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Skill & Professional Trait,Financial Discipline,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Skill & Professional Trait,Financial Discipline,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Skill & Professional Trait,Financial Discipline,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Wealth Potential,Base,Base,5
+Wealth & Resources Trait,Wealth Potential,Jupiter (wisdom & expansion),Jupiter very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Wealth Potential,Jupiter (wisdom & expansion),Jupiter strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Wealth Potential,Jupiter (wisdom & expansion),Jupiter weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Wealth Potential,Jupiter (wisdom & expansion),Jupiter very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Wealth Potential,Venus (love & harmony),Venus very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Wealth Potential,Venus (love & harmony),Venus strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Wealth Potential,Venus (love & harmony),Venus weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Wealth Potential,Venus (love & harmony),Venus very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Wealth Potential,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Wealth Potential,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Wealth Potential,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Wealth Potential,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Wealth Potential,Rahu (innovation & risk),Rahu very strong & well placed for this trait (own/exalted in key houses),2
+Wealth & Resources Trait,Wealth Potential,Rahu (innovation & risk),Rahu strong or benefic-supported for this trait,1
+Wealth & Resources Trait,Wealth Potential,Rahu (innovation & risk),Rahu weak or somewhat afflicted for this trait,-1
+Wealth & Resources Trait,Wealth Potential,Rahu (innovation & risk),Rahu very weak/debilitated & heavily afflicted for this trait,-2
+Wealth & Resources Trait,Wealth Potential,2nd house & lord (values/wealth),2H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Wealth Potential,2nd house & lord (values/wealth),"2H lord average, some benefic support",1
+Wealth & Resources Trait,Wealth Potential,2nd house & lord (values/wealth),2H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Wealth Potential,2nd house & lord (values/wealth),2H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Wealth Potential,11th house & lord (gains/networks),11H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Wealth Potential,11th house & lord (gains/networks),"11H lord average, some benefic support",1
+Wealth & Resources Trait,Wealth Potential,11th house & lord (gains/networks),11H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Wealth Potential,11th house & lord (gains/networks),11H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Wealth Potential,9th house & lord (dharma/luck),9H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Wealth Potential,9th house & lord (dharma/luck),"9H lord average, some benefic support",1
+Wealth & Resources Trait,Wealth Potential,9th house & lord (dharma/luck),9H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Wealth Potential,9th house & lord (dharma/luck),9H lord debilitated & heavily afflicted,-2
+Wealth & Resources Trait,Wealth Potential,10th house & lord (career/status),10H lord strong & well placed (supports this trait),2
+Wealth & Resources Trait,Wealth Potential,10th house & lord (career/status),"10H lord average, some benefic support",1
+Wealth & Resources Trait,Wealth Potential,10th house & lord (career/status),10H lord weak or placed in 6/8/12,-1
+Wealth & Resources Trait,Wealth Potential,10th house & lord (career/status),10H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Health & Vitality,Base,Base,5
+Emotional & Relationship Trait,Health & Vitality,Sun (identity & leadership),Sun very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Health & Vitality,Sun (identity & leadership),Sun strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Health & Vitality,Sun (identity & leadership),Sun weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Health & Vitality,Sun (identity & leadership),Sun very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Health & Vitality,Moon (mind & emotions),Moon very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Health & Vitality,Moon (mind & emotions),Moon strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Health & Vitality,Moon (mind & emotions),Moon weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Health & Vitality,Moon (mind & emotions),Moon very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Health & Vitality,Mars (drive & execution),Mars very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Health & Vitality,Mars (drive & execution),Mars strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Health & Vitality,Mars (drive & execution),Mars weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Health & Vitality,Mars (drive & execution),Mars very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Health & Vitality,Saturn (discipline & structure),Saturn very strong & well placed for this trait (own/exalted in key houses),2
+Emotional & Relationship Trait,Health & Vitality,Saturn (discipline & structure),Saturn strong or benefic-supported for this trait,1
+Emotional & Relationship Trait,Health & Vitality,Saturn (discipline & structure),Saturn weak or somewhat afflicted for this trait,-1
+Emotional & Relationship Trait,Health & Vitality,Saturn (discipline & structure),Saturn very weak/debilitated & heavily afflicted for this trait,-2
+Emotional & Relationship Trait,Health & Vitality,1st house & lord (self/body),1H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Health & Vitality,1st house & lord (self/body),"1H lord average, some benefic support",1
+Emotional & Relationship Trait,Health & Vitality,1st house & lord (self/body),1H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Health & Vitality,1st house & lord (self/body),1H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Health & Vitality,6th house & lord (daily work/service),6H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Health & Vitality,6th house & lord (daily work/service),"6H lord average, some benefic support",1
+Emotional & Relationship Trait,Health & Vitality,6th house & lord (daily work/service),6H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Health & Vitality,6th house & lord (daily work/service),6H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Health & Vitality,8th house & lord (transformation),8H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Health & Vitality,8th house & lord (transformation),"8H lord average, some benefic support",1
+Emotional & Relationship Trait,Health & Vitality,8th house & lord (transformation),8H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Health & Vitality,8th house & lord (transformation),8H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Health & Vitality,12th house & lord (loss/spirituality),12H lord strong & well placed (supports this trait),2
+Emotional & Relationship Trait,Health & Vitality,12th house & lord (loss/spirituality),"12H lord average, some benefic support",1
+Emotional & Relationship Trait,Health & Vitality,12th house & lord (loss/spirituality),12H lord weak or placed in 6/8/12,-1
+Emotional & Relationship Trait,Health & Vitality,12th house & lord (loss/spirituality),12H lord debilitated & heavily afflicted,-2
+Emotional & Relationship Trait,Health & Vitality,Lagna & lord (core nature),Lagna strong & well supported,1
+Emotional & Relationship Trait,Health & Vitality,Lagna & lord (core nature),Lagna weak or afflicted,-1

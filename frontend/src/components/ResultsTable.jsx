@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { calculateNakshatra, getNakshatraAbbr } from '../utils/nakshatraUtils';
 
 const ResultsTable = ({ data }) => {
+    const { t } = useTranslation();
     if (!data) return null;
 
     const planets = Object.entries(data).filter(([key]) => key !== 'Ascendant');
@@ -22,7 +24,7 @@ const ResultsTable = ({ data }) => {
             'Leo', 'Virgo', 'Libra', 'Scorpio',
             'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
         ];
-        return rasis[Math.floor(long / 30)];
+        return t(`signs.${rasis[Math.floor(long / 30)]}`);
     };
 
     const isRetrograde = (speed) => {
@@ -31,25 +33,25 @@ const ResultsTable = ({ data }) => {
 
     return (
         <div className="results-container">
-            <h2>Planetary Positions</h2>
+            <h2>{t('resultsTable.title')}</h2>
             <div className="ascendant-info">
-                <strong>Ascendant:</strong> {getRasi(ascendant?.longitude)} ({formatLongitude(ascendant?.longitude)})
+                <strong>{t('resultsTable.ascendant')}</strong> {getRasi(ascendant?.longitude)} ({formatLongitude(ascendant?.longitude)})
                 {ascendant?.longitude && (
                     <>
-                        {' '}- Nakshatra: <strong>{calculateNakshatra(ascendant.longitude).name}</strong>
-                        {' '}Pada {calculateNakshatra(ascendant.longitude).pada}
+                        {' '}- {t('resultsTable.nakshatra')}: <strong>{calculateNakshatra(ascendant.longitude).name}</strong>
+                        {' '}{t('resultsTable.pada')} {calculateNakshatra(ascendant.longitude).pada}
                     </>
                 )}
             </div>
             <table className="results-table">
                 <thead>
                     <tr>
-                        <th>Planet</th>
-                        <th>Longitude</th>
-                        <th>Rasi (Sign)</th>
-                        <th>Nakshatra</th>
-                        <th>Pada</th>
-                        <th>Speed</th>
+                        <th>{t('resultsTable.planet')}</th>
+                        <th>{t('resultsTable.longitude')}</th>
+                        <th>{t('resultsTable.rasi')}</th>
+                        <th>{t('resultsTable.nakshatra')}</th>
+                        <th>{t('resultsTable.pada')}</th>
+                        <th>{t('resultsTable.speed')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,8 +62,8 @@ const ResultsTable = ({ data }) => {
                         return (
                             <tr key={planet} className={retrograde ? 'retrograde-row' : ''}>
                                 <td>
-                                    {planet}
-                                    {retrograde && <span className="retrograde-badge"> (R)</span>}
+                                    {t(`planets.${planet}`)}
+                                    {retrograde && <span className="retrograde-badge"> {t('resultsTable.retrograde')}</span>}
                                 </td>
                                 <td>{formatLongitude(info.longitude)}</td>
                                 <td>{getRasi(info.longitude)}</td>

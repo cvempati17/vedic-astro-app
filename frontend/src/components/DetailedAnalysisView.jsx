@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { calculateDignity, getPlanetNature, calculateAvastha } from '../utils/strengthUtils';
 import { getHouseType, getPurushartha } from '../utils/houseUtils';
 import { calculateAspects, getAspectsOnSign } from '../utils/aspectUtils';
 import './DetailedAnalysisView.css';
 
 const DetailedAnalysisView = ({ data, formData }) => {
+    const { t } = useTranslation();
     if (!data || !data.Ascendant) return null;
 
     const ascLong = data.Ascendant.longitude;
@@ -45,21 +47,30 @@ const DetailedAnalysisView = ({ data, formData }) => {
         return `${d}°${m}'`;
     };
 
-    // Helper: Get Ordinal
+    // Helper: Get Ordinal (kept for English, but used less in translations)
     const getOrdinal = (n) => {
         const s = ["th", "st", "nd", "rd"];
         const v = n % 100;
         return s[(v - 20) % 10] || s[v] || s[0];
     };
 
-    // Generate Planet Analysis Text (Always relative to Ascendant for general planet description)
+    const tPlanet = (p) => t(`planets.${p}`, p);
+    const tSign = (s) => t(`signs.${s}`, s);
+    const tElement = (e) => t(`elements.${e}`, e);
+    const tHouseType = (h) => h.split(', ').map(type => t(`houseTypes.${type}`, type)).join(', ');
+    const tPurushartha = (p) => t(`purusharthas.${p}`, p);
+    const tStatus = (s) => t(`dignity.${s}`, s);
+    const tNature = (n) => t(`nature.${n}`, n);
+    const tAvastha = (a) => t(`avastha.${a}`, a);
+
+    // Generate Planet Analysis Text
     const generatePlanetText = (planet) => {
         const info = data[planet];
         if (!info || info.longitude === undefined) return null;
 
         const planetLong = info.longitude;
         const rasiIndex = Math.floor(planetLong / 30);
-        const house = getHouseNum(planetLong, ascLong); // Planet positions usually described from Ascendant
+        const house = getHouseNum(planetLong, ascLong);
         const sign = signs[rasiIndex];
         const element = getElement(planetLong);
 
@@ -76,7 +87,12 @@ const DetailedAnalysisView = ({ data, formData }) => {
         if (lordInfo) {
             const lordHouse = getHouseNum(lordInfo.longitude, ascLong);
             const lordSign = getSignName(lordInfo.longitude);
-            lordText = `The lord of its sign is ${signLord}, who is placed in the ${lordHouse}${getOrdinal(lordHouse)} House (${lordSign}).`;
+            lordText = t('detailedAnalysis.lordOfSign', {
+                signLord: tPlanet(signLord),
+                lordHouse,
+                lordSign: tSign(lordSign),
+                ordinal: getOrdinal(lordHouse)
+            });
         }
 
         // Aspects Logic
@@ -84,21 +100,33 @@ const DetailedAnalysisView = ({ data, formData }) => {
             .filter(a => a.planet !== planet);
 
         const aspectText = aspectsReceived.length > 0
-            ? `It receives aspects from: ${aspectsReceived.map(a => `${a.planet} (${a.type})`).join(', ')}.`
-            : "It receives no major planetary aspects.";
+            ? t('detailedAnalysis.aspectsReceived', { aspects: aspectsReceived.map(a => `${tPlanet(a.planet)} (${a.type})`).join(', ') })
+            : t('detailedAnalysis.noAspects');
 
         return (
             <div className="analysis-item">
-                <h4>{planet}</h4>
-                <p>
-                    <strong>{avastha.state}</strong> {nature.natural} <strong>{planet}</strong> is at <strong>{formatDeg(planetLong % 30)}</strong> in <strong>{sign}</strong>,
-                    which is the <strong>{house}{getOrdinal(house)} House</strong>. This is a <strong>{element}</strong> sign.
-                    It is currently in the <strong>{purushartha}</strong> house ({houseType}).
-                </p>
-                <p>
-                    The planet is <strong>{dignity.status}</strong> and acts as a <strong>{nature.functional}</strong> for this chart.
-                    Its state indicates <strong>{avastha.meaning}</strong>.
-                </p>
+                <h4>{tPlanet(planet)}</h4>
+                <p dangerouslySetInnerHTML={{
+                    __html: t('detailedAnalysis.planetText', {
+                        state: tAvastha(avastha.state),
+                        natural: tNature(nature.natural),
+                        planet: tPlanet(planet),
+                        deg: formatDeg(planetLong % 30),
+                        sign: tSign(sign),
+                        house,
+                        ordinal: getOrdinal(house),
+                        element: tElement(element),
+                        purushartha: tPurushartha(purushartha),
+                        houseType: tHouseType(houseType)
+                    })
+                }} />
+                <p dangerouslySetInnerHTML={{
+                    __html: t('detailedAnalysis.planetStatus', {
+                        status: tStatus(dignity.status),
+                        functional: tNature(nature.functional),
+                        meaning: avastha.meaning // This is a long string, might need its own translation or just leave as is for now
+                    })
+                }} />
                 <p>
                     {lordText} {aspectText}
                 </p>
@@ -106,7 +134,7 @@ const DetailedAnalysisView = ({ data, formData }) => {
         );
     };
 
-    // Generate House Analysis Text (Generic for Ascendant or Moon)
+    // Generate House Analysis Text
     const generateHouseText = (houseNum, refLong, labelPrefix) => {
         // Find sign on this house cusp
         const refRasi = Math.floor(refLong / 30);
@@ -121,17 +149,22 @@ const DetailedAnalysisView = ({ data, formData }) => {
         });
 
         const planetsText = planetsInHouse.length > 0
-            ? `Planets sitting in this house: ${planetsInHouse.map(p => `${p} (${calculateAvastha(data[p].longitude).state})`).join(', ')}.`
-            : "No planets are sitting in this house.";
+            ? t('detailedAnalysis.planetsInHouse', { planets: planetsInHouse.map(p => `${tPlanet(p)} (${tAvastha(calculateAvastha(data[p].longitude).state)})`).join(', ') })
+            : t('detailedAnalysis.noPlanetsInHouse');
 
         // Lordship Logic
         const houseLord = SIGN_LORDS[houseRasi];
         const lordInfo = data[houseLord];
         let lordText = '';
         if (lordInfo) {
-            const lordHouse = getHouseNum(lordInfo.longitude, refLong); // Lord's house relative to THIS reference
+            const lordHouse = getHouseNum(lordInfo.longitude, refLong);
             const lordSign = getSignName(lordInfo.longitude);
-            lordText = `The lord of this house is ${houseLord}, placed in the ${lordHouse}${getOrdinal(lordHouse)} House (${lordSign}).`;
+            lordText = t('detailedAnalysis.lordOfHouse', {
+                houseLord: tPlanet(houseLord),
+                lordHouse,
+                lordSign: tSign(lordSign),
+                ordinal: getOrdinal(lordHouse)
+            });
         }
 
         // Aspects Logic
@@ -139,21 +172,26 @@ const DetailedAnalysisView = ({ data, formData }) => {
         const externalAspects = aspectsReceived.filter(a => a.type !== '1th Aspect' && a.type !== '1st Aspect');
 
         const aspectText = externalAspects.length > 0
-            ? `This house receives aspects from: ${externalAspects.map(a => `${a.planet} (${a.type})`).join(', ')}.`
-            : "This house receives no external planetary aspects.";
+            ? t('detailedAnalysis.houseAspects', { aspects: externalAspects.map(a => `${tPlanet(a.planet)} (${a.type})`).join(', ') })
+            : t('detailedAnalysis.noHouseAspects');
 
-        let title = `${labelPrefix} ${houseNum}${getOrdinal(houseNum)} House`;
+        let title = t('detailedAnalysis.houseTitle', { prefix: labelPrefix === 'Lagna' ? t('detailedAnalysis.lagna') : t('detailedAnalysis.moon'), house: houseNum, ordinal: getOrdinal(houseNum) });
         if (houseNum === 1) {
-            title = labelPrefix === 'Moon' ? 'Moon 1st House (Rashi)' : `${labelPrefix} 1st House (Lagna)`;
+            title = labelPrefix === 'Moon' ? t('detailedAnalysis.moonFirstHouse') : t('detailedAnalysis.lagnaFirstHouse');
         }
 
         return (
             <div className="analysis-item">
                 <h4>{title}</h4>
-                <p>
-                    The {houseNum}{getOrdinal(houseNum)} house is <strong>{sign}</strong> sign ({element} element).
-                    It is a <strong>{purushartha}</strong> house.
-                </p>
+                <p dangerouslySetInnerHTML={{
+                    __html: t('detailedAnalysis.houseDesc', {
+                        house: houseNum,
+                        ordinal: getOrdinal(houseNum),
+                        sign: tSign(sign),
+                        element: tElement(element),
+                        purushartha: tPurushartha(purushartha)
+                    })
+                }} />
                 <p>{planetsText}</p>
                 <p>{lordText} {aspectText}</p>
             </div>
@@ -163,12 +201,12 @@ const DetailedAnalysisView = ({ data, formData }) => {
     return (
         <div className="detailed-analysis-container">
             <header className="analysis-header">
-                <h2>Detailed Vedic Analysis</h2>
-                <p>Comprehensive report for <strong>{formData?.name}</strong></p>
+                <h2>{t('detailedAnalysis.title', 'Detailed Vedic Analysis')}</h2>
+                <p>{t('detailedAnalysis.reportFor', 'Comprehensive report for')} <strong>{formData?.name}</strong></p>
             </header>
 
             <div className="analysis-section">
-                <h3 className="section-head">Planetary Details</h3>
+                <h3 className="section-head">{t('detailedAnalysis.planetaryDetails', 'Planetary Details')}</h3>
                 <div className="analysis-grid">
                     {planets.map(planet => (
                         <div key={planet} className="analysis-card">
@@ -179,7 +217,7 @@ const DetailedAnalysisView = ({ data, formData }) => {
             </div>
 
             <div className="analysis-section">
-                <h3 className="section-head">House Details (From Ascendant / Lagna)</h3>
+                <h3 className="section-head">{t('detailedAnalysis.houseDetailsLagna', 'House Details (From Ascendant / Lagna)')}</h3>
                 <div className="analysis-grid">
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(houseNum => (
                         <div key={houseNum} className="analysis-card">
@@ -190,7 +228,7 @@ const DetailedAnalysisView = ({ data, formData }) => {
             </div>
 
             <div className="analysis-section">
-                <h3 className="section-head">House Details (From Moon / Chandra Lagna)</h3>
+                <h3 className="section-head">{t('detailedAnalysis.houseDetailsMoon', 'House Details (From Moon / Chandra Lagna)')}</h3>
                 <div className="analysis-grid">
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(houseNum => (
                         <div key={houseNum} className="analysis-card">

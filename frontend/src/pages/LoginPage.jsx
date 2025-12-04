@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmailAuth from '../components/EmailAuth';
 import './LoginPage.css';
 import parrotImage from '../assets/parrot_astrologer.png';
 
 const LoginPage = ({ onLogin }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [showEmailAuth, setShowEmailAuth] = useState(false);
 
@@ -113,7 +115,7 @@ const LoginPage = ({ onLogin }) => {
                         fontWeight: '600'
                     }}
                 >
-                    ← Back to Options
+                    {t('auth.backToOptions')}
                 </button>
             </div>
         );
@@ -129,18 +131,18 @@ const LoginPage = ({ onLogin }) => {
 
                 <div className="login-card">
                     <header className="login-header">
-                        <h1 className="app-title">Vedic Astro</h1>
-                        <p className="app-subtitle">Discover your cosmic blueprint</p>
+                        <h1 className="app-title">{t('auth.appTitle')}</h1>
+                        <p className="app-subtitle">{t('auth.appSubtitle')}</p>
                     </header>
 
                     <div className="login-body">
                         {/* Guest Mode Button */}
                         <button className="oauth-btn guest-btn" onClick={handleGuestLogin}>
-                            <span>👤 Continue as Guest</span>
+                            <span>{t('auth.continueGuest')}</span>
                         </button>
 
                         <div className="divider">
-                            <span>OR</span>
+                            <span>{t('auth.or')}</span>
                         </div>
 
                         <div
@@ -161,13 +163,13 @@ const LoginPage = ({ onLogin }) => {
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                             </svg>
-                            <span>Sign in with Email</span>
+                            <span>{t('auth.signInEmail')}</span>
                         </button>
                     </div>
 
                     <div className="login-footer">
                         <p className="privacy-note">
-                            By signing in, you agree to our Terms of Service and Privacy Policy
+                            {t('auth.terms')}
                         </p>
                     </div>
                 </div>

@@ -7,10 +7,11 @@ const authRoutes = require('./routes/auth');
 const chartRoutes = require('./routes/charts');
 
 // Connect to Database
-connectDB();
+// Connect to Database
+// connectDB(); // Moved to async start function
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -46,6 +47,12 @@ app.post('/api/calculate', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    await connectDB();
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+};
+
+startServer();

@@ -1,0 +1,172 @@
+.balas-info-container {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #e2e8f0;
+    background-color: #0f172a;
+    min-height: 100vh;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #a78bfa;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.back-button:hover {
+    color: #c4b5fd;
+}
+
+.page-title {
+    color: #f472b6;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.intro-section {
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.intro-section p {
+    margin-bottom: 1rem;
+}
+
+h2 {
+    color: #a78bfa;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.5rem;
+}
+
+.info-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 3rem;
+    background: #1e293b;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+    color: #e2e8f0;
+}
+
+.info-table th {
+    background: rgba(0, 0, 0, 0.2);
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.info-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.comparison-card {
+    background: #1e293b;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.comparison-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.comparison-card.positive h3 {
+    color: #4ade80;
+}
+
+.comparison-card.negative h3 {
+    color: #f87171;
+}
+
+.comparison-card ul {
+    padding-left: 1.2rem;
+    margin: 0;
+}
+
+.comparison-card li {
+    margin-bottom: 0.5rem;
+    color: #cbd5e1;
+}
+
+.example-box {
+    background: rgba(167, 139, 250, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #a78bfa;
+    margin-bottom: 3rem;
+}
+
+.example-box h4 {
+    color: #a78bfa;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.example-box p {
+    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+}
+
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 3rem;
+}
+
+.check-list li {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+}
+
+.remedies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.remedy-item {
+    background: #1e293b;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .balas-info-container {
+        padding: 1rem;
+    }
+}

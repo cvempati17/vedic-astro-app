@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import CitySearch from '../components/CitySearch';
 import { calculateHappinessIndex, getHappinessDetails, calculateWealthIndex, getWealthDetails, calculateHealthIndex, getHealthDetails } from '../utils/traitUtils';
 import './SavedChartsPage.css';
 
-const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
+const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenSettings, onLogout, userType = 'basic' }) => {
+    const { t } = useTranslation(); // Initialize hook
     const [charts, setCharts] = useState([]);
+    // ... (rest of the file until sidebar)
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -41,6 +45,9 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
 
     const fileInputRef = useRef(null);
 
+    const [toolsOpen, setToolsOpen] = useState(true);
+    const [utilityOpen, setUtilityOpen] = useState(true);
+
     useEffect(() => {
         const fetchCharts = async () => {
             const token = localStorage.getItem('token');
@@ -60,7 +67,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                 setCharts([...response.data, ...localCharts]);
             } catch (err) {
                 console.error('Error fetching charts:', err);
-                setError('Failed to load cloud charts. Showing local charts only.');
+                setError(t('savedCharts.loadCloudFailed', 'Failed to load cloud charts. Showing local charts only.'));
                 setCharts(localCharts);
             } finally {
                 setLoading(false);
@@ -160,11 +167,44 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
         }
     };
 
-    const executeBulkDelete = () => {
-        // Local Delete
-        const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
-        const updatedLocal = localCharts.filter(c => !selectedIds.includes(c._id));
-        localStorage.setItem('savedCharts', JSON.stringify(updatedLocal));
+    const executeBulkDelete = async () => {
+        // Separate local and cloud charts
+        const localIds = [];
+        const cloudIds = [];
+
+        selectedIds.forEach(id => {
+            const chart = charts.find(c => c._id === id);
+            if (chart) {
+                if (chart.isLocal) {
+                    localIds.push(id);
+                } else {
+                    cloudIds.push(id);
+                }
+            }
+        });
+
+        // 1. Delete Local Charts
+        if (localIds.length > 0) {
+            const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+            const updatedLocal = localCharts.filter(c => !localIds.includes(c._id));
+            localStorage.setItem('savedCharts', JSON.stringify(updatedLocal));
+        }
+
+        // 2. Delete Cloud Charts
+        if (cloudIds.length > 0) {
+            try {
+                const token = localStorage.getItem('token');
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                await axios.post(`${API_URL}/api/charts/bulk-delete`, { ids: cloudIds }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (err) {
+                console.error('Error deleting cloud charts:', err);
+                alert(t('savedCharts.deleteCloudFailed', 'Failed to delete some cloud charts.'));
+                // We might want to stop here or continue to update UI?
+                // For now, let's assume partial success and update UI for what we can.
+            }
+        }
 
         // State Update
         setCharts(prev => prev.filter(c => !selectedIds.includes(c._id)));
@@ -178,7 +218,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             : charts;
 
         if (chartsToExport.length === 0) {
-            alert("No charts to export.");
+            alert(t('savedCharts.noExport', "No charts to export."));
             return;
         }
 
@@ -255,7 +295,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                 const updatedCharts = [...localCharts, ...newCharts];
                 localStorage.setItem('savedCharts', JSON.stringify(updatedCharts));
                 setCharts(prev => [...prev, ...newCharts]);
-                alert(`Imported ${newCharts.length} charts. Please edit them to confirm city and calculate.`);
+                alert(t('savedCharts.importSuccess', { count: newCharts.length }));
             }
         };
         reader.readAsText(file);
@@ -263,7 +303,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
     };
 
     const handleDelete = async (id, isLocal) => {
-        if (!window.confirm('Are you sure you want to delete this chart? This action cannot be undone.')) return;
+        if (!window.confirm(t('savedCharts.confirmDelete', 'Are you sure you want to delete this chart? This action cannot be undone.'))) return;
 
         if (isLocal) {
             const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
@@ -282,7 +322,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             setCharts(charts.filter(chart => chart._id !== id));
         } catch (err) {
             console.error('Error deleting chart:', err);
-            alert('Failed to delete chart');
+            alert(t('savedCharts.deleteFailed', 'Failed to delete chart'));
         }
     };
 
@@ -298,7 +338,6 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             city: chart.placeOfBirth?.city || '',
             latitude: chart.placeOfBirth?.lat,
             longitude: chart.placeOfBirth?.lng,
-            longitude: chart.placeOfBirth?.lng,
             timezone: chart.placeOfBirth?.timezone,
             ayanamsa: chart.ayanamsa || 'lahiri'
         });
@@ -306,20 +345,10 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
     };
 
     const handleAddNew = () => {
-        setIsAddingNew(true);
-        setEditingId(null);
-        setEditFormData({
-            name: '',
-            gender: 'male',
-            dateOfBirth: '',
-            timeOfBirth: '',
-            city: '',
-            latitude: '',
-            longitude: '',
-            longitude: '',
-            timezone: 5.5,
-            ayanamsa: 'lahiri'
-        });
+        // Navigate to Enter Birth Details form via parent handler
+        if (onEditChart) {
+            onEditChart({});
+        }
     };
 
     const handleCancelEdit = () => {
@@ -330,12 +359,12 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
 
     const handleSaveNew = async () => {
         if (!editFormData.name || !editFormData.dateOfBirth || !editFormData.timeOfBirth || !editFormData.city) {
-            alert("Please fill all fields (Name, Date, Time, City)");
+            alert(t('savedCharts.fillAllFields', "Please fill all fields (Name, Date, Time, City)"));
             return;
         }
 
         if (!editFormData.latitude || !editFormData.longitude) {
-            alert("Please select a city from the dropdown to get coordinates.");
+            alert(t('savedCharts.selectCity', "Please select a city from the dropdown to get coordinates."));
             return;
         }
 
@@ -346,8 +375,6 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                 date: editFormData.dateOfBirth,
                 time: editFormData.timeOfBirth,
                 latitude: editFormData.latitude,
-                longitude: editFormData.longitude,
-                timezone: editFormData.timezone || 5.5,
                 longitude: editFormData.longitude,
                 timezone: editFormData.timezone || 5.5,
                 city: editFormData.city,
@@ -384,12 +411,12 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                 setIsAddingNew(false);
                 setEditFormData({});
             } else {
-                alert("Calculation failed: " + response.data.error);
+                alert(t('savedCharts.calcFailed', { error: response.data.error }));
             }
         } catch (err) {
             console.error(err);
             const errorMessage = err.response?.data?.error || err.message || "Unknown error";
-            alert(`Error calculating chart: ${errorMessage}`);
+            alert(t('savedCharts.calcError', { error: errorMessage }));
         } finally {
             setLoading(false);
         }
@@ -406,14 +433,12 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
             city: editFormData.city || originalChart.placeOfBirth?.city,
             latitude: editFormData.latitude || originalChart.placeOfBirth?.lat,
             longitude: editFormData.longitude || originalChart.placeOfBirth?.lng,
-            latitude: editFormData.latitude || originalChart.placeOfBirth?.lat,
-            longitude: editFormData.longitude || originalChart.placeOfBirth?.lng,
             timezone: editFormData.timezone || originalChart.placeOfBirth?.timezone || 5.5,
             ayanamsa: editFormData.ayanamsa || originalChart.ayanamsa || 'lahiri'
         };
 
         if (!payload.latitude || !payload.longitude) {
-            alert("Please select the City from the dropdown to fetch coordinates before saving.");
+            alert(t('savedCharts.selectCitySave', "Please select the City from the dropdown to fetch coordinates before saving."));
             return;
         }
 
@@ -450,12 +475,12 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                 setEditingId(null);
                 setEditFormData({});
             } else {
-                alert("Calculation failed: " + response.data.error);
+                alert(t('savedCharts.calcFailed', { error: response.data.error }));
             }
         } catch (err) {
             console.error(err);
             const errorMessage = err.response?.data?.error || err.message || "Unknown error";
-            alert(`Error calculating chart: ${errorMessage}`);
+            alert(t('savedCharts.calcError', { error: errorMessage }));
         } finally {
             setLoading(false);
         }
@@ -478,7 +503,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
 
     const handleLoad = (chart) => {
         if (!chart.chartData) {
-            alert("This chart has not been calculated yet. Please click the 'Edit' button (pencil icon), confirm the City to fetch coordinates, and click the 'Save' icon to generate the chart.");
+            alert(t('savedCharts.notCalculated', "This chart has not been calculated yet. Please click the 'Edit' button (pencil icon), confirm the City to fetch coordinates, and click the 'Save' icon to generate the chart."));
             return;
         }
 
@@ -498,146 +523,235 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
         setActionMenuOpen(actionMenuOpen === id ? null : id);
     };
 
-    if (loading && !isAddingNew) return <div className="loading-container">Loading charts...</div>;
+    if (loading && !isAddingNew) return <div className="loading-container">{t('savedCharts.loading', 'Loading charts...')}</div>;
 
     return (
         <div className="saved-charts-container">
             <header className="saved-header">
-                <div>
-                    <button className="back-btn" onClick={onBack}>← Back</button>
+                <div className="saved-header-spacer" />
+                <div className="saved-header-title">
+                    <h1>📂 Your Charts</h1>
                 </div>
-                <h1>📂 Saved Charts</h1>
-                <div>
+                <div className="saved-header-actions">
                     {selectedIds.length > 0 && (
                         <button className="delete-btn-bulk" onClick={() => setShowDeleteConfirm(true)} style={{ marginRight: '1rem', background: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', cursor: 'pointer' }}>
-                            Delete ({selectedIds.length})
+                            {t('savedCharts.deleteSelected', { count: selectedIds.length })}
                         </button>
                     )}
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <button className="add-btn" onClick={() => setShowColumnMenu(!showColumnMenu)} style={{ marginRight: '0.5rem', background: '#4b5563' }}>
-                            Columns ▾
-                        </button>
-                        {showColumnMenu && (
-                            <div className="column-menu">
-                                <label><input type="checkbox" checked={visibleColumns.savedOn} onChange={() => toggleColumn('savedOn')} /> Last Save Date</label>
-                                <label><input type="checkbox" checked={visibleColumns.ayanamsa} onChange={() => toggleColumn('ayanamsa')} /> Ayanamsa</label>
-                                <label><input type="checkbox" checked={visibleColumns.happiness} onChange={() => toggleColumn('happiness')} /> Happiness</label>
-                                <label><input type="checkbox" checked={visibleColumns.wealth} onChange={() => toggleColumn('wealth')} /> Wealth</label>
-                                <label><input type="checkbox" checked={visibleColumns.health} onChange={() => toggleColumn('health')} /> Health</label>
-                            </div>
-                        )}
-                    </div>
-                    <button className="add-btn" onClick={handleDownloadTemplate} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Template</button>
-                    <button className="add-btn" onClick={handleExport} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Export</button>
-                    <button className="add-btn" onClick={() => fileInputRef.current.click()} style={{ marginRight: '0.5rem', background: '#4b5563' }}>Import</button>
-                    <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".csv" onChange={handleImport} />
-                    <button className="add-btn" onClick={handleAddNew}>+ Add New</button>
+                    <button
+                        type="button"
+                        className="gear-btn"
+                        onClick={onOpenSettings}
+                        title={t('settings.settings', 'Settings')}
+                    >
+                        ⚙️
+                    </button>
+                    <button
+                        aria-label={t('savedCharts.addNewTooltip', 'Add new Chart')}
+                        onClick={handleAddNew}
+                        type="button"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px' }}
+                        title={t('savedCharts.addNewTooltip', 'Add new Chart')}
+                    >
+                        <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            {/* Outer zodiac circle */}
+                            <circle cx="32" cy="32" r="29" stroke="#8b5cf6" strokeWidth="3" fill="none" opacity="0.7" />
+
+                            {/* Inner natal chart circle + cross (Asc/Desc & MC/IC) */}
+                            <circle cx="32" cy="32" r="18" stroke="#c4b5fd" strokeWidth="2" fill="none" />
+                            <line x1="32" y1="14" x2="32" y2="50" stroke="#c4b5fd" strokeWidth="2" />
+                            <line x1="14" y1="32" x2="50" y2="32" stroke="#c4b5fd" strokeWidth="2" />
+
+                            {/* 8 subtle degree markers on the wheel */}
+                            <g fill="#a78bfa">
+                                <circle cx="32" cy="8" r="2.5" />
+                                <circle cx="56" cy="32" r="2.5" />
+                                <circle cx="32" cy="56" r="2.5" />
+                                <circle cx="8" cy="32" r="2.5" />
+                                <circle cx="48" cy="16" r="2" />
+                                <circle cx="48" cy="48" r="2" />
+                                <circle cx="16" cy="16" r="2" />
+                                <circle cx="16" cy="48" r="2" />
+                            </g>
+
+                            {/* Big bold "+" in the center */}
+                            <g stroke="#10b981" strokeWidth="7" strokeLinecap="round">
+                                <line x1="32" y1="24" x2="32" y2="40" />
+                                <line x1="24" y1="32" x2="40" y2="32" />
+                            </g>
+                        </svg>
+                    </button>
                 </div>
             </header>
 
-            {error && <div className="error-msg">{error}</div>}
-
-            {charts.length === 0 && !loading && !isAddingNew ? (
-                <div className="empty-state">
-                    <h3>No saved charts found</h3>
-                    <button className="create-btn" onClick={handleAddNew}>Create New Chart</button>
-                </div>
-            ) : (
-                <div className="table-container">
-                    <table className="charts-table">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" onChange={handleSelectAll} checked={charts.length > 0 && selectedIds.length === charts.length} /></th>
-                                <th onClick={() => handleSort('name')} className="sortable-th">Name {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
-                                <th>Gender</th>
-                                <th onClick={() => handleSort('dateOfBirth')} className="sortable-th">Date of Birth {sortConfig.key === 'dateOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
-                                <th onClick={() => handleSort('timeOfBirth')} className="sortable-th">Time {sortConfig.key === 'timeOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
-                                <th onClick={() => handleSort('city')} className="sortable-th">Place {sortConfig.key === 'city' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
-                                {visibleColumns.ayanamsa && <th>Ayanamsa</th>}
-                                {visibleColumns.happiness && <th onClick={() => handleSort('happiness')} className="sortable-th">Happiness {sortConfig.key === 'happiness' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
-                                {visibleColumns.wealth && <th onClick={() => handleSort('wealth')} className="sortable-th">Wealth {sortConfig.key === 'wealth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
-                                {visibleColumns.health && <th onClick={() => handleSort('health')} className="sortable-th">Health {sortConfig.key === 'health' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
-                                {visibleColumns.savedOn && <th>Saved On</th>}
-                                <th>Actions</th>
-                            </tr>
-                            <tr className="filter-row">
-                                <th></th>
-                                <th><input placeholder="Filter Name" value={filterConfig.name} onChange={e => setFilterConfig({ ...filterConfig, name: e.target.value })} className="filter-input" /></th>
-                                <th><input placeholder="Filter Gender" value={filterConfig.gender} onChange={e => setFilterConfig({ ...filterConfig, gender: e.target.value })} className="filter-input" /></th>
-                                <th></th>
-                                <th></th>
-                                <th><input placeholder="Filter City" value={filterConfig.city} onChange={e => setFilterConfig({ ...filterConfig, city: e.target.value })} className="filter-input" /></th>
-                                {visibleColumns.ayanamsa && <th></th>}
-                                {visibleColumns.happiness && <th></th>}
-                                {visibleColumns.wealth && <th></th>}
-                                {visibleColumns.health && <th></th>}
-                                {visibleColumns.savedOn && <th></th>}
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* New Row Input */}
-                            {isAddingNew && (
-                                <tr className="editing-row new-row">
-                                    <td></td>
-                                    <td><input placeholder="Name" value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
-                                    <td>
-                                        <select value={editFormData.gender} onChange={e => setEditFormData({ ...editFormData, gender: e.target.value })}>
-                                            <option value="male">Male</option>
-                                            <option value="female">Female</option>
-                                            <option value="other">Other</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="date" value={editFormData.dateOfBirth} onChange={e => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })} /></td>
-                                    <td><input type="time" value={editFormData.timeOfBirth} onChange={e => setEditFormData({ ...editFormData, timeOfBirth: e.target.value })} /></td>
-                                    <td>
-                                        <div style={{ minWidth: '200px', position: 'relative' }}>
-                                            <CitySearch
-                                                defaultValue={editFormData.city}
-                                                onCitySelect={(cityData) => setEditFormData({
-                                                    ...editFormData,
-                                                    city: cityData.name,
-                                                    latitude: cityData.latitude,
-                                                    longitude: cityData.longitude,
-                                                    timezone: cityData.timezone
-                                                })}
-                                            />
-                                        </div>
-                                    </td>
-                                    {visibleColumns.ayanamsa && (
-                                        <td>
-                                            <select value={editFormData.ayanamsa} onChange={e => setEditFormData({ ...editFormData, ayanamsa: e.target.value })} style={{ maxWidth: '100px' }}>
-                                                <option value="lahiri">Lahiri</option>
-                                                <option value="raman">Raman</option>
-                                                <option value="krishnamurti">KP</option>
-                                                <option value="tropical">Tropical</option>
-                                            </select>
-                                        </td>
-                                    )}
-                                    {visibleColumns.happiness && <td>-</td>}
-                                    {visibleColumns.wealth && <td>-</td>}
-                                    {visibleColumns.health && <td>-</td>}
-                                    {visibleColumns.savedOn && <td>Now</td>}
-                                    <td>
-                                        <div className="action-buttons">
-                                            <button className="save-btn" onClick={handleSaveNew} title="Calculate & Save">💾</button>
-                                            <button className="cancel-btn" onClick={handleCancelEdit}>❌</button>
-                                        </div>
-                                    </td>
-                                </tr>
+            <div className="results-layout">
+                <aside className="sticky-sidebar">
+                    <div
+                        className="sidebar-header"
+                        style={{ marginBottom: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                        onClick={() => setToolsOpen(!toolsOpen)}
+                    >
+                        <h3>{t('nav.tools', 'Tools')}</h3>
+                        <span>{toolsOpen ? '▾' : '▸'}</span>
+                    </div>
+                    {toolsOpen && (
+                        <div className="sidebar-tabs">
+                            {userType === 'advance' && (
+                                <button
+                                    type="button"
+                                    className="sidebar-tab"
+                                    onClick={onOpenMatchNew}
+                                >
+                                    {t('nav.matchMakingNew', 'Match Making - New')}
+                                </button>
                             )}
+                            <button
+                                type="button"
+                                className="sidebar-tab"
+                                onClick={onOpenMatchTraditional}
+                            >
+                                {t('nav.matchMakingTrad', 'Match Making - Trad')}
+                            </button>
+                            <button
+                                type="button"
+                                className="sidebar-tab"
+                                onClick={() => { console.log("Namakaran button clicked"); onOpenNamakaran(); }}
+                            >
+                                {t('nav.namakaran', 'Namakaran')}
+                            </button>
+                        </div>
+                    )}
 
-                            {sortedCharts.map((chart) => (
-                                <tr key={chart._id} className={editingId === chart._id ? 'editing-row' : ''}>
-                                    <td><input type="checkbox" checked={selectedIds.includes(chart._id)} onChange={() => handleSelectRow(chart._id)} /></td>
-                                    {editingId === chart._id ? (
-                                        <>
-                                            <td><input value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
+                    {userType === 'advance' && (
+                        <>
+                            <div
+                                className="sidebar-header"
+                                style={{ marginTop: '0.5rem', marginBottom: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                                onClick={() => setUtilityOpen(!utilityOpen)}
+                            >
+                                <h3>{t('nav.utility', 'Utility')}</h3>
+                                <span>{utilityOpen ? '▾' : '▸'}</span>
+                            </div>
+                            {utilityOpen && (
+                                <div className="sidebar-tabs">
+                                    <div style={{ position: 'relative', width: '100%' }}>
+                                        <button
+                                            type="button"
+                                            className="sidebar-tab"
+                                            onClick={() => setShowColumnMenu(!showColumnMenu)}
+                                        >
+                                            {t('nav.columns', 'Columns')} ▾
+                                        </button>
+                                        {showColumnMenu && (
+                                            <div className="column-menu">
+                                                <label><input type="checkbox" checked={visibleColumns.savedOn} onChange={() => toggleColumn('savedOn')} /> {t('cols.lastSaveDate', 'Last Save Date')}</label>
+                                                <label><input type="checkbox" checked={visibleColumns.ayanamsa} onChange={() => toggleColumn('ayanamsa')} /> {t('cols.ayanamsa', 'Ayanamsa')}</label>
+                                                <label><input type="checkbox" checked={visibleColumns.happiness} onChange={() => toggleColumn('happiness')} /> {t('cols.happiness', 'Happiness')}</label>
+                                                <label><input type="checkbox" checked={visibleColumns.wealth} onChange={() => toggleColumn('wealth')} /> {t('cols.wealth', 'Wealth')}</label>
+                                                <label><input type="checkbox" checked={visibleColumns.health} onChange={() => toggleColumn('health')} /> {t('cols.health', 'Health')}</label>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="sidebar-tab"
+                                        onClick={handleDownloadTemplate}
+                                    >
+                                        {t('nav.template', 'Template')}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="sidebar-tab"
+                                        onClick={handleExport}
+                                    >
+                                        {t('nav.export', 'Export')}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="sidebar-tab"
+                                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                                    >
+                                        {t('nav.import', 'Import')}
+                                    </button>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        accept=".csv"
+                                        onChange={handleImport}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    <div className="sidebar-header" style={{ marginTop: '1rem' }}>
+                        <h3>{t('settings.logout', 'Logout')}</h3>
+                    </div>
+                    <div className="sidebar-tabs">
+                        <button
+                            type="button"
+                            className="sidebar-tab"
+                            onClick={onLogout}
+                            style={{ marginTop: '0.5rem', color: '#ef4444' }}
+                        >
+                            {t('settings.logout', 'Logout')}
+                        </button>
+                    </div>
+                </aside>
+
+                <div className="results-content-column">
+                    {error && <div className="error-msg">{error}</div>}
+
+                    {charts.length === 0 && !loading && !isAddingNew ? (
+                        <div className="empty-state">
+                            <h3>{t('savedCharts.noCharts', 'No saved charts found')}</h3>
+                            <button className="create-btn" onClick={handleAddNew}>{t('savedCharts.createNew', 'Create New Chart')}</button>
+                        </div>
+                    ) : (
+                        <div className="table-container">
+                            <table className="charts-table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" onChange={handleSelectAll} checked={charts.length > 0 && selectedIds.length === charts.length} /></th>
+                                        <th onClick={() => handleSort('name')} className="sortable-th">{t('cols.name', 'Name')} {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                        <th>{t('cols.gender', 'Gender')}</th>
+                                        <th onClick={() => handleSort('dateOfBirth')} className="sortable-th">{t('cols.dob', 'Date of Birth')} {sortConfig.key === 'dateOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                        <th onClick={() => handleSort('timeOfBirth')} className="sortable-th">{t('cols.time', 'Time')} {sortConfig.key === 'timeOfBirth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                        <th onClick={() => handleSort('city')} className="sortable-th">{t('cols.place', 'Place')} {sortConfig.key === 'city' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>
+                                        {visibleColumns.ayanamsa && <th>{t('cols.ayanamsa', 'Ayanamsa')}</th>}
+                                        {visibleColumns.happiness && <th onClick={() => handleSort('happiness')} className="sortable-th">{t('cols.happiness', 'Happiness')} {sortConfig.key === 'happiness' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                        {visibleColumns.wealth && <th onClick={() => handleSort('wealth')} className="sortable-th">{t('cols.wealth', 'Wealth')} {sortConfig.key === 'wealth' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                        {visibleColumns.health && <th onClick={() => handleSort('health')} className="sortable-th">{t('cols.health', 'Health')} {sortConfig.key === 'health' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}</th>}
+                                        {visibleColumns.savedOn && <th>{t('cols.savedOn', 'Saved On')}</th>}
+                                        <th>{t('cols.actions', 'Actions')}</th>
+                                    </tr>
+                                    <tr className="filter-row">
+                                        <th></th>
+                                        <th><input placeholder={t('filters.name', 'Filter Name')} value={filterConfig.name} onChange={e => setFilterConfig({ ...filterConfig, name: e.target.value })} className="filter-input" /></th>
+                                        <th><input placeholder={t('filters.gender', 'Filter Gender')} value={filterConfig.gender} onChange={e => setFilterConfig({ ...filterConfig, gender: e.target.value })} className="filter-input" /></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th><input placeholder={t('filters.city', 'Filter City')} value={filterConfig.city} onChange={e => setFilterConfig({ ...filterConfig, city: e.target.value })} className="filter-input" /></th>
+                                        {visibleColumns.ayanamsa && <th></th>}
+                                        {visibleColumns.happiness && <th></th>}
+                                        {visibleColumns.wealth && <th></th>}
+                                        {visibleColumns.health && <th></th>}
+                                        {visibleColumns.savedOn && <th></th>}
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {/* New Row Input */}
+                                    {isAddingNew && (
+                                        <tr className="editing-row new-row">
+                                            <td></td>
+                                            <td><input placeholder={t('placeholders.name', 'Name')} value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
                                             <td>
                                                 <select value={editFormData.gender} onChange={e => setEditFormData({ ...editFormData, gender: e.target.value })}>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                    <option value="other">Other</option>
+                                                    <option value="male">{t('gender.male', 'Male')}</option>
+                                                    <option value="female">{t('gender.female', 'Female')}</option>
+                                                    <option value="other">{t('gender.other', 'Other')}</option>
                                                 </select>
                                             </td>
                                             <td><input type="date" value={editFormData.dateOfBirth} onChange={e => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })} /></td>
@@ -659,124 +773,177 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart }) => {
                                             {visibleColumns.ayanamsa && (
                                                 <td>
                                                     <select value={editFormData.ayanamsa} onChange={e => setEditFormData({ ...editFormData, ayanamsa: e.target.value })} style={{ maxWidth: '100px' }}>
-                                                        <option value="lahiri">Lahiri</option>
-                                                        <option value="raman">Raman</option>
-                                                        <option value="krishnamurti">KP</option>
-                                                        <option value="tropical">Tropical</option>
+                                                        <option value="lahiri">{t('ayanamsa.lahiri', 'Lahiri')}</option>
+                                                        <option value="raman">{t('ayanamsa.raman', 'Raman')}</option>
+                                                        <option value="krishnamurti">{t('ayanamsa.kp', 'KP')}</option>
+                                                        <option value="tropical">{t('ayanamsa.tropical', 'Tropical')}</option>
                                                     </select>
                                                 </td>
                                             )}
                                             {visibleColumns.happiness && <td>-</td>}
                                             {visibleColumns.wealth && <td>-</td>}
                                             {visibleColumns.health && <td>-</td>}
-                                            {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
+                                            {visibleColumns.savedOn && <td>{t('common.now', 'Now')}</td>}
                                             <td>
                                                 <div className="action-buttons">
-                                                    <button className="save-btn" onClick={() => handleSaveEdit(chart._id, chart.isLocal)}>💾</button>
+                                                    <button className="save-btn" onClick={handleSaveNew} title="Calculate & Save">💾</button>
                                                     <button className="cancel-btn" onClick={handleCancelEdit}>❌</button>
                                                 </div>
                                             </td>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <td onClick={() => handleLoad(chart)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>{chart.name}</td>
-                                            <td>{chart.gender || '-'}</td>
-                                            <td>{new Date(chart.dateOfBirth).toLocaleDateString()}</td>
-                                            <td>{chart.timeOfBirth}</td>
-                                            <td>{chart.placeOfBirth?.city}</td>
-                                            {visibleColumns.ayanamsa && <td>{chart.ayanamsa || 'lahiri'}</td>}
-                                            {visibleColumns.happiness && (
-                                                <td>
-                                                    <span
-                                                        title={chart.chartData ? getHappinessDetails(chart.chartData) : ''}
-                                                        style={{
-                                                            fontWeight: 'bold',
-                                                            cursor: 'help',
-                                                            color: (chart.chartData && calculateHappinessIndex(chart.chartData) >= 7) ? '#10b981' :
-                                                                (chart.chartData && calculateHappinessIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
-                                                        }}
-                                                    >
-                                                        {chart.chartData ? calculateHappinessIndex(chart.chartData) : '-'}
-                                                    </span>
-                                                </td>
-                                            )}
-                                            {visibleColumns.wealth && (
-                                                <td>
-                                                    <span
-                                                        title={chart.chartData ? getWealthDetails(chart.chartData) : ''}
-                                                        style={{
-                                                            fontWeight: 'bold',
-                                                            cursor: 'help',
-                                                            color: (chart.chartData && calculateWealthIndex(chart.chartData) >= 7) ? '#10b981' :
-                                                                (chart.chartData && calculateWealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
-                                                        }}
-                                                    >
-                                                        {chart.chartData ? calculateWealthIndex(chart.chartData) : '-'}
-                                                    </span>
-                                                </td>
-                                            )}
-                                            {visibleColumns.health && (
-                                                <td>
-                                                    <span
-                                                        title={chart.chartData ? getHealthDetails(chart.chartData) : ''}
-                                                        style={{
-                                                            fontWeight: 'bold',
-                                                            cursor: 'help',
-                                                            color: (chart.chartData && calculateHealthIndex(chart.chartData) >= 7) ? '#10b981' :
-                                                                (chart.chartData && calculateHealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
-                                                        }}
-                                                    >
-                                                        {chart.chartData ? calculateHealthIndex(chart.chartData) : '-'}
-                                                    </span>
-                                                </td>
-                                            )}
-                                            {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
-                                            <td style={{ position: 'relative' }}>
-                                                <button className="gear-btn" onClick={(e) => toggleActionMenu(e, chart._id)}>⚙️</button>
-                                                {actionMenuOpen === chart._id && (
-                                                    <div className="action-menu">
-                                                        <div onClick={() => handleLoad(chart)}>👁️ Show Chart</div>
-                                                        <div onClick={(e) => handleStartEdit(e, chart)}>✏️ Quick Edit</div>
-                                                        <div onClick={(e) => handleEditInForm(e, chart)}>📝 Full Edit (Recalculate)</div>
-                                                        <div onClick={() => handleDelete(chart._id, chart.isLocal)} className="delete-option">🗑️ Delete</div>
-                                                    </div>
-                                                )}
-                                            </td>
-                                        </>
+                                        </tr>
                                     )}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div >
-            )}
 
-            {
-                showDeleteConfirm && (
-                    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                        <div className="modal-content" style={{ background: '#1e293b', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '400px', textAlign: 'center' }}>
-                            <h3 style={{ marginTop: 0, color: 'white' }}>Confirm Deletion</h3>
-                            <p style={{ color: '#cbd5e1' }}>You are about to delete {selectedIds.length} records. Do you want to proceed?</p>
-                            <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
-                                <button
-                                    onClick={() => setShowDeleteConfirm(false)}
-                                    autoFocus
-                                    style={{ padding: '0.5rem 1.5rem', background: 'transparent', border: '1px solid #cbd5e1', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={executeBulkDelete}
-                                    style={{ padding: '0.5rem 1.5rem', background: '#ef4444', border: 'none', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
-                                >
-                                    Yes, Delete
-                                </button>
-                            </div>
+                                    {sortedCharts.map((chart) => (
+                                        <tr key={chart._id} className={editingId === chart._id ? 'editing-row' : ''}>
+                                            <td><input type="checkbox" checked={selectedIds.includes(chart._id)} onChange={() => handleSelectRow(chart._id)} /></td>
+                                            {editingId === chart._id ? (
+                                                <>
+                                                    <td><input value={editFormData.name} onChange={e => setEditFormData({ ...editFormData, name: e.target.value })} /></td>
+                                                    <td>
+                                                        <select value={editFormData.gender} onChange={e => setEditFormData({ ...editFormData, gender: e.target.value })}>
+                                                            <option value="male">{t('gender.male', 'Male')}</option>
+                                                            <option value="female">{t('gender.female', 'Female')}</option>
+                                                            <option value="other">{t('gender.other', 'Other')}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="date" value={editFormData.dateOfBirth} onChange={e => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })} /></td>
+                                                    <td><input type="time" value={editFormData.timeOfBirth} onChange={e => setEditFormData({ ...editFormData, timeOfBirth: e.target.value })} /></td>
+                                                    <td>
+                                                        <div style={{ minWidth: '200px', position: 'relative' }}>
+                                                            <CitySearch
+                                                                defaultValue={editFormData.city}
+                                                                onCitySelect={(cityData) => setEditFormData({
+                                                                    ...editFormData,
+                                                                    city: cityData.name,
+                                                                    latitude: cityData.latitude,
+                                                                    longitude: cityData.longitude,
+                                                                    timezone: cityData.timezone
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                    {visibleColumns.ayanamsa && (
+                                                        <td>
+                                                            <select value={editFormData.ayanamsa} onChange={e => setEditFormData({ ...editFormData, ayanamsa: e.target.value })} style={{ maxWidth: '100px' }}>
+                                                                <option value="lahiri">{t('ayanamsa.lahiri', 'Lahiri')}</option>
+                                                                <option value="raman">{t('ayanamsa.raman', 'Raman')}</option>
+                                                                <option value="krishnamurti">{t('ayanamsa.kp', 'KP')}</option>
+                                                                <option value="tropical">{t('ayanamsa.tropical', 'Tropical')}</option>
+                                                            </select>
+                                                        </td>
+                                                    )}
+                                                    {visibleColumns.happiness && <td>-</td>}
+                                                    {visibleColumns.wealth && <td>-</td>}
+                                                    {visibleColumns.health && <td>-</td>}
+                                                    {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
+                                                    <td>
+                                                        <div className="action-buttons">
+                                                            <button className="save-btn" onClick={() => handleSaveEdit(chart._id, chart.isLocal)}>💾</button>
+                                                            <button className="cancel-btn" onClick={handleCancelEdit}>❌</button>
+                                                        </div>
+                                                    </td>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <td onClick={() => handleLoad(chart)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>{chart.name}</td>
+                                                    <td>{chart.gender || '-'}</td>
+                                                    <td>{new Date(chart.dateOfBirth).toLocaleDateString()}</td>
+                                                    <td>{chart.timeOfBirth}</td>
+                                                    <td>{chart.placeOfBirth?.city}</td>
+                                                    {visibleColumns.ayanamsa && <td>{chart.ayanamsa || 'lahiri'}</td>}
+                                                    {visibleColumns.happiness && (
+                                                        <td>
+                                                            <span
+                                                                title={chart.chartData ? getHappinessDetails(chart.chartData) : ''}
+                                                                style={{
+                                                                    fontWeight: 'bold',
+                                                                    cursor: 'help',
+                                                                    color: (chart.chartData && calculateHappinessIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                        (chart.chartData && calculateHappinessIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                                }}
+                                                            >
+                                                                {chart.chartData ? calculateHappinessIndex(chart.chartData) : '-'}
+                                                            </span>
+                                                        </td>
+                                                    )}
+                                                    {visibleColumns.wealth && (
+                                                        <td>
+                                                            <span
+                                                                title={chart.chartData ? getWealthDetails(chart.chartData) : ''}
+                                                                style={{
+                                                                    fontWeight: 'bold',
+                                                                    cursor: 'help',
+                                                                    color: (chart.chartData && calculateWealthIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                        (chart.chartData && calculateWealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                                }}
+                                                            >
+                                                                {chart.chartData ? calculateWealthIndex(chart.chartData) : '-'}
+                                                            </span>
+                                                        </td>
+                                                    )}
+                                                    {visibleColumns.health && (
+                                                        <td>
+                                                            <span
+                                                                title={chart.chartData ? getHealthDetails(chart.chartData) : ''}
+                                                                style={{
+                                                                    fontWeight: 'bold',
+                                                                    cursor: 'help',
+                                                                    color: (chart.chartData && calculateHealthIndex(chart.chartData) >= 7) ? '#10b981' :
+                                                                        (chart.chartData && calculateHealthIndex(chart.chartData) >= 5) ? '#fbbf24' : '#ef4444'
+                                                                }}
+                                                            >
+                                                                {chart.chartData ? calculateHealthIndex(chart.chartData) : '-'}
+                                                            </span>
+                                                        </td>
+                                                    )}
+                                                    {visibleColumns.savedOn && <td>{new Date(chart.createdAt).toLocaleDateString()}</td>}
+                                                    <td style={{ position: 'relative' }}>
+                                                        <button className="gear-btn" onClick={(e) => toggleActionMenu(e, chart._id)}>⚙️</button>
+                                                        {actionMenuOpen === chart._id && (
+                                                            <div className="action-menu">
+                                                                <div onClick={() => handleLoad(chart)}>👁️ Show Chart</div>
+                                                                <div onClick={(e) => handleStartEdit(e, chart)}>✏️ Quick Edit</div>
+                                                                <div onClick={(e) => handleEditInForm(e, chart)}>📝 Full Edit (Recalculate)</div>
+                                                                <div onClick={() => handleDelete(chart._id, chart.isLocal)} className="delete-option">🗑️ Delete</div>
+                                                            </div>
+                                                        )}
+                                                    </td>
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                </div>
+            </div>
+
+            {showDeleteConfirm && (
+                <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                    <div className="modal-content" style={{ background: '#1e293b', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '400px', textAlign: 'center' }}>
+                        <h3 style={{ marginTop: 0, color: 'white' }}>Confirm Deletion</h3>
+                        <p style={{ color: '#cbd5e1' }}>You are about to delete {selectedIds.length} records. Do you want to proceed?</p>
+                        <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                autoFocus
+                                style={{ padding: '0.5rem 1.5rem', background: 'transparent', border: '1px solid #cbd5e1', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={executeBulkDelete}
+                                style={{ padding: '0.5rem 1.5rem', background: '#ef4444', border: 'none', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}
+                            >
+                                Yes, Delete
+                            </button>
                         </div>
                     </div>
-                )
-            }
-        </div >
+                </div>
+            )}
+        </div>
     );
 };
 

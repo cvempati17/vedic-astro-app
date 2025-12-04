@@ -87,6 +87,18 @@ const calculatePlanetaryPositions = (date, time, lat, long, timezone = 5.5) => {
         longitude: ascSidereal
     };
 
+    // Calculate Nakshatra for Moon
+    if (results.Moon) {
+        const nakshatras = [
+            "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+            "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+            "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+        ];
+        const moonLong = results.Moon.longitude;
+        const nakshatraIdx = Math.floor(moonLong / 13.333333);
+        results.Moon.nakshatra = nakshatras[nakshatraIdx];
+    }
+
     return results;
 };
 

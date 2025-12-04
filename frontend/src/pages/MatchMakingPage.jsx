@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { analyzeCandidates } from '../utils/matchUtils';
 import './MatchMakingPage.css';
 
 const MatchMakingPage = ({ savedCharts, onBack }) => {
+    const { t } = useTranslation();
     const [perspective, setPerspective] = useState('girl_looking_boy');
     const [selectedCandidates, setSelectedCandidates] = useState([]);
     const [results, setResults] = useState(null);
@@ -85,18 +87,18 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
     const handleAnalyze = () => {
         const candidates = charts.filter(c => selectedCandidates.includes(c.id));
         const baseProfile = charts.find(c => c.id === baseProfileId);
-        const analysisResults = analyzeCandidates(candidates, perspective, baseProfile?.data);
+        const analysisResults = analyzeCandidates(candidates, perspective, baseProfile?.data, false, t);
         setResults(analysisResults);
     };
 
     const getPerspectiveLabel = () => {
         switch (perspective) {
-            case 'girl_looking_boy': return "Girl looking for a Boy (Husband Potential)";
-            case 'boy_looking_girl': return "Boy looking for a Girl (Wife Potential)";
-            case 'employer_looking_employee': return "Employer looking for Talent";
-            case 'employee_looking_employer': return "Employee looking for a Job";
-            case 'business_partner': return "Business Partner Search";
-            default: return "Select Perspective";
+            case 'girl_looking_boy': return t('matchMaking.girlLookingBoy');
+            case 'boy_looking_girl': return t('matchMaking.boyLookingGirl');
+            case 'employer_looking_employee': return t('matchMaking.employerLookingEmployee');
+            case 'employee_looking_employer': return t('matchMaking.employeeLookingEmployer');
+            case 'business_partner': return t('matchMaking.businessPartner');
+            default: return t('matchMaking.selectPerspective');
         }
     };
 
@@ -114,32 +116,32 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
     return (
         <div className="match-making-container">
             <header className="match-header">
-                <button className="back-btn" onClick={onBack} style={{ float: 'left' }}>← Back</button>
-                <h1>Match Making & Comparative Analysis</h1>
-                <p>Compare multiple charts based on specific relationship dynamics.</p>
+                <button className="back-btn" onClick={onBack} style={{ float: 'left' }}>← {t('common.back')}</button>
+                <h1>{t('matchMaking.title')}</h1>
+                <p>{t('matchMaking.subtitle')}</p>
             </header>
 
             <div className="match-controls">
                 <div className="control-group">
-                    <label>1. Select Perspective</label>
+                    <label>{t('matchMaking.step1')}</label>
                     <select
                         className="perspective-select"
                         value={perspective}
                         onChange={(e) => setPerspective(e.target.value)}
                     >
-                        <option value="girl_looking_boy">I am a Girl looking for a Boy</option>
-                        <option value="boy_looking_girl">I am a Boy looking for a Girl</option>
-                        <option value="employer_looking_employee">I am an Employer looking for Talent</option>
-                        <option value="employee_looking_employer">I am an Employee looking for a Job</option>
-                        <option value="business_partner">I am looking for a Business Partner</option>
+                        <option value="girl_looking_boy">{t('matchMaking.optionGirlBoy')}</option>
+                        <option value="boy_looking_girl">{t('matchMaking.optionBoyGirl')}</option>
+                        <option value="employer_looking_employee">{t('matchMaking.optionEmployerEmployee')}</option>
+                        <option value="employee_looking_employer">{t('matchMaking.optionEmployeeEmployer')}</option>
+                        <option value="business_partner">{t('matchMaking.optionBusinessPartner')}</option>
                     </select>
                 </div>
 
                 <div className="control-group">
-                    <label>2. Select Base Profile (You)</label>
+                    <label>{t('matchMaking.step2')}</label>
                     {charts.length === 0 ? (
                         <div style={{ color: '#fbbf24', padding: '0.5rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '0.3rem' }}>
-                            ⚠️ No saved charts found. Please go to "Saved Charts" or calculate and save new charts to use this feature.
+                            ⚠️ {t('matchMaking.noChartsWarning')}
                         </div>
                     ) : (
                         <select
@@ -150,7 +152,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                                 setSelectedCandidates([]); // Reset selection
                             }}
                         >
-                            <option value="">-- Select Your Profile --</option>
+                            <option value="">-- {t('matchMaking.selectProfile')} --</option>
                             {baseProfileOptions.map(chart => (
                                 <option key={chart.id} value={chart.id}>{chart.name} ({chart.gender})</option>
                             ))}
@@ -159,7 +161,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                 </div>
 
                 <div className="control-group">
-                    <label>3. Select Candidates ({selectedCandidates.length})</label>
+                    <label>{t('matchMaking.step3')} ({selectedCandidates.length})</label>
                     <div className="multi-select-container">
                         <div
                             className="multi-select-header"
@@ -167,8 +169,8 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                         >
                             <span style={{ display: 'flex', alignItems: 'center' }}>
                                 {selectedCandidates.length === 0
-                                    ? "Select Candidates..."
-                                    : `${selectedCandidates.length} Selected`}
+                                    ? t('matchMaking.selectCandidates')
+                                    : `${selectedCandidates.length} ${t('matchMaking.selected')}`}
 
                                 {selectedCandidates.length > 0 && (
                                     <button
@@ -186,9 +188,9 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                                             cursor: 'pointer',
                                             marginLeft: '0.8rem'
                                         }}
-                                        title="Clear All Selections"
+                                        title={t('matchMaking.clearAll')}
                                     >
-                                        Clear
+                                        {t('matchMaking.clear')}
                                     </button>
                                 )}
                             </span>
@@ -200,7 +202,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                                 <div style={{ padding: '0.5rem', borderBottom: '1px solid #374151', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <input
                                         type="text"
-                                        placeholder="Search candidates..."
+                                        placeholder={t('matchMaking.searchPlaceholder')}
                                         value={candidateSearch}
                                         onChange={(e) => setCandidateSearch(e.target.value)}
                                         onClick={(e) => e.stopPropagation()}
@@ -243,7 +245,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
 
                                 {displayedCandidates.length === 0 ? (
                                     <div style={{ padding: '1rem', color: '#94a3b8', textAlign: 'center' }}>
-                                        No candidates found.
+                                        {t('matchMaking.noCandidatesFound')}
                                     </div>
                                 ) : (
                                     <>
@@ -257,7 +259,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                                                 checked={displayedCandidates.length > 0 && displayedCandidates.every(c => selectedCandidates.includes(c.id))}
                                                 readOnly
                                             />
-                                            Select All {candidateSearch && '(Filtered)'}
+                                            {t('matchMaking.selectAll')} {candidateSearch && `(${t('matchMaking.filtered')})`}
                                         </div>
                                         {displayedCandidates.map(chart => (
                                             <div
@@ -285,13 +287,13 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                     onClick={handleAnalyze}
                     disabled={selectedCandidates.length === 0}
                 >
-                    Analyze & Rank Candidates
+                    {t('matchMaking.analyzeBtn')}
                 </button>
             </div>
 
             {results && (
                 <div className="results-section">
-                    <h2>Ranking Results: {getPerspectiveLabel()}</h2>
+                    <h2>{t('matchMaking.rankingResults')}: {getPerspectiveLabel()}</h2>
                     {results.map((result, index) => (
                         <div key={result.id} className="result-card">
                             <div className="rank-badge">#{index + 1}</div>
@@ -305,18 +307,18 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
                                         className="total-score"
                                         title={
                                             baseProfileId
-                                                ? `Calculation:\n60% ${result.name}'s Merit (${result.individualScore})\n+ 40% Compatibility (${result.compatibilityScore})`
-                                                : `Calculation:\n100% ${result.name}'s Merit`
+                                                ? t('matchMaking.calculationBlended', { name: result.name, merit: result.individualScore, synastry: result.compatibilityScore })
+                                                : t('matchMaking.calculationIndividual', { name: result.name })
                                         }
                                         style={{ cursor: 'help' }}
                                     >
                                         {result.score}/10
                                     </span>
-                                    <small>Overall Match Score</small>
+                                    <small>{t('matchMaking.overallScore')}</small>
                                     {result.compatibilityDetails && result.compatibilityDetails.length > 0 && (
                                         <div style={{ textAlign: 'right', marginTop: '0.5rem', fontSize: '0.8rem', color: '#94a3b8' }}>
-                                            <div>{result.name.split(' ')[0]}'s Merit: {result.individualScore}</div>
-                                            <div>Synastry: {result.compatibilityScore}</div>
+                                            <div>{t('matchMaking.merit', { name: result.name.split(' ')[0], score: result.individualScore })}</div>
+                                            <div>{t('matchMaking.synastry', { score: result.compatibilityScore })}</div>
                                         </div>
                                     )}
                                 </div>
@@ -324,7 +326,7 @@ const MatchMakingPage = ({ savedCharts, onBack }) => {
 
                             {result.compatibilityDetails && result.compatibilityDetails.length > 0 && (
                                 <div className="compatibility-section" style={{ margin: '0 0 1.5rem 0', padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                                    <h4 style={{ margin: '0 0 0.5rem 0', color: '#10b981' }}>❤️ Compatibility Analysis (Synastry)</h4>
+                                    <h4 style={{ margin: '0 0 0.5rem 0', color: '#10b981' }}>❤️ {t('matchMaking.compatibilityAnalysis')}</h4>
                                     <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#065f46' }}>
                                         {result.compatibilityDetails.map((detail, i) => (
                                             <li key={i}>{detail}</li>

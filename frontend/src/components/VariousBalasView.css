@@ -1,0 +1,303 @@
+.various-balas-container {
+    padding: 1rem;
+    color: #ffffff !important;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    color: #f472b6 !important;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Balas Grid */
+.balas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.bala-card {
+    background: #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bala-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bala-name {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.bala-value {
+    color: #f8fafc !important;
+    font-weight: 700;
+}
+
+.bala-desc {
+    color: #cbd5e1 !important;
+    font-size: 0.9rem;
+}
+
+.bala-bar-bg {
+    height: 6px;
+    background: #334155;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.bala-bar-fill {
+    height: 100%;
+    background: #a78bfa;
+    border-radius: 3px;
+    transition: width 0.5s ease-out;
+}
+
+/* Life Summary Table */
+.life-summary-section {
+    margin-bottom: 3rem;
+}
+
+.summary-table-wrapper {
+    overflow-x: auto;
+    background: #1e293b;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 0.75rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+    color: #ffffff !important;
+}
+
+.summary-table th {
+    color: #cbd5e1 !important;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.summary-table tr:last-child td {
+    border-bottom: none;
+}
+
+.area-cell {
+    color: #ffffff !important;
+    font-weight: 500;
+    width: 130px;
+    white-space: normal;
+}
+
+.phase-header {
+    width: 110px;
+}
+
+.years-header {
+    width: 90px;
+    text-align: center;
+}
+
+.phase-cell {
+    color: #ffffff !important;
+    font-weight: 500;
+    width: 110px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.years-cell {
+    color: #e2e8f0 !important;
+    width: 90px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.status-cell {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.status-excellent {
+    color: #4ade80 !important;
+}
+
+.status-good {
+    color: #60a5fa !important;
+}
+
+.status-moderate {
+    color: #facc15 !important;
+}
+
+.status-challenging {
+    color: #f87171 !important;
+}
+
+.summary-table .score-cell {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.path-cell {
+    color: #e2e8f0 !important;
+}
+
+/* Personal Signature */
+.signature-section {
+    margin-bottom: 3rem;
+    background: #0f172a;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #a78bfa;
+}
+
+.signature-quote {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #ffffff !important;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.signature-desc {
+    color: #cbd5e1 !important;
+}
+
+/* Planetary Analysis */
+.planet-analysis-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #334155;
+}
+
+.planet-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.planet-icon {
+    font-size: 1.5rem;
+}
+
+.planet-number {
+    font-size: 1.2rem;
+    color: #ffffff !important;
+}
+
+.planet-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-transform: uppercase;
+}
+
+.planet-title {
+    color: #cbd5e1 !important;
+    font-size: 1.1rem;
+}
+
+.strength-reason {
+    color: #a78bfa !important;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.analysis-column h4 {
+    color: #f472b6 !important;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.analysis-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.analysis-column li {
+    color: #e2e8f0 !important;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.gifts-list li {
+    color: #86efac !important;
+}
+
+.challenges-list li {
+    color: #fda4af !important;
+}
+
+.life-advice {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 3px solid #f472b6;
+}
+
+.life-advice h4 {
+    color: #f472b6 !important;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.life-advice p {
+    color: #ffffff !important;
+    margin: 0;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+@media (max-width: 768px) {
+    .balas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .planet-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vedic Astrology – Grouped Trait Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #050816;
+      color: #f5f5f5;
+    }
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    h1, h2, h3 {
+      margin: 0 0 0.5rem;
+      font-weight: 600;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    p {
+      margin: 0 0 0.75rem;
+      font-size: 0.9rem;
+      color: #d0d0d0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+    .category-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #e0f2fe;
+      margin-bottom: 0.4rem;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      margin: 0.4rem 0 0.1rem;
+      color: #e5e7eb;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.35rem 0.45rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #f9fafb;
+      font-size: 0.8rem;
+    }
+    input[type="number"]:focus {
+      outline: 2px solid #38bdf8;
+      outline-offset: 1px;
+    }
+    .hint {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-bottom: 0.25rem;
+    }
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #e0f2fe;
+    }
+    .score-value {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .btn-row {
+      margin-top: 0.85rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.45rem 1.1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.6);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.75);
+    }
+    .results {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.09), rgba(15,23,42,0.95));
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+    }
+    .results-table th,
+    .results-table td {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.45rem 0.2rem;
+      text-align: left;
+    }
+    .results-table th {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+    .results-table td.trait-name {
+      font-weight: 500;
+      color: #f9fafb;
+    }
+    .results-table td.score-col {
+      text-align: center;
+    }
+    .tagline {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      .app {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Vedic Astrology – Grouped Trait Explorer</h1>
+    <p class="tagline">
+      Manually assign <strong>Score_Delta</strong> values for each trait factor using RULE_ENGINE_GROUPED. The engine uses
+      <code>Base = 5 + sum(deltas)</code>, clamped to <code>1–10</code>, for every trait.
+    </p>
+
+    <div class="grid" id="trait-grid"></div>
+
+    <div class="results" id="summary-block" style="display:none;">
+      <h2>Summary for This Chart</h2>
+      <p class="hint">
+        All traits scored using the grouped rule engine. You can export this table into Excel or feed it into
+        your synergy / compatibility calculator.
+      </p>
+      <table class="results-table" id="summary-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Trait</th>
+            <th class="score-col">Score (1–10)</th>
+          </tr>
+        </thead>
+        <tbody id="summary-body"></tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="resetAll()">Reset All Inputs</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function clamp(x, lo = 1, hi = 10) {
+      return Math.max(lo, Math.min(hi, x));
+    }
+
+    // --- TRAIT CONFIG ---
+    // Each trait corresponds to a block in RULE_ENGINE_GROUPED.md.
+    // Factors here are high-level indicators; you set the exact delta based on the table.
+    const TRAITS = [
+      // 3. Personal Character & Ethics
+      {
+        id: 'trustworthiness',
+        name: 'Trustworthiness & Honesty',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'sun', label: 'Sun dignity & house (3.1)', hint: 'e.g., +3 strong Kendra/Trikona, −2 weak in 6/8/12' },
+          { id: 'jupiter', label: 'Jupiter strength (3.1)', hint: 'e.g., +3 strong, −2 very weak' },
+          { id: 'ninth', label: '9th lord & house (3.1)', hint: 'e.g., +2 strong 9H, −2 heavily afflicted' },
+          { id: 'rahuKetu', label: 'Rahu/Ketu vs Sun/Jupiter (3.1)', hint: 'e.g., −2 if strong affliction' }
+        ]
+      },
+      {
+        id: 'respect',
+        name: 'Respectful Behavior',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'jupiter', label: 'Jupiter vs Lagna/Moon', hint: 'e.g., +2 if aspecting Lagna/Moon/7H' },
+          { id: 'venus', label: 'Venus dignity', hint: 'e.g., +1 if strong & unafflicted' },
+          { id: 'saturn', label: 'Saturn influence', hint: 'e.g., +1 if disciplined, not harsh' },
+          { id: 'marsRahu', label: 'Mars/Rahu harshness', hint: 'e.g., −2 if strong harsh aspects' }
+        ]
+      },
+      {
+        id: 'loyalty',
+        name: 'Loyalty & Commitment',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'venus', label: 'Venus fixed & dignified', hint: 'e.g., +2 fixed strong Venus' },
+          { id: 'moon', label: 'Moon fixed & stable', hint: 'e.g., +1 if fixed & not afflicted' },
+          { id: 'seventh', label: '7th lord & house', hint: 'e.g., +2 if strong, −2 if weak/afflicted' },
+          { id: 'rahuKetu7', label: 'Rahu/Ketu in 7th/2nd', hint: 'e.g., −2 or −1 if severe' }
+        ]
+      },
+      {
+        id: 'responsibility',
+        name: 'Responsibility & Reliability',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'saturn', label: 'Saturn dignity & role', hint: 'e.g., +3 strong Saturn in Kendra/Trikona' },
+          { id: 'sixth', label: '6th lord & house', hint: 'e.g., +2 strong, −2 very weak' },
+          { id: 'tenth', label: '10th lord', hint: 'e.g., +1 strong 10L' },
+          { id: 'moonWeak', label: 'Moon very weak', hint: 'e.g., −2 if Moon heavily afflicted' }
+        ]
+      },
+      {
+        id: 'fairness',
+        name: 'Fairness & Justice',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'jupiter', label: 'Jupiter strength', hint: 'e.g., +3 strong & linked to 9/10H' },
+          { id: 'libra', label: 'Libra emphasis', hint: 'e.g., +1 strong Libra on angles' },
+          { id: 'ninth', label: '9th lord/house', hint: 'e.g., +2 strong, −2 afflicted' },
+          { id: 'rahu', label: 'Rahu in 9/10', hint: 'e.g., −2 if afflicting 9/10H' }
+        ]
+      },
+      {
+        id: 'generosity',
+        name: 'Generosity (Compensation)',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'jupiter', label: 'Jupiter in 2/5/9/11', hint: 'e.g., +2 strong' },
+          { id: 'venus', label: 'Venus in 2/11', hint: 'e.g., +1 if strong & sharing' },
+          { id: 'saturn', label: 'Harsh Saturn on 2H', hint: 'e.g., −1 if over-harsh' }
+        ]
+      },
+      {
+        id: 'neutral',
+        name: 'Neutrality & Objectivity',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'mercury', label: 'Mercury strength', hint: 'e.g., +2 strong, not combust' },
+          { id: 'saturn', label: 'Saturn support', hint: 'e.g., +1 if supports objectivity' },
+          { id: 'moon', label: 'Moon instability', hint: 'e.g., −2 if very unstable' }
+        ]
+      },
+      {
+        id: 'patience',
+        name: 'Patience & Tolerance',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'saturn', label: 'Saturn strength', hint: 'e.g., +2 strong & benefic' },
+          { id: 'jupiter', label: 'Jupiter aspect to Moon/Lagna', hint: 'e.g., +1' },
+          { id: 'mars', label: 'Mars impatience', hint: 'e.g., −2 if harsh to Moon/3H' }
+        ]
+      },
+      {
+        id: 'shared_values',
+        name: 'Shared Values',
+        category: 'Personal Character & Ethics',
+        factors: [
+          { id: 'ninth', label: '9th lord & house', hint: 'e.g., +2 strong 9H' },
+          { id: 'second', label: '2nd lord & house', hint: 'e.g., +1 strong 2H' },
+          { id: 'rahu', label: 'Rahu on 2/9H', hint: 'e.g., −2 if heavy affliction' }
+        ]
+      },
+
+      // 4. Emotional & Relationship Traits
+      {
+        id: 'emotional_maturity',
+        name: 'Emotional Maturity',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'moonStrong', label: 'Moon strong', hint: 'e.g., +3 if own/exalted, benefic support' },
+          { id: 'moonSaturn', label: 'Moon + Saturn with Jupiter help', hint: 'e.g., +1' },
+          { id: 'moonAffliction', label: 'Moon heavy affliction', hint: 'e.g., −3 if debilitated with malefics' }
+        ]
+      },
+      {
+        id: 'kindness',
+        name: 'Kindness & Compassion',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'moon', label: 'Moon in benefic signs', hint: 'e.g., +2 in Cancer/Pisces with support' },
+          { id: 'venus', label: 'Venus strong', hint: 'e.g., +1 if unafflicted' },
+          { id: 'mars', label: 'Mars harshness', hint: 'e.g., −2 if heavy on Moon/4H' }
+        ]
+      },
+      {
+        id: 'communication',
+        name: 'Effective Communication',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'mercury', label: 'Mercury strength', hint: 'e.g., +3 strong in 2/3/10H' },
+          { id: 'third', label: '3rd lord', hint: 'e.g., +1 if strong' },
+          { id: 'rahuMerc', label: 'Rahu with Mercury (good)', hint: 'e.g., +1 if in air signs' },
+          { id: 'mercAfflict', label: 'Mercury afflicted', hint: 'e.g., −2 in dusthana with malefics' }
+        ]
+      },
+      {
+        id: 'supportiveness',
+        name: 'Supportiveness',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'moon11', label: 'Moon & 11th/4th support', hint: 'e.g., +2' },
+          { id: 'venusKendra', label: 'Venus in Kendra/Trikona', hint: 'e.g., +1' },
+          { id: 'saturn4', label: 'Saturn harsh on 4H', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'affection',
+        name: 'Affection & Intimacy',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'venus', label: 'Venus dignity', hint: 'e.g., +3 strong in 5/7/Kendra' },
+          { id: 'seventh', label: '7th lord & benefics', hint: 'e.g., +2' },
+          { id: 'malefics7', label: 'Malefics in 7H', hint: 'e.g., −3 if harsh & weak Venus' }
+        ]
+      },
+      {
+        id: 'humor',
+        name: 'Sense of Humor',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'mercuryJupiter', label: 'Mercury + Jupiter link', hint: 'e.g., +2' },
+          { id: 'fifth', label: '5th house strength', hint: 'e.g., +1' },
+          { id: 'saturn5', label: 'Heavy Saturn on Moon/5H', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'wellbeing',
+        name: 'Focus on Well-being',
+        category: 'Emotional & Relationship Traits',
+        factors: [
+          { id: 'first', label: '1st lord/house', hint: 'e.g., +2 strong' },
+          { id: 'sixth', label: '6th house', hint: 'e.g., +1 proactive health' },
+          { id: 'twelfth', label: '12th imbalance', hint: 'e.g., −2 addictions/escapism' }
+        ]
+      },
+
+      // 5. Mental Growth & Adaptability
+      {
+        id: 'independence',
+        name: 'Independence / Self-Motivation',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'sun', label: 'Sun in Kendra/strong', hint: 'e.g., +2' },
+          { id: 'mars', label: 'Mars strength', hint: 'e.g., +2 in Kendra/Upachaya' },
+          { id: 'moonWeak', label: 'Moon dependent/weak', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'adaptability',
+        name: 'Adaptability & Flexibility',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'mercuryDual', label: 'Mercury in dual signs', hint: 'e.g., +2' },
+          { id: 'rahuMerc', label: 'Rahu + Mercury in air/dual', hint: 'e.g., +1' },
+          { id: 'fixedOver', label: 'Fixed sign overload', hint: 'e.g., −2 if excessive' }
+        ]
+      },
+      {
+        id: 'curiosity',
+        name: 'Curiosity & Inquisitiveness',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'mercury', label: 'Mercury in 3/5/9H', hint: 'e.g., +2' },
+          { id: 'rahu', label: 'Rahu with Mercury', hint: 'e.g., +1 in 3/9H' },
+          { id: 'saturn', label: 'Saturn suppression', hint: 'e.g., −1' }
+        ]
+      },
+      {
+        id: 'learning',
+        name: 'Willingness to Learn',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'jupiter', label: 'Jupiter in 5/9H', hint: 'e.g., +3' },
+          { id: 'fifth', label: '5th lord', hint: 'e.g., +1 strong & clean' },
+          { id: 'saturnRigid', label: 'Rigid Saturn', hint: 'e.g., −1 if no Jupiter/Mercury help' }
+        ]
+      },
+      {
+        id: 'observation',
+        name: 'Observation & Awareness',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'mercury3', label: 'Mercury in 3/6H', hint: 'e.g., +2' },
+          { id: 'moon', label: 'Moon stable', hint: 'e.g., +1' },
+          { id: 'rahuFog', label: 'Rahu fog on Moon/Merc', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'problem_solving',
+        name: 'Problem-Solving',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'mercury', label: 'Mercury strong', hint: 'e.g., +2 in Kendra/Trikona' },
+          { id: 'mars', label: 'Mars + Mercury synergy', hint: 'e.g., +1' },
+          { id: 'sixth', label: '6th lord', hint: 'e.g., +1 strong 6L' },
+          { id: 'moonWeak', label: 'Weak Moon', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'improvisation',
+        name: 'Improvisation & Adaptability',
+        category: 'Mental Growth & Adaptability',
+        factors: [
+          { id: 'rahuAir', label: 'Rahu in air signs', hint: 'e.g., +2 with Merc/Jup help' },
+          { id: 'mercuryExalt', label: 'Mercury exalted with nodes', hint: 'e.g., +1' },
+          { id: 'saturnHeavy', label: 'Very heavy Saturn on Lagna/3H', hint: 'e.g., −1' }
+        ]
+      },
+
+      // 6. Work & Collaboration Traits
+      {
+        id: 'work_ethic',
+        name: 'Strong Work Ethic',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'saturn', label: 'Saturn strength', hint: 'e.g., +3 in Kendra/Trikona with 6/10 link' },
+          { id: 'mars', label: 'Mars in 3/6/10H', hint: 'e.g., +2' },
+          { id: 'sixth', label: '6th lord', hint: 'e.g., +1 strong, −2 very weak' },
+          { id: 'tenth', label: '10th lord', hint: 'e.g., +1 strong' }
+        ]
+      },
+      {
+        id: 'positive_attitude',
+        name: 'Positive Attitude',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'jupiter', label: 'Jupiter aspect to Lagna/Moon', hint: 'e.g., +2' },
+          { id: 'moon', label: 'Moon dignity', hint: 'e.g., +1 strong & not afflicted' },
+          { id: 'saturn', label: 'Heavy Saturn on Moon/Lagna', hint: 'e.g., −2' },
+          { id: 'rahuMoon', label: 'Rahu over Moon', hint: 'e.g., −1' }
+        ]
+      },
+      {
+        id: 'teamwork',
+        name: 'Teamwork & Collaboration',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'moon11', label: 'Moon & 11H', hint: 'e.g., +2' },
+          { id: 'venus', label: 'Venus in Libra/Taurus/7H', hint: 'e.g., +1' },
+          { id: 'saturn7_11', label: 'Harsh Saturn on 7/11H', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'leadership',
+        name: 'Leadership',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'sun', label: 'Sun dignity', hint: 'e.g., +3 strong in 1/9/10H' },
+          { id: 'tenth', label: '10th lord & yogas', hint: 'e.g., +2' },
+          { id: 'mars', label: 'Mars strength', hint: 'e.g., +1' },
+          { id: 'saturnWeak', label: 'Very weak Saturn on 10H', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'vision',
+        name: 'Vision & Direction',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'sun9_10', label: 'Sun in 9/10H', hint: 'e.g., +2' },
+          { id: 'jupiter9', label: 'Jupiter in/asp 9/10H', hint: 'e.g., +2' },
+          { id: 'rahu9', label: 'Rahu in 9H harming', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'project_mgmt',
+        name: 'Project Management',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'saturn', label: 'Saturn strength in Kendra/Upachaya', hint: 'e.g., +2' },
+          { id: 'tenth', label: '10th lord', hint: 'e.g., +1' },
+          { id: 'mercury', label: 'Mercury support', hint: 'e.g., +1' },
+          { id: 'moonWeak', label: 'Very weak Moon', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'risk_taking',
+        name: 'Risk Taking Ability',
+        category: 'Work & Collaboration Traits',
+        factors: [
+          { id: 'mars', label: 'Mars strength in 3/5/10H', hint: 'e.g., +2' },
+          { id: 'rahu', label: 'Rahu dignity in 3/10H', hint: 'e.g., +1' },
+          { id: 'saturnInhibit', label: 'Over-strong Saturn on 1/3H', hint: 'e.g., −1' },
+          { id: 'moonFear', label: 'Fearful Moon', hint: 'e.g., −1' }
+        ]
+      },
+
+      // 7. Skills & Professional Traits
+      {
+        id: 'technical',
+        name: 'Technical/Digital Literacy',
+        category: 'Skills & Professional Traits',
+        factors: [
+          { id: 'rahuAir', label: 'Rahu in air signs & 3/10H', hint: 'e.g., +2' },
+          { id: 'mercury', label: 'Mercury strong in 3/6/10H', hint: 'e.g., +1' },
+          { id: 'saturnModern', label: 'Saturn with Rahu in upachaya', hint: 'e.g., +1' },
+          { id: 'mercuryWeak', label: 'Weak/debilitated Mercury', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'data_analysis',
+        name: 'Data Analysis',
+        category: 'Skills & Professional Traits',
+        factors: [
+          { id: 'mercury', label: 'Mercury dignity (Virgo/Gemini)', hint: 'e.g., +2' },
+          { id: 'saturnMerc', label: 'Saturn + Mercury in air/earth', hint: 'e.g., +1' },
+          { id: 'moonUnstable', label: 'Unstable Moon', hint: 'e.g., −1' }
+        ]
+      },
+      {
+        id: 'business_acumen',
+        name: 'Business Acumen',
+        category: 'Skills & Professional Traits',
+        factors: [
+          { id: 'second', label: '2nd lord', hint: 'e.g., +2 linked to 10/11H' },
+          { id: 'eleventh', label: '11th lord', hint: 'e.g., +2 strong with benefics' },
+          { id: 'saturn', label: 'Saturn strong', hint: 'e.g., +1' },
+          { id: 'jupiterWeak', label: 'Very weak Jupiter 6/8/12', hint: 'e.g., −1' }
+        ]
+      },
+      {
+        id: 'financial_resp',
+        name: 'Financial Responsibility',
+        category: 'Skills & Professional Traits',
+        factors: [
+          { id: 'saturn2', label: 'Saturn & 2H', hint: 'e.g., +2 protecting 2H' },
+          { id: 'jupiter2_11', label: 'Jupiter in 2/11H', hint: 'e.g., +1' },
+          { id: 'rahu2', label: 'Rahu in 2H with weak lord', hint: 'e.g., −2' }
+        ]
+      },
+      {
+        id: 'perfectionism',
+        name: 'Perfectionism & Detail',
+        category: 'Skills & Professional Traits',
+        factors: [
+          { id: 'virgo', label: 'Virgo emphasis', hint: 'e.g., +2 strong Virgo with Merc support' },
+          { id: 'mercury', label: 'Mercury strong with 3/6/10H', hint: 'e.g., +1' },
+          { id: 'saturn', label: 'Saturn strict', hint: 'e.g., +1' },
+          { id: 'moonAnx', label: 'Overthinking Moon', hint: 'e.g., −1' }
+        ]
+      }
+    ];
+
+    // --- RENDERING ---
+    function renderTraits() {
+      const grid = document.getElementById('trait-grid');
+      grid.innerHTML = '';
+
+      TRAITS.forEach((trait) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.id = `card-${trait.id}`;
+
+        const header = document.createElement('div');
+        header.className = 'card-header';
+
+        const title = document.createElement('h2');
+        title.textContent = trait.name;
+
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = trait.category;
+
+        header.appendChild(title);
+        header.appendChild(badge);
+
+        const catLabel = document.createElement('div');
+        catLabel.className = 'category-label';
+        catLabel.textContent = trait.category;
+
+        const hintP = document.createElement('p');
+        hintP.className = 'hint';
+        hintP.textContent = 'Base = 5 + sum of factor deltas from RULE_ENGINE_GROUPED → clamp 1–10.';
+
+        card.appendChild(header);
+        card.appendChild(hintP);
+
+        trait.factors.forEach((f) => {
+          const label = document.createElement('label');
+          label.setAttribute('for', `${trait.id}-${f.id}`);
+          label.textContent = f.label;
+
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.step = '0.5';
+          input.min = '-4';
+          input.max = '4';
+          input.id = `${trait.id}-${f.id}`;
+          input.placeholder = f.hint || '';
+
+          const small = document.createElement('div');
+          small.className = 'hint';
+          small.textContent = f.hint || '';
+
+          card.appendChild(label);
+          card.appendChild(input);
+          card.appendChild(small);
+        });
+
+        const btnRow = document.createElement('div');
+        btnRow.className = 'btn-row';
+
+        const btn = document.createElement('button');
+        btn.className = 'btn-primary';
+        btn.textContent = 'Calculate All Traits';
+        btn.onclick = calculateAll;
+
+        const chip = document.createElement('span');
+        chip.className = 'score-chip';
+        chip.innerHTML = `TR: <span class="score-value" id="score-${trait.id}">–</span>/10`;
+
+        btnRow.appendChild(btn);
+        btnRow.appendChild(chip);
+        card.appendChild(btnRow);
+
+        grid.appendChild(card);
+      });
+    }
+
+    // --- SCORING ---
+    function scoreTrait(trait) {
+      let score = 5;
+      trait.factors.forEach((f) => {
+        const el = document.getElementById(`${trait.id}-${f.id}`);
+        if (!el) return;
+        const v = parseFloat(el.value || '0');
+        if (!Number.isNaN(v)) score += v;
+      });
+      return clamp(score);
+    }
+
+    function calculateAll() {
+      const summaryBody = document.getElementById('summary-body');
+      summaryBody.innerHTML = '';
+
+      const scores = {};
+
+      TRAITS.forEach((trait) => {
+        const s = scoreTrait(trait);
+        scores[trait.id] = s;
+
+        const span = document.getElementById(`score-${trait.id}`);
+        if (span) span.textContent = s.toFixed(1);
+
+        const tr = document.createElement('tr');
+        const tdCat = document.createElement('td');
+        tdCat.textContent = trait.category;
+        const tdName = document.createElement('td');
+        tdName.className = 'trait-name';
+        tdName.textContent = trait.name;
+        const tdScore = document.createElement('td');
+        tdScore.className = 'score-col';
+        tdScore.textContent = s.toFixed(1);
+
+        tr.appendChild(tdCat);
+        tr.appendChild(tdName);
+        tr.appendChild(tdScore);
+        summaryBody.appendChild(tr);
+      });
+
+      document.getElementById('summary-block').style.display = 'block';
+    }
+
+    function resetAll() {
+      const inputs = document.querySelectorAll('input[type="number"]');
+      inputs.forEach((i) => (i.value = ''));
+
+      TRAITS.forEach((trait) => {
+        const span = document.getElementById(`score-${trait.id}`);
+        if (span) span.textContent = '–';
+      });
+
+      const summaryBody = document.getElementById('summary-body');
+      summaryBody.innerHTML = '';
+      document.getElementById('summary-block').style.display = 'none';
+    }
+
+    // init
+    renderTraits();
+  </script>
+</body>
+</html>

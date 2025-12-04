@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { transformToVarga, getDivisionalChartName } from '../utils/divisionalCharts';
 import './NorthIndianChart.css';
 
 const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = false }) => {
+    const { t } = useTranslation();
     const [chartStyle, setChartStyle] = useState('south');
     const [division, setDivision] = useState(defaultDivision);
 
@@ -13,23 +15,23 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
     const getRasiName = (rasiNum) => {
         const rasis = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
             'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
-        return rasis[rasiNum];
+        return t(`signs.${rasis[rasiNum]}`);
     };
 
     const getRasiAbbr = (rasiNum) => {
-        const abbr = ['Ar', 'Ta', 'Ge', 'Cn', 'Le', 'Vi', 'Li', 'Sc', 'Sg', 'Cp', 'Aq', 'Pi'];
-        return abbr[rasiNum];
+        const rasis = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+            'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+        return t(`signs.${rasis[rasiNum]}`).substring(0, 2);
     };
 
     const getDegreesInSign = (longitude) => (longitude % 30).toFixed(2);
 
     const getPlanetAbbr = (planet) => {
-        const abbr = {
-            'Sun': 'Su', 'Moon': 'Mo', 'Mars': 'Ma', 'Mercury': 'Me',
-            'Jupiter': 'Ju', 'Venus': 'Ve', 'Saturn': 'Sa',
-            'Rahu': 'Ra', 'Ketu': 'Ke'
-        };
-        return abbr[planet] || planet.substring(0, 2);
+        // For abbreviations, we might want to keep them short or English-based for the chart visuals
+        // or use the first 2 letters of the translated name.
+        // Let's try translated first 2 chars.
+        const translated = t(`planets.${planet}`);
+        return translated.substring(0, 2);
     };
 
     // Transform data based on selected division
@@ -43,7 +45,7 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
     }
 
     planetsByRasi[ascendantRasi].push({
-        abbr: 'Asc',
+        abbr: t('charts.ascShort'), // Use localized Ascendant short form
         degrees: getDegreesInSign(ascendantLong)
     });
 
@@ -78,15 +80,15 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                                         centerRendered = true;
                                         return (
                                             <div key="center" className="chart-cell-south center-merged">
-                                                <div className="chart-title-south">{getDivisionalChartName(division)}</div>
+                                                <div className="chart-title-south">{t(`charts.${division}`)}</div>
                                                 <div className="birth-details">
                                                     {formData?.name && (
                                                         <div className="detail-row">
-                                                            <strong>Name:</strong> {formData.name}
+                                                            <strong>{t('charts.name')}:</strong> {formData.name}
                                                         </div>
                                                     )}
                                                     <div className="detail-row lagna-highlight">
-                                                        <strong>Lagna:</strong> {getRasiName(ascendantRasi)}
+                                                        <strong>{t('charts.lagna')}:</strong> {getRasiName(ascendantRasi)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,7 +168,7 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                                     fontSize="8"
                                     fontWeight="700"
                                 >
-                                    H{num}
+                                    {t('charts.houseShort')}{num}
                                 </text>
 
                                 {isAsc && (
@@ -178,7 +180,7 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                                         fontSize="6"
                                         fontWeight="600"
                                     >
-                                        Rising Lagna
+                                        {t('charts.risingLagna')}
                                     </text>
                                 )}
 
@@ -244,7 +246,7 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                 const y = cy - planetRadius * Math.sin(angle);
                 return {
                     name: planet,
-                    abbr: planet === 'Ascendant' ? 'Asc' : getPlanetAbbr(planet),
+                    abbr: planet === 'Ascendant' ? t('charts.ascShort') : getPlanetAbbr(planet),
                     x,
                     y,
                     longitude: info.longitude
@@ -343,7 +345,7 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                         fontSize="11"
                         fontWeight="800"
                     >
-                        ASC
+                        {t('charts.ascShort')}
                     </text>
                 </svg>
             </div>
@@ -385,13 +387,15 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
 
                         return (
                             <g key={sign.num}>
-                                <text x={sign.x} y={sign.y - 15} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight="700">{sign.name}</text>
+                                <text x={sign.x} y={sign.y - 15} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight="700">
+                                    {getRasiAbbr(sign.num - 1)}
+                                </text>
                                 <rect x={sign.x - 16} y={sign.y - 12} width="32" height="20" rx="4" ry="4" fill="#2563eb" />
                                 <text x={sign.x} y={sign.y + 3} textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="800">{houseNum}</text>
                                 {planetsInSign.map((planet, idx) => (
                                     <text key={idx} x={sign.x} y={sign.y + 15 + (idx * 10)} textAnchor="middle" fill="#8b5cf6" fontSize="9" fontWeight="600">{planet.abbr} {planet.degrees}</text>
                                 ))}
-                                {isAscendant && <text x={sign.x} y={sign.y - 25} textAnchor="middle" fill="#3b82f6" fontSize="8" fontWeight="700">ASC</text>}
+                                {isAscendant && <text x={sign.x} y={sign.y - 25} textAnchor="middle" fill="#3b82f6" fontSize="8" fontWeight="700">{t('charts.ascShort')}</text>}
                             </g>
                         );
                     })}
@@ -401,29 +405,29 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
     };
 
     const vargaOptions = [
-        { id: 'd1', label: 'D-1 Rasi (Body)' },
-        { id: 'd2', label: 'D-2 Hora (Wealth)' },
-        { id: 'd3', label: 'D-3 Drekkana (Siblings)' },
-        { id: 'd4', label: 'D-4 Chaturthamsa (Fortune)' },
-        { id: 'd7', label: 'D-7 Saptamsa (Children)' },
-        { id: 'd9', label: 'D-9 Navamsa (Spouse & Dharma)' },
-        { id: 'd10', label: 'D-10 Dasamsa (Profession)' },
-        { id: 'd12', label: 'D-12 Dwadasamsa (Parents)' },
-        { id: 'd16', label: 'D-16 Shodasamsa (Vehicles & Comforts)' },
-        { id: 'd20', label: 'D-20 Vimsamsa (Spiritual)' },
-        { id: 'd24', label: 'D-24 Chaturvimsamsa (Education)' },
-        { id: 'd27', label: 'D-27 Saptavimsamsa (Strengths)' },
-        { id: 'd30', label: 'D-30 Trimsamsa (Evils)' },
-        { id: 'd40', label: 'D-40 Khavedamsa (Auspiciousness)' },
-        { id: 'd45', label: 'D-45 Akshavedamsa (General)' },
-        { id: 'd60', label: 'D-60 Shastiamsa (Past Karma)' },
-        { id: 'bhava', label: 'Bhava Chalit (Houses)' }
+        { id: 'd1', label: t('charts.d1') },
+        { id: 'd2', label: t('charts.d2') },
+        { id: 'd3', label: t('charts.d3') },
+        { id: 'd4', label: t('charts.d4') },
+        { id: 'd7', label: t('charts.d7') },
+        { id: 'd9', label: t('charts.d9') },
+        { id: 'd10', label: t('charts.d10') },
+        { id: 'd12', label: t('charts.d12') },
+        { id: 'd16', label: t('charts.d16') },
+        { id: 'd20', label: t('charts.d20') },
+        { id: 'd24', label: t('charts.d24') },
+        { id: 'd27', label: t('charts.d27') },
+        { id: 'd30', label: t('charts.d30') },
+        { id: 'd40', label: t('charts.d40') },
+        { id: 'd45', label: t('charts.d45') },
+        { id: 'd60', label: t('charts.d60') },
+        { id: 'bhava', label: t('charts.bhava') }
     ];
 
     return (
         <div className="birth-chart-container">
             <div className="chart-header">
-                <h2>{getDivisionalChartName(division)}</h2>
+                <h2>{t(`charts.${division}`)}</h2>
 
                 {!hideControls && (
                     <div className="division-selector">
@@ -446,15 +450,15 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                             className={chartStyle === style ? 'active' : ''}
                             onClick={() => setChartStyle(style)}
                         >
-                            {style.charAt(0).toUpperCase() + style.slice(1)}
+                            {t(`charts.${style}`)}
                         </button>
                     ))}
                 </div>
             </div>
 
             <div className="chart-info">
-                <strong>Ascendant (Lagna):</strong> {getRasiName(ascendantRasi)} {getDegreesInSign(ascendantLong)}°
-                {division !== 'd1' && <span className="division-note"> ({getDivisionalChartName(division)} Position)</span>}
+                <strong>{t('charts.ascendant')}:</strong> {getRasiName(ascendantRasi)} {getDegreesInSign(ascendantLong)}°
+                {division !== 'd1' && <span className="division-note"> ({t(`charts.${division}`)} Position)</span>}
             </div>
 
             {chartStyle === 'north' && renderNorthIndian()}

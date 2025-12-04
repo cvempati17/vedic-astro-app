@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { getHouseType, getPurushartha, getRelationship } from '../utils/houseUtils';
 import './HouseAnalysisView.css';
 
 const HouseAnalysisView = ({ data }) => {
+    const { t } = useTranslation();
     if (!data || !data.Ascendant) return null;
 
     const ascLong = data.Ascendant.longitude;
@@ -28,11 +30,11 @@ const HouseAnalysisView = ({ data }) => {
 
     // 2. Key Relationships Data
     const relationships = [
-        { p1: 'Sun', p2: 'Moon', label: 'Soul & Mind (Sun-Moon)' },
-        { p1: 'Mars', p2: 'Venus', label: 'Passion (Mars-Venus)' },
-        { p1: 'Jupiter', p2: 'Moon', label: 'Wisdom & Mind (Gaja Kesari)' },
-        { p1: 'Saturn', p2: 'Moon', label: 'Stress & Mind (Sade Sati Check)' },
-        { p1: 'Rahu', p2: 'Moon', label: 'Obsession & Mind' }
+        { p1: 'Sun', p2: 'Moon', labelKey: 'relSoulMind' },
+        { p1: 'Mars', p2: 'Venus', labelKey: 'relPassion' },
+        { p1: 'Jupiter', p2: 'Moon', labelKey: 'relWisdom' },
+        { p1: 'Saturn', p2: 'Moon', labelKey: 'relStress' },
+        { p1: 'Rahu', p2: 'Moon', labelKey: 'relObsession' }
     ];
 
     const relData = relationships.map(pair => ({
@@ -42,27 +44,27 @@ const HouseAnalysisView = ({ data }) => {
 
     return (
         <div className="house-analysis-container">
-            <h2 className="section-title">House Classifications & Relationships</h2>
+            <h2 className="section-title">{t('houseAnalysis.title')}</h2>
 
             <div className="analysis-grid">
                 {/* Section 1: House Classifications */}
                 <div className="classification-section">
-                    <h3>House Placements</h3>
+                    <h3>{t('houseAnalysis.placementsTitle')}</h3>
                     <div className="classification-table">
                         <div className="c-header">
-                            <span>Planet</span>
-                            <span>House</span>
-                            <span>Classification</span>
-                            <span>Goal (Purushartha)</span>
+                            <span>{t('houseAnalysis.planetHeader')}</span>
+                            <span>{t('houseAnalysis.houseHeader')}</span>
+                            <span>{t('houseAnalysis.classificationHeader')}</span>
+                            <span>{t('houseAnalysis.goalHeader')}</span>
                         </div>
                         {classifications.map((item) => (
                             <div key={item.planet} className="c-row">
-                                <span className="c-planet">{item.planet}</span>
-                                <span className="c-house">House {item.house}</span>
+                                <span className="c-planet">{t(`planets.${item.planet}`)}</span>
+                                <span className="c-house">{t('houseAnalysis.houseNum', { num: item.house })}</span>
                                 <span className="c-types">
-                                    {item.types.map(t => <span key={t} className="type-badge">{t}</span>)}
+                                    {item.types.map(type => <span key={type} className="type-badge">{t(`houseTypes.${type}`)}</span>)}
                                 </span>
-                                <span className="c-goal">{item.purushartha}</span>
+                                <span className="c-goal">{t(`purusharthas.${item.purushartha}`)}</span>
                             </div>
                         ))}
                     </div>
@@ -70,12 +72,12 @@ const HouseAnalysisView = ({ data }) => {
 
                 {/* Section 2: Planetary Relationships */}
                 <div className="relationship-section">
-                    <h3>Key Planetary Relationships</h3>
+                    <h3>{t('houseAnalysis.relationshipsTitle')}</h3>
                     <div className="rel-cards">
                         {relData.map((rel, idx) => (
                             <div key={idx} className={`rel-card ${rel.info.quality.toLowerCase().includes('inauspicious') ? 'rel-bad' : 'rel-good'}`}>
                                 <div className="rel-header">
-                                    <span className="rel-label">{rel.label}</span>
+                                    <span className="rel-label">{t(`houseAnalysis.${rel.labelKey}`)}</span>
                                     <span className="rel-name">{rel.info.name}</span>
                                 </div>
                                 <div className="rel-desc">{rel.info.description}</div>
