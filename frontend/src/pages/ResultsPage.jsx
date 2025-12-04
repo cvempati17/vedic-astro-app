@@ -198,7 +198,7 @@ const ResultsPage = ({
 
                     <div className="sidebar-header" onClick={() => setComponentsOpen(!componentsOpen)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <h3>{t('results.components', 'Components')}</h3>
-                        <span>{componentsOpen ? '▾' : '▸'}</span>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{componentsOpen ? '▾' : '▸'}</span>
                     </div>
                     {componentsOpen && (
                         <div className="sidebar-tabs">
@@ -279,7 +279,7 @@ const ResultsPage = ({
                         <>
                             <div className="sidebar-header" onClick={() => setMiscOpen(!miscOpen)} style={{ cursor: 'pointer', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <h3>{t('nav.advance', 'Advance')}</h3>
-                                <span>{miscOpen ? '▾' : '▸'}</span>
+                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{miscOpen ? '▾' : '▸'}</span>
                             </div>
                             {miscOpen && (
                                 <div className="sidebar-tabs">

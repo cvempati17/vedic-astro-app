@@ -592,7 +592,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                         onClick={() => setToolsOpen(!toolsOpen)}
                     >
                         <h3>{t('nav.tools', 'Tools')}</h3>
-                        <span>{toolsOpen ? '▾' : '▸'}</span>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{toolsOpen ? '▾' : '▸'}</span>
                     </div>
                     {toolsOpen && (
                         <div className="sidebar-tabs">
@@ -630,7 +630,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                                 onClick={() => setUtilityOpen(!utilityOpen)}
                             >
                                 <h3>{t('nav.utility', 'Utility')}</h3>
-                                <span>{utilityOpen ? '▾' : '▸'}</span>
+                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{utilityOpen ? '▾' : '▸'}</span>
                             </div>
                             {utilityOpen && (
                                 <div className="sidebar-tabs">
