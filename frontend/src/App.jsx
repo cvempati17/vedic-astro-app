@@ -98,8 +98,9 @@ function App() {
               });
 
               if (!saveResponse.ok) {
-                console.error('Failed to save chart to backend');
-                alert(t('errors.saveFailed'));
+                const errorData = await saveResponse.json();
+                console.error('Failed to save chart to backend:', errorData);
+                alert(`Save Failed: ${errorData.error || saveResponse.statusText}`);
                 // Fallback to local? Or just error? Let's fallback for safety.
                 saveLocally(data, responseData.data);
               } else {

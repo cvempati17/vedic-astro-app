@@ -13,7 +13,11 @@ const chartRoutes = require('./routes/charts');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-app.use(cors());
+app.use(cors({
+    origin: '*', // Allow all origins for now to rule out CORS issues
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Auth routes
