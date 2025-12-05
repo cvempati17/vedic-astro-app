@@ -21,7 +21,9 @@ router.get('/', protect, async (req, res) => {
 // @access  Private
 router.post('/', protect, async (req, res) => {
     try {
+        console.log('Saving chart request received');
         const { name, dateOfBirth, timeOfBirth, placeOfBirth, chartData } = req.body;
+        console.log('Payload size:', JSON.stringify(req.body).length);
 
         if (!name || !dateOfBirth || !timeOfBirth || !chartData) {
             return res.status(400).json({ error: 'Please provide all required fields' });

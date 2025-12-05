@@ -20,9 +20,26 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
+// Request Logger
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log('Headers:', JSON.stringify(req.headers));
+    next();
+});
+
 // Auth routes
 app.use('/api/auth', authRoutes);
 app.use('/api/charts', chartRoutes);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('Unhandled Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message,
+        stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+    });
+});
 
 app.post('/api/calculate', (req, res) => {
     try {
