@@ -6,7 +6,7 @@
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
-    color: #111827;
+    color: var(--accent-gold);
 }
 
 .aspects-grid {
@@ -16,8 +16,8 @@
 }
 
 .aspect-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 0.9rem;
     padding: 1.1rem 1.25rem;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
@@ -26,9 +26,9 @@
 .aspect-card h3 {
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #111827;
+    color: var(--accent-gold);
     font-size: 1.2rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
 
@@ -42,8 +42,8 @@
 
 .sign-badge {
     display: inline-block;
-    background: rgba(139, 92, 246, 0.2);
-    color: #4b5563;
+    background: rgba(197, 160, 89, 0.2);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
     font-size: 0.85rem;
@@ -58,11 +58,12 @@
 }
 
 .planet-pill {
-    background: #e5e7eb;
+    background: rgba(255, 255, 255, 0.1);
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.9rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
+    color: var(--text-on-dark);
 }
 
 /* Ascendant Aspects */
@@ -74,10 +75,11 @@
 
 .aspect-list li {
     padding: 0.75rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--text-on-dark);
 }
 
 .aspect-list li:last-child {
@@ -85,7 +87,7 @@
 }
 
 .aspect-type {
-    color: #4b5563;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -117,7 +119,7 @@
 
 .planet-cell {
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-on-dark);
     white-space: nowrap;
 }
 
@@ -128,8 +130,8 @@
 }
 
 .aspect-tag {
-    background: rgba(59, 130, 246, 0.15);
-    color: #60a5fa;
+    background: rgba(197, 160, 89, 0.15);
+    color: var(--accent-gold);
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.85rem;

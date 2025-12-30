@@ -85,15 +85,6 @@ const InputForm = ({ onCalculate, initialData }) => {
                         name="gender"
                         value={formData.gender}
                         onChange={handleChange}
-                        style={{
-                            width: '100%',
-                            padding: '0.5rem 0.75rem',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            border: '1px solid var(--glass-border)',
-                            borderRadius: '0.5rem',
-                            color: 'white',
-                            fontSize: '0.9rem'
-                        }}
                     >
                         <option value="male">{t('gender.male')}</option>
                         <option value="female">{t('gender.female')}</option>
@@ -177,15 +168,6 @@ const InputForm = ({ onCalculate, initialData }) => {
                     name="ayanamsa"
                     value={formData.ayanamsa || 'lahiri'}
                     onChange={handleChange}
-                    style={{
-                        width: '100%',
-                        padding: '0.5rem 0.75rem',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid var(--glass-border)',
-                        borderRadius: '0.5rem',
-                        color: 'white',
-                        fontSize: '0.9rem'
-                    }}
                 >
                     <option value="lahiri">{t('ayanamsa.lahiri')}/Chitrapaksha</option>
                     <option value="raman">{t('ayanamsa.raman')}</option>

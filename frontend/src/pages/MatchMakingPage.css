@@ -2,8 +2,9 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    color: var(--text-primary);
+    color: var(--text-on-dark);
 }
+
 
 .match-header {
     text-align: center;
@@ -11,15 +12,17 @@
 }
 
 .match-controls {
-    background: #ffffff;
+    background: var(--bg-light);
     padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--accent-gold);
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    color: var(--text-on-light);
 }
+
 
 .control-group {
     display: flex;
@@ -29,16 +32,19 @@
 
 .control-group label {
     font-weight: 600;
-    color: #111827;
+    color: var(--text-on-light);
+    font-family: var(--font-heading);
 }
+
 
 .perspective-select {
     padding: 0.8rem;
-    border-radius: 0.5rem;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    color: #111827;
+    border-radius: var(--border-radius);
+    background: var(--bg-deep);
+    border: 1px solid var(--accent-gold);
+    color: var(--text-on-dark);
     font-size: 1rem;
+    font-family: var(--font-body);
 }
 
 /* Multi Select Dropdown */
@@ -49,19 +55,19 @@
 
 .multi-select-header {
     padding: 0.8rem;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--accent-gold);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #111827;
+    color: var(--text-on-dark);
     transition: background 0.2s;
 }
 
 .multi-select-header:hover {
-    background: #f3f4f6;
+    background: rgba(197, 160, 89, 0.1);
 }
 
 .multi-select-options {
@@ -69,22 +75,22 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--accent-gold);
+    border-radius: var(--border-radius);
     margin-top: 0.5rem;
     max-height: 300px;
     overflow-y: auto;
     z-index: 100;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
-    color: #111827;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    color: var(--text-on-dark);
 }
 
 .multi-select-options .candidate-item {
     padding: 0.8rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     border-radius: 0;
-    background: #ffffff;
+    background: transparent;
     margin-bottom: 0;
     display: flex;
     align-items: center;
@@ -98,7 +104,7 @@
 }
 
 .multi-select-options .candidate-item:hover {
-    background: #f3f4f6;
+    background: rgba(197, 160, 89, 0.15);
 }
 
 .multi-select-options .candidate-item input[type="checkbox"] {
@@ -109,18 +115,21 @@
 
 .analyze-btn {
     padding: 1rem;
-    background: var(--accent-color);
+    background: var(--accent-gold);
     border: none;
-    border-radius: 0.5rem;
-    color: #ffffff;
-    font-weight: bold;
+    border-radius: var(--border-radius);
+    color: var(--bg-deep);
+    font-weight: 700;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
     align-self: center;
     width: 100%;
     max-width: 300px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 
 .analyze-btn:hover {
     background: var(--accent-hover);
@@ -181,11 +190,13 @@
 }
 
 .total-score {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--accent-gold);
     display: block;
 }
+
 
 .role-badge {
     background: #10b981;

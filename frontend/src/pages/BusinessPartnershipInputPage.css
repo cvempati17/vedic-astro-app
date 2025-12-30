@@ -1,0 +1,449 @@
+/* Retain existing styles */
+.bp-page-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+}
+
+.bp-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid #64748b;
+    color: #cbd5e1;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-right: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    background: linear-gradient(90deg, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bp-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.glass-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.glass-card.partners-card {
+    position: relative;
+    z-index: 50;
+}
+
+.glass-card h2,
+.glass-card h3 {
+    margin-top: 0;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+
+.select-container {
+    margin-bottom: 1rem;
+}
+
+.chart-select {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.chart-select:focus {
+    outline: none;
+    border-color: #a78bfa;
+}
+
+.chart-select option {
+    background: #1e293b;
+    color: white;
+}
+
+.selected-details {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+}
+
+.multi-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.multi-select-trigger {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #475569;
+    padding: 0.8rem;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.multi-select-trigger:hover {
+    border-color: #64748b;
+}
+
+.multi-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    margin-top: 5px;
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 20;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-actions-header {
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-search-input {
+    width: 100%;
+    padding: 0.6rem;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.dropdown-search-input:focus {
+    outline: none;
+    border-color: #a78bfa;
+}
+
+.dropdown-actions-sub {
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: #0f172a;
+}
+
+.action-link {
+    background: none;
+    border: none;
+    color: #a78bfa;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.action-link.clear-link {
+    color: #cbd5e1;
+}
+
+.multi-select-option {
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.15s;
+}
+
+.multi-select-option:hover {
+    background: #334155;
+}
+
+.multi-select-option.selected {
+    background: rgba(167, 139, 250, 0.15);
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #64748b;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+}
+
+.checkbox-custom.checked {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
+}
+
+.option-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.option-label .name {
+    font-weight: 500;
+}
+
+.option-label .sub-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.selected-partners-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.partner-tag {
+    background: #334155;
+    color: #e2e8f0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid #475569;
+}
+
+.partner-tag button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.partner-tag button:hover {
+    color: #ef4444;
+}
+
+.action-row {
+    margin-top: 1.5rem;
+}
+
+.analyze-btn {
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    color: white;
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.analyze-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.analyze-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.error-msg {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+    border-radius: 8px;
+}
+
+/* Result Styles (same as before) */
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.reset-btn {
+    background: #334155;
+    color: #94a3b8;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.verdict {
+    padding: 0.2rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.verdict.strategic {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.verdict.conditional {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.verdict.experiment {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.verdict.no-go {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.score-summary {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.score-card {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.score-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.score-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.projections-graph {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 150px;
+    padding-top: 1rem;
+    border-bottom: 1px solid #334155;
+}
+
+.projection-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30px;
+}
+
+.projection-bar {
+    width: 100%;
+    background: #8b5cf6;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease-out;
+}
+
+.month-label,
+.val-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+}
+
+.val-label {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.role-tag {
+    display: inline-block;
+    background: #334155;
+    color: #cbd5e1;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.no-options {
+    padding: 1rem;
+    color: #94a3b8;
+    text-align: center;
+    font-style: italic;
+}

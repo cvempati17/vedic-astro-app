@@ -23,10 +23,10 @@
 }
 
 .bala-card {
-    background: #1e293b;
+    background: var(--card-bg);
     padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #334155;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -39,24 +39,24 @@
 }
 
 .bala-name {
-    color: #ffffff !important;
+    color: var(--text-on-dark) !important;
     font-weight: 600;
     font-size: 1.1rem;
 }
 
 .bala-value {
-    color: #f8fafc !important;
+    color: var(--accent-gold) !important;
     font-weight: 700;
 }
 
 .bala-desc {
-    color: #cbd5e1 !important;
+    color: var(--text-secondary) !important;
     font-size: 0.9rem;
 }
 
 .bala-bar-bg {
     height: 6px;
-    background: #334155;
+    background: var(--border-color);
     border-radius: 3px;
     margin-top: 0.5rem;
     overflow: hidden;
@@ -64,7 +64,7 @@
 
 .bala-bar-fill {
     height: 100%;
-    background: #a78bfa;
+    background: var(--accent-gold);
     border-radius: 3px;
     transition: width 0.5s ease-out;
 }
@@ -76,9 +76,9 @@
 
 .summary-table-wrapper {
     overflow-x: auto;
-    background: #1e293b;
-    border-radius: 8px;
-    border: 1px solid #334155;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
 .summary-table {
@@ -90,14 +90,14 @@
 .summary-table td {
     padding: 0.75rem 0.75rem;
     text-align: left;
-    border-bottom: 1px solid #334155;
-    color: #ffffff !important;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-on-dark) !important;
 }
 
 .summary-table th {
-    color: #cbd5e1 !important;
+    color: var(--accent-gold) !important;
     font-weight: 600;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(197, 160, 89, 0.1);
 }
 
 .summary-table tr:last-child td {
@@ -169,10 +169,10 @@
 /* Personal Signature */
 .signature-section {
     margin-bottom: 3rem;
-    background: #0f172a;
+    background: rgba(197, 160, 89, 0.05);
     padding: 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #a78bfa;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--accent-gold);
 }
 
 .signature-quote {
@@ -189,11 +189,11 @@
 
 /* Planetary Analysis */
 .planet-analysis-card {
-    background: #1e293b;
-    border-radius: 12px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
     padding: 1.5rem;
     margin-bottom: 2rem;
-    border: 1px solid #334155;
+    border: 1px solid var(--border-color);
 }
 
 .planet-header {
@@ -240,7 +240,7 @@
 }
 
 .analysis-column h4 {
-    color: #f472b6 !important;
+    color: var(--accent-gold) !important;
     margin-bottom: 0.75rem;
     font-size: 1rem;
 }
@@ -269,8 +269,8 @@
 .life-advice {
     background: rgba(255, 255, 255, 0.05);
     padding: 1rem;
-    border-radius: 6px;
-    border-left: 3px solid #f472b6;
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--accent-gold);
 }
 
 .life-advice h4 {

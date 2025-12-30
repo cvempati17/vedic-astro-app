@@ -2,32 +2,836 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AstroGravity | Authentic Vedic Astrology</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
     <style>
+        /* --- RESET & VARIABLES --- */
         :root {
-            --primary: #0b1026;
-            --secondary: #4b3ca3;
-            --accent: #ffb703;
-            --text-main: #334155;
-            --bg-light: #f8fafc;
+            --bg-deep: #0A192F;
+            /* Midnight Void */
+            --bg-light: #FCFCF5;
+            /* Stardust Cream */
+            --accent-gold: #C5A059;
+            /* Antique Brass / Muted Gold */
+            --text-on-dark: #E6E6E6;
+            /* Platinum */
+            --text-on-light: #2D2D2D;
+            /* Charcoal */
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --border-radius: 2px;
+            --btn-shadow: 0 4px 14px 0 rgba(197, 160, 89, 0.39);
+            --gradient-hero: linear-gradient(135deg, #0A192F 0%, #172A45 100%);
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-light);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text-on-dark);
+            background-color: var(--bg-deep);
+            overflow-x: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-part-1 {
+            color: var(--primary);
+        }
+
+        .logo-part-2 {
+            color: var(--secondary);
+            background: -webkit-linear-gradient(45deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
             color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+
+        .btn-signin {
+            padding: 0.7rem 1.8rem;
+            background: var(--accent-gold);
+            color: var(--bg-deep);
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            box-shadow: var(--btn-shadow);
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-body);
+        }
+
+        .btn-signin:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+
+        /* --- HERO --- */
+        .hero {
+            background: var(--gradient-hero);
+            color: var(--white);
+            text-align: center;
+            padding: 8rem 1rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(75, 60, 163, 0.2) 0%, transparent 60%);
+            transform: rotate(30deg);
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            position: relative;
+            z-index: 1;
+        }
+
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 6rem 10%;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            text-align: center;
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 4rem;
+            font-weight: 700;
+        }
+
+        .section-title span {
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+
+        .btn-learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 1rem;
+            color: var(--secondary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* --- AI ORACLE --- */
+        .ai-oracle-section {
+            background: linear-gradient(135deg, #1a0b2e 0%, #4b3ca3 100%);
+            color: var(--white);
+            text-align: center;
+            position: relative;
+        }
+
+        .ai-oracle-section .section-title {
+            color: var(--accent);
+        }
+
+        .ai-oracle-section .section-title span {
+            border-color: rgba(255, 183, 3, 0.3);
+        }
+
+        .oracle-interface {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .oracle-input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .oracle-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffd60a;
+            font-weight: 600;
+        }
+
+        .oracle-select,
+        .oracle-textarea,
+        .oracle-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .oracle-select option {
+            background: #1a0b2e;
+            color: white;
+        }
+
+        .oracle-select:focus,
+        .oracle-textarea:focus,
+        .oracle-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .oracle-response {
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            text-align: left;
+            display: none;
+            white-space: pre-wrap;
+        }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- COMPARISON --- */
+        .comparison {
+            background: #f1f5f9;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .compare-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s;
+            position: relative;
+            border-top: 5px solid transparent;
+        }
+
+        .compare-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card-western {
+            border-color: var(--secondary);
+        }
+
+        .card-vedic {
+            border-color: var(--accent);
+        }
+
+        .compare-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .compare-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+            line-height: 1rem;
+        }
+
+        /* --- VEDANGAS --- */
+        .vedanga-container {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .vedanga-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .vedanga-image {
+            flex: 1.2;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .vedanga-image img {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(11, 16, 38, 0.15);
+        }
+
+        /* --- AYANAMSA --- */
+        .ayanamsha-section {
+            background: var(--primary);
+            color: var(--white);
+            position: relative;
+        }
+
+        .ayanamsha-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ayanamsha-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .ayanamsha-visual {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .orbit-system {
+            position: relative;
+            width: 320px;
+            height: 320px;
+        }
+
+        .star-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed rgba(255, 183, 3, 0.4);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .moving-zodiac {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 260px;
+            height: 260px;
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: drift 15s linear infinite;
+        }
+
+        .moving-zodiac::after {
+            content: '♈';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--accent);
+            font-weight: bold;
+            padding: 0 5px;
+        }
+
+        .earth {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #4facfe, #00f2fe);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        @keyframes drift {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        .ayanamsha-types {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .type-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            backdrop-filter: blur(5px);
+        }
+
+        .type-box h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- OTHER SCIENCES --- */
+        .occult {
+            background: var(--white);
+            text-align: center;
+        }
+
+        .occult-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .occult-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 2.5rem 2rem;
+            width: 320px;
+            border-radius: 15px;
+            transition: 0.3s;
+            position: relative;
+            top: 0;
+        }
+
+        .occult-card:hover {
+            border-color: var(--secondary);
+            top: -10px;
+            box-shadow: 0 15px 30px rgba(75, 60, 163, 0.1);
+        }
+
+        .occult-card h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        footer {
+            background: #060918;
+            color: #94a3b8;
+            padding: 4rem 5% 2rem;
+            text-align: center;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root" style="display: none;"></div>
+    <!-- Removed default display:none to debug -->
+
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Hiding Landing Content by default for debugging -->
+    <div id="landing-content" style="position: relative; z-index: 10;">
+        <!-- NAV -->
+        <nav class="navbar">
+            <a href="#" class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="40" stroke="url(#paint0_linear)" stroke-width="8" />
+                    <path d="M20 75C20 75 40 40 80 50" stroke="#FFB703" stroke-width="6" stroke-linecap="round" />
+                    <circle cx="70" cy="30" r="8" fill="#FFB703" />
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="10" y1="10" x2="90" y2="90"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4B3CA3" />
+                            <stop offset="1" stop-color="#0B1026" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="logo-text"><span class="logo-part-1">Astro</span><span class="logo-part-2">Gravity</span>
+                </div>
+            </a>
+            <div class="nav-menu">
+                <a href="#oracle" class="nav-link" style="color:var(--secondary);">AI Oracle</a>
+                <a href="#history" class="nav-link">History</a>
+                <a href="#comparison" class="nav-link">Difference</a>
+                <a href="#ayanamsa" class="nav-link">Ayanamsa</a>
+            </div>
+            <button onclick="enterApp()" class="btn-signin">Sign In</button>
+        </nav>
+
+        <!-- HERO -->
+        <header class="hero">
+            <h1>Decode Your Cosmic Blueprint</h1>
+            <p>Explore the precise mathematics of Vedic Astrology, the science of Ayanamsa, and the ancient wisdom that
+                guides destiny.</p>
+        </header>
+
+        <!-- AI ORACLE -->
+        <section id="oracle" class="ai-oracle-section">
+            <h2 class="section-title"><span>Cosmic AI Oracle ✨</span></h2>
+            <p style="margin-bottom: 2rem;">Ask the stars. Our AI Vedic Astrologer will interpret the cosmic energies
+                for you.</p>
+
+            <div class="oracle-interface">
+                <!-- API Key Input for Local Use -->
+                <div class="oracle-input-group">
+                    <label for="apiKey">Step 1: Enter Gemini API Key (Required for download version)</label>
+                    <input type="password" id="apiKey" class="oracle-input"
+                        placeholder="Paste your Google Gemini API Key here...">
+                    <small style="color: #ccc; display: block; margin-top: 5px;">Get a key from <a
+                            href="https://aistudio.google.com/app/apikey" target="_blank"
+                            style="color:#ffb703; text-decoration: underline;">Google AI Studio</a></small>
+                </div>
+
+                <div class="oracle-input-group">
+                    <label for="sign">Step 2: Select Your Moon Sign</label>
+                    <select id="sign" class="oracle-select">
+                        <option value="Aries">Aries (Mesha)</option>
+                        <option value="Taurus">Taurus (Vrishabha)</option>
+                        <option value="Gemini">Gemini (Mithuna)</option>
+                        <option value="Cancer">Cancer (Karka)</option>
+                        <option value="Leo">Leo (Simha)</option>
+                        <option value="Virgo">Virgo (Kanya)</option>
+                        <option value="Libra">Libra (Tula)</option>
+                        <option value="Scorpio">Scorpio (Vrishchika)</option>
+                        <option value="Sagittarius">Sagittarius (Dhanu)</option>
+                        <option value="Capricorn">Capricorn (Makara)</option>
+                        <option value="Aquarius">Aquarius (Kumbha)</option>
+                        <option value="Pisces">Pisces (Meena)</option>
+                    </select>
+                </div>
+
+                <div class="oracle-input-group">
+                    <label for="question">Step 3: What do you seek?</label>
+                    <textarea id="question" class="oracle-textarea" rows="3"
+                        placeholder="e.g., What does my career path look like this year?"></textarea>
+                </div>
+
+                <button onclick="askOracle()" class="btn-signin" style="width: 100%; margin-top: 10px;">Consult the
+                    Stars</button>
+
+                <div id="loader" class="loader" style="margin-top: 20px;"></div>
+                <div id="response" class="oracle-response"></div>
+            </div>
+        </section>
+
+        <!-- HISTORY -->
+        <section id="history" class="history">
+            <h2 class="section-title"><span>History of Astrology</span></h2>
+            <p>Astrology is the study of the correlation between celestial movements and earthly events. Originating
+                over 5,000 years ago in Babylon and Ancient India, it evolved from a method of tracking agricultural
+                seasons to a sophisticated system of predicting human fate, karma, and psychological patterns.</p>
+            <a href="#" class="btn-learn-more">Read Full History -></a>
+        </section>
+
+        <!-- COMPARISON -->
+        <section id="comparison" class="comparison">
+            <h2 class="section-title"><span>Western vs. Indian (Vedic)</span></h2>
+            <div class="compare-grid">
+                <div class="compare-card card-western">
+                    <h3>Western (Tropical)</h3>
+                    <ul class="compare-list">
+                        <li><strong>Basis:</strong> Seasons (Sun's relationship to Earth).</li>
+                        <li><strong>Zodiac:</strong> Movable (Starts at Spring Equinox).</li>
+                        <li><strong>Focus:</strong> Psychological traits & Personality.</li>
+                        <li><strong>Planets:</strong> Includes Uranus, Neptune, Pluto.</li>
+                    </ul>
+                </div>
+                <div class="compare-card card-vedic">
+                    <h3>Vedic (Sidereal)</h3>
+                    <ul class="compare-list">
+                        <li><strong>Basis:</strong> Fixed Stars (Constellations/Nakshatras).</li>
+                        <li><strong>Zodiac:</strong> Fixed (Accounts for Earth's Precession).</li>
+                        <li><strong>Focus:</strong> Karma, Destiny, & Predictive Dashas.</li>
+                        <li><strong>Planets:</strong> 9 Grahas (Includes Rahu/Ketu).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- VEDANGAS -->
+        <section class="vedangas">
+            <h2 class="section-title"><span>Jyotisha: The Eye of the Vedas</span></h2>
+            <div class="vedanga-container">
+                <div class="vedanga-content">
+                    <p style="font-size: 1.1rem; margin-bottom: 20px;">Vedic Astrology is one of the six
+                        <strong>Vedangas</strong> (Limbs of the Vedas), crucial for understanding sacred texts.
+                    </p>
+                    <ul class="vedanga-list" style="list-style: none;">
+                        <li><strong>Shiksha (Nose):</strong> Phonetics</li>
+                        <li><strong>Chhandas (Legs):</strong> Prosody</li>
+                        <li><strong>Vyakarna (Mouth):</strong> Grammar</li>
+                        <li><strong>Nirukta (Ears):</strong> Etymology</li>
+                        <li><strong>Kalpa (Hands):</strong> Rituals</li>
+                        <li><strong>Jyotisha (Eyes):</strong> Astronomy & Astrology</li>
+                    </ul>
+                </div>
+                <div class="vedanga-image">
+                    <img src="image_63fdc1.jpg" alt="Six Limbs of the Vedas Diagram">
+                </div>
+            </div>
+        </section>
+
+        <!-- AYANAMSA -->
+        <section id="ayanamsa" class="ayanamsha-section">
+            <h2 class="section-title"><span>The Science of Ayanamsa</span></h2>
+            <div class="ayanamsha-grid">
+                <div class="ayanamsha-info">
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">What is the Difference?</h3>
+                    <p>Because the Earth "wobbles" on its axis (Precession of Equinoxes), the tropical zodiac drifts
+                        backward against the actual fixed stars by about 1° every 72 years.</p>
+                    <div class="ayanamsha-types">
+                        <div class="type-box">
+                            <h4>Lahiri</h4>
+                            <p>Standard (Indian Govt). Anchored to Spica.</p>
+                        </div>
+                        <div class="type-box">
+                            <h4>B.V. Raman</h4>
+                            <p>Based on Surya Siddhanta.</p>
+                        </div>
+                        <div class="type-box">
+                            <h4>KP</h4>
+                            <p>Refined for Stellar precision.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ayanamsha-visual">
+                    <div class="orbit-system">
+                        <div class="star-circle"><span
+                                style="position:absolute; top: 15px; color: rgba(255,255,255,0.6); font-size: 12px;">Fixed
+                                Stars</span></div>
+                        <div class="moving-zodiac"></div>
+                        <div class="earth"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2025 AstroGravity Project. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- SCRIPT FOR GEMINI API -->
+    <script>
+        function enterApp() {
+            document.getElementById('landing-content').style.display = 'none';
+            document.getElementById('root').style.display = 'block';
+        }
+
+        async function askOracle() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const sign = document.getElementById('sign').value;
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+            const loader = document.getElementById('loader');
+
+            if (!apiKey) {
+                alert("Please enter a valid API Key.");
+                return;
+            }
+            if (!question) {
+                alert("Please ask a question.");
+                return;
+            }
+
+            // UI State: Loading
+            responseDiv.style.display = 'none';
+            loader.style.display = 'block';
+
+            const prompt = `Act as a wise and mystical Vedic Astrologer. 
+            The user's Moon Sign is ${sign}. 
+            Their question is: "${question}".
+            Provide a short, profound answer (max 3 sentences) using metaphors of planets, karma, and cosmic alignment. 
+            Be encouraging but mysterious.`;
+
+            // FIXED: Updated model version
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+
+                const aiText = data.candidates[0].content.parts[0].text;
+                responseDiv.innerText = aiText;
+                responseDiv.style.display = 'block';
+
+            } catch (error) {
+                responseDiv.innerText = `Orbit misalignment: ${error.message}`;
+                responseDiv.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 
 </html>

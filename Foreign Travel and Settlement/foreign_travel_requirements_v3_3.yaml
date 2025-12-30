@@ -1,0 +1,103 @@
+
+version: 3.3
+name: Foreign Travel & Settlement Decision System
+
+purpose: >
+  Comprehensive astrological decision system for foreign travel, long stay,
+  settlement, and return analysis with explainability, confidence scoring,
+  and visual chart support (D1 & D9).
+
+canonical_format: yaml
+
+inputs:
+  birth_details:
+    - name
+    - date_of_birth
+    - time_of_birth
+    - place_of_birth
+
+  chart_data:
+    chart_style:
+      enum: [north_indian, south_indian]
+      description: Preferred chart rendering style
+
+    d1_chart:
+      required: true
+      description: Rasi (D1) chart visual
+      supported_formats: [svg, png, img, html]
+
+    d9_chart:
+      required: true
+      description: Navamsa (D9) chart visual
+      supported_formats: [svg, png, img, html]
+
+    planetary_positions_table:
+      required: true
+      fields:
+        - planet
+        - sign
+        - sign_lord
+        - nakshatra
+        - nakshatra_lord
+        - degree
+        - retrograde
+        - avastha
+        - house_from_lagna
+        - status
+
+optional_inputs:
+  - known_foreign_events
+  - dasha_periods
+  - current_residence
+
+override_rules:
+  reality_override:
+    - if continuous_foreign_residence_years >= 10:
+        physical_settlement: true
+    - if no_foreign_travel_recorded:
+        archetype: NON_MOVER
+
+houses:
+  short_travel: 3
+  business_travel: 7
+  long_travel: 9
+  foreign_residence: 12
+
+decision_tree:
+  steps:
+    - evaluate_foreign_trigger
+    - evaluate_long_stay_potential
+    - evaluate_physical_settlement
+    - evaluate_emotional_anchor
+    - assign_archetype
+
+archetypes:
+  - NON_MOVER
+  - VISITOR
+  - LONG_STAY_RETURNER
+  - DUAL_ANCHOR
+  - PERMANENT_SETTLER
+
+confidence_scoring:
+  interval_years: 5
+  score_range: [0,100]
+  explainable: true
+
+outputs:
+  required_sections:
+    - profile
+    - chart_selector
+    - d1_chart_visual
+    - d9_chart_visual
+    - planetary_positions_table
+    - why
+    - when
+    - where
+    - settlement_status
+    - archetype
+    - confidence_timeline
+    - final_verdict
+
+disallowed:
+  - missing_d1_or_d9_chart
+  - non_explainable_confidence_scores

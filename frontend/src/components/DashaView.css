@@ -1,122 +1,263 @@
-.dasha-container {
-    background: rgba(30, 41, 59, 0.6);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    border: 1px solid var(--glass-border);
-    margin-top: 2rem;
-    backdrop-filter: blur(10px);
+.dasha-view-container {
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--font-body);
+    color: var(--text-on-dark);
 }
 
-.dasha-header {
-    margin-top: 0;
+.dasha-main-title {
+    color: var(--accent-gold);
     margin-bottom: 1.5rem;
-    color: var(--accent-color);
-    font-size: 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 0.5rem;
+    font-family: var(--font-heading);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.current-dasha-card {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: 0.75rem;
+.depth-badge {
+    font-size: 0.8rem;
+    background: rgba(197, 160, 89, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+}
+
+/* Breadcrumbs */
+.dasha-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item:hover {
+    color: var(--accent-gold);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-on-dark);
+    font-weight: 700;
+    cursor: default;
+}
+
+.breadcrumb-separator {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Prediction / Context Box */
+.active-dasha-context {
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.9) 0%, rgba(197, 160, 89, 0.1) 100%);
+    border: 1px solid var(--border-color);
     padding: 1.5rem;
-    text-align: center;
+    border-radius: 12px;
     margin-bottom: 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.dasha-label {
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
+.prediction-box h4 {
+    margin: 0 0 1rem 0;
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
 }
 
-.dasha-planet {
-    font-size: 2rem;
-    font-weight: 800;
-    color: white;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.prediction-box p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: var(--text-on-dark);
 }
 
-.dasha-dates {
-    font-family: monospace;
-    color: var(--text-primary);
-    font-size: 1.1rem;
-    background: rgba(0, 0, 0, 0.2);
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.5rem;
+.prediction-tags span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
 }
 
-.dasha-timeline {
+/* Table Wrapper */
+.dasha-list-wrapper {
     overflow-x: auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
 }
 
-.dasha-table {
+.dasha-table-enhanced {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    min-width: 600px;
 }
 
-.dasha-table th {
+.dasha-table-enhanced th {
     text-align: left;
     padding: 1rem;
     color: var(--text-secondary);
     font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.2);
 }
 
-.dasha-table td {
+.dasha-table-enhanced td {
     padding: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
+    color: var(--text-on-dark);
+    vertical-align: middle;
 }
 
-.active-dasha-row {
-    background: rgba(16, 185, 129, 0.1);
-    border-left: 3px solid #10b981;
+.row-current {
+    background: rgba(197, 160, 89, 0.15);
+    border-left: 2px solid var(--accent-gold);
 }
 
-.active-dasha-row td {
-    color: white;
-    font-weight: 500;
-}
-
-.planet-cell {
+.planet-info-cell {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 12px;
 }
 
-.planet-dot {
-    width: 8px;
-    height: 8px;
+.planet-dot-lg {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    display: inline-block;
+    /* Default fallback */
+    background: #ccc;
 }
 
-/* Planet Colors */
-.planet-sun { background-color: #fbbf24; box-shadow: 0 0 5px #fbbf24; }
-.planet-moon { background-color: #e2e8f0; box-shadow: 0 0 5px #e2e8f0; }
-.planet-mars { background-color: #ef4444; box-shadow: 0 0 5px #ef4444; }
-.planet-mercury { background-color: #10b981; box-shadow: 0 0 5px #10b981; }
-.planet-jupiter { background-color: #f59e0b; box-shadow: 0 0 5px #f59e0b; }
-.planet-venus { background-color: #ec4899; box-shadow: 0 0 5px #ec4899; }
-.planet-saturn { background-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
-.planet-rahu { background-color: #8b5cf6; box-shadow: 0 0 5px #8b5cf6; }
-.planet-ketu { background-color: #a855f7; box-shadow: 0 0 5px #a855f7; }
+/* Standard Planet Colors */
+.planet-sun {
+    background: #FCD34D;
+    box-shadow: 0 0 8px #FCD34D;
+}
 
-@media (max-width: 768px) {
-    .dasha-table th, .dasha-table td {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.85rem;
-    }
-    
-    .dasha-planet {
-        font-size: 1.5rem;
-    }
+.planet-moon {
+    background: #E2E8F0;
+    box-shadow: 0 0 8px #E2E8F0;
+}
+
+.planet-mars {
+    background: #EF4444;
+}
+
+.planet-mercury {
+    background: #4ADE80;
+}
+
+.planet-jupiter {
+    background: #FBBF24;
+}
+
+.planet-venus {
+    background: #F472B6;
+}
+
+.planet-saturn {
+    background: #60A5FA;
+}
+
+.planet-rahu {
+    background: #64748B;
+}
+
+.planet-ketu {
+    background: #94A3B8;
+}
+
+.planet-name-lg {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.dasha-level-sm {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.drill-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--accent-gold);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.drill-btn:hover {
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+}
+
+.end-badge {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Aspect Ratings Grid */
+.aspect-ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.aspect-rating-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.aspect-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.aspect-stars {
+    letter-spacing: 2px;
+    font-size: 1rem;
+}
+
+.star-filled {
+    color: #FFD700;
+    /* Bright Yellow/Gold */
+    text-shadow: 0 0 2px rgba(255, 215, 0, 0.5);
+}
+
+.star-empty {
+    color: #4B5563;
+    /* Grey */
+}
+
+.breadcrumb-date-display {
+    margin-left: auto;
+    /* Push to the right */
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(197, 160, 89, 0.3);
 }

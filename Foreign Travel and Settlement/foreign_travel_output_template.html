@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Foreign Travel Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #38bdf8;
+        }
+        .section {
+            margin-bottom: 28px;
+        }
+        .box {
+            background: #020617;
+            border-left: 4px solid #38bdf8;
+            padding: 16px;
+            margin-top: 12px;
+        }
+        .highlight {
+            color: #22c55e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Foreign Travel & Settlement Summary</h1>
+
+<div class="section">
+    <h2>Profile</h2>
+    <div class="box">
+        <p><strong>Name:</strong> {{name}}</p>
+        <p><strong>Date of Birth:</strong> {{dob}}</p>
+        <p><strong>Place of Birth:</strong> {{place}}</p>
+        <p><strong>Lagna:</strong> {{lagna}} | <strong>Rasi:</strong> {{rasi}}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>WHY – Reason for Foreign Travel</h2>
+    <div class="box">
+        {{why_analysis}}
+    </div>
+</div>
+
+<div class="section">
+    <h2>WHEN – Timing Windows</h2>
+    <div class="box">
+        {{when_analysis}}
+    </div>
+</div>
+
+<div class="section">
+    <h2>WHERE – Direction & Country Type</h2>
+    <div class="box">
+        {{where_analysis}}
+    </div>
+</div>
+
+<div class="section">
+    <h2>Settlement vs Return</h2>
+    <div class="box">
+        <span class="highlight">{{settlement_verdict}}</span>
+        <p>{{settlement_explanation}}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Summary</h2>
+    <div class="box">
+        {{final_summary}}
+    </div>
+</div>
+
+</body>
+</html>

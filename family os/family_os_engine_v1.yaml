@@ -1,0 +1,41 @@
+
+version: 1.0
+engine: family_os
+description: >
+  Consumes astrological signals + relationship types to generate Family OS structure.
+inputs:
+  - person_signals
+  - relationship_type
+
+family_matrix_rules:
+  Architect:
+    if:
+      - authority_capacity == high
+      - responsibility_tolerance == high
+      - relationship in [Husband, Wife]
+  Protector:
+    if:
+      - support_style == emotional
+      - relationship == Wife
+  Stabilizer:
+    if:
+      - stability_index >= 7
+      - dependency_risk == low
+  Connector:
+    if:
+      - emotional_expression == expressive
+      - relationship in [Son, Daughter]
+
+sections_generated:
+  - philosophy
+  - family_matrix
+  - responsibility_distribution
+  - emotional_architecture
+  - decision_framework
+  - money_work_model
+  - boundaries
+  - conflict_repair
+  - time_evolution
+  - legacy
+  - care_aging
+  - closure

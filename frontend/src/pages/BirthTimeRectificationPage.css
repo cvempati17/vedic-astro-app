@@ -1,0 +1,437 @@
+.btr-container {
+    min-height: 100vh;
+    background: var(--bg-deep);
+    color: var(--text-on-dark);
+    padding-bottom: 2rem;
+}
+
+
+.btr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: rgba(10, 25, 47, 0.8);
+    border-bottom: 1px solid var(--accent-gold);
+    backdrop-filter: blur(10px);
+}
+
+
+.btr-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    color: var(--accent-gold);
+}
+
+
+.back-btn {
+    background: rgba(197, 160, 89, 0.1);
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+}
+
+
+.back-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: #8b5cf6;
+    transform: translateX(-2px);
+}
+
+.header-spacer {
+    width: 100px;
+}
+
+.btr-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.btr-intro {
+    background: var(--bg-light);
+    border: 1px solid var(--accent-gold);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--text-on-light);
+}
+
+
+.btr-intro p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.btr-form {
+    background: rgba(10, 25, 47, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h2 {
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.btr-new-form .form-row {
+    grid-template-columns: 1fr 1fr;
+}
+
+.btr-new-form .form-row.btr-new-single {
+    grid-template-columns: 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hide the internal label from CitySearch component to avoid duplicate labels */
+.form-group .city-search label {
+    display: none;
+}
+
+.form-group label {
+    color: #ffffff !important;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Ensure all labels in the form are white */
+.btr-form label {
+    color: #ffffff !important;
+}
+
+.form-section label {
+    color: #ffffff !important;
+}
+
+.form-group input,
+.form-group select {
+    background: rgba(10, 25, 47, 0.6);
+    border: 1px solid var(--border-color);
+    color: var(--text-on-dark);
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    color: #a78bfa;
+}
+
+.btn-secondary:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: #8b5cf6;
+}
+
+.btr-results {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 1rem;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btr-results h2 {
+    color: #a78bfa;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.result-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.result-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+}
+
+.result-card.primary-result {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+    border: 2px solid rgba(139, 92, 246, 0.5);
+}
+
+.result-card h3 {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.result-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #a78bfa;
+    margin-bottom: 0.5rem;
+}
+
+.confidence-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.confidence-badge.high {
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    color: #86efac;
+}
+
+.confidence-badge.medium {
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: #fde047;
+}
+
+.confidence-badge.low {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+}
+
+.method-breakdown {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.method-breakdown h3 {
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.method-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.method-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 0.5rem;
+}
+
+.method-name {
+    color: #ffffff;
+}
+
+.method-score {
+    color: #a78bfa;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.top-candidates {
+    margin-top: 2rem;
+    overflow-x: auto;
+}
+
+.top-candidates h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.candidates-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.candidates-table thead {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.candidates-table th {
+    padding: 1rem;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.candidates-table td {
+    padding: 1rem;
+    border-top: 1px solid rgba(139, 92, 246, 0.1);
+    color: #ffffff;
+}
+
+.candidates-table tr.best-candidate {
+    background: rgba(139, 92, 246, 0.15);
+    font-weight: 600;
+}
+
+.candidates-table tr:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.btr-container input[type="checkbox"] {
+    width: auto;
+    padding: 0;
+    appearance: auto;
+}
+
+@media (max-width: 768px) {
+    .btr-header {
+        padding: 1rem;
+    }
+
+    .btr-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .btr-content {
+        padding: 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .btr-new-form .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .result-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .candidates-table {
+        font-size: 0.85rem;
+    }
+
+    .candidates-table th,
+    .candidates-table td {
+        padding: 0.5rem;
+    }
+}

@@ -1,0 +1,125 @@
+
+version: 1.0
+engine: astro_signals
+description: >
+  Full astrological interpretive engine converting classical Vedic astrology
+  parameters into normalized behavioral and systemic signals.
+
+inputs:
+  chart:
+    lagna:
+      sign: string
+      lord:
+        planet: string
+        dignity: [debilitated, neutral, own, exalted]
+        avastha: [bala, kumara, yuva, vriddha, mrita]
+    moon:
+      sign: string
+      nakshatra: string
+      pada: int
+      aspects:
+        benefic: [Jupiter, Venus]
+        malefic: [Saturn, Mars, Rahu, Ketu]
+    planets:
+      each:
+        sign: string
+        house: int
+        dignity: [debilitated, neutral, own, exalted]
+        avastha: [bala, kumara, yuva, vriddha, mrita]
+        functional_nature: [benefic, malefic, neutral]
+        aspects_given: list
+        aspects_received: list
+    houses:
+      strength:
+        1: [weak, medium, strong]
+        4: [weak, medium, strong]
+        6: [weak, medium, strong]
+        10: [weak, medium, strong]
+        12: [weak, medium, strong]
+    dasha:
+      mahadasha: string
+      antardasha: string
+      support_level: [weak, medium, strong]
+
+signals:
+
+  authority_capacity:
+    derived_from:
+      - lagna.lord.dignity
+      - sun.dignity
+      - houses.strength.10
+      - saturn.dignity
+    rules:
+      high_if:
+        - lagna.lord.dignity in [own, exalted]
+        - houses.strength.10 == strong
+      medium_if:
+        - houses.strength.10 == medium
+      low_if:
+        - lagna.lord.dignity == debilitated
+
+  emotional_expression:
+    derived_from:
+      - moon.sign
+      - moon.aspects
+      - moon.nakshatra
+    rules:
+      expressive_if:
+        - moon.sign in [Cancer, Scorpio, Pisces]
+        - Jupiter in moon.aspects.benefic
+      contained_if:
+        - Saturn in moon.aspects.malefic
+        - moon.sign in [Taurus, Virgo, Capricorn]
+
+  responsibility_tolerance:
+    derived_from:
+      - saturn.avastha
+      - houses.strength.6
+      - houses.strength.10
+    rules:
+      high_if:
+        - saturn.avastha in [yuva, vriddha]
+        - houses.strength.6 == strong
+      medium_if:
+        - houses.strength.6 == medium
+      low_if:
+        - saturn.avastha == mrita
+
+  support_style:
+    derived_from:
+      - venus.dignity
+      - moon.jupiter_relationship
+      - houses.strength.4
+    rules:
+      emotional_if:
+        - houses.strength.4 == strong
+        - moon.jupiter_relationship == positive
+      practical_if:
+        - saturn_venus_relationship == neutral
+      advisory_if:
+        - jupiter.dignity in [own, exalted]
+
+  dependency_risk:
+    derived_from:
+      - moon_rahu_ketu_affliction
+      - houses.strength.12
+      - lagna.lord.dignity
+    rules:
+      high_if:
+        - moon_rahu_ketu_affliction == true
+        - houses.strength.12 == strong
+      low_if:
+        - lagna.lord.dignity in [own, exalted]
+
+  stability_index:
+    formula: >
+      (lagna_strength + saturn_strength + moon_stability + dasha.support_level) / 4
+
+outputs:
+  normalized_signals:
+    - authority_capacity
+    - emotional_expression
+    - responsibility_tolerance
+    - support_style
+    - dependency_risk
+    - stability_index

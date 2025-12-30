@@ -1,0 +1,102 @@
+
+version: 1.0
+engine: family_role_resolution
+mode:
+  default: adaptive
+  options:
+    - strict
+    - adaptive
+
+description: >
+  Resolution layer applied after Family OS role assignment.
+  Ensures human-usable outputs while preserving astrological integrity.
+  This layer does NOT alter astrological signals.
+  It only resolves unassigned roles deterministically.
+
+inputs:
+  - family_members
+  - astrological_signals
+  - initial_role_assignments
+  - relationship_types
+
+resolution_order:
+  - Architect
+  - Protector
+  - Stabilizer
+  - Connector
+
+rules:
+
+  Architect:
+    when_unassigned: true
+    resolution:
+      priority:
+        - highest_authority_capacity
+        - highest_responsibility_tolerance
+        - strongest_lagna_lord
+      constraints:
+        relationship_allowed: [Husband, Wife]
+      explanation: >
+        Architect role is resolved by selecting the member with the highest
+        authority and responsibility capacity among spouses.
+
+  Protector:
+    when_unassigned: true
+    resolution:
+      priority:
+        - highest_support_style_emotional
+        - strongest_moon_4th_house
+      constraints:
+        relationship_allowed: [Wife, Husband]
+      explanation: >
+        Protector role is resolved by emotional support capacity derived
+        from Moon, Venus, and 4th house strength.
+
+  Stabilizer:
+    when_unassigned: true
+    resolution:
+      priority:
+        - highest_stability_index
+        - lowest_dependency_risk
+      constraints:
+        relationship_allowed: [Husband, Wife, Son, Daughter]
+      explanation: >
+        Stabilizer role is resolved by selecting the most stable, low-risk
+        member irrespective of generation.
+
+  Connector:
+    when_unassigned: true
+    resolution:
+      priority:
+        - highest_emotional_expression
+        - strongest_venus_mercury_signal
+      constraints:
+        relationship_allowed: [Son, Daughter]
+      explanation: >
+        Connector role is resolved by emotional expressiveness and relational
+        flow capacity, typically among children.
+
+fallbacks:
+
+  allow_multi_assignment:
+    default: false
+
+  if_no_candidate_found:
+    action: leave_unassigned
+    explanation: >
+      If no member satisfies resolution criteria within constraints,
+      role remains explicitly unassigned.
+
+output:
+  resolved_roles:
+    - role_name
+    - assigned_member
+    - resolution_reason
+    - resolution_priority_used
+
+logging:
+  enabled: true
+  include:
+    - initial_assignment
+    - resolution_steps
+    - final_assignment

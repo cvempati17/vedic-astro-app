@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Astrogravity Family OS – Input (v1.0)</title>
+<style>
+body{background:#0f1220;color:#e6e6e6;font-family:Arial,sans-serif;padding:20px}
+h1{color:#e6c87a}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #2e324a;padding:10px;text-align:center}
+select,button{background:#151827;color:#e6e6e6;border:1px solid #2e324a;padding:8px}
+button{cursor:pointer}
+.primary{background:linear-gradient(90deg,#e6c87a,#bfa24a);color:#0f1220;border:none;font-weight:bold}
+.note{margin-top:12px;color:#9fa6c4;font-size:13px}
+</style>
+<script>
+let rowCount=1;
+function addRow(){
+ if(rowCount>=8){alert("Maximum 8 persons allowed");return;}
+ rowCount++;
+ const t=document.getElementById("tbl");
+ const r=t.insertRow(-1);
+ r.innerHTML=`<td><select><option>Select Person</option><option>Person A</option><option>Person B</option><option>Person C</option><option>Person D</option></select></td>
+ <td><select><option>Relationship</option><option>Husband</option><option>Wife</option><option>Son</option><option>Daughter</option></select></td>
+ <td><button onclick="addRow()">Add</button></td>`;
+}
+function generateFamilyOS(){
+ alert("Generate Family OS Report triggered. Vibe Code will apply astrology + Family OS engines and produce output.");
+}
+</script>
+</head>
+<body>
+<h1>Family OS – Input (v1.0)</h1>
+<table id="tbl">
+<tr><th>Person</th><th>Relationship</th><th>Action</th></tr>
+<tr>
+<td><select><option>Select Person</option><option>Person A</option><option>Person B</option><option>Person C</option><option>Person D</option></select></td>
+<td><select><option>Relationship</option><option>Husband</option><option>Wife</option><option>Son</option><option>Daughter</option></select></td>
+<td><button onclick="addRow()">Add</button></td>
+</tr>
+</table>
+<br>
+<button class="primary" onclick="generateFamilyOS()">Generate Family OS Report</button>
+<div class="note">Astrology-driven Family OS report (Matrix, Maps, Dashboards).</div>
+</body>
+</html>

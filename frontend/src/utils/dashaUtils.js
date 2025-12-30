@@ -1,6 +1,6 @@
 import { calculateNakshatra } from './nakshatraUtils';
 
-const DASHA_PERIODS = [
+export const DASHA_PERIODS = [
     { planet: 'Ketu', years: 7 },
     { planet: 'Venus', years: 20 },
     { planet: 'Sun', years: 6 },
@@ -24,13 +24,9 @@ export const formatDate = (date) => {
 // Helper to add fractional years to date
 const addYears = (date, years) => {
     const newDate = new Date(date);
-    const fullYears = Math.floor(years);
-    const remaining = years - fullYears;
-    const days = Math.round(remaining * 365.25);
-
-    newDate.setFullYear(newDate.getFullYear() + fullYears);
-    newDate.setDate(newDate.getDate() + days);
-    return newDate;
+    const msPerYear = 365.25 * 24 * 60 * 60 * 1000;
+    const newTime = newDate.getTime() + (years * msPerYear);
+    return new Date(newTime);
 };
 
 // Helper to convert fractional years to YMD
@@ -72,7 +68,8 @@ export const calculateVimshottariDasha = (moonLongitude, birthDate) => {
         startDate: new Date(currentDate),
         endDate: new Date(firstEndDate),
         fullDuration: startDasha.years, // Used for Antardasha calc
-        isCurrent: now >= currentDate && now <= firstEndDate
+        isCurrent: now >= currentDate && now <= firstEndDate,
+        level: 1
     });
 
     currentDate = new Date(firstEndDate);
@@ -91,7 +88,8 @@ export const calculateVimshottariDasha = (moonLongitude, birthDate) => {
             startDate: new Date(currentDate),
             endDate: new Date(endDate),
             fullDuration: dasha.years,
-            isCurrent: now >= currentDate && now <= endDate
+            isCurrent: now >= currentDate && now <= endDate,
+            level: 1
         });
 
         currentDate = new Date(endDate);
@@ -107,33 +105,44 @@ export const calculateVimshottariDasha = (moonLongitude, birthDate) => {
     };
 };
 
-export const calculateAntardashas = (mahadashaPlanet, startDate) => {
-    const mdIndex = DASHA_PERIODS.findIndex(d => d.planet === mahadashaPlanet);
-    if (mdIndex === -1) return [];
+export const calculateSubDashas = (parentPlanet, startDate, parentDurationYears, level = 2) => {
+    if (level > 6) return []; // Stop at 6 levels
 
-    const mdDuration = DASHA_PERIODS[mdIndex].years;
-    const antardashas = [];
+    // Find the starting index. Sub-periods always start with the lord of the parent period
+    const parentIndex = DASHA_PERIODS.findIndex(d => d.planet === parentPlanet);
+    if (parentIndex === -1) return [];
+
+    const subDashas = [];
     let currentDate = new Date(startDate);
     const now = new Date();
 
-    // Antardasha sequence starts from the Mahadasha lord itself
     for (let i = 0; i < 9; i++) {
-        const currentIndex = (mdIndex + i) % 9;
-        const adPlanet = DASHA_PERIODS[currentIndex];
+        const currentIndex = (parentIndex + i) % 9;
+        const subDashaPlanet = DASHA_PERIODS[currentIndex];
 
-        // Formula: (MD Years * AD Years) / 120 = Years duration
-        const adDurationYears = (mdDuration * adPlanet.years) / 120;
-        const endDate = addYears(currentDate, adDurationYears);
+        // Formula: (Parent Duration * Sub Planet Years) / 120
+        const durationYears = (parentDurationYears * subDashaPlanet.years) / 120;
+        const endDate = addYears(currentDate, durationYears);
 
-        antardashas.push({
-            planet: adPlanet.planet,
+        subDashas.push({
+            planet: subDashaPlanet.planet,
             startDate: new Date(currentDate),
             endDate: new Date(endDate),
-            isCurrent: now >= currentDate && now <= endDate
+            fullDuration: durationYears, // This sub-period becomes the parent duration for next level
+            isCurrent: now >= currentDate && now <= endDate,
+            level: level,
+            parentPlanet: parentPlanet
         });
 
         currentDate = new Date(endDate);
     }
 
-    return antardashas;
+    return subDashas;
+};
+
+// Legacy method for backward compatibility if needed, but we should use calculateSubDashas now
+export const calculateAntardashas = (mahadashaPlanet, startDate) => {
+    // Find absolute duration from reference map
+    const dasha = DASHA_PERIODS.find(d => d.planet === mahadashaPlanet);
+    return calculateSubDashas(mahadashaPlanet, startDate, dasha ? dasha.years : 0, 2);
 };

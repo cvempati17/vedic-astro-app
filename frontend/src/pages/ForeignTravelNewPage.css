@@ -1,0 +1,123 @@
+/* ForeignTravelNewPage.css - V3.3 */
+.foreign-travel-container {
+    font-family: system-ui, sans-serif;
+    background: #0b1220;
+    color: #e5e7eb;
+    padding: 32px;
+    min-height: 100vh;
+}
+
+.foreign-travel-container h1,
+.foreign-travel-container h2,
+.foreign-travel-container h3 {
+    color: #60a5fa;
+    margin-top: 0;
+}
+
+.card {
+    background: #020617;
+    border-radius: 12px;
+    padding: 18px;
+    border-left: 4px solid #60a5fa;
+    margin-bottom: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.chart-wrapper {
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 8px;
+    min-height: 300px;
+    /* Ensure space for SVG */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #334155;
+    padding: 8px;
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.physical {
+    background: #22c55e;
+    color: #022c22;
+}
+
+.emotional {
+    background: #facc15;
+    color: #422006;
+}
+
+.trend {
+    background: #38bdf8;
+    color: #022c22;
+}
+
+.selector {
+    margin-bottom: 16px;
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.selector select,
+.selector button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: white;
+}
+
+.analyze-btn {
+    background: #3b82f6 !important;
+    border: none !important;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.analyze-btn:hover {
+    background: #2563eb !important;
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid #475569;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

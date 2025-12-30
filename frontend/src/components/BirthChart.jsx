@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { transformToVarga, getDivisionalChartName } from '../utils/divisionalCharts';
+import { getPlanetNature } from '../utils/strengthUtils';
 import './NorthIndianChart.css';
 
 const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = false }) => {
@@ -45,16 +46,23 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
     }
 
     planetsByRasi[ascendantRasi].push({
-        abbr: t('charts.ascShort'), // Use localized Ascendant short form
-        degrees: getDegreesInSign(ascendantLong)
+        abbr: t('charts.ascShort'),
+        degrees: getDegreesInSign(ascendantLong),
+        fullName: 'Ascendant',
+        isBenefic: true, // Defaulting to true/neutral for color coding
+        isRetro: false
     });
 
     Object.entries(displayData).forEach(([planet, info]) => {
         if (planet !== 'Ascendant' && info.longitude !== undefined) {
             const rasiNum = getRasiNumber(info.longitude);
+            const nature = getPlanetNature(planet, ascendantLong);
             planetsByRasi[rasiNum].push({
                 abbr: getPlanetAbbr(planet),
-                degrees: getDegreesInSign(info.longitude)
+                degrees: getDegreesInSign(info.longitude),
+                isBenefic: nature.isBenefic,
+                isRetro: info.speed < 0,
+                fullName: planet
             });
         }
     });
@@ -113,8 +121,10 @@ const BirthChart = ({ data, formData, defaultDivision = 'd1', hideControls = fal
                                         </div>
                                         <div className="cell-content-south">
                                             {planetsByRasi[rasiNum].map((planet, idx) => (
-                                                <div key={idx} className="planet-item-south">
-                                                    {planet.abbr}
+                                                <div key={idx} className={`planet-item-south ${planet.fullName === 'Ascendant' ? 'planet-neutral' : (planet.isBenefic ? 'planet-benefic' : 'planet-malefic')}`}>
+                                                    <span>{planet.abbr}</span>
+                                                    <span className="planet-deg-small">{Math.floor(planet.degrees)}°</span>
+                                                    {planet.isRetro && <span>(R)</span>}
                                                 </div>
                                             ))}
                                         </div>
