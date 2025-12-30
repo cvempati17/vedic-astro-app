@@ -30,16 +30,38 @@ const LoginPage = ({ onLogin }) => {
         };
     }, []);
 
-    const handleGoogleCallback = (response) => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    const handleGoogleCallback = async (response) => {
         // Decode the JWT token to get user info
         const userInfo = parseJwt(response.credential);
 
-        onLogin({
-            name: userInfo.name,
-            email: userInfo.email,
-            picture: userInfo.picture,
-            provider: 'google'
-        });
+        try {
+            // Exchange Google token for App Token
+            const res = await fetch(`${API_URL}/api/auth/google`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: userInfo.email,
+                    name: userInfo.name,
+                    picture: userInfo.picture,
+                    googleToken: response.credential
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                onLogin(data.user);
+            } else {
+                console.error("Login verification failed:", data.error);
+                alert(t('auth.loginFailed', "Login verification failed"));
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            // Fallback for demo/offline logic if preferred, but explicit failure is better for debugging
+            alert(t('auth.networkError', "Login network error"));
+        }
     };
 
     const parseJwt = (token) => {
@@ -95,8 +117,9 @@ const LoginPage = ({ onLogin }) => {
     };
 
     if (showEmailAuth) {
+        console.log("LoginPage: Rendering EmailAuth component");
         return (
-            <div>
+            <div style={{ position: 'relative', width: '100vw', minHeight: '100vh', background: 'var(--bg-deep)' }}>
                 <EmailAuth onAuthSuccess={handleEmailAuthSuccess} />
                 <button
                     className="back-to-login-btn"
@@ -112,7 +135,8 @@ const LoginPage = ({ onLogin }) => {
                         padding: '10px 20px',
                         borderRadius: '10px',
                         cursor: 'pointer',
-                        fontWeight: '600'
+                        fontWeight: '600',
+                        zIndex: 1000
                     }}
                 >
                     {t('auth.backToOptions')}
@@ -122,7 +146,7 @@ const LoginPage = ({ onLogin }) => {
     }
 
     return (
-        <div className="login-container">
+        <div className="login-container" style={{ zIndex: 1, position: 'relative' }}>
             <div className="login-content-wrapper">
                 <div className="login-image-section">
                     <img src={parrotImage} alt="Vedic Astrologer" className="parrot-image" />
@@ -158,7 +182,12 @@ const LoginPage = ({ onLogin }) => {
 
                         <button
                             className="oauth-btn email-btn"
-                            onClick={() => setShowEmailAuth(true)}
+                            onClick={() => {
+                                console.log("Sign in with Email clicked");
+                                setShowEmailAuth(true);
+                            }}
+                            type="button"
+                            style={{ zIndex: 10, position: 'relative' }}
                         >
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />

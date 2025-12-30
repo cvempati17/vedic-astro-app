@@ -44,15 +44,6 @@ const SettingsPage = ({ onBack, onLogout, userType = 'basic', onUserTypeChange }
                     <select
                         value={i18n.language}
                         onChange={(e) => changeLanguage(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: '12px',
-                            borderRadius: '8px',
-                            border: '1px solid var(--glass-border)',
-                            background: 'var(--bg-light)',
-                            color: 'var(--text-main)',
-                            fontSize: '1rem'
-                        }}
                     >
                         {languages.map((lang) => (
                             <option key={lang.code} value={lang.code}>
@@ -71,15 +62,6 @@ const SettingsPage = ({ onBack, onLogout, userType = 'basic', onUserTypeChange }
                 <select
                     value={userType}
                     onChange={(e) => onUserTypeChange && onUserTypeChange(e.target.value)}
-                    style={{
-                        width: '100%',
-                        padding: '12px',
-                        borderRadius: '8px',
-                        border: '1px solid var(--glass-border)',
-                        background: 'var(--bg-light)',
-                        color: 'var(--text-main)',
-                        fontSize: '1rem'
-                    }}
                 >
                     <option value="basic">{t('settings.userTypeBasic', 'Basic')}</option>
                     <option value="advance">{t('settings.userTypeAdvance', 'Advance')}</option>

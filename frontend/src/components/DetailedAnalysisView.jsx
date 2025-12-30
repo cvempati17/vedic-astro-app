@@ -5,8 +5,12 @@ import { getHouseType, getPurushartha } from '../utils/houseUtils';
 import { calculateAspects, getAspectsOnSign } from '../utils/aspectUtils';
 import './DetailedAnalysisView.css';
 
+import DetailedAIReportModal from './DetailedAIReportModal';
+
 const DetailedAnalysisView = ({ data, formData }) => {
     const { t } = useTranslation();
+    const [selectedReport, setSelectedReport] = React.useState(null);
+
     if (!data || !data.Ascendant) return null;
 
     const ascLong = data.Ascendant.longitude;
@@ -62,6 +66,30 @@ const DetailedAnalysisView = ({ data, formData }) => {
     const tStatus = (s) => t(`dignity.${s}`, s);
     const tNature = (n) => t(`nature.${n}`, n);
     const tAvastha = (a) => t(`avastha.${a}`, a);
+
+    const handleOpenReport = (type, houseNum, refLong, title) => {
+        // Prepare data for AI model
+        const refRasi = Math.floor(refLong / 30);
+        const houseRasi = (refRasi + houseNum - 1) % 12;
+        const signIndex = houseRasi;
+
+        // Find planets in this house
+        const planetsInHouse = planets.filter(p => {
+            return data[p] && data[p].longitude !== undefined && getHouseNum(data[p].longitude, refLong) === houseNum;
+        }).map(p => ({
+            name: p,
+            data: data[p]
+        }));
+
+        setSelectedReport({
+            houseNum,
+            signIndex,
+            planetsInHouse,
+            allPlanetsData: data,
+            ascendantLong: ascLong,
+            title
+        });
+    };
 
     // Generate Planet Analysis Text
     const generatePlanetText = (planet) => {
@@ -130,6 +158,17 @@ const DetailedAnalysisView = ({ data, formData }) => {
                 <p>
                     {lordText} {aspectText}
                 </p>
+                {/* AI Report Link */}
+                <button
+                    style={{
+                        marginTop: '10px', padding: '6px 12px', border: '1px solid #3b82f6',
+                        color: '#3b82f6', background: 'white', borderRadius: '4px', cursor: 'pointer',
+                        fontSize: '0.9rem'
+                    }}
+                    onClick={() => handleOpenReport('planet', house, ascLong, tPlanet(planet))}
+                >
+                    ✨ View Detailed AI Insight
+                </button>
             </div>
         );
     };
@@ -194,6 +233,17 @@ const DetailedAnalysisView = ({ data, formData }) => {
                 }} />
                 <p>{planetsText}</p>
                 <p>{lordText} {aspectText}</p>
+                {/* AI Report Link */}
+                <button
+                    style={{
+                        marginTop: '10px', padding: '6px 12px', border: '1px solid #8b5cf6',
+                        color: '#8b5cf6', background: 'white', borderRadius: '4px', cursor: 'pointer',
+                        fontSize: '0.9rem'
+                    }}
+                    onClick={() => handleOpenReport('house', houseNum, refLong, title)}
+                >
+                    ✨ View Detailed AI Insight
+                </button>
             </div>
         );
     };
@@ -237,8 +287,20 @@ const DetailedAnalysisView = ({ data, formData }) => {
                     ))}
                 </div>
             </div>
+
+            {selectedReport && (
+                <DetailedAIReportModal
+                    houseNum={selectedReport.houseNum}
+                    signIndex={selectedReport.signIndex}
+                    planetsInHouse={selectedReport.planetsInHouse}
+                    allPlanetsData={selectedReport.allPlanetsData}
+                    ascendantLong={selectedReport.ascendantLong}
+                    onClose={() => setSelectedReport(null)}
+                />
+            )}
         </div>
     );
 };
 
 export default DetailedAnalysisView;
+

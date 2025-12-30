@@ -19,6 +19,10 @@ const EmailAuth = ({ onAuthSuccess }) => {
     const [message, setMessage] = useState('');
     const [timer, setTimer] = useState(0);
 
+    useEffect(() => {
+        console.log("EmailAuth component mounted");
+    }, []);
+
     // Send OTP to email
     const handleSendOTP = async (e) => {
         e.preventDefault();
@@ -144,7 +148,7 @@ const EmailAuth = ({ onAuthSuccess }) => {
 
             if (response.ok) {
                 // Save token
-                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
                 // Call success callback

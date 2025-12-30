@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Job vs Business Analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: system-ui; background:#0b1220; color:#e5e7eb; padding:32px; }
+h1,h2 { color:#60a5fa; }
+.card { background:#020617; padding:18px; margin-bottom:24px; border-left:4px solid #60a5fa; border-radius:12px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.badge { padding:4px 12px; border-radius:999px; font-size:0.85em; margin-right:6px; }
+.job { background:#22c55e; color:#022c22; }
+.business { background:#facc15; color:#422006; }
+.hybrid { background:#38bdf8; color:#022c22; }
+</style>
+</head>
+<body>
+
+<h1>Job vs Business Analysis</h1>
+
+<div class="card">
+  <p><strong>Name:</strong> {{name}}</p>
+  <p><strong>DOB:</strong> {{dob}}</p>
+  <p><strong>Place:</strong> {{place}}</p>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>D1 Chart</h2>
+    {{d1_chart_visual}}
+  </div>
+  <div class="card">
+    <h2>D9 Chart</h2>
+    {{d9_chart_visual}}
+  </div>
+</div>
+
+<div class="card">
+  <h2>WHY</h2>
+  {{why_analysis}}
+</div>
+
+<div class="card">
+  <h2>WHEN</h2>
+  {{when_analysis}}
+</div>
+
+<div class="card">
+  <h2>HOW</h2>
+  {{how_analysis}}
+</div>
+
+<div class="card">
+  <h2>Career Pattern</h2>
+  <span class="badge {{career_type_class}}">{{career_pattern}}</span>
+</div>
+
+<div class="card">
+  <h2>Confidence Timeline</h2>
+  <canvas id="careerChart" height="120"></canvas>
+</div>
+
+<div class="card">
+  <h2>Final Recommendation</h2>
+  {{final_recommendation}}
+</div>
+
+<script>
+const dataPoints = {{confidence_data}};
+
+new Chart(document.getElementById("careerChart"), {
+  type:"line",
+  data:{
+    labels:dataPoints.map(d=>d.age_range),
+    datasets:[{
+      label:"Career Orientation Confidence",
+      data:dataPoints.map(d=>d.score),
+      borderColor:"#60a5fa",
+      tension:0.3
+    }]
+  },
+  options:{ scales:{ y:{min:0,max:100} } }
+});
+</script>
+
+</body>
+</html>

@@ -32,10 +32,6 @@ const HomePage = ({ onCalculate, initialData, onBack, onOpenSettings }) => {
                     <InputForm onCalculate={onCalculate} initialData={initialData} />
                 </div>
             </main>
-
-            <footer className="app-footer">
-                <p>{t('home.footer', 'Powered by Swiss Ephemeris & Node.js')}</p>
-            </footer>
         </>
     );
 };

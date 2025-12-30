@@ -12,9 +12,21 @@ import MatchMakingPage from './pages/MatchMakingPage';
 import ConventionalMatchMakingPage from './pages/ConventionalMatchMakingPage';
 import NamakaranPage from './pages/NamakaranPage';
 import SettingsPage from './pages/SettingsPage';
+import BirthTimeRectificationPage from './pages/BirthTimeRectificationPage';
+import BirthTimeRectificationNewPage from './pages/BirthTimeRectificationNewPage';
+import PlanetaryChangesImpactPage from './pages/PlanetaryChangesImpactPage';
 import Disclaimer from './components/Disclaimer';
 import BalasInfoPage from './pages/BalasInfoPage';
 import MandiInfoPage from './pages/MandiInfoPage';
+import ForeignTravelNewPage from './pages/ForeignTravelNewPage';
+import JobBusinessNewPage from './pages/JobBusinessNewPage';
+import BusinessPartnershipInputPage from './pages/BusinessPartnershipInputPage';
+import BusinessPartnershipV6Page from './pages/BusinessPartnershipV6Page';
+import AstrogravityTestPage from './pages/AstrogravityTestPage';
+import GeminiTestPage from './pages/GeminiTestPage';
+import PalmistryPage from './pages/PalmistryPage';
+import FamilyOSPage from './pages/FamilyOSPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import './ThemeToggle.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -26,14 +38,16 @@ function App() {
   const [user, setUser] = useState(null);
   const [results, setResults] = useState(null);
   const [formData, setFormData] = useState(null);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [userType, setUserType] = useState(() => {
     if (typeof window === 'undefined') return 'basic';
     return localStorage.getItem('userType') || 'basic';
   });
   const [editingChart, setEditingChart] = useState(null);
   const [resultsInitialTab, setResultsInitialTab] = useState('charts');
+  const [resultsReturnPage, setResultsReturnPage] = useState('saved-charts');
   const [settingsReturnPage, setSettingsReturnPage] = useState('saved-charts');
+  const [btrNewPageState, setBtrNewPageState] = useState(null);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -57,8 +71,9 @@ function App() {
     }
   };
 
-  const handleCalculate = async (data, shouldSave = false) => {
+  const handleCalculate = async (data, shouldSave = false, returnPage = 'saved-charts') => {
     try {
+      setResultsReturnPage(returnPage);
       const response = await fetch(`${API_URL}/api/calculate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,6 +124,7 @@ function App() {
               }
             } catch (saveErr) {
               console.error('Error saving to backend:', saveErr);
+              alert(`Save Error (Network/Server): ${saveErr.message}`);
               saveLocally(data, responseData.data);
             }
           } else {
@@ -151,6 +167,7 @@ function App() {
     setResults(chartData);
     setFormData(chartFormData);
     setResultsInitialTab('charts');
+    setResultsReturnPage('saved-charts');
     setCurrentPage('results');
   };
 
@@ -164,8 +181,9 @@ function App() {
   };
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-    document.body.className = theme === 'dark' ? 'light-theme' : 'dark-theme';
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    document.body.className = next === 'dark' ? 'dark-theme' : 'light-theme';
   };
 
   return (
@@ -178,7 +196,9 @@ function App() {
         )}
 
         {currentPage === 'login' && (
-          <LoginPage onLogin={handleLogin} />
+          <ErrorBoundary>
+            <LoginPage onLogin={handleLogin} />
+          </ErrorBoundary>
         )}
 
         {currentPage === 'home' && isAuthenticated && (
@@ -198,6 +218,17 @@ function App() {
             onOpenMatchNew={() => setCurrentPage('match-making')}
             onOpenMatchTraditional={() => setCurrentPage('match-making-traditional')}
             onOpenNamakaran={() => setCurrentPage('namakaran')}
+            onOpenBTR={() => setCurrentPage('birth-time-rectification')}
+            onOpenBTRNew={() => setCurrentPage('birth-time-rectification-new')}
+            onOpenForeignTravelNew={() => setCurrentPage('foreign-travel-new')}
+            onOpenJobBusinessNew={() => setCurrentPage('job-vs-business-new')}
+            onOpenBusinessPartnershipInput={() => setCurrentPage('business-partnership-input')}
+            onOpenBusinessPartnershipV6={() => setCurrentPage('business-partnership-v6')}
+            onOpenAstrogravityTest={() => setCurrentPage('astrogravity-test')}
+            onOpenGeminiTest={() => setCurrentPage('gemini-test')}
+            onOpenPalmistry={() => setCurrentPage('palmistry')}
+            onOpenFamilyOS={() => setCurrentPage('family-os')}
+            onOpenPlanetaryChangesImpact={() => setCurrentPage('planetary-changes-impact')}
             onOpenSettings={() => { setSettingsReturnPage('saved-charts'); setCurrentPage('settings'); }}
             onLogout={handleLogout}
             userType={userType}
@@ -208,7 +239,7 @@ function App() {
           <ResultsPage
             results={results}
             formData={formData}
-            onBack={() => setCurrentPage('saved-charts')}
+            onBack={() => setCurrentPage(resultsReturnPage || 'saved-charts')}
             onOpenTraitReport={() => setCurrentPage('detailed-trait')}
             onOpenVedicReport={() => setCurrentPage('detailed-vedic')}
             onOpenAdvancedTrait={() => setCurrentPage('advanced-trait')}
@@ -272,6 +303,79 @@ function App() {
           <NamakaranPage
             onBack={() => setCurrentPage('saved-charts')}
           />
+        )}
+
+        {currentPage === 'birth-time-rectification' && (
+          <BirthTimeRectificationPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'birth-time-rectification-new' && (
+          <BirthTimeRectificationNewPage
+            onBack={() => setCurrentPage('saved-charts')}
+            onCalculate={handleCalculate}
+            initialState={btrNewPageState}
+            onStateChange={setBtrNewPageState}
+          />
+        )}
+
+        {currentPage === 'planetary-changes-impact' && (
+          <PlanetaryChangesImpactPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'foreign-travel-new' && (
+          <ForeignTravelNewPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'job-vs-business-new' && (
+          <JobBusinessNewPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'business-partnership-input' && (
+          <BusinessPartnershipInputPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'business-partnership-v6' && (
+          <BusinessPartnershipV6Page
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'astrogravity-test' && (
+          <AstrogravityTestPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'gemini-test' && (
+          <GeminiTestPage
+            onBack={() => setCurrentPage('saved-charts')}
+          />
+        )}
+
+        {currentPage === 'palmistry' && (
+          <ErrorBoundary>
+            <PalmistryPage
+              onBack={() => setCurrentPage('saved-charts')}
+            />
+          </ErrorBoundary>
+        )}
+
+        {currentPage === 'family-os' && (
+          <ErrorBoundary>
+            <FamilyOSPage
+              onBack={() => setCurrentPage('saved-charts')}
+            />
+          </ErrorBoundary>
         )}
 
         {currentPage === 'balas-info' && (

@@ -1,0 +1,107 @@
+
+version: 11.0
+name: Foreign Travel & Settlement Decision System
+
+purpose: >
+  Canonical, production-ready specification for foreign travel,
+  long-stay, return, and settlement analysis using astrology.
+  Includes explainability (WHY / WHEN / WHERE), rule-based linting,
+  homeland semantics, timelines, and UI guarantees.
+
+canonical_format: yaml
+
+definitions:
+  homeland:
+    meaning: >
+      Homeland ALWAYS refers to the country of birth / cultural origin
+      (e.g., India). It never refers to destination or current residence.
+  foreign_land:
+    meaning: >
+      Any country other than the country of birth.
+
+inputs:
+  birth_details:
+    - name
+    - date_of_birth
+    - time_of_birth
+    - place_of_birth
+    - country_of_birth
+
+  chart_data:
+    chart_style:
+      enum: [north_indian, south_indian]
+      description: Input-only, never user-selectable.
+    d1_chart:
+      required: true
+    d9_chart:
+      required: true
+    planetary_positions_table:
+      required: true
+
+timeline:
+  type: age_based
+  start_age: 0
+  end_age: 80
+  interval_years: 8
+  buckets:
+    - "0-8"
+    - "8-16"
+    - "16-24"
+    - "24-32"
+    - "32-40"
+    - "40-48"
+    - "48-56"
+    - "56-64"
+    - "64-72"
+    - "72-80"
+
+explainability_sections:
+  WHY:
+    description: Astrological causes for foreign travel / settlement
+    required: true
+  WHEN:
+    description: Timing windows using dasha & transits mapped to age buckets
+    required: true
+  WHERE:
+    description: Directional / geographical inference
+    required: true
+
+archetypes:
+  NON_MOVER:
+    description: Never leaves homeland.
+  VISITOR:
+    description: Short foreign visits only.
+  LONG_STAY_RETURNER:
+    description: Extended stay abroad with return tendency.
+  DUAL_ANCHOR:
+    description: Physically abroad, emotionally rooted in homeland.
+  PERMANENT_SETTLER:
+    description: Permanently anchored abroad.
+
+linting_rules:
+  hard_errors:
+    - archetype_vs_verdict
+    - missing_timeline_buckets
+  warnings:
+    - missing_homeland_country
+  auto_fixes:
+    - append_homeland_country
+
+outputs:
+  required_sections:
+    - profile
+    - chart_style_display
+    - d1_chart_visual
+    - d9_chart_visual
+    - planetary_positions_table
+    - WHY
+    - WHEN
+    - WHERE
+    - settlement_status
+    - confidence_timeline
+    - final_verdict
+
+disallowed:
+  - chart_style_dropdown_in_ui
+  - ambiguous_homeland_reference
+  - conflicting_archetype_and_verdict

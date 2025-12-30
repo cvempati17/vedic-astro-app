@@ -4,23 +4,27 @@
     justify-content: center;
     min-height: 100vh;
     width: 100%;
-    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    background: var(--bg-deep);
     padding: 2rem;
 }
 
+
 .login-content-wrapper {
     display: flex;
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2rem;
+    display: flex;
+    background: #0A192F;
+    /* Solid background instead of glass for safety */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     max-width: 1000px;
     width: 100%;
     min-height: 600px;
+    position: relative;
+    z-index: 10;
 }
+
 
 .login-image-section {
     flex: 1;
@@ -42,8 +46,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(30, 41, 59, 0.8));
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.2), var(--bg-deep));
 }
+
 
 .login-card {
     flex: 1;
@@ -63,14 +68,13 @@
 }
 
 .app-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--accent-gold);
     margin-bottom: 0.5rem;
 }
+
 
 .app-subtitle {
     color: #94a3b8;
@@ -92,19 +96,21 @@
     justify-content: center;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: rgba(197, 160, 89, 0.05);
+    color: var(--text-on-dark);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-family: var(--font-body);
 }
 
 .oauth-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(197, 160, 89, 0.15);
     transform: translateY(-2px);
 }
+
 
 .guest-btn {
     background: rgba(16, 185, 129, 0.1);
@@ -117,13 +123,18 @@
 }
 
 .email-btn {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    background: var(--accent-gold);
+    color: var(--bg-deep);
     border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .email-btn:hover {
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    box-shadow: var(--btn-shadow);
+    filter: brightness(1.1);
 }
+
 
 .divider {
     display: flex;

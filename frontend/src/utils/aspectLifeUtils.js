@@ -1,18 +1,19 @@
 import { calculateVimshottariDasha, calculateAntardashas, formatDate } from './dashaUtils';
 
-const ASPECTS = {
+export const ASPECTS = {
     career: { label: 'Career', houses: [10], karaka: ['Saturn', 'Sun'] },
-    marriage: { label: 'Marriage', houses: [7], karaka: ['Venus', 'Jupiter'] },
+    marriage: { label: 'Relationship', houses: [7], karaka: ['Venus', 'Jupiter'] },
     health: { label: 'Health', houses: [1, 6], karaka: ['Sun'] },
-    finances: { label: 'Finances', houses: [2, 11], karaka: ['Jupiter'] },
-    kids: { label: 'Kids Growth', houses: [5], karaka: ['Jupiter'] },
-    parents: { label: 'Parents Health & Finance', houses: [4, 9], karaka: ['Sun', 'Moon'] },
+    finances: { label: 'Finance', houses: [2, 11], karaka: ['Jupiter'] },
+    kids: { label: 'Kids', houses: [5], karaka: ['Jupiter'] },
+    parents: { label: 'Family', houses: [2, 4], karaka: ['Sun', 'Moon'] }, // Updated specific labels/logic if needed to match request "Family" usually house 2/4
     siblings: { label: 'Siblings', houses: [3], karaka: ['Mars'] },
+    education: { label: 'Education', houses: [4, 5, 9], karaka: ['Mercury', 'Jupiter'] },
     business: { label: 'Business', houses: [7], karaka: ['Mercury'] },
     spiritual: { label: 'Spiritual Growth', houses: [9, 12], karaka: ['Ketu', 'Jupiter'] }
 };
 
-const PLANET_FRIENDS = {
+export const PLANET_FRIENDS = {
     Sun: ['Moon', 'Mars', 'Jupiter'],
     Moon: ['Sun', 'Mercury'],
     Mars: ['Sun', 'Moon', 'Jupiter'],
@@ -24,7 +25,7 @@ const PLANET_FRIENDS = {
     Ketu: ['Mars', 'Jupiter']
 };
 
-const PLANET_ENEMIES = {
+export const PLANET_ENEMIES = {
     Sun: ['Venus', 'Saturn'],
     Moon: [],
     Mars: ['Mercury'],
@@ -36,7 +37,7 @@ const PLANET_ENEMIES = {
     Ketu: ['Sun', 'Moon']
 };
 
-const getHouseLord = (houseNumber, ascendantSign) => {
+export const getHouseLord = (houseNumber, ascendantSign) => {
     const signs = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
     const lords = {
         'Aries': 'Mars', 'Taurus': 'Venus', 'Gemini': 'Mercury', 'Cancer': 'Moon',
@@ -56,7 +57,7 @@ const getHouseLord = (houseNumber, ascendantSign) => {
     return { sign, lord: lords[sign] };
 };
 
-const evaluatePlanetStrength = (planetName, chartData, aspectKey) => {
+export const evaluatePlanetStrength = (planetName, chartData, aspectKey) => {
     let score = 0;
     let reasons = [];
 
@@ -129,6 +130,7 @@ export const calculateAspectsOfLife = (chartData, birthDate) => {
     const dashaData = calculateVimshottariDasha(moonLongitude, birthDate);
     if (!dashaData) return [];
 
+    const dob = new Date(birthDate);
     const allPeriods = [];
 
     // Flatten Dasha/Antardasha
@@ -145,7 +147,20 @@ export const calculateAspectsOfLife = (chartData, birthDate) => {
                 aspects: {}
             };
 
+            // Calculate person's age at the start of this sub-period
+            const ageAtStart = (ad.startDate - dob) / (1000 * 60 * 60 * 24 * 365.25);
+
             Object.keys(ASPECTS).forEach(key => {
+                // Age Filtering Logic
+                if (key === 'health' || key === 'siblings') {
+                    if (ageAtStart < 1) return; // Skip if < 1
+                } else if (key === 'education') {
+                    if (ageAtStart < 5) return; // Skip if < 5
+                } else {
+                    // All other aspects (Career, Marriage, etc.)
+                    if (ageAtStart < 20) return; // Skip if < 20
+                }
+
                 let totalScore = 5.0; // Base
                 let periodReasons = [];
 
@@ -181,7 +196,14 @@ export const calculateAspectsOfLife = (chartData, birthDate) => {
                 };
             });
 
-            allPeriods.push(periodData);
+            // Only add period if it has at least one aspect (e.g. if age < 1 and no health/siblings, skip row?)
+            // Or keep row but empty aspects?
+            // "remaining take them off" implies valid rows only or valid cells.
+            // If we filter keys, the UI row will just show blanks for those columns if we render purely on keys.
+            // But if we want to not show the ROW at all if nothing is relevant:
+            if (Object.keys(periodData.aspects).length > 0) {
+                allPeriods.push(periodData);
+            }
         });
     });
 

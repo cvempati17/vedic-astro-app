@@ -36,7 +36,7 @@ i18n
             ja: { translation: ja },
         },
         fallbackLng: 'en',
-        debug: true,
+        debug: false,
         interpolation: {
             escapeValue: false,
         },

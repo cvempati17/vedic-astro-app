@@ -11,7 +11,7 @@
 .yoga-group {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

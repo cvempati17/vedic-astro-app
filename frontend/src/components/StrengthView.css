@@ -86,8 +86,3 @@
     border-top: 1px solid var(--border-color);
     font-style: italic;
 }
-@import './StrengthViewBadges.css';
-
-
-@import './StrengthViewAvastha.css';
-

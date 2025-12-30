@@ -1,0 +1,98 @@
+
+version: 7.0
+name: Foreign Travel & Settlement Decision System
+
+purpose: >
+  Final canonical requirement specification for foreign travel, settlement,
+  and return analysis using astrology. Designed for vibe coding with
+  explainable timelines, D1/D9 charts, and age-based confidence scoring.
+
+canonical_format: yaml
+
+inputs:
+  birth_details:
+    - name
+    - date_of_birth
+    - time_of_birth
+    - place_of_birth
+
+  chart_data:
+    chart_style:
+      enum: [north_indian, south_indian]
+      description: >
+        Rendering style for charts. This is an INPUT ONLY and must never
+        be user-selectable in the UI.
+
+    d1_chart:
+      required: true
+      description: Rasi (D1) chart visual
+
+    d9_chart:
+      required: true
+      description: Navamsa (D9) chart visual
+
+    planetary_positions_table:
+      required: true
+
+optional_inputs:
+  - known_foreign_events
+  - dasha_periods
+  - current_residence
+
+timeline:
+  type: age_based
+  start_age: 0
+  end_age: 80
+  interval_years: 8
+  buckets:
+    - "0-8"
+    - "8-16"
+    - "16-24"
+    - "24-32"
+    - "32-40"
+    - "40-48"
+    - "48-56"
+    - "56-64"
+    - "64-72"
+    - "72-80"
+
+timeline_point_schema:
+  required_fields:
+    - age_range
+    - confidence_score
+    - archetype_hint
+    - dominant_factors
+    - suppressing_factors
+    - real_event_override
+
+confidence_scoring:
+  range: [0,100]
+  bands:
+    0-20: none
+    21-40: weak
+    41-60: moderate
+    61-80: strong
+    81-100: very_strong
+
+archetypes:
+  - NON_MOVER
+  - VISITOR
+  - LONG_STAY_RETURNER
+  - DUAL_ANCHOR
+  - PERMANENT_SETTLER
+
+outputs:
+  required_sections:
+    - profile
+    - chart_style_display
+    - d1_chart_visual
+    - d9_chart_visual
+    - planetary_positions_table
+    - settlement_status
+    - confidence_timeline
+    - final_verdict
+
+disallowed:
+  - chart_style_dropdown_in_ui
+  - interactive_style_controls
+  - timelines_not_covering_0_to_80

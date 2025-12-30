@@ -1,0 +1,91 @@
+You are executing a deterministic decision engine.
+
+Folder contents:
+1) astrogravity_rules_v3.yaml
+   → This is the SINGLE SOURCE OF TRUTH.
+   → It contains all rules, weights, formulas, gates, and logic.
+   → Do NOT invent rules or modify weights unless explicitly instructed.
+
+2) astrogravity_input_v3.html
+   → This is an INPUT FORM only.
+   → Read user-provided data from this file.
+   → Do NOT place logic inside this file.
+
+3) astrogravity_output_v3.html
+   → This is an OUTPUT TEMPLATE.
+   → Populate it strictly using results computed from the YAML rules.
+
+Execution instructions:
+
+STEP 1 — Parse astrogravity_rules_v3.yaml
+- Load all sections, including:
+  • composite_engine
+  • time_series
+  • learning_engine
+  • compatibility_formula
+  • role definitions
+- Treat formulas in YAML as executable logic.
+
+STEP 2 — Read input data
+- Extract Base Person and Partner(s) data from astrogravity_input_v3.html.
+- Assume valid birth data is provided.
+- Construct individual charts and a composite chart (midpoint method).
+
+STEP 3 — Compute scores
+- Calculate:
+  • Individual Promise, Activation, Timing
+  • Partnership Synergy and Friction
+  • Composite chart score
+  • Compatibility score using compatibility_formula
+- Apply:
+  • aspect orb decay
+  • combustion penalties and mitigations
+  • planetary phase multipliers
+  • house–planet matrix scores
+
+STEP 4 — Time-series projection
+- Apply monthly drift logic for 24 months.
+- Output:
+  • current compatibility
+  • 12-month projection
+  • 24-month projection
+  • risk spike months (if any)
+
+STEP 5 — Role allocation
+- Evaluate role_axes and role thresholds.
+- Assign the best-fit role to each person.
+- Flag role misalignment if thresholds are not met.
+
+STEP 6 — Gates and verdict
+- Apply hard gates from YAML.
+- Determine partnership verdict:
+  • NO-GO / EXPERIMENT / CONDITIONAL / STRATEGIC
+
+STEP 7 — Render output
+- Populate astrogravity_output_v3.html with:
+  • Compatibility %
+  • Composite stability score
+  • Projected compatibility (12 & 24 months)
+  • Recommended roles
+  • Risk notes
+  • Confidence band (from learning_engine)
+
+CRITICAL CONSTRAINTS:
+- Do NOT add astrology explanations or storytelling.
+- Do NOT invent meanings outside YAML.
+- If data is missing, fail gracefully and note it.
+- Output must be deterministic and reproducible.
+
+STRICT MODE ENABLED.
+
+Rules:
+- YAML overrides all assumptions.
+- No heuristics, no intuition, no extra logic.
+- If a rule is not present in astrogravity_rules_v3.yaml, it must NOT be used.
+- Numerical output must be traceable to YAML weights or formulas.
+- Output only what is computable.
+
+Any deviation is considered an error.
+
+
+Begin execution.

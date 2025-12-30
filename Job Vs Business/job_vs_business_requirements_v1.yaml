@@ -1,0 +1,95 @@
+
+version: 1.0
+name: Job vs Business Decision System
+
+purpose: >
+  Canonical specification for analyzing whether an individual is better
+  suited for Job (Service), Business (Entrepreneurship), or a Hybrid path,
+  using astrology. Designed as a separate session/page, aligned with the
+  Migration Pattern framework and explainability-first output.
+
+canonical_format: yaml
+
+definitions:
+  job:
+    meaning: >
+      Structured employment, service, salaried or contractual roles,
+      dependent on organizations or authorities.
+  business:
+    meaning: >
+      Independent, entrepreneurial, self-driven income activities,
+      including partnerships and ownership.
+  hybrid:
+    meaning: >
+      Combination of job and business across life phases.
+
+inputs:
+  birth_details:
+    - name
+    - date_of_birth
+    - time_of_birth
+    - place_of_birth
+    - country_of_birth
+
+  chart_data:
+    d1_chart:
+      required: true
+    d9_chart:
+      required: true
+    planetary_positions_table:
+      required: true
+
+timeline:
+  type: age_based
+  start_age: 0
+  end_age: 80
+  interval_years: 8
+
+decision_axes:
+  job_indicators:
+    - strong_6th_house
+    - strong_10th_house
+    - saturn_dominance
+    - benefic_sun
+  business_indicators:
+    - strong_7th_house
+    - strong_3rd_house
+    - mercury_dominance
+    - rahu_in_kendra_or_trikona
+
+outcomes:
+  JOB_ORIENTED:
+    description: Career best suited for service or structured roles.
+  BUSINESS_ORIENTED:
+    description: Strong entrepreneurial or independent income potential.
+  HYBRID_PATH:
+    description: Job in early life, business later (or parallel).
+
+explainability_sections:
+  WHY:
+    description: Planetary and house-based reasons
+    required: true
+  WHEN:
+    description: Age buckets indicating job/business activation
+    required: true
+  HOW:
+    description: Nature of work, scale, and risk profile
+    required: true
+
+linting_rules:
+  hard_errors:
+    - missing_explainability_sections
+  warnings:
+    - conflicting_job_business_signals
+
+outputs:
+  required_sections:
+    - profile
+    - d1_chart_visual
+    - d9_chart_visual
+    - WHY
+    - WHEN
+    - HOW
+    - career_pattern
+    - confidence_timeline
+    - final_recommendation

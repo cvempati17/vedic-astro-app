@@ -2,32 +2,37 @@
     padding: 2rem;
     max-width: 1000px;
     margin: 0 auto;
-    color: #e2e8f0;
-    background-color: #0f172a;
+    color: var(--text-on-dark);
+    background-color: var(--bg-deep);
     min-height: 100vh;
 }
+
 
 .back-button {
     background: none;
     border: none;
-    color: #a78bfa;
+    color: var(--accent-gold);
     cursor: pointer;
     font-size: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     padding: 0;
-    text-decoration: underline;
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .back-button:hover {
-    color: #c4b5fd;
+    filter: brightness(1.2);
 }
 
+
 .page-title {
-    color: #f472b6;
-    font-size: 2rem;
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
 }
+
 
 .intro-section {
     margin-bottom: 3rem;
@@ -40,19 +45,22 @@
 }
 
 h2 {
-    color: #a78bfa;
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid #334155;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
+
 
 .info-table-wrapper {
     overflow-x: auto;
     margin-bottom: 3rem;
-    background: #1e293b;
-    border-radius: 8px;
-    border: 1px solid #334155;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
+
 
 .info-table {
     width: 100%;
@@ -63,15 +71,16 @@ h2 {
 .info-table td {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid #334155;
-    color: #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-on-dark);
 }
 
 .info-table th {
-    background: rgba(0, 0, 0, 0.2);
-    color: #cbd5e1;
-    font-weight: 600;
+    background: rgba(197, 160, 89, 0.1);
+    color: var(--accent-gold);
+    font-weight: 700;
 }
+
 
 .info-table tr:last-child td {
     border-bottom: none;
@@ -85,10 +94,10 @@ h2 {
 }
 
 .comparison-card {
-    background: #1e293b;
+    background: var(--card-bg);
     padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #334155;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
 .comparison-card h3 {
@@ -112,7 +121,8 @@ h2 {
 
 .comparison-card li {
     margin-bottom: 0.5rem;
-    color: #cbd5e1;
+    color: var(--text-on-dark);
+    opacity: 0.9;
 }
 
 .example-box {

@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Foreign Travel & Settlement Analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  background: #0b1220;
+  color: #e5e7eb;
+  padding: 32px;
+}
+h1, h2 {
+  color: #60a5fa;
+}
+.section {
+  margin-bottom: 28px;
+}
+.card {
+  background: #020617;
+  border-radius: 12px;
+  padding: 18px;
+  border-left: 4px solid #60a5fa;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  border: 1px solid #334155;
+  padding: 8px;
+  font-size: 0.9em;
+}
+.badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85em;
+}
+.physical { background: #22c55e; color: #022c22; }
+.emotional { background: #facc15; color: #422006; }
+.selector {
+  margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+
+<h1>Foreign Travel & Settlement Analysis</h1>
+
+<div class="section card">
+  <p><strong>Name:</strong> {{name}}</p>
+  <p><strong>DOB:</strong> {{dob}}</p>
+  <p><strong>Place:</strong> {{place}}</p>
+</div>
+
+<div class="section card selector">
+  <label><strong>Chart Style:</strong></label>
+  <select>
+    <option {{north_selected}}>North Indian</option>
+    <option {{south_selected}}>South Indian</option>
+  </select>
+</div>
+
+<div class="section">
+  <h2>D1 & D9 Charts</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>D1 (Rasi Chart)</h3>
+      {{d1_chart_visual}}
+    </div>
+    <div class="card">
+      <h3>D9 (Navamsa Chart)</h3>
+      {{d9_chart_visual}}
+    </div>
+  </div>
+</div>
+
+<div class="section card">
+  <h2>Planetary Position Table</h2>
+  {{planetary_table_html}}
+</div>
+
+<div class="section card">
+  <h2>WHY</h2>
+  {{why_analysis}}
+</div>
+
+<div class="section card">
+  <h2>WHEN</h2>
+  {{when_analysis}}
+</div>
+
+<div class="section card">
+  <h2>WHERE</h2>
+  {{where_analysis}}
+</div>
+
+<div class="section card">
+  <h2>Settlement Status</h2>
+  <span class="badge physical">Physical: {{physical_settlement}}</span>
+  <span class="badge emotional">Emotional: {{emotional_attachment}}</span>
+  <p>{{settlement_explanation}}</p>
+</div>
+
+<div class="section card">
+  <h2>Confidence Timeline</h2>
+  <canvas id="confidenceChart" height="120"></canvas>
+</div>
+
+<div class="section card">
+  <h2>Final Verdict</h2>
+  {{final_summary}}
+</div>
+
+<script>
+const dataPoints = {{confidence_data}};
+const ctx = document.getElementById('confidenceChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: dataPoints.map(d => d.period),
+    datasets: [{
+      data: dataPoints.map(d => d.score),
+      borderColor: '#60a5fa',
+      tension: 0.3,
+      pointRadius: 6
+    }]
+  },
+  options: {
+    scales: { y: { min: 0, max: 100 } }
+  }
+});
+</script>
+
+</body>
+</html>

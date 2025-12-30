@@ -3,9 +3,11 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import CitySearch from '../components/CitySearch';
 import { calculateHappinessIndex, getHappinessDetails, calculateWealthIndex, getWealthDetails, calculateHealthIndex, getHealthDetails } from '../utils/traitUtils';
+import RibbonMenu from '../components/RibbonMenu';
+import { Icons } from '../components/uiIcons.jsx';
 import './SavedChartsPage.css';
 
-const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenSettings, onLogout, userType = 'basic' }) => {
+const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenBTR, onOpenBTRNew, onOpenForeignTravelNew, onOpenJobBusinessNew, onOpenBusinessPartnershipInput, onOpenBusinessPartnershipV6, onOpenAstrogravityTest, onOpenGeminiTest, onOpenPalmistry, onOpenPlanetaryChangesImpact, onOpenFamilyOS, onOpenSettings, onLogout, userType = 'basic' }) => {
     const { t } = useTranslation(); // Initialize hook
     const [charts, setCharts] = useState([]);
     // ... (rest of the file until sidebar)
@@ -83,6 +85,26 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
+
+    // Load ValueStream widget script
+    /*
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
+        script.setAttribute('data-project', 'AstroGravity');
+        script.setAttribute('data-page', 'chart-view');
+        script.setAttribute('data-user-id', 'reviewer@astrogravity.in');
+        script.setAttribute('data-api-url', 'https://speak.valuestream.in');
+        script.async = true;
+
+        document.body.appendChild(script);
+
+        return () => {
+            // Cleanup: remove script when component unmounts
+            document.body.removeChild(script);
+        };
+    }, []);
+    */
 
     const handleSort = (key) => {
         let direction = 'ascending';
@@ -584,121 +606,123 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                 </div>
             </header>
 
-            <div className="results-layout">
-                <aside className="sticky-sidebar">
-                    <div
-                        className="sidebar-header"
-                        style={{ marginBottom: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                        onClick={() => setToolsOpen(!toolsOpen)}
-                    >
-                        <h3>{t('nav.tools', 'Tools')}</h3>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{toolsOpen ? '▾' : '▸'}</span>
-                    </div>
-                    {toolsOpen && (
-                        <div className="sidebar-tabs">
-                            {userType === 'advance' && (
-                                <button
-                                    type="button"
-                                    className="sidebar-tab"
-                                    onClick={onOpenMatchNew}
-                                >
-                                    {t('nav.matchMakingNew', 'Match Making - New')}
-                                </button>
-                            )}
-                            <button
-                                type="button"
-                                className="sidebar-tab"
-                                onClick={onOpenMatchTraditional}
-                            >
-                                {t('nav.matchMakingTrad', 'Match Making - Trad')}
-                            </button>
-                            <button
-                                type="button"
-                                className="sidebar-tab"
-                                onClick={() => { console.log("Namakaran button clicked"); onOpenNamakaran(); }}
-                            >
-                                {t('nav.namakaran', 'Namakaran')}
-                            </button>
-                        </div>
+            <div>
+                <RibbonMenu
+                    logo={(
+                        <span className="ribbon-logo" title="AstroGravity">
+                            <img src="/AstroGravity_Logo_1.jpg" alt="AstroGravity" />
+                        </span>
                     )}
-
-                    {userType === 'advance' && (
-                        <>
-                            <div
-                                className="sidebar-header"
-                                style={{ marginTop: '0.5rem', marginBottom: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                                onClick={() => setUtilityOpen(!utilityOpen)}
+                    title={t('savedCharts.title', 'My Charts')}
+                    rightContent={userType === 'advance' ? (
+                        <div style={{ position: 'relative' }}>
+                            <button
+                                type="button"
+                                className="ribbon-action"
+                                onClick={() => setShowColumnMenu(!showColumnMenu)}
                             >
-                                <h3>{t('nav.utility', 'Utility')}</h3>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: '1' }}>{utilityOpen ? '▾' : '▸'}</span>
-                            </div>
-                            {utilityOpen && (
-                                <div className="sidebar-tabs">
-                                    <div style={{ position: 'relative', width: '100%' }}>
-                                        <button
-                                            type="button"
-                                            className="sidebar-tab"
-                                            onClick={() => setShowColumnMenu(!showColumnMenu)}
-                                        >
-                                            {t('nav.columns', 'Columns')} ▾
-                                        </button>
-                                        {showColumnMenu && (
-                                            <div className="column-menu">
-                                                <label><input type="checkbox" checked={visibleColumns.savedOn} onChange={() => toggleColumn('savedOn')} /> {t('cols.lastSaveDate', 'Last Save Date')}</label>
-                                                <label><input type="checkbox" checked={visibleColumns.ayanamsa} onChange={() => toggleColumn('ayanamsa')} /> {t('cols.ayanamsa', 'Ayanamsa')}</label>
-                                                <label><input type="checkbox" checked={visibleColumns.happiness} onChange={() => toggleColumn('happiness')} /> {t('cols.happiness', 'Happiness')}</label>
-                                                <label><input type="checkbox" checked={visibleColumns.wealth} onChange={() => toggleColumn('wealth')} /> {t('cols.wealth', 'Wealth')}</label>
-                                                <label><input type="checkbox" checked={visibleColumns.health} onChange={() => toggleColumn('health')} /> {t('cols.health', 'Health')}</label>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sidebar-tab"
-                                        onClick={handleDownloadTemplate}
-                                    >
-                                        {t('nav.template', 'Template')}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="sidebar-tab"
-                                        onClick={handleExport}
-                                    >
-                                        {t('nav.export', 'Export')}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="sidebar-tab"
-                                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                                    >
-                                        {t('nav.import', 'Import')}
-                                    </button>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        style={{ display: 'none' }}
-                                        accept=".csv"
-                                        onChange={handleImport}
-                                    />
+                                <span className="ribbon-action-icon">{Icons.columns()}</span>
+                                Columns
+                            </button>
+                            {showColumnMenu && (
+                                <div className="top-nav-dropdown" style={{ right: 0, left: 'auto' }}>
+                                    <label><input type="checkbox" checked={visibleColumns.savedOn} onChange={() => toggleColumn('savedOn')} /> {t('cols.lastSaveDate', 'Last Save Date')}</label>
+                                    <label><input type="checkbox" checked={visibleColumns.ayanamsa} onChange={() => toggleColumn('ayanamsa')} /> {t('cols.ayanamsa', 'Ayanamsa')}</label>
+                                    <label><input type="checkbox" checked={visibleColumns.happiness} onChange={() => toggleColumn('happiness')} /> {t('cols.happiness', 'Happiness')}</label>
+                                    <label><input type="checkbox" checked={visibleColumns.wealth} onChange={() => toggleColumn('wealth')} /> {t('cols.wealth', 'Wealth')}</label>
+                                    <label><input type="checkbox" checked={visibleColumns.health} onChange={() => toggleColumn('health')} /> {t('cols.health', 'Health')}</label>
                                 </div>
                             )}
-                        </>
-                    )}
+                        </div>
+                    ) : null}
+                    defaultTabKey="myCharts"
+                    tabs={[
+                        {
+                            key: 'myCharts',
+                            label: 'My Charts',
+                            icon: Icons.grid(),
+                            groups: [
+                                {
+                                    key: 'chartActions',
+                                    label: 'Charts',
+                                    actions: [
+                                        { key: 'newChart', label: 'New Chart', onClick: handleAddNew, variant: 'primary', icon: Icons.chart() },
+                                        { key: 'palmistry', label: 'Palmistry', onClick: () => { if (onOpenPalmistry) { onOpenPalmistry(); } else { alert('Palmistry handler missing!'); } }, icon: Icons.chart() }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            key: 'tools',
+                            label: t('nav.tools', 'Tools'),
+                            icon: Icons.tool(),
+                            groups: [
+                                {
+                                    key: 'toolsGroup',
+                                    label: 'Tools',
+                                    actions: [
+                                        ...(userType === 'advance'
+                                            ? [{ key: 'matchNew', label: t('nav.matchMakingNew', 'Match Making - New'), onClick: onOpenMatchNew, icon: Icons.star() }]
+                                            : []),
+                                        { key: 'matchTrad', label: t('nav.matchMakingTrad', 'Match Making - Trad'), onClick: onOpenMatchTraditional, icon: Icons.star() },
+                                        { key: 'foreignTravelNew', label: t('nav.foreignTravelNew', 'Foreign Travel - New'), onClick: onOpenForeignTravelNew, icon: Icons.star() },
+                                        { key: 'jobBusinessNew', label: 'Job vs Business - New', onClick: onOpenJobBusinessNew, icon: Icons.chart() },
+                                        { key: 'businessPartnership', label: 'Advanced Compatibility Input', onClick: onOpenBusinessPartnershipInput, icon: Icons.chart() },
+                                        { key: 'businessPartnershipV6', label: 'Business Partnership - V6.1', onClick: onOpenBusinessPartnershipV6, icon: Icons.chart() },
+                                        { key: 'astrogravityTest', label: 'Test - Decision Engine', onClick: onOpenAstrogravityTest, icon: Icons.chart() },
+                                        { key: 'geminiTest', label: 'Test 1Engines', onClick: onOpenGeminiTest, icon: Icons.chart() },
+                                        { key: 'namakaran', label: t('nav.namakaran', 'Namakaran'), onClick: onOpenNamakaran, icon: Icons.report() },
+                                        { key: 'btrNew', label: t('nav.birthTimeRectification', 'Birth Time Rectification'), onClick: onOpenBTRNew, icon: Icons.table() },
+                                        { key: 'planetaryImpact', label: 'Planetry Changes and Its Impact', onClick: onOpenPlanetaryChangesImpact, icon: Icons.chart() },
+                                        { key: 'familyOS', label: 'Family OS', onClick: onOpenFamilyOS, icon: Icons.chart() }
+                                    ]
+                                }
+                            ]
+                        },
+                        ...(userType === 'advance'
+                            ? [
+                                {
+                                    key: 'utility',
+                                    label: t('nav.utility', 'Utility'),
+                                    icon: Icons.table(),
+                                    groups: [
+                                        {
+                                            key: 'fileGroup',
+                                            label: 'File',
+                                            actions: [
+                                                { key: 'template', label: t('nav.template', 'Template'), onClick: handleDownloadTemplate, icon: Icons.download() },
+                                                { key: 'export', label: t('nav.export', 'Export'), onClick: handleExport, icon: Icons.download() },
+                                                { key: 'import', label: t('nav.import', 'Import'), onClick: () => fileInputRef.current && fileInputRef.current.click(), icon: Icons.upload() }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                            : []),
+                        {
+                            key: 'logout',
+                            label: t('settings.logout', 'Logout'),
+                            icon: Icons.logout(),
+                            groups: [
+                                {
+                                    key: 'logoutGroup',
+                                    label: 'Account',
+                                    actions: [
+                                        { key: 'logoutBtn', label: t('settings.logout', 'Logout'), onClick: onLogout, icon: Icons.logout() }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]}
+                />
 
-                    <div className="sidebar-header" style={{ marginTop: '1rem' }}>
-                        <h3>{t('settings.logout', 'Logout')}</h3>
-                    </div>
-                    <div className="sidebar-tabs">
-                        <button
-                            type="button"
-                            className="sidebar-tab"
-                            onClick={onLogout}
-                            style={{ marginTop: '0.5rem', color: '#ef4444' }}
-                        >
-                            {t('settings.logout', 'Logout')}
-                        </button>
-                    </div>
-                </aside>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    accept=".csv"
+                    onChange={handleImport}
+                />
 
                 <div className="results-content-column">
                     {error && <div className="error-msg">{error}</div>}

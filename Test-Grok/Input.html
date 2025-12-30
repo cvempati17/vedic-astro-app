@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrogravity Multi-Domain Input Form</title>
+</head>
+<body>
+    <h1>Astrogravity Decision Input</h1>
+    <form id="input-form">
+        <section>
+            <h2>Domain Selection</h2>
+            <label for="domain">Select Domain:</label>
+            <select id="domain" name="domain" required>
+                <option value="Business Partnership">Business Partnership</option>
+                <option value="Foreign Travel & Immigration">Foreign Travel & Immigration</option>
+                <option value="Career & Profession">Career & Profession</option>
+                <option value="Marriage & Relationships">Marriage & Relationships</option>
+                <option value="Love & Romance">Love & Romance</option>
+                <option value="Finance & Wealth">Finance & Wealth</option>
+                <option value="Health & Well-being">Health & Well-being</option>
+                <option value="Education & Studies">Education & Studies</option>
+                <option value="Family & Domestic Life">Family & Domestic Life</option>
+                <option value="Children & Parenthood">Children & Parenthood</option>
+                <option value="Foreign Travel & Settlement">Foreign Travel & Settlement</option>
+                <option value="Spirituality & Life Purpose">Spirituality & Life Purpose</option>
+                <option value="Timing & Destiny">Timing & Destiny</option>
+                <option value="Legal & Disputes">Legal & Disputes</option>
+                <option value="Personality & Self">Personality & Self</option>
+                <option value="Compatibility & Matching">Compatibility & Matching</option>
+                <option value="Marriage + Business Compatibility">Marriage + Business Compatibility</option>
+                <option value="Compatibility Scoring">Compatibility Scoring</option>
+                <option value="Consultation Decision Tree">Consultation Decision Tree</option>
+            </select><br>
+        </section>
+        <section>
+            <h2>Person 1 Birth Data</h2>
+            <label for="p1_date">Date of Birth (YYYY-MM-DD):</label>
+            <input type="date" id="p1_date" name="p1_date" required><br>
+            <label for="p1_time">Time of Birth (HH:MM):</label>
+            <input type="time" id="p1_time" name="p1_time" required><br>
+            <label for="p1_place">Place of Birth (City, Country):</label>
+            <input type="text" id="p1_place" name="p1_place" required><br>
+        </section>
+        <section>
+            <h2>Optional Person 2 Birth Data (for Compatibility/Partnerships)</h2>
+            <label for="p2_date">Date of Birth (YYYY-MM-DD):</label>
+            <input type="date" id="p2_date" name="p2_date"><br>
+            <label for="p2_time">Time of Birth (HH:MM):</label>
+            <input type="time" id="p2_time" name="p2_time"><br>
+            <label for="p2_place">Place of Birth (City, Country):</label>
+            <input type="text" id="p2_place" name="p2_place"><br>
+        </section>
+        <section>
+            <h2>Domain-Specific Inputs</h2>
+            <label for="current_status">Current Status Level (0-10):</label>
+            <input type="number" id="current_status" name="current_status" min="0" max="10"><br>
+            <label for="goal_description">Goal Description:</label>
+            <textarea id="goal_description" name="goal_description"></textarea><br>
+            <label for="risk_tolerance">Risk Tolerance (0-10):</label>
+            <input type="number" id="risk_tolerance" name="risk_tolerance" min="0" max="10"><br>
+        </section>
+        <section>
+            <h2>Optional Feedback Inputs</h2>
+            <label for="actual_outcome">Actual Outcome Score (0-10):</label>
+            <input type="number" id="actual_outcome" name="actual_outcome" min="0" max="10"><br>
+            <label for="feedback_text">Feedback Text:</label>
+            <textarea id="feedback_text" name="feedback_text"></textarea><br>
+        </section>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

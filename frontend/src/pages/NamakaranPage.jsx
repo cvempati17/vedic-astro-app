@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { NAKSHATRA_SYLLABLES, generateNames, fetchNameDatabase } from '../utils/namakaranUtils';
 import CitySearch from '../components/CitySearch';
 
-const API_URL = 'http://localhost:5001'; // Hardcoded for debugging as per previous fix
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 const NamakaranPage = ({ onBack }) => {
     const { t } = useTranslation();
@@ -151,7 +151,7 @@ const NamakaranPage = ({ onBack }) => {
                 ← {t('namakaran.backToSaved', 'Back to Saved Charts')}
             </button>
 
-            <h1 style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--accent-color)' }}>{t('namakaran.title', 'Namakaran (Naming Ceremony)')}</h1>
+            <h1 style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--accent-color)' }}>{t('namakaran.title', 'Namakaran (Select Name)')}</h1>
 
             <div className="form-section" style={{ background: 'var(--card-bg)', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
                 <h3>{t('namakaran.birthDetails', '1. Birth Details')}</h3>
@@ -190,7 +190,6 @@ const NamakaranPage = ({ onBack }) => {
                 </div>
 
                 <div className="input-group" style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>{t('cols.place', 'Place of Birth')}</label>
                     <CitySearch
                         onCitySelect={handleCitySelect}
                     />
@@ -235,7 +234,6 @@ const NamakaranPage = ({ onBack }) => {
                                 name="gender"
                                 value={formData.gender}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--input-bg)', color: 'var(--text-color)' }}
                             >
                                 <option value="male">{t('gender.male', 'Male')}</option>
                                 <option value="female">{t('gender.female', 'Female')}</option>
@@ -247,7 +245,6 @@ const NamakaranPage = ({ onBack }) => {
                                 name="religion"
                                 value={formData.religion}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--input-bg)', color: 'var(--text-color)' }}
                             >
                                 <option value="Hindu">Hindu</option>
                                 <option value="Muslim">Muslim</option>
@@ -264,7 +261,6 @@ const NamakaranPage = ({ onBack }) => {
                             name="basedOn"
                             value={formData.basedOn}
                             onChange={(e) => setFormData({ ...formData, basedOn: e.target.value, specificPreference: '' })}
-                            style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--input-bg)', color: 'var(--text-color)' }}
                         >
                             <option value="Nakshatra">{t('namakaran.nakshatraSyllables', 'Nakshatra Syllables')} ({nakshatraData.syllables.join(', ')})</option>
                             <option value="Religion">{t('namakaran.religionOnly', 'Religion Only')}</option>
@@ -282,7 +278,6 @@ const NamakaranPage = ({ onBack }) => {
                                 name="specificPreference"
                                 value={formData.specificPreference}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--input-bg)', color: 'var(--text-color)' }}
                             >
                                 <option value="">-- {t('namakaran.select', 'Select')} --</option>
                                 {getSpecificOptions().map(opt => (

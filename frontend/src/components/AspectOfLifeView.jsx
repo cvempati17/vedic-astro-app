@@ -19,7 +19,7 @@ const AspectOfLifeView = ({ chartData, birthDate }) => {
 
     const allAspects = [
         'career', 'marriage', 'health', 'finances', 'kids',
-        'parents', 'siblings', 'business', 'spiritual'
+        'parents', 'siblings', 'education', 'business', 'spiritual'
     ];
 
     const [selectedAspects, setSelectedAspects] = useState(allAspects.slice(0, 4));
@@ -141,12 +141,16 @@ const AspectOfLifeView = ({ chartData, birthDate }) => {
                                     <td>{row.bhukti}</td>
                                     <td>{row.yearRange}</td>
                                     {selectedAspects.map(key => {
-                                        const score = row.aspects[key].score;
+                                        const aspectData = row.aspects[key];
+                                        if (!aspectData) {
+                                            return <td key={key}>-</td>;
+                                        }
+                                        const score = aspectData.score;
                                         const color = score >= 7
                                             ? '#166534' // good
                                             : score <= 4
                                                 ? '#b91c1c' // challenging
-                                                : '#1f2937'; // average (between 4 and 7)
+                                                : '#ffffff'; // average (between 4 and 7)
 
                                         let quality = 'Average';
                                         if (score >= 7) quality = 'Good';
@@ -201,7 +205,7 @@ const AspectOfLifeView = ({ chartData, birthDate }) => {
                                     </td>
                                     {selectedAspects.map(key => (
                                         <td key={key} className={selectedAspect === key ? 'highlight-cell' : ''}>
-                                            {row.aspects[key].reason}
+                                            {row.aspects[key] ? row.aspects[key].reason : '-'}
                                         </td>
                                     ))}
                                 </tr>
@@ -237,7 +241,7 @@ const AspectOfLifeView = ({ chartData, birthDate }) => {
                                                         <div className="custom-tooltip">
                                                             <p className="label">{`${data.mahadasha}-${data.bhukti} (${label})`}</p>
                                                             <p className="intro">{`Score: ${payload[0].value}`}</p>
-                                                            <p className="desc">{data.aspects[key].reason}</p>
+                                                            <p className="desc">{data.aspects[key] ? data.aspects[key].reason : 'No data'}</p>
                                                         </div>
                                                     );
                                                 }
@@ -246,11 +250,12 @@ const AspectOfLifeView = ({ chartData, birthDate }) => {
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey={(d) => d.aspects[key].score}
+                                            dataKey={(d) => d.aspects[key] ? d.aspects[key].score : null}
                                             stroke="#8884d8"
                                             strokeWidth={2}
                                             dot={{ r: 3 }}
                                             activeDot={{ r: 6 }}
+                                            connectNulls
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>

@@ -1,0 +1,178 @@
+.about-me-container {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+    min-height: 500px;
+    color: var(--text-on-dark);
+}
+
+.about-me-sidebar {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.05);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+}
+
+.about-me-nav-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+}
+
+.about-me-nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-on-dark);
+}
+
+.about-me-nav-item.active {
+    background: rgba(197, 160, 89, 0.2);
+    color: var(--accent-gold);
+    border-left: 3px solid var(--accent-gold);
+}
+
+.about-me-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: var(--card-bg);
+    border-radius: 8px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    color: var(--accent-gold);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Ranking Lists */
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ranking-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rank-badge {
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.item-details h4 {
+    margin: 0 0 5px 0;
+    color: var(--text-on-dark);
+}
+
+.item-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Health Body Container */
+.body-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.body-silhouette {
+    width: 200px;
+    height: 400px;
+    fill: rgba(255, 255, 255, 0.1);
+    stroke: var(--accent-gold);
+    stroke-width: 2;
+}
+
+.body-part-highlight {
+    fill: #EF4444;
+    /* Red for areas of concern */
+    opacity: 0.7;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+/* Finance Table */
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.finance-table th,
+.finance-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.finance-table th {
+    color: var(--accent-gold);
+}
+
+.finance-input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    color: var(--text-on-dark);
+    padding: 5px;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.finance-input:focus {
+    border-color: var(--accent-gold);
+    outline: none;
+}
+
+/* EOL Grid */
+.eol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.eol-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border-top: 3px solid var(--accent-gold);
+}
