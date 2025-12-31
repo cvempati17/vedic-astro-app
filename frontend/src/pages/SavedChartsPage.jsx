@@ -87,7 +87,6 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
     }, []);
 
     // Load ValueStream widget script
-    /*
     useEffect(() => {
         const script = document.createElement('script');
         script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
@@ -101,10 +100,11 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
 
         return () => {
             // Cleanup: remove script when component unmounts
-            document.body.removeChild(script);
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
         };
     }, []);
-    */
 
     const handleSort = (key) => {
         let direction = 'ascending';

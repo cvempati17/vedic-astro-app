@@ -8,6 +8,8 @@ const LoginPage = ({ onLogin }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [showEmailAuth, setShowEmailAuth] = useState(false);
+    const [showGuestInput, setShowGuestInput] = useState(false);
+    const [guestName, setGuestName] = useState('');
 
     useEffect(() => {
         // Load Google's Sign-In JavaScript library
@@ -85,26 +87,27 @@ const LoginPage = ({ onLogin }) => {
         });
     };
 
-    const handleZohoLogin = () => {
-        setIsLoading(true);
-
-        // Demo Zoho login
-        setTimeout(() => {
-            onLogin({
-                name: 'Demo User (Zoho)',
-                email: 'demo@zoho.com',
-                provider: 'zoho'
-            });
-            setIsLoading(false);
-        }, 1000);
+    const handleGuestLoginClick = () => {
+        setShowGuestInput(true);
     };
 
-    const handleGuestLogin = () => {
+    const handleGuestSubmit = (e) => {
+        e.preventDefault();
+        if (!guestName.trim()) {
+            alert(t('auth.enterName', 'Please enter your name'));
+            return;
+        }
+
         const guestUser = {
-            name: 'Guest User',
+            name: guestName,
             email: 'guest@example.com',
             isGuest: true
         };
+
+        // Persist guest session
+        localStorage.setItem('guestName', guestName);
+        localStorage.setItem('isGuest', 'true');
+
         onLogin(guestUser);
     };
 
@@ -115,6 +118,63 @@ const LoginPage = ({ onLogin }) => {
             provider: 'email'
         });
     };
+
+    if (showGuestInput) {
+        return (
+            <div className="login-container" style={{ zIndex: 1, position: 'relative' }}>
+                <div className="login-content-wrapper">
+                    <div className="login-image-section">
+                        <img src={parrotImage} alt="Vedic Astrologer" className="parrot-image" />
+                        <div className="image-overlay"></div>
+                    </div>
+
+                    <div className="login-card">
+                        <header className="login-header">
+                            <h1 className="app-title">{t('auth.guestLogin', 'Guest Login')}</h1>
+                            <p className="app-subtitle">{t('auth.enterNameSubtitle', 'Please enter your name to continue')}</p>
+                        </header>
+
+                        <div className="login-body">
+                            <form onSubmit={handleGuestSubmit} style={{ width: '100%' }}>
+                                <div className="input-group" style={{ marginBottom: '20px' }}>
+                                    <input
+                                        type="text"
+                                        placeholder={t('auth.yourName', 'Your Name')}
+                                        value={guestName}
+                                        onChange={(e) => setGuestName(e.target.value)}
+                                        className="auth-input"
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            background: 'rgba(255, 255, 255, 0.05)',
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            borderRadius: '8px',
+                                            color: 'white',
+                                            fontSize: '16px'
+                                        }}
+                                        autoFocus
+                                    />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <button type="submit" className="oauth-btn guest-btn" style={{ justifyContent: 'center' }}>
+                                        {t('auth.continue', 'Continue')}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="oauth-btn"
+                                        onClick={() => setShowGuestInput(false)}
+                                        style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', justifyContent: 'center' }}
+                                    >
+                                        {t('auth.back', 'Back')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (showEmailAuth) {
         console.log("LoginPage: Rendering EmailAuth component");
@@ -161,7 +221,7 @@ const LoginPage = ({ onLogin }) => {
 
                     <div className="login-body">
                         {/* Guest Mode Button */}
-                        <button className="oauth-btn guest-btn" onClick={handleGuestLogin}>
+                        <button className="oauth-btn guest-btn" onClick={handleGuestLoginClick}>
                             <span>{t('auth.continueGuest')}</span>
                         </button>
 
