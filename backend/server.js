@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const { calculatePlanetaryPositions } = require('./astroService');
 const authRoutes = require('./routes/auth');
 const chartRoutes = require('./routes/charts');
+const muhuratRoutes = require('./routes/muhurat');
+const tithiRoutes = require('./routes/tithi');
 
 // Connect to Database
 // Connect to Database
@@ -30,6 +32,8 @@ app.use((req, res, next) => {
 // Auth routes
 app.use('/api/auth', authRoutes);
 app.use('/api/charts', chartRoutes);
+app.use('/api/muhurat', muhuratRoutes);
+app.use('/api/tithi', tithiRoutes);
 
 const ZODIAC_SIGNS = [
     'Aries',

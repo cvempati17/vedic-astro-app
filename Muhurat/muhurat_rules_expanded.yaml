@@ -1,0 +1,280 @@
+
+muhurat_engine:
+  name: Person-Centric Muhurat Rule Engine
+  version: 1.1
+  ayanamsa: Lahiri
+  timezone: IST
+  calendar: Gregorian
+
+# =====================================================
+# PERSON & CHART DEFINITIONS
+# =====================================================
+person_definition:
+  required_fields:
+    identity:
+      - name
+      - relationship   # husband | wife | child
+    birth_details:
+      - date_of_birth
+      - time_of_birth
+      - place
+      - latitude
+      - longitude
+    derived_chart:
+      lagna:
+        - sign
+        - degree
+        - lord
+        - lord_strength
+      moon:
+        - rashi
+        - nakshatra
+        - pada
+      janma_nakshatra: true
+
+# =====================================================
+# GLOBAL PANCHANGA RESTRICTIONS
+# =====================================================
+global_restrictions:
+  tithi:
+    avoid:
+      - Amavasya
+      - Purnima
+      - Chaturdashi
+  yoga:
+    avoid:
+      - Vyatipata
+      - Vaidhriti
+      - Ganda
+  karana:
+    avoid:
+      - Vishti
+  weekdays:
+    avoid:
+      - Sunday
+  eclipses:
+    solar: avoid
+    lunar: avoid
+  sankranti_day: avoid
+
+# =====================================================
+# NAKSHATRA LOGIC
+# =====================================================
+nakshatra_rules:
+  tara_bala:
+    mapping:
+      Janma: 60
+      Sampat: 100
+      Vipat: 20
+      Kshema: 100
+      Pratyak: 20
+      Sadhaka: 100
+      Naidhana: 0
+      Mitra: 100
+      ParamaMitra: 100
+    good:
+      - Sampat
+      - Kshema
+      - Sadhaka
+      - Mitra
+      - ParamaMitra
+    bad:
+      - Vipat
+      - Pratyak
+      - Naidhana
+    weight: 4
+
+  quality:
+    benefic:
+      - Rohini
+      - Hasta
+      - Pushya
+      - Uttara Phalguni
+      - Uttara Ashadha
+      - Uttara Bhadrapada
+    neutral:
+      - Mrigashira
+      - Anuradha
+      - Revati
+    malefic:
+      - Ardra
+      - Ashlesha
+      - Jyeshtha
+      - Mula
+    scores:
+      benefic: 100
+      neutral: 70
+      malefic: 30
+    weight: 2
+
+# =====================================================
+# RASHI (CHANDRA BALA) LOGIC
+# =====================================================
+rashi_rules:
+  chandra_bala:
+    favorable_positions:
+      - 1
+      - 3
+      - 6
+      - 7
+      - 10
+      - 11
+    neutral_positions:
+      - 4
+      - 5
+      - 9
+    unfavorable_positions:
+      - 2
+      - 8
+      - 12
+    scores:
+      favorable: 100
+      neutral: 60
+      unfavorable: 0
+    weight: 3
+
+# =====================================================
+# LAGNA LOGIC
+# =====================================================
+lagna_rules:
+  lagna_shuddhi:
+    avoid_houses:
+      - 6
+      - 8
+      - 12
+    preferred_signs:
+      - Taurus
+      - Cancer
+      - Leo
+      - Libra
+    avoid_signs:
+      - Scorpio
+      - Capricorn
+    scores:
+      strong: 100
+      medium: 70
+      weak: 30
+    weight: 4
+
+  lagna_lord_strength:
+    exalted: 100
+    own_sign: 90
+    friendly_sign: 75
+    enemy_sign: 40
+    debilitated: 0
+    weight: 2
+
+# =====================================================
+# CEREMONY DEFINITIONS
+# =====================================================
+ceremonies:
+
+  marriage:
+    participants:
+      - husband
+      - wife
+    importance:
+      nakshatra: 4
+      rashi: 3
+      lagna: 3
+    restrictions:
+      avoid_months:
+        - Ashada
+        - Shravana
+        - Bhadrapada
+      avoid_same_gotra: true
+
+  house_warming:
+    participants:
+      - husband
+      - wife
+    importance:
+      lagna: 5
+      rashi: 3
+      nakshatra: 2
+    restrictions:
+      lagna_must_be_fixed_or_dual: true
+      moon_not_in_8th: true
+
+  ground_breaking:
+    participants:
+      - husband
+    importance:
+      lagna: 5
+      nakshatra: 3
+      rashi: 2
+    preferred_nakshatra:
+      - Rohini
+      - Mrigashira
+      - Uttara Phalguni
+
+  naming_ceremony:
+    participants:
+      - child
+    importance:
+      nakshatra: 5
+      lagna: 3
+      rashi: 2
+    restrictions:
+      avoid_janma_nakshatra: true
+
+  gestation:
+    participants:
+      - wife
+    importance:
+      nakshatra: 5
+      rashi: 3
+      lagna: 2
+    restrictions:
+      moon_not_in_6_8_12: true
+
+  annaprashana:
+    participants:
+      - child
+    importance:
+      nakshatra: 5
+      lagna: 3
+      rashi: 2
+
+  mundan:
+    participants:
+      - child
+    importance:
+      nakshatra: 4
+      lagna: 4
+      rashi: 2
+
+# =====================================================
+# SCORING & RANKING
+# =====================================================
+scoring_engine:
+  formula: >
+    (NakshatraScore * NakshatraWeight) +
+    (RashiScore * RashiWeight) +
+    (LagnaScore * LagnaWeight) +
+    Bonus - Penalty
+
+  ranking:
+    excellent: ">=80"
+    good: ">=65"
+    average: ">=50"
+    avoid: "<50"
+
+# =====================================================
+# OUTPUT & EXPLANATION
+# =====================================================
+output:
+  include_columns:
+    - rank
+    - date
+    - weekday
+    - nakshatra
+    - tithi
+    - lagna
+    - score
+    - quality
+  explanation_fields:
+    - tara_bala_result
+    - chandra_bala_result
+    - lagna_quality
+    - applied_doshas

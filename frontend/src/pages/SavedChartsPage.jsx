@@ -7,7 +7,7 @@ import RibbonMenu from '../components/RibbonMenu';
 import { Icons } from '../components/uiIcons.jsx';
 import './SavedChartsPage.css';
 
-const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenBTR, onOpenBTRNew, onOpenForeignTravelNew, onOpenJobBusinessNew, onOpenBusinessPartnershipInput, onOpenBusinessPartnershipV6, onOpenAstrogravityTest, onOpenGeminiTest, onOpenPalmistry, onOpenPlanetaryChangesImpact, onOpenFamilyOS, onOpenSettings, onLogout, userType = 'basic' }) => {
+const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenBTR, onOpenBTRNew, onOpenForeignTravelNew, onOpenJobBusinessNew, onOpenBusinessPartnershipInput, onOpenBusinessPartnershipV6, onOpenAstrogravityTest, onOpenGeminiTest, onOpenPalmistry, onOpenPlanetaryChangesImpact, onOpenFamilyOS, onOpenMuhurat, onOpenTithi, onOpenSettings, onLogout, userType = 'basic' }) => {
     const { t } = useTranslation(); // Initialize hook
     const [charts, setCharts] = useState([]);
     // ... (rest of the file until sidebar)
@@ -674,7 +674,9 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                                         { key: 'namakaran', label: t('nav.namakaran', 'Namakaran'), onClick: onOpenNamakaran, icon: Icons.report() },
                                         { key: 'btrNew', label: t('nav.birthTimeRectification', 'Birth Time Rectification'), onClick: onOpenBTRNew, icon: Icons.table() },
                                         { key: 'planetaryImpact', label: 'Planetry Changes and Its Impact', onClick: onOpenPlanetaryChangesImpact, icon: Icons.chart() },
-                                        { key: 'familyOS', label: 'Family OS', onClick: onOpenFamilyOS, icon: Icons.chart() }
+                                        { key: 'familyOS', label: 'Family OS', onClick: onOpenFamilyOS, icon: Icons.chart() },
+                                        { key: 'muhurat', label: 'Muhurat', onClick: onOpenMuhurat, icon: Icons.chart() },
+                                        { key: 'tithi', label: 'Thithi Calculator', onClick: onOpenTithi, icon: Icons.chart() }
                                     ]
                                 }
                             ]
