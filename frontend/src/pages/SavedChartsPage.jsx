@@ -88,6 +88,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
 
     // Load ValueStream widget script
     useEffect(() => {
+        console.log("Mounting ValueStream Widget Script...");
         const script = document.createElement('script');
         script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
         script.setAttribute('data-project', 'AstroGravity');
@@ -96,11 +97,15 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
         script.setAttribute('data-api-url', 'https://speak.valuestream.in');
         script.async = true;
 
+        script.onload = () => console.log("ValueStream Widget Script Loaded Successfully");
+        script.onerror = (e) => console.error("ValueStream Widget Script Failed to Load", e);
+
         document.body.appendChild(script);
 
         return () => {
             // Cleanup: remove script when component unmounts
             if (document.body.contains(script)) {
+                console.log("Cleaning up ValueStream Widget Script...");
                 document.body.removeChild(script);
             }
         };
