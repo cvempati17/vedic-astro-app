@@ -111,58 +111,39 @@ router.post('/calculate', async (req, res) => {
 
         // Algo to find Gregorian Date in 'searchYear'
         // Scan full year
-        const results = [];
-        const start = new Date(searchYear, 0, 1);
-        const end = new Date(searchYear, 11, 31);
+        let results = [];
 
-        // Define Tamil Months for use in loop
-        const TAMIL_MONTHS_LOOP = [
-            "Chithirai", "Vaikasi", "Aani", "Aadi", "Avani", "Purhattasi",
-            "Aippasi", "Karthigai", "Margazhi", "Thai", "Maasi", "Panguni"
-        ];
+        // Helper function for search range
+        const searchRange = (sYear, sMonth, sDay, eYear, eMonth, eDay) => {
+            const rangeResults = [];
+            const rStart = new Date(sYear, sMonth, sDay);
+            const rEnd = new Date(eYear, eMonth, eDay);
 
-        try {
-            for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-                // Formatting date carefully
+            for (let d = rStart; d <= rEnd; d.setDate(d.getDate() + 1)) {
                 const dateStr = d.toISOString().split('T')[0];
-
-                // Wrap pancang calculation for safety
                 try {
                     const p = calculatePanchang(dateStr, "12:00", location.lat, location.lng, 5.5);
-
-                    // Check Tithi Match
                     if (p.tithi.index === targetTithiIndex) {
-                        // Match Found for Tithi. Now verify Month Logic.
-
-                        // We need to calculate the Lunar Month for this candidate date efficiently.
-                        // Backtrack to previous New Moon.
+                        // Check Month
                         const dDaysSinceNM = p.tithi.index;
                         const dNMDate = new Date(d);
                         dNMDate.setDate(d.getDate() - dDaysSinceNM);
                         const dNMStr = dNMDate.toISOString().split('T')[0];
-
                         const dNMPan = calculatePanchang(dNMStr, "12:00", location.lat, location.lng, 5.5);
                         const dNMSunSign = Math.floor(dNMPan.positions.Sun.longitude / 30);
-
                         const dAmantaIndex = (dNMSunSign + 1) % 12;
 
-                        // Does it match our target Month?
                         if (dAmantaIndex === targetMonthIndex) {
-                            // MATCH CONFIRMED
-
                             const dAmantaName = HINDU_MONTHS_Amanta[dAmantaIndex];
-
-                            // Regional Variations
                             let dPurnimantaName = dAmantaName;
                             if (p.tithi.paksha === 'Krishna') {
                                 const pIdx = (dAmantaIndex + 1) % 12;
-                                dPurnimantaName = HINDU_MONTHS_Amanta[pIdx]; // Purnimanta is 1 month ahead in Krishna Paksha
+                                dPurnimantaName = HINDU_MONTHS_Amanta[pIdx];
                             }
-
                             const dCurrentSunSign = Math.floor(p.positions.Sun.longitude / 30);
                             const dTamilName = TAMIL_MONTHS_LOOP[dCurrentSunSign];
 
-                            results.push({
+                            rangeResults.push({
                                 date: dateStr,
                                 tithi: p.tithi.name,
                                 paksha: p.tithi.paksha,
@@ -174,17 +155,40 @@ router.post('/calculate', async (req, res) => {
                             });
                         }
                     }
-                } catch (pError) {
-                    // Ignore individual day calculation errors (e.g. malformed ephemeris data)
-                    // console.warn(`Skipping date ${dateStr} due to calculation error`);
+                } catch (e) {
+                    // Ignore
                 }
             }
+            return rangeResults;
+        };
+
+        try {
+            // 1. Primary Search: Full Target Year
+            results = searchRange(searchYear, 0, 1, searchYear, 11, 31);
+
+            // 2. Fallback: If no results, check overlaps (Dec prev - Mar next)
+            let note = null;
+            if (results.length === 0) {
+                console.log(`No results for ${searchYear}, attempting fallback search...`);
+
+                // Search Previous Dec
+                const prevResults = searchRange(searchYear - 1, 11, 1, searchYear - 1, 11, 31);
+                // Search Next Jan-Mar
+                const nextResults = searchRange(searchYear + 1, 0, 1, searchYear + 1, 2, 31);
+
+                results = [...prevResults, ...nextResults];
+
+                if (results.length > 0) {
+                    note = `No exact match found in ${searchYear}. Showing nearest dates from adjacent years (due to lunar calendar shifts).`;
+                }
+            }
+
+            res.json({ success: true, results, note });
+
         } catch (loopError) {
             console.error("Error in Search Loop:", loopError);
             throw new Error("Failed to search dates: " + loopError.message);
         }
-
-        res.json({ success: true, results });
 
     } catch (e) {
         console.error(e);
