@@ -119,6 +119,12 @@ router.post('/calculate', async (req, res) => {
             const rStart = new Date(sYear, sMonth, sDay);
             const rEnd = new Date(eYear, eMonth, eDay);
 
+            // Define Tamil Months for use in loop
+            const TAMIL_MONTHS_LOOP = [
+                "Chithirai", "Vaikasi", "Aani", "Aadi", "Avani", "Purhattasi",
+                "Aippasi", "Karthigai", "Margazhi", "Thai", "Maasi", "Panguni"
+            ];
+
             for (let d = rStart; d <= rEnd; d.setDate(d.getDate() + 1)) {
                 const dateStr = d.toISOString().split('T')[0];
                 try {
@@ -156,7 +162,7 @@ router.post('/calculate', async (req, res) => {
                         }
                     }
                 } catch (e) {
-                    // Ignore
+                    console.error(`Error processing date ${dateStr}:`, e);
                 }
             }
             return rangeResults;
