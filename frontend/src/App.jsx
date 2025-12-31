@@ -78,7 +78,8 @@ function App() {
     console.log(`Mounting ValueStream Widget for ${currentPage} as ${userId}`);
     const script = document.createElement('script');
     script.id = scriptId;
-    script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
+    // Add timestamp to bypass cache and avoid potential redirect loops
+    script.src = `https://speak.valuestream.in/widget/widget_modern.js?v=${Date.now()}`;
     script.setAttribute('data-project', 'vedic-astro-app.vercel.app');
     script.setAttribute('data-page', currentPage);
     script.setAttribute('data-user-id', userId);
