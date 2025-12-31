@@ -51,6 +51,49 @@ function App() {
   const [settingsReturnPage, setSettingsReturnPage] = useState('saved-charts');
   const [btrNewPageState, setBtrNewPageState] = useState(null);
 
+  // ValueStream Widget Integration
+  React.useEffect(() => {
+    const scriptId = 'valuestream-widget-script';
+
+    // Cleanup function helper
+    const removeScript = () => {
+      const existing = document.getElementById(scriptId);
+      if (existing) {
+        existing.remove();
+      }
+    };
+
+    // Exclude Logic: "Except Homa ('home') and login page"
+    if (currentPage === 'login' || currentPage === 'home') {
+      removeScript();
+      return;
+    }
+
+    // Determine User ID
+    const userId = user?.name || user?.email || 'Guest';
+
+    // Re-mount script to update attributes (Page & User)
+    removeScript();
+
+    console.log(`Mounting ValueStream Widget for ${currentPage} as ${userId}`);
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
+    script.setAttribute('data-project', 'vedic-astro-app.vercel.app');
+    script.setAttribute('data-page', currentPage);
+    script.setAttribute('data-user-id', userId);
+    script.setAttribute('data-api-url', 'https://speak.valuestream.in');
+    script.async = true;
+
+    document.head.appendChild(script);
+
+    return () => {
+      // Optional: clean up on unmount, but mostly handled by the re-mount logic above
+      // We don't want to remove it blindly on every effect run if we are just updating, 
+      // but here we ARE removing and re-adding.
+    };
+  }, [currentPage, user]);
+
   const handleLogin = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);

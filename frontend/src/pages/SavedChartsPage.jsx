@@ -86,40 +86,11 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    // Load ValueStream widget script
+    // Close menu when clicking outside
     useEffect(() => {
-        const scriptId = 'valuestream-widget-script';
-
-        // Prevent duplicate injection
-        if (document.getElementById(scriptId)) {
-            console.log("ValueStream widget script already exists.");
-            return;
-        }
-
-        console.log("Mounting ValueStream Widget Script...");
-        const script = document.createElement('script');
-        script.id = scriptId;
-        script.src = 'https://speak.valuestream.in/widget/widget_modern.js';
-        script.setAttribute('data-project', 'AstroGravity');
-        script.setAttribute('data-page', 'chart-view');
-        script.setAttribute('data-user-id', 'reviewer@astrogravity.in');
-        script.setAttribute('data-api-url', 'https://speak.valuestream.in');
-        script.async = true;
-
-        script.onload = () => console.log("ValueStream Widget Script Loaded Successfully");
-        script.onerror = (e) => console.error("ValueStream Widget Script Failed to Load", e);
-
-        // Append to HEAD for better compatibility
-        document.head.appendChild(script);
-
-        return () => {
-            // Cleanup: remove script when component unmounts
-            const existingScript = document.getElementById(scriptId);
-            if (existingScript) {
-                console.log("Cleaning up ValueStream Widget Script...");
-                existingScript.remove();
-            }
-        };
+        const handleClickOutside = () => setActionMenuOpen(null);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
     const handleSort = (key) => {
