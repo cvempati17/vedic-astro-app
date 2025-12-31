@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Muhurat Input</title>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<h2>Muhurat Selection</h2>
+
+<label>Select Person (Name + Relationship)</label><br>
+<select id="person" style="width:300px">
+  <option>Ramesh (Husband)</option>
+  <option>Sita (Wife)</option>
+  <option>Baby Aarav (Child)</option>
+</select>
+
+<br><br>
+
+<label>Select Ceremony</label><br>
+<select id="ceremony" style="width:300px">
+  <option>Marriage</option>
+  <option>House Warming</option>
+  <option>Ground Breaking</option>
+  <option>Naming Ceremony</option>
+  <option>Gestation</option>
+</select>
+
+<br><br>
+
+<label>Start Date</label><br>
+<input type="date" id="startDate"><br><br>
+
+<label>End Date</label><br>
+<input type="date" id="endDate"><br><br>
+
+<button onclick="getMuhurat()">Get Muhurat</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+<script>
+$('#person').select2();
+$('#ceremony').select2();
+
+function getMuhurat(){
+  alert("Backend Muhurat calculation will be triggered");
+}
+</script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CitySearch = ({ onCitySelect, defaultValue }) => {
+const CitySearch = ({ onCitySelect, defaultValue, label }) => {
     const { t } = useTranslation();
     const [query, setQuery] = useState(defaultValue || '');
     const [results, setResults] = useState([]);
@@ -89,7 +89,7 @@ const CitySearch = ({ onCitySelect, defaultValue }) => {
 
     return (
         <div className="city-search">
-            <label>{t('inputForm.cityLabel')}</label>
+            {label !== null && <label>{label || t('inputForm.cityLabel')}</label>}
             <div className="search-container">
                 <input
                     type="text"

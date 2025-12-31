@@ -1,0 +1,380 @@
+muhurat_engine:
+  name: Advanced Vedic Muhurat Engine
+  version: 2.1
+  ayanamsa: Lahiri
+  timezone: IST
+  calendar: Gregorian
+  philosophy: >
+    Person-centric, ceremony-aware, Lagna-dominant
+    Muhurat system following classical principles
+    from Muhurta Chintamani, Dharma Sindhu, and Phaladeepika.
+
+# =====================================================
+# PERSON & CHART REQUIREMENTS
+# =====================================================
+person_definition:
+  identity:
+    required:
+      - name
+      - relationship            # owner | partner | director
+  birth_details:
+    required:
+      - date_of_birth
+      - time_of_birth
+      - place
+      - latitude
+      - longitude
+  derived_chart:
+    lagna:
+      sign: required
+      degree: required
+      lord: required
+      lord_strength: required
+      lord_house: required
+    moon:
+      rashi: required
+      nakshatra: required
+      pada: required
+    janma_nakshatra: required
+    dhana_yoga_present: optional
+    dasa_running: optional
+
+# =====================================================
+# GLOBAL PANCHANGA RESTRICTIONS (APPLY TO ALL)
+# =====================================================
+global_restrictions:
+  tithi:
+    avoid:
+      - Amavasya
+      - Purnima
+      - Chaturdashi
+      - Ashtami
+  yoga:
+    avoid:
+      - Vyatipata
+      - Vaidhriti
+      - Ganda
+  karana:
+    avoid:
+      - Vishti
+  weekdays:
+    avoid:
+      - Sunday
+  eclipses:
+    solar: avoid
+    lunar: avoid
+  sankranti:
+    day_of_entry: avoid
+  malefic_transits:
+    saturn_over_moon: avoid
+    rahu_over_lagna: avoid
+
+# =====================================================
+# NAKSHATRA ENGINE (SUPPORTIVE, NOT PRIMARY)
+# =====================================================
+nakshatra_rules:
+  tara_bala:
+    mapping:
+      Janma: 60
+      Sampat: 100
+      Vipat: 20
+      Kshema: 100
+      Pratyak: 20
+      Sadhaka: 100
+      Naidhana: 0
+      Mitra: 100
+      ParamaMitra: 100
+    allowed:
+      - Sampat
+      - Kshema
+      - Sadhaka
+      - Mitra
+      - ParamaMitra
+    avoid:
+      - Vipat
+      - Pratyak
+      - Naidhana
+    weight: 2
+
+  nakshatra_quality:
+    preferred:
+      - Rohini
+      - Pushya
+      - Uttara Phalguni
+      - Uttara Ashadha
+      - Uttara Bhadrapada
+      - Revati
+    neutral:
+      - Mrigashira
+      - Anuradha
+      - Chitra
+    avoid:
+      - Ardra
+      - Ashlesha
+      - Jyeshtha
+      - Mula
+    scores:
+      preferred: 100
+      neutral: 70
+      avoid: 30
+    weight: 2
+
+# =====================================================
+# RASHI / MOON ENGINE (OPERATIONAL STABILITY)
+# =====================================================
+rashi_rules:
+  chandra_bala:
+    favorable_positions:
+      - 3
+      - 6
+      - 10
+      - 11
+    neutral_positions:
+      - 1
+      - 7
+    unfavorable_positions:
+      - 2
+      - 4
+      - 5
+      - 8
+      - 9
+      - 12
+    scores:
+      favorable: 100
+      neutral: 60
+      unfavorable: 0
+    weight: 3
+
+# =====================================================
+# LAGNA ENGINE (PRIMARY FOR BUSINESS)
+# =====================================================
+lagna_rules:
+  lagna_shuddhi:
+    avoid_houses:
+      - 6
+      - 8
+      - 12
+    preferred_signs:
+      - Taurus
+      - Gemini
+      - Cancer
+      - Leo
+      - Libra
+      - Aquarius
+    avoid_signs:
+      - Scorpio
+      - Capricorn
+    scores:
+      strong: 100
+      medium: 70
+      weak: 30
+    weight: 6
+
+  lagna_lord_strength:
+    exalted: 100
+    own_sign: 90
+    friendly_sign: 75
+    neutral_sign: 60
+    enemy_sign: 40
+    debilitated: 0
+    combust: 20
+    retrograde: 60
+    weight: 5
+
+# =====================================================
+# HORA & WEEKDAY ENGINE (CRITICAL FOR BUSINESS)
+# =====================================================
+time_engine:
+  weekday_strength:
+    Sunday: Sun
+    Monday: Moon
+    Tuesday: Mars
+    Wednesday: Mercury
+    Thursday: Jupiter
+    Friday: Venus
+    Saturday: Saturn
+
+  hora_strength:
+    Sun: authority
+    Moon: nourishment
+    Mars: action
+    Mercury: trade
+    Jupiter: expansion
+    Venus: luxury
+    Saturn: stability
+
+# =====================================================
+# CEREMONY: BUSINESS / SHOP / COMPANY OPENING
+# =====================================================
+ceremonies:
+
+  business_opening:
+    description: >
+      Covers shop inauguration, company incorporation,
+      factory opening, professional practice start,
+      partnership launch and brand unveiling.
+
+    participants:
+      - owner
+
+    importance:
+      lagna: 6
+      lagna_lord: 5
+      hora: 4
+      weekday: 3
+      rashi: 3
+      nakshatra: 2
+
+    absolute_rejections:
+      lagna_in_houses: [6,8,12]
+      moon_in_houses: [8,12]
+      lagna_lord_debilitated: true
+      ketu_in_7th: true
+      rahu_afflicting_lagna: true
+      combust_mercury_for_trade: true
+
+    # -------------------------------------------------
+    # BUSINESS TYPE RULES (THIS IS THE CORE)
+    # -------------------------------------------------
+    business_types:
+
+      retail_shop:
+        ruling_planet: Mercury
+        business_nature: fast_trade
+        preferred_weekdays: [Wednesday, Friday]
+        preferred_horas: [Mercury]
+        preferred_lagna_signs: [Gemini, Virgo, Libra]
+        avoid_lagna_signs: [Pisces]
+        moon_preference: waxing
+        notes: >
+          Best for clothing, electronics, daily goods.
+
+      wholesale_trade:
+        ruling_planet: Jupiter
+        business_nature: bulk_distribution
+        preferred_weekdays: [Thursday]
+        preferred_horas: [Jupiter]
+        preferred_lagna_signs: [Sagittarius, Pisces]
+        moon_preference: waxing
+
+      manufacturing:
+        ruling_planet: Mars
+        business_nature: production
+        preferred_weekdays: [Tuesday]
+        preferred_horas: [Mars]
+        preferred_lagna_signs: [Aries, Scorpio]
+        avoid_lagna_signs: [Cancer]
+
+      finance_banking:
+        ruling_planet: Jupiter
+        secondary_planet: Venus
+        business_nature: money_management
+        preferred_weekdays: [Thursday, Friday]
+        preferred_horas: [Jupiter]
+        preferred_lagna_signs: [Cancer, Sagittarius]
+
+      technology_it:
+        ruling_planet: Mercury
+        secondary_planet: Rahu
+        business_nature: analytics_innovation
+        preferred_weekdays: [Wednesday, Saturday]
+        preferred_horas: [Mercury, Rahu]
+        preferred_lagna_signs: [Gemini, Aquarius]
+
+      food_restaurant:
+        ruling_planet: Moon
+        secondary_planet: Venus
+        business_nature: nourishment
+        preferred_weekdays: [Monday, Friday]
+        preferred_horas: [Moon, Venus]
+        preferred_lagna_signs: [Cancer, Taurus]
+
+      luxury_fashion:
+        ruling_planet: Venus
+        business_nature: aesthetics
+        preferred_weekdays: [Friday]
+        preferred_horas: [Venus]
+        preferred_lagna_signs: [Taurus, Libra]
+
+      education_training:
+        ruling_planet: Jupiter
+        business_nature: knowledge
+        preferred_weekdays: [Thursday]
+        preferred_horas: [Jupiter]
+        preferred_lagna_signs: [Sagittarius, Pisces]
+
+      healthcare_medical:
+        ruling_planet: Sun
+        secondary_planet: Mars
+        business_nature: healing_action
+        preferred_weekdays: [Sunday, Tuesday]
+        preferred_horas: [Sun, Mars]
+        preferred_lagna_signs: [Leo, Aries]
+
+      real_estate:
+        ruling_planet: Mars
+        secondary_planet: Saturn
+        business_nature: land_assets
+        preferred_weekdays: [Tuesday, Saturday]
+        preferred_horas: [Mars, Saturn]
+        preferred_lagna_signs: [Capricorn, Aries]
+
+      logistics_transport:
+        ruling_planet: Saturn
+        business_nature: movement
+        preferred_weekdays: [Saturday]
+        preferred_horas: [Saturn]
+        preferred_lagna_signs: [Capricorn, Aquarius]
+
+      spiritual_ashram:
+        ruling_planet: Jupiter
+        secondary_planet: Ketu
+        business_nature: spiritual_service
+        preferred_weekdays: [Thursday]
+        preferred_horas: [Jupiter, Ketu]
+        preferred_lagna_signs: [Pisces, Sagittarius]
+
+# =====================================================
+# FINAL SCORING & RANKING
+# =====================================================
+scoring_engine:
+  formula: >
+    (LagnaScore * LagnaWeight)
+    + (LagnaLordScore * LagnaLordWeight)
+    + (HoraScore * HoraWeight)
+    + (WeekdayScore * WeekdayWeight)
+    + (RashiScore * RashiWeight)
+    + (NakshatraScore * NakshatraWeight)
+    - Penalties
+
+  ranking:
+    excellent: ">=85"
+    good: ">=70"
+    average: ">=55"
+    avoid: "<55"
+
+# =====================================================
+# OUTPUT & EXPLANATION
+# =====================================================
+output:
+  table_columns:
+    - rank
+    - date
+    - weekday
+    - hora
+    - lagna
+    - moon_rashi
+    - nakshatra
+    - tithi
+    - score
+    - quality
+
+  explanation:
+    include:
+      - lagna_analysis
+      - lagna_lord_strength
+      - hora_alignment
+      - business_type_alignment
+      - moon_position
+      - nakshatra_result
+      - penalties_applied
