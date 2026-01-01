@@ -1,218 +1,223 @@
-# ============================================================
-# vision_narrative_templates.yaml
-# Family OS – Vision Narrative Assembly Layer
-# ============================================================
+version: 2.1
+module: vision
+rendering_mode: template_emission_only
 
-vision_narrative_templates:
+global_constraints:
+  allow_free_text: false
+  allow_paraphrasing: false
+  allow_synonyms: false
+  allow_fallback_generation: false
+  allow_abstract_slogans: false
+  placeholder_replacement:
+    allowed: false
+  failure_mode:
+    on_missing_template: TEMPLATE_KEY_NOT_FOUND
 
-  metadata:
-    domain: vision
-    version: "1.0.0"
-    purpose: >
-      Converts computed Vision metrics into final,
-      human-readable Vision narratives and guidance.
-      This layer does NOT calculate scores.
-      It interprets and assembles meaning.
-    principles:
-      - non_fatalistic
-      - counseling_safe
-      - future_oriented
-      - family_systems_based
+# ==================================================
+# 1. FAMILY VISION — UNIFIED STATEMENT
+# ==================================================
 
-  # ------------------------------------------------------------
-  # INPUT SIGNALS EXPECTED FROM vision_engine.yaml
-  # ------------------------------------------------------------
-  input_signals:
-    required:
-      - alignment_score          # 0–100
-      - vision_clarity_index     # 0–100
-      - vision_stability_index   # 0–100
-    optional:
-      - distortion_flags         # list
-      - evolutionary_pressure_score
-      - dominant_planets
-      - suppressed_planets
+family_vision_unified:
 
-  # ------------------------------------------------------------
-  # PRIMARY CLASSIFICATION LOGIC
-  # ------------------------------------------------------------
-  classification_rules:
+  clarity_high:
+    template_key: FAMILY_VISION_UNIFIED_HIGH
+    paragraphs:
+      - |
+        This family holds a clear and internally aligned vision rooted in emotional security, moral integrity, and shared values. Direction is reinforced through mutual understanding and a stable emotional foundation.
+      - |
+        Protection and empowerment operate in harmony, allowing growth to unfold without compromising trust or connection.
 
-    high_alignment:
-      conditions:
-        alignment_score: ">=70"
-        vision_clarity_index: ">=65"
-        vision_stability_index: ">=60"
+  clarity_moderate:
+    template_key: FAMILY_VISION_UNIFIED_MODERATE
+    paragraphs:
+      - |
+        This family carries a deeply dharmic and emotionally rooted vision, centered on emotional security, moral integrity, and inner growth rather than outward dominance or material ambition alone.
+      - |
+        Alignment is present but requires conscious participation, especially as individual needs and expressions evolve.
 
-    moderate_alignment:
-      conditions:
-        alignment_score: ">=40"
-        alignment_score: "<70"
+  clarity_low:
+    template_key: FAMILY_VISION_UNIFIED_LOW
+    paragraphs:
+      - |
+        The family experiences periods of uncertainty regarding shared direction, often influenced by emotional sensitivity and situational pressure.
+      - |
+        Re-establishing vision depends on renewed emotional grounding and ethical coherence.
 
-    low_alignment:
-      conditions:
-        alignment_score: "<40"
+# ==================================================
+# 1A. FAMILY VISION — COMBINED VARIANTS
+# ==================================================
 
-  # ------------------------------------------------------------
-  # CORE VISION NARRATIVES (FAMILY LEVEL)
-  # ------------------------------------------------------------
-  family_narratives:
+family_vision_combined_variants:
 
-    high_alignment:
-      narrative: >
-        This family carries a clear and sustainable long-term vision,
-        grounded in values rather than survival pressure.
-        Decisions tend to align naturally with purpose, and
-        there is an inherited sense of direction that supports
-        continuity across generations.
+  clarity_moderate__parent_dominant:
+    template_key: FAMILY_VISION_MODERATE_PARENT_DOMINANT
+    text: |
+      While a shared vision exists, parental stabilization outweighs the child’s evolving expression, creating a need for conscious handoff rather than prolonged containment.
 
-      strengths:
-        - clarity_of_direction
-        - ethical_compass
-        - generational_continuity
+  clarity_moderate__child_conflicted:
+    template_key: FAMILY_VISION_MODERATE_CHILD_CONFLICTED
+    text: |
+      The family’s vision is present but strained by tension between inherited expectations and the child’s emerging autonomy.
 
-      risks:
-        - rigidity_of_belief
-        - resistance_to_new_paths
+  clarity_low__emotional_overfunctioning:
+    template_key: FAMILY_VISION_LOW_EMOTIONAL_OVERFUNCTIONING
+    text: |
+      Emotional effort temporarily substitutes for shared clarity, masking deeper misalignment within the family vision.
 
-    moderate_alignment:
-      narrative: >
-        This family possesses aspiration and a sense of purpose,
-        but alignment is not always consistent.
-        Periods of clarity alternate with confusion,
-        often influenced by emotional or situational pressures.
-        Conscious reflection is required to sustain direction.
+# ==================================================
+# 2. FATHER — VISION ROLE
+# ==================================================
 
-      strengths:
-        - adaptability
-        - emerging_purpose
-        - learning_orientation
+father_vision_role:
+  archetype_label: "Principle Holder & Moral Compass"
 
-      risks:
-        - drift_during_stress
-        - conflicting_priorities
+  role_description:
+    template_key: FATHER_ROLE_BASE
+    text: |
+      The father’s vision role is to act as a steady moral and ethical anchor, contextualizing family direction within enduring values and long-term meaning.
 
-    low_alignment:
-      narrative: >
-        Vision within this family is fragmented or inherited through
-        unresolved struggle rather than conscious choice.
-        Decisions may be driven by immediate needs instead of
-        long-term meaning, making intentional vision-building essential.
+  distortion_patterns:
 
-      strengths:
-        - resilience
-        - survival_intelligence
-
-      risks:
-        - aimlessness
-        - reactive_decision_making
-
-  # ------------------------------------------------------------
-  # MODULATION BASED ON DISTORTION FLAGS
-  # ------------------------------------------------------------
-  distortion_adjustments:
-
-    inherited_confusion:
-      narrative_append: >
-        A pattern of inherited uncertainty may cause hesitation
-        around defining or committing to a shared future.
-      severity: medium
-
-    idealism_without_structure:
-      narrative_append: >
-        Vision may be aspirational but lack practical scaffolding,
-        increasing the risk of disappointment.
-      severity: medium
-
-    survival_dominant_thinking:
-      narrative_append: >
-        Survival concerns may override long-term purpose,
-        especially during periods of stress.
-      severity: high
-
-  # ------------------------------------------------------------
-  # EVOLUTIONARY PRESSURE INTERPRETATION
-  # ------------------------------------------------------------
-  evolutionary_pressure:
-
-    high:
-      condition: ">=70"
-      narrative: >
-        The family is undergoing a period of forced reorientation,
-        where existing visions are being tested or reshaped by circumstances.
+    mild:
+      template_key: FATHER_DISTORTION_MILD
+      text: |
+        Mild strain may appear as hesitation in asserting values, leading to ambiguity rather than conflict.
 
     moderate:
-      condition: ">=40"
-      narrative: >
-        Gradual adjustments in vision are underway,
-        requiring flexibility without abandoning core values.
+      template_key: FATHER_DISTORTION_MODERATE
+      text: |
+        Moderate strain can manifest as rigidity, where structure is emphasized over emotional responsiveness.
 
-    low:
-      condition: "<40"
-      narrative: >
-        Vision is relatively stable, with change occurring
-        through choice rather than pressure.
+    severe:
+      template_key: FATHER_DISTORTION_SEVERE
+      text: |
+        Severe distortion replaces inspiration with control, enforcing vision through authority rather than guidance.
 
-  # ------------------------------------------------------------
-  # GUIDANCE TEMPLATES (FREE-WILL ORIENTED)
-  # ------------------------------------------------------------
-  guidance_templates:
+  healthy_expression:
+    template_key: FATHER_HEALTHY_EXPRESSION
+    text: |
+      In balance, the father leads by example, creating a stable moral reference without imposing direction.
 
-    high_alignment:
-      guidance:
-        - Protect long-term goals from short-term disruptions
-        - Actively mentor younger members in shared values
-        - Periodically review vision to prevent rigidity
+# ==================================================
+# 3. MOTHER — VISION ROLE
+# ==================================================
 
-    moderate_alignment:
-      guidance:
-        - Clarify shared priorities before major decisions
-        - Reduce emotional reactivity during planning
-        - Revisit family values during transitional phases
+mother_vision_role:
+  archetype_label: "Emotional Translator & Sustainer"
 
-    low_alignment:
-      guidance:
-        - Pause major long-term commitments
-        - Initiate conversations around shared meaning
-        - Focus on stabilizing the present before defining the future
+  role_description:
+    template_key: MOTHER_ROLE_BASE
+    text: |
+      The mother translates the family’s vision into lived emotional reality, ensuring belonging, care, and emotional continuity.
 
-  # ------------------------------------------------------------
-  # MEMBER-LEVEL MODULATION (OPTIONAL OVERRIDES)
-  # ------------------------------------------------------------
-  member_overrides:
+  distortion_patterns:
 
-    father:
-      emphasis:
-        - authority_alignment
-        - responsibility_bearing
-      tone: pragmatic
+    mild:
+      template_key: MOTHER_DISTORTION_MILD
+      text: |
+        Mild imbalance appears as emotional over-involvement before responsibility is shared.
 
-    mother:
-      emphasis:
-        - emotional_coherence
-        - value_transmission
-      tone: nurturing
+    moderate:
+      template_key: MOTHER_DISTORTION_MODERATE
+      text: |
+        Moderate strain leads to emotional compensation replacing mutual engagement.
 
-    child:
-      emphasis:
-        - aspiration_forming
-        - identity_development
-      tone: exploratory
+    severe:
+      template_key: MOTHER_DISTORTION_SEVERE
+      text: |
+        Severe distortion results in silent absorption of systemic strain, reducing emotional sustainability.
 
-  # ------------------------------------------------------------
-  # OUTPUT MAPPING (FOR JSON CONTRACT)
-  # ------------------------------------------------------------
-  output_mapping:
-    narrative: final_narrative
-    strengths: strengths
-    risks: risks
-    guidance: guidance
-    severity_score: alignment_score
+  healthy_expression:
+    template_key: MOTHER_HEALTHY_EXPRESSION
+    text: |
+      In balance, emotional care sustains growth without suppressing independence.
 
-  # ------------------------------------------------------------
-  # GUIDING PRINCIPLES (STRICT TEMPLATE KEYS)
-  # ------------------------------------------------------------
-  family_guiding_principle:
-    high_alignment: "Dharmic Continuity & Shared Purpose"
-    moderate_alignment: "Aspirational Growth through Recalibration"
-    low_alignment: "Survival & Stabilization First"
+# ==================================================
+# 4. CHILD — VISION ROLE
+# ==================================================
+
+child_vision_role:
+  archetype_label: "Future Direction Carrier"
+
+  role_description:
+    template_key: CHILD_ROLE_BASE
+    text: |
+      The child represents the evolutionary edge of the family’s vision, where inherited values meet emerging contexts.
+
+  generational_modes:
+
+    adaptive:
+      template_key: CHILD_MODE_ADAPTIVE
+      text: |
+        Family wisdom is integrated with initiative, allowing organic evolution of vision.
+
+    conflicted:
+      template_key: CHILD_MODE_CONFLICTED
+      text: |
+        Tension arises between autonomy and inherited expectations, requiring conscious navigation.
+
+    suppressed:
+      template_key: CHILD_MODE_SUPPRESSED
+      text: |
+        Suppression limits the healthy evolution of the family’s direction.
+
+  evolution_framing:
+    template_key: CHILD_EVOLUTION_FRAMING
+    text: |
+      Fulfillment comes through integration, not imitation, of inherited wisdom.
+
+# ==================================================
+# 4A. PARENT → CHILD TRANSITION BRIDGES
+# ==================================================
+
+parent_child_transition_bridges:
+
+  stabilization_to_handoff:
+    template_key: PARENT_CHILD_HANDOFF_STABILIZED
+    text: |
+      The stabilizing influence of the parents forms the ground from which the child’s independent direction can safely emerge.
+
+  overprotection_risk:
+    template_key: PARENT_CHILD_OVERPROTECTION
+    text: |
+      When protection exceeds empowerment, the child’s evolutionary role is delayed rather than strengthened.
+
+# ==================================================
+# 5. FAMILY VISION ALIGNMENT SUMMARY
+# ==================================================
+
+family_vision_alignment_summary:
+
+  aligned:
+    template_key: FAMILY_ALIGNMENT_ALIGNED
+    text: |
+      Values, emotions, and direction are coherently integrated, allowing the vision to be lived consistently.
+
+  moderately_aligned:
+    template_key: FAMILY_ALIGNMENT_MODERATE
+    text: |
+      A shared foundation exists, though awareness is required to balance stability and evolution.
+
+  misaligned:
+    template_key: FAMILY_ALIGNMENT_LOW
+    text: |
+      Gaps between intention and experience call for renewed alignment and conscious re-grounding.
+
+# ==================================================
+# 6. GUIDING VISION PRINCIPLE (FIXED)
+# ==================================================
+
+family_guiding_vision_principle:
+  template_key: FAMILY_GUIDING_VISION_PRINCIPLE
+  text: |
+    Create emotional safety without restricting growth; guide without controlling; protect without limiting courage.
+
+# ==================================================
+# INTERNAL RENDERING FOOTER (NON-UI)
+# ==================================================
+
+rendering_footer:
+  enabled_for_ui: false
+  template_key: VISION_RENDER_STATUS
+  text: |
+    Vision narrative rendered using template emission mode.

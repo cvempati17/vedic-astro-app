@@ -14,16 +14,8 @@ const loadYaml = (filePath) => {
         return yaml.load(fileContents);
     } catch (e) {
         console.error(`Failed to load YAML at ${filePath}:`, e);
-        return null; // Handle missing file strictly in logic
+        return null;
     }
-};
-
-// 1. Planetary Axioms & Role Mappings (Partial Logic from Domain Definition)
-const ROLE_ARCHETYPES = {
-    Father: "Principle Holder & Moral Compass",
-    Mother: "Emotional Translator & Sustainer",
-    Son: "Future Direction Carrier",
-    Daughter: "Future Direction Carrier"
 };
 
 // Helper: Get House of Planet
@@ -33,6 +25,24 @@ const getHouse = (planetLon, ascLon) => {
     return Math.floor(diff / 30) + 1;
 };
 
+// Helper: Render Template Block
+const renderTemplate = (templates, pathArray) => {
+    let current = templates;
+    for (const key of pathArray) {
+        if (current && current[key]) {
+            current = current[key];
+        } else {
+            return "CONTRACT_VIOLATION"; // Strict failure mode
+        }
+    }
+    // Handle specific YAML structure from the user update
+    // e.g. some nodes have 'text', some have 'paragraphs' list
+    if (current.text) return current.text.trim();
+    if (current.paragraphs && Array.isArray(current.paragraphs)) return current.paragraphs.join('\n\n').trim();
+
+    return "CONTRACT_VIOLATION";
+};
+
 // Main Generation Function
 router.post('/vision', (req, res) => {
     try {
@@ -40,16 +50,15 @@ router.post('/vision', (req, res) => {
 
         // LOAD TEMPLATES STRICTLY
         const templates = loadYaml(VISION_TEMPLATES_PATH);
-        if (!templates || !templates.vision_narrative_templates) {
-            throw new Error("TEMPLATE_MISSING_ERROR: vision_narrative_templates.yaml invalid or missing");
+        if (!templates) {
+            throw new Error("CONTRACT_VIOLATION: vision_narrative_templates.yaml missing");
         }
-        const narrativeRules = templates.vision_narrative_templates;
 
         const roleOutputs = [];
         let totalScore = 0;
         let memberCount = 0;
 
-        // Process Each Member
+        // Process Each Member for Scoring
         members.forEach(m => {
             const chart = m.chart_object;
             const asc = chart.ascendant || chart.Ascendant?.longitude || 0;
@@ -74,7 +83,7 @@ router.post('/vision', (req, res) => {
                 }
             });
 
-            // STRICT ROLE LABEL ENFORCEMENT
+            // Map Roles strictly
             let visionRole = "Future Direction Carrier";
             let emoji = "👤";
             let roleLabel = role;
@@ -101,7 +110,8 @@ router.post('/vision', (req, res) => {
                 role: roleLabel,
                 vision_role: visionRole,
                 emoji: emoji,
-                planet: domPlanet
+                planet: domPlanet,
+                strength: maxStrength
             });
 
             if (['Sun', 'Jupiter'].includes(domPlanet) && maxStrength > 30) totalScore += 30;
@@ -110,58 +120,104 @@ router.post('/vision', (req, res) => {
             memberCount++;
         });
 
+        // Determine Alignment Level
         const avgScore = memberCount > 0 ? totalScore / memberCount : 20;
-        let alignmentKey = 'moderate_alignment';
-        if (avgScore > 25) alignmentKey = 'high_alignment';
-        if (avgScore < 15) alignmentKey = 'low_alignment';
+        let alignmentInfo = { key: 'clarity_moderate', label: 'Moderate' };
+        if (avgScore > 25) alignmentInfo = { key: 'clarity_high', label: 'High' };
+        if (avgScore < 15) alignmentInfo = { key: 'clarity_low', label: 'Low' };
 
-        // FETCH TEMPLATES
-        const familyNarrativeObj = narrativeRules.family_narratives[alignmentKey];
-        if (!familyNarrativeObj) throw new Error(`TEMPLATE_MISSING_ERROR: family_narratives.${alignmentKey}`);
-
-        const guidingPrinciple = narrativeRules.family_guiding_principle?.[alignmentKey];
-        if (!guidingPrinciple) throw new Error(`TEMPLATE_MISSING_ERROR: family_guiding_principle.${alignmentKey}`);
-
-        // BUILD OUTPUT STRICTLY
+        // ----------------------------------------------------------------
+        // RENDER OUTPUT (STRICT TEMPLATE EMISSION)
+        // ----------------------------------------------------------------
         let outputText = `1. 🌟 FAMILY VISION STATEMENT (Unified Statement)\n`;
-        outputText += `${familyNarrativeObj.narrative.trim()}\n\n`;
 
-        // Role Sections - STRICT: If template missing, output error.
-        const outputRoleBlock = (r) => {
-            let block = "";
-            let roleTitle = r.role;
-            block += `${r.emoji} ${r.role} – Vision Role: “${r.vision_role}”\n`;
-            // NOTE TO USER: Role Narratives are NOT defined in vision_narrative_templates.yaml.
-            // Per defined rules: "If a required template is missing: output TEMPLATE_MISSING_ERROR".
-            block += `TEMPLATE_MISSING_ERROR: Role narrative templates not found in vision_narrative_templates.yaml.\n\n`;
-            return block;
-        };
+        // 1. Unified Statement
+        const unifiedText = renderTemplate(templates, ['family_vision_unified', alignmentInfo.key]);
+        if (unifiedText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Family Vision Template");
+        outputText += `${unifiedText}\n\n`;
 
-        // Sort roles: Father, Mother, Children
+        // 2, 3, 4. Role Narratives
         const sortedRoles = [...roleOutputs].sort((a, b) => {
             const order = { 'Father': 1, 'Mother': 2, 'Son': 3, 'Daughter': 4 };
             return (order[a.role] || 99) - (order[b.role] || 99);
         });
 
         sortedRoles.forEach((r, idx) => {
-            outputText += `${idx + 2}. ${outputRoleBlock(r)}`;
+            outputText += `${idx + 2}. ${r.emoji} ${r.role} – Vision Role: “${r.vision_role}”\n`;
+
+            if (r.role === 'Father') {
+                const desc = renderTemplate(templates, ['father_vision_role', 'role_description']);
+
+                // Distortion Logic: alignment low -> severe, mod -> moderate, high -> mild (Simplified Mapping)
+                let distKey = 'moderate';
+                if (alignmentInfo.key === 'clarity_high') distKey = 'mild';
+                if (alignmentInfo.key === 'clarity_low') distKey = 'severe';
+                const dist = renderTemplate(templates, ['father_vision_role', 'distortion_patterns', distKey]);
+
+                const healthy = renderTemplate(templates, ['father_vision_role', 'healthy_expression']);
+
+                outputText += `${desc}\n\n`;
+                outputText += `Distortion Pattern: ${dist}\n\n`;
+                outputText += `Healthy Expression: ${healthy}\n\n`;
+
+            } else if (r.role === 'Mother') {
+                const desc = renderTemplate(templates, ['mother_vision_role', 'role_description']);
+
+                let distKey = 'moderate';
+                if (alignmentInfo.key === 'clarity_high') distKey = 'mild';
+                if (alignmentInfo.key === 'clarity_low') distKey = 'severe';
+                const dist = renderTemplate(templates, ['mother_vision_role', 'distortion_patterns', distKey]);
+
+                const healthy = renderTemplate(templates, ['mother_vision_role', 'healthy_expression']);
+
+                outputText += `${desc}\n\n`;
+                outputText += `Distortion Pattern: ${dist}\n\n`;
+                outputText += `Healthy Expression: ${healthy}\n\n`;
+
+            } else { // Child
+                const desc = renderTemplate(templates, ['child_vision_role', 'role_description']);
+
+                // Mode Logic
+                let modeKey = 'conflicted';
+                if (alignmentInfo.key === 'clarity_high') modeKey = 'adaptive';
+                if (alignmentInfo.key === 'clarity_low') modeKey = 'suppressed';
+                const mode = renderTemplate(templates, ['child_vision_role', 'generational_modes', modeKey]);
+
+                const evolution = renderTemplate(templates, ['child_vision_role', 'evolution_framing']);
+
+                outputText += `${desc}\n\n`;
+                outputText += `Generational Mode: ${mode}\n\n`;
+                outputText += `Evolution Framing: ${evolution}\n\n`;
+            }
         });
 
+        // 5. Alignment Summary
         outputText += `5. 🧭 Family Vision Alignment Summary\n`;
-        // Summary text is also not in YAML and summarization forbidden.
-        outputText += `TEMPLATE_MISSING_ERROR: Alignment summary templates not found in vision_narrative_templates.yaml.\n\n`;
+        let alignKey = 'moderately_aligned';
+        if (alignmentInfo.key === 'clarity_high') alignKey = 'aligned';
+        if (alignmentInfo.key === 'clarity_low') alignKey = 'misaligned';
+        const summaryText = renderTemplate(templates, ['family_vision_alignment_summary', alignKey]);
+        if (summaryText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Alignment Summary");
+        outputText += `${summaryText}\n\n`;
 
+        // 6. Guiding Principle
         outputText += `6. 🌱 Guiding Vision Principle for the Family\n`;
-        outputText += `“${guidingPrinciple}”\n\n`;
-
-        outputText += `7. ✅ Vision Module Validation Status\n`;
-        outputText += `Vision Narrative Rendering Module executed successfully. Narrative Rendering Mode Active.`;
+        const principleText = renderTemplate(templates, ['family_guiding_vision_principle']);
+        if (principleText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Guiding Principle");
+        outputText += `“${principleText}”\n\n`;
 
         res.json({ success: true, report: outputText });
 
     } catch (error) {
         console.error("Vision Generation Error:", error);
-        res.status(500).json({ success: false, error: error.message || "Vision Generation Failed" });
+        // If it's a contract violation, strict output
+        if (error.message.includes("CONTRACT_VIOLATION")) {
+            res.json({ success: true, report: error.message }); // Return as report content or strict error? 
+            // "If any required template key is missing or invalid: Output exactly: CONTRACT_VIOLATION -> Stop execution"
+            // I will return it as the report text to be visible.
+        } else {
+            res.status(500).json({ success: false, error: "Vision Generation Failed: " + error.message });
+        }
     }
 });
 

@@ -1,253 +1,223 @@
-# ============================================================
-# member_level_output_contract.yaml
-# Family OS – Member-Level Output Contract (MLOC)
-# ============================================================
+version: 2.0
+module: vision
+contract_type: member_level_output
+binding_mode: strict
+rendering_mode: template_emission_only
 
-member_level_output_contract:
+# ==================================================
+# GLOBAL CONTRACT RULES
+# ==================================================
 
-  metadata:
-    engine: Member_Level_Output_Contract
-    version: "1.1.0"
-    role: human_interface_layer
-    scope: post_intervention_pre_ui
-    purpose: >
-      Converts fully-evaluated Family OS engine outputs
-      into safe, role-aware, human-readable guidance.
-      This layer enforces ethical boundaries, responsibility
-      containment, and UI consistency.
-    principles:
-      - non_fatalistic
-      - non_deterministic
-      - counseling_safe
-      - role_bounded
-      - explainable
+global_constraints:
+  allow_free_text: false
+  allow_paraphrasing: false
+  allow_synonyms: false
+  allow_fallback_generation: false
+  allow_template_substitution: false
 
-  # ------------------------------------------------------------
-  # GLOBAL STRUCTURE (EXPECTED JSON SHAPE)
-  # ------------------------------------------------------------
-  global_output_structure:
-    family_name: string
-    generated_on: iso_datetime
-    sections: map
+  failure_mode:
+    on_invalid_archetype: CONTRACT_VIOLATION
+    on_invalid_template_key: CONTRACT_VIOLATION
+    on_missing_required_block: CONTRACT_VIOLATION
 
-  # ------------------------------------------------------------
-  # SECTION-LEVEL BINDINGS (CRITICAL)
-  # ------------------------------------------------------------
-  section_bindings:
+  template_authority:
+    file: vision_narrative_templates.yaml
+    enforcement: mandatory
 
-    vision:
-      required_fields:
-        - narrative
-        - guidance
-        - alignment_score
-      optional_fields:
-        - strengths
-        - risks
-        - timeline
-        - clarity_index
-        - stability_index
-      severity_source: alignment_score
+# ==================================================
+# REQUIRED OUTPUT SECTIONS (ORDERED)
+# ==================================================
 
-    mission:
-      required_fields:
-        - narrative
-        - guidance
-        - effort_score
-      optional_fields:
-        - sustainability_risk
-        - timeline
-      severity_source: effort_score
+required_sections:
+  - family_vision_unified
+  - father_vision_role
+  - mother_vision_role
+  - child_vision_role
+  - family_vision_alignment_summary
+  - family_guiding_vision_principle
 
-    family_matrix:
-      required_fields:
-        - structure_summary
-        - role_balance_score
-      optional_fields:
-        - power_concentration_flags
-      severity_source: role_balance_score
+# ==================================================
+# FAMILY-LEVEL OUTPUT CONTRACT
+# ==================================================
 
-    emotional_architecture:
-      required_fields:
-        - emotional_pattern_summary
-        - regulation_score
-      optional_fields:
-        - emotional_risk_flags
-      severity_source: regulation_score
+family_vision_unified:
+  clarity_level:
+    type: enum
+    allowed:
+      - clarity_high
+      - clarity_moderate
+      - clarity_low
 
-    decision_framework:
-      required_fields:
-        - decision_style
-        - coherence_score
-      optional_fields:
-        - bottleneck_flags
-      severity_source: coherence_score
+  allowed_template_keys:
+    - FAMILY_VISION_UNIFIED_HIGH
+    - FAMILY_VISION_UNIFIED_MODERATE
+    - FAMILY_VISION_UNIFIED_LOW
 
-    money_work_model:
-      required_fields:
-        - resource_pattern
-        - stability_score
-      optional_fields:
-        - risk_flags
-      severity_source: stability_score
+  combined_variant_support: true
+  combined_variant_source:
+    file: vision_narrative_templates.yaml
+    section: family_vision_combined_variants
 
-    boundaries_dependency:
-      required_fields:
-        - boundary_health_summary
-        - autonomy_score
-      optional_fields:
-        - enmeshment_flags
-      severity_source: autonomy_score
+# ==================================================
+# FATHER — MEMBER OUTPUT CONTRACT
+# ==================================================
 
-    conflict_repair:
-      required_fields:
-        - conflict_pattern
-        - repair_capacity_score
-      optional_fields:
-        - escalation_risks
-      severity_source: repair_capacity_score
+father:
+  role: father
 
-    time_evolution:
-      required_fields:
-        - phase_summary
-      optional_fields:
-        - timeline
-        - transition_risks
+  archetype:
+    type: enum
+    allowed:
+      - "Principle Holder & Moral Compass"
 
-    legacy:
-      required_fields:
-        - legacy_theme
-      optional_fields:
-        - continuity_risks
+  narrative_blocks:
 
-    care_aging:
-      required_fields:
-        - care_orientation
-      optional_fields:
-        - dependency_risks
+    role_description:
+      required: true
+      allowed_template_keys:
+        - FATHER_ROLE_BASE
 
-    parent_child_karmic_contracts:
-      required_fields:
-        - contract_summary
-      optional_fields:
-        - imbalance_flags
+    distortion_pattern:
+      required: true
+      severity:
+        type: enum
+        allowed:
+          - mild
+          - moderate
+          - severe
+      allowed_template_keys:
+        - FATHER_DISTORTION_MILD
+        - FATHER_DISTORTION_MODERATE
+        - FATHER_DISTORTION_SEVERE
 
-  # ------------------------------------------------------------
-  # MEMBER ROLES (FIXED & EXTENSIBLE)
-  # ------------------------------------------------------------
-  member_roles:
-    - family
-    - father
-    - mother
-    - child
+    healthy_expression:
+      required: true
+      allowed_template_keys:
+        - FATHER_HEALTHY_EXPRESSION
 
-  # ------------------------------------------------------------
-  # MEMBER-LEVEL OUTPUT TEMPLATE
-  # ------------------------------------------------------------
-  member_output_template:
+# ==================================================
+# MOTHER — MEMBER OUTPUT CONTRACT
+# ==================================================
 
-    narrative:
-      type: text
-      tone:
-        family: neutral_integrative
-        father: responsibility_bounded
-        mother: emotionally_attuned
-        child: non_burdening
+mother:
+  role: mother
 
-    guidance:
-      type: list
-      max_items: 5
-      rule: actionable_and_optional
+  archetype:
+    type: enum
+    allowed:
+      - "Emotional Translator & Sustainer"
 
-    strengths:
-      type: list
-      optional: true
+  narrative_blocks:
 
-    risks:
-      type: list
-      optional: true
-      severity_tagged: true
+    role_description:
+      required: true
+      allowed_template_keys:
+        - MOTHER_ROLE_BASE
 
-    timeline:
-      type: list
-      optional: true
-      item_schema:
-        from: year
-        to: year
-        label: text
-        active: boolean
+    distortion_pattern:
+      required: true
+      severity:
+        type: enum
+        allowed:
+          - mild
+          - moderate
+          - severe
+      allowed_template_keys:
+        - MOTHER_DISTORTION_MILD
+        - MOTHER_DISTORTION_MODERATE
+        - MOTHER_DISTORTION_SEVERE
 
-    severity_score:
-      type: integer
-      range: 0_to_100
+    healthy_expression:
+      required: true
+      allowed_template_keys:
+        - MOTHER_HEALTHY_EXPRESSION
 
-    time_horizon:
-      allowed:
-        - short_term
-        - medium_term
-        - long_term
+# ==================================================
+# CHILD — MEMBER OUTPUT CONTRACT
+# ==================================================
 
-    emotional_support_note:
-      type: text
-      optional: true
+child:
+  role: child
 
-  # ------------------------------------------------------------
-  # ROLE RESPONSIBILITY BOUNDARIES (VERY IMPORTANT)
-  # ------------------------------------------------------------
-  responsibility_constraints:
+  archetype:
+    type: enum
+    allowed:
+      - "Future Direction Carrier"
 
-    father:
-      cannot_receive:
-        - emotional_burden_from_children
-        - responsibility_for_spouse_emotions
+  narrative_blocks:
 
-    mother:
-      cannot_receive:
-        - sole_emotional_regulation_duty
-        - guilt_for_family_outcomes
+    role_description:
+      required: true
+      allowed_template_keys:
+        - CHILD_ROLE_BASE
 
-    child:
-      cannot_receive:
-        - responsibility_for_family_stability
-        - expectation_of_emotional_maturity
-        - caretaking_roles
+    generational_mode:
+      required: true
+      mode:
+        type: enum
+        allowed:
+          - adaptive
+          - conflicted
+          - suppressed
+      allowed_template_keys:
+        - CHILD_MODE_ADAPTIVE
+        - CHILD_MODE_CONFLICTED
+        - CHILD_MODE_SUPPRESSED
 
-    family:
-      cannot_assign_blame: true
+    evolution_framing:
+      required: true
+      allowed_template_keys:
+        - CHILD_EVOLUTION_FRAMING
 
-  # ------------------------------------------------------------
-  # LANGUAGE & ETHICS FILTERS
-  # ------------------------------------------------------------
-  language_constraints:
-    forbidden_phrases:
-      - destined
-      - unavoidable
-      - karmic punishment
-      - must suffer
-      - forever
-    required_modifiers:
-      - may
-      - can
-      - tends_to
-      - requires_conscious_effort
+# ==================================================
+# PARENT → CHILD TRANSITION (OPTIONAL BUT LOCKED)
+# ==================================================
 
-  # ------------------------------------------------------------
-  # TRACEABILITY & EXPLAINABILITY
-  # ------------------------------------------------------------
-  explainability:
-    enabled: true
-    required_fields:
-      - contributing_factors
-      - dominant_influences
-    optional_fields:
-      - suppressed_influences
+parent_child_transition:
+  enabled: true
+  allowed_template_keys:
+    - PARENT_CHILD_HANDOFF_STABILIZED
+    - PARENT_CHILD_OVERPROTECTION
 
-  # ------------------------------------------------------------
-  # OUTPUT CONTRACT GUARANTEES
-  # ------------------------------------------------------------
-  guarantees:
-    - no_guilt_transfer
-    - no_fatalistic_language
-    - no_role_confusion
-    - explicit_non_responsibility_clauses
-    - traceable_reasoning
-    - ui_safe_structure
+  emission_rules:
+    max_blocks: 1
+    selection_basis:
+      - clarity_level
+      - child_generational_mode
+
+# ==================================================
+# FAMILY ALIGNMENT SUMMARY CONTRACT
+# ==================================================
+
+family_vision_alignment_summary:
+  alignment_level:
+    type: enum
+    allowed:
+      - aligned
+      - moderately_aligned
+      - misaligned
+
+  allowed_template_keys:
+    - FAMILY_ALIGNMENT_ALIGNED
+    - FAMILY_ALIGNMENT_MODERATE
+    - FAMILY_ALIGNMENT_LOW
+
+# ==================================================
+# GUIDING VISION PRINCIPLE (FIXED, NON-VARIANT)
+# ==================================================
+
+family_guiding_vision_principle:
+  required: true
+  variant_allowed: false
+  allowed_template_keys:
+    - FAMILY_GUIDING_VISION_PRINCIPLE
+
+# ==================================================
+# INTERNAL / NON-UI BLOCKS
+# ==================================================
+
+internal_blocks:
+  rendering_footer:
+    allowed_template_keys:
+      - VISION_RENDER_STATUS
+    enabled_for_ui: false
