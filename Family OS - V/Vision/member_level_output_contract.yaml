@@ -1,0 +1,253 @@
+# ============================================================
+# member_level_output_contract.yaml
+# Family OS – Member-Level Output Contract (MLOC)
+# ============================================================
+
+member_level_output_contract:
+
+  metadata:
+    engine: Member_Level_Output_Contract
+    version: "1.1.0"
+    role: human_interface_layer
+    scope: post_intervention_pre_ui
+    purpose: >
+      Converts fully-evaluated Family OS engine outputs
+      into safe, role-aware, human-readable guidance.
+      This layer enforces ethical boundaries, responsibility
+      containment, and UI consistency.
+    principles:
+      - non_fatalistic
+      - non_deterministic
+      - counseling_safe
+      - role_bounded
+      - explainable
+
+  # ------------------------------------------------------------
+  # GLOBAL STRUCTURE (EXPECTED JSON SHAPE)
+  # ------------------------------------------------------------
+  global_output_structure:
+    family_name: string
+    generated_on: iso_datetime
+    sections: map
+
+  # ------------------------------------------------------------
+  # SECTION-LEVEL BINDINGS (CRITICAL)
+  # ------------------------------------------------------------
+  section_bindings:
+
+    vision:
+      required_fields:
+        - narrative
+        - guidance
+        - alignment_score
+      optional_fields:
+        - strengths
+        - risks
+        - timeline
+        - clarity_index
+        - stability_index
+      severity_source: alignment_score
+
+    mission:
+      required_fields:
+        - narrative
+        - guidance
+        - effort_score
+      optional_fields:
+        - sustainability_risk
+        - timeline
+      severity_source: effort_score
+
+    family_matrix:
+      required_fields:
+        - structure_summary
+        - role_balance_score
+      optional_fields:
+        - power_concentration_flags
+      severity_source: role_balance_score
+
+    emotional_architecture:
+      required_fields:
+        - emotional_pattern_summary
+        - regulation_score
+      optional_fields:
+        - emotional_risk_flags
+      severity_source: regulation_score
+
+    decision_framework:
+      required_fields:
+        - decision_style
+        - coherence_score
+      optional_fields:
+        - bottleneck_flags
+      severity_source: coherence_score
+
+    money_work_model:
+      required_fields:
+        - resource_pattern
+        - stability_score
+      optional_fields:
+        - risk_flags
+      severity_source: stability_score
+
+    boundaries_dependency:
+      required_fields:
+        - boundary_health_summary
+        - autonomy_score
+      optional_fields:
+        - enmeshment_flags
+      severity_source: autonomy_score
+
+    conflict_repair:
+      required_fields:
+        - conflict_pattern
+        - repair_capacity_score
+      optional_fields:
+        - escalation_risks
+      severity_source: repair_capacity_score
+
+    time_evolution:
+      required_fields:
+        - phase_summary
+      optional_fields:
+        - timeline
+        - transition_risks
+
+    legacy:
+      required_fields:
+        - legacy_theme
+      optional_fields:
+        - continuity_risks
+
+    care_aging:
+      required_fields:
+        - care_orientation
+      optional_fields:
+        - dependency_risks
+
+    parent_child_karmic_contracts:
+      required_fields:
+        - contract_summary
+      optional_fields:
+        - imbalance_flags
+
+  # ------------------------------------------------------------
+  # MEMBER ROLES (FIXED & EXTENSIBLE)
+  # ------------------------------------------------------------
+  member_roles:
+    - family
+    - father
+    - mother
+    - child
+
+  # ------------------------------------------------------------
+  # MEMBER-LEVEL OUTPUT TEMPLATE
+  # ------------------------------------------------------------
+  member_output_template:
+
+    narrative:
+      type: text
+      tone:
+        family: neutral_integrative
+        father: responsibility_bounded
+        mother: emotionally_attuned
+        child: non_burdening
+
+    guidance:
+      type: list
+      max_items: 5
+      rule: actionable_and_optional
+
+    strengths:
+      type: list
+      optional: true
+
+    risks:
+      type: list
+      optional: true
+      severity_tagged: true
+
+    timeline:
+      type: list
+      optional: true
+      item_schema:
+        from: year
+        to: year
+        label: text
+        active: boolean
+
+    severity_score:
+      type: integer
+      range: 0_to_100
+
+    time_horizon:
+      allowed:
+        - short_term
+        - medium_term
+        - long_term
+
+    emotional_support_note:
+      type: text
+      optional: true
+
+  # ------------------------------------------------------------
+  # ROLE RESPONSIBILITY BOUNDARIES (VERY IMPORTANT)
+  # ------------------------------------------------------------
+  responsibility_constraints:
+
+    father:
+      cannot_receive:
+        - emotional_burden_from_children
+        - responsibility_for_spouse_emotions
+
+    mother:
+      cannot_receive:
+        - sole_emotional_regulation_duty
+        - guilt_for_family_outcomes
+
+    child:
+      cannot_receive:
+        - responsibility_for_family_stability
+        - expectation_of_emotional_maturity
+        - caretaking_roles
+
+    family:
+      cannot_assign_blame: true
+
+  # ------------------------------------------------------------
+  # LANGUAGE & ETHICS FILTERS
+  # ------------------------------------------------------------
+  language_constraints:
+    forbidden_phrases:
+      - destined
+      - unavoidable
+      - karmic punishment
+      - must suffer
+      - forever
+    required_modifiers:
+      - may
+      - can
+      - tends_to
+      - requires_conscious_effort
+
+  # ------------------------------------------------------------
+  # TRACEABILITY & EXPLAINABILITY
+  # ------------------------------------------------------------
+  explainability:
+    enabled: true
+    required_fields:
+      - contributing_factors
+      - dominant_influences
+    optional_fields:
+      - suppressed_influences
+
+  # ------------------------------------------------------------
+  # OUTPUT CONTRACT GUARANTEES
+  # ------------------------------------------------------------
+  guarantees:
+    - no_guilt_transfer
+    - no_fatalistic_language
+    - no_role_confusion
+    - explicit_non_responsibility_clauses
+    - traceable_reasoning
+    - ui_safe_structure

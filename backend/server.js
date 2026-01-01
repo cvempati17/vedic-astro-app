@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const chartRoutes = require('./routes/charts');
 const muhuratRoutes = require('./routes/muhurat');
 const tithiRoutes = require('./routes/tithi');
+const familyVisionRoutes = require('./routes/familyVision');
 
 // Connect to Database
 // Connect to Database
@@ -34,6 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/charts', chartRoutes);
 app.use('/api/muhurat', muhuratRoutes);
 app.use('/api/tithi', tithiRoutes);
+app.use('/api/family-values', familyVisionRoutes);
 
 const ZODIAC_SIGNS = [
     'Aries',

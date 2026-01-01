@@ -28,6 +28,7 @@ import PalmistryPage from './pages/PalmistryPage';
 import FamilyOSPage from './pages/FamilyOSPage';
 import MuhuratPage from './pages/MuhuratPage';
 import TithiPage from './pages/TithiPage';
+import FamilyVisionPage from './pages/FamilyVisionPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import './ThemeToggle.css';
 
@@ -274,6 +275,7 @@ function App() {
             onOpenGeminiTest={() => setCurrentPage('gemini-test')}
             onOpenPalmistry={() => setCurrentPage('palmistry')}
             onOpenFamilyOS={() => setCurrentPage('family-os')}
+            onOpenFamilyVision={() => setCurrentPage('family-vision')}
             onOpenMuhurat={() => setCurrentPage('muhurat')}
             onOpenTithi={() => setCurrentPage('tithi')}
             onOpenPlanetaryChangesImpact={() => setCurrentPage('planetary-changes-impact')}
@@ -437,6 +439,14 @@ function App() {
         {currentPage === 'tithi' && (
           <ErrorBoundary>
             <TithiPage
+              onBack={() => setCurrentPage('saved-charts')}
+            />
+          </ErrorBoundary>
+        )}
+
+        {currentPage === 'family-vision' && (
+          <ErrorBoundary>
+            <FamilyVisionPage
               onBack={() => setCurrentPage('saved-charts')}
             />
           </ErrorBoundary>

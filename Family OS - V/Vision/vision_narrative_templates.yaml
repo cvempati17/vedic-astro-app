@@ -1,0 +1,210 @@
+# ============================================================
+# vision_narrative_templates.yaml
+# Family OS – Vision Narrative Assembly Layer
+# ============================================================
+
+vision_narrative_templates:
+
+  metadata:
+    domain: vision
+    version: "1.0.0"
+    purpose: >
+      Converts computed Vision metrics into final,
+      human-readable Vision narratives and guidance.
+      This layer does NOT calculate scores.
+      It interprets and assembles meaning.
+    principles:
+      - non_fatalistic
+      - counseling_safe
+      - future_oriented
+      - family_systems_based
+
+  # ------------------------------------------------------------
+  # INPUT SIGNALS EXPECTED FROM vision_engine.yaml
+  # ------------------------------------------------------------
+  input_signals:
+    required:
+      - alignment_score          # 0–100
+      - vision_clarity_index     # 0–100
+      - vision_stability_index   # 0–100
+    optional:
+      - distortion_flags         # list
+      - evolutionary_pressure_score
+      - dominant_planets
+      - suppressed_planets
+
+  # ------------------------------------------------------------
+  # PRIMARY CLASSIFICATION LOGIC
+  # ------------------------------------------------------------
+  classification_rules:
+
+    high_alignment:
+      conditions:
+        alignment_score: ">=70"
+        vision_clarity_index: ">=65"
+        vision_stability_index: ">=60"
+
+    moderate_alignment:
+      conditions:
+        alignment_score: ">=40"
+        alignment_score: "<70"
+
+    low_alignment:
+      conditions:
+        alignment_score: "<40"
+
+  # ------------------------------------------------------------
+  # CORE VISION NARRATIVES (FAMILY LEVEL)
+  # ------------------------------------------------------------
+  family_narratives:
+
+    high_alignment:
+      narrative: >
+        This family carries a clear and sustainable long-term vision,
+        grounded in values rather than survival pressure.
+        Decisions tend to align naturally with purpose, and
+        there is an inherited sense of direction that supports
+        continuity across generations.
+
+      strengths:
+        - clarity_of_direction
+        - ethical_compass
+        - generational_continuity
+
+      risks:
+        - rigidity_of_belief
+        - resistance_to_new_paths
+
+    moderate_alignment:
+      narrative: >
+        This family possesses aspiration and a sense of purpose,
+        but alignment is not always consistent.
+        Periods of clarity alternate with confusion,
+        often influenced by emotional or situational pressures.
+        Conscious reflection is required to sustain direction.
+
+      strengths:
+        - adaptability
+        - emerging_purpose
+        - learning_orientation
+
+      risks:
+        - drift_during_stress
+        - conflicting_priorities
+
+    low_alignment:
+      narrative: >
+        Vision within this family is fragmented or inherited through
+        unresolved struggle rather than conscious choice.
+        Decisions may be driven by immediate needs instead of
+        long-term meaning, making intentional vision-building essential.
+
+      strengths:
+        - resilience
+        - survival_intelligence
+
+      risks:
+        - aimlessness
+        - reactive_decision_making
+
+  # ------------------------------------------------------------
+  # MODULATION BASED ON DISTORTION FLAGS
+  # ------------------------------------------------------------
+  distortion_adjustments:
+
+    inherited_confusion:
+      narrative_append: >
+        A pattern of inherited uncertainty may cause hesitation
+        around defining or committing to a shared future.
+      severity: medium
+
+    idealism_without_structure:
+      narrative_append: >
+        Vision may be aspirational but lack practical scaffolding,
+        increasing the risk of disappointment.
+      severity: medium
+
+    survival_dominant_thinking:
+      narrative_append: >
+        Survival concerns may override long-term purpose,
+        especially during periods of stress.
+      severity: high
+
+  # ------------------------------------------------------------
+  # EVOLUTIONARY PRESSURE INTERPRETATION
+  # ------------------------------------------------------------
+  evolutionary_pressure:
+
+    high:
+      condition: ">=70"
+      narrative: >
+        The family is undergoing a period of forced reorientation,
+        where existing visions are being tested or reshaped by circumstances.
+
+    moderate:
+      condition: ">=40"
+      narrative: >
+        Gradual adjustments in vision are underway,
+        requiring flexibility without abandoning core values.
+
+    low:
+      condition: "<40"
+      narrative: >
+        Vision is relatively stable, with change occurring
+        through choice rather than pressure.
+
+  # ------------------------------------------------------------
+  # GUIDANCE TEMPLATES (FREE-WILL ORIENTED)
+  # ------------------------------------------------------------
+  guidance_templates:
+
+    high_alignment:
+      guidance:
+        - Protect long-term goals from short-term disruptions
+        - Actively mentor younger members in shared values
+        - Periodically review vision to prevent rigidity
+
+    moderate_alignment:
+      guidance:
+        - Clarify shared priorities before major decisions
+        - Reduce emotional reactivity during planning
+        - Revisit family values during transitional phases
+
+    low_alignment:
+      guidance:
+        - Pause major long-term commitments
+        - Initiate conversations around shared meaning
+        - Focus on stabilizing the present before defining the future
+
+  # ------------------------------------------------------------
+  # MEMBER-LEVEL MODULATION (OPTIONAL OVERRIDES)
+  # ------------------------------------------------------------
+  member_overrides:
+
+    father:
+      emphasis:
+        - authority_alignment
+        - responsibility_bearing
+      tone: pragmatic
+
+    mother:
+      emphasis:
+        - emotional_coherence
+        - value_transmission
+      tone: nurturing
+
+    child:
+      emphasis:
+        - aspiration_forming
+        - identity_development
+      tone: exploratory
+
+  # ------------------------------------------------------------
+  # OUTPUT MAPPING (FOR JSON CONTRACT)
+  # ------------------------------------------------------------
+  output_mapping:
+    narrative: final_narrative
+    strengths: strengths
+    risks: risks
+    guidance: guidance
+    severity_score: alignment_score

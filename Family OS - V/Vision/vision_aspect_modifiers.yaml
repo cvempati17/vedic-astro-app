@@ -1,0 +1,84 @@
+aspect_modifier_engine:
+  name: vision_aspect_modifiers
+  domain: vision
+  description: >
+    Modifies the expression, clarity, and confidence of vision
+    based on inter-planetary aspects. This file does not create
+    vision; it alters how clearly or distortedly it is perceived.
+
+supported_aspects:
+  - conjunction
+  - opposition
+  - trine
+  - square
+  - sextile
+
+aspect_rules:
+
+  sun_jupiter:
+    conjunction:
+      effect: amplify
+      delta: +15
+      narrative_tag: confident_direction
+    trine:
+      effect: support
+      delta: +12
+      narrative_tag: ethical_expansion
+    opposition:
+      effect: tension
+      delta: -8
+      narrative_tag: belief_conflict
+
+  sun_saturn:
+    conjunction:
+      effect: constrain
+      delta: -10
+      narrative_tag: heavy_responsibility
+    trine:
+      effect: stabilize
+      delta: +8
+      narrative_tag: disciplined_vision
+    square:
+      effect: suppress
+      delta: -15
+      narrative_tag: fear_of_failure
+
+  jupiter_saturn:
+    conjunction:
+      effect: mature_balance
+      delta: +10
+      narrative_tag: realistic_growth
+    opposition:
+      effect: oscillation
+      delta: -5
+      narrative_tag: hope_vs_fear
+
+  moon_jupiter:
+    conjunction:
+      effect: emotional_expansion
+      delta: +10
+      narrative_tag: hopeful_belief
+    square:
+      effect: confusion
+      delta: -12
+      narrative_tag: emotional_overreach
+
+  moon_saturn:
+    conjunction:
+      effect: emotional_weight
+      delta: -10
+      narrative_tag: inherited_pessimism
+    trine:
+      effect: emotional_maturity
+      delta: +6
+      narrative_tag: calm_realism
+
+application_rules:
+  apply_to_axes:
+    - meaning_vs_survival
+    - aspiration_vs_resignation
+  stacking:
+    max_positive: +20
+    max_negative: -20
+  safety:
+    do_not_flip_polarity: true
