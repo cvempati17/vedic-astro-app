@@ -29,6 +29,7 @@ import FamilyOSPage from './pages/FamilyOSPage';
 import MuhuratPage from './pages/MuhuratPage';
 import TithiPage from './pages/TithiPage';
 import FamilyVisionPage from './pages/FamilyVisionPage';
+import SnapshotPage from './pages/SnapshotPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import './ThemeToggle.css';
 
@@ -218,6 +219,12 @@ function App() {
     setCurrentPage('results');
   };
 
+  const handleOpenSnapshot = (chartData, chartFormData) => {
+    setResults(chartData);
+    setFormData(chartFormData);
+    setCurrentPage('snapshot');
+  };
+
   const handleEditChart = (chartFormData) => {
     setEditingChart(chartFormData);
     setCurrentPage('home');
@@ -279,9 +286,19 @@ function App() {
             onOpenMuhurat={() => setCurrentPage('muhurat')}
             onOpenTithi={() => setCurrentPage('tithi')}
             onOpenPlanetaryChangesImpact={() => setCurrentPage('planetary-changes-impact')}
+
             onOpenSettings={() => { setSettingsReturnPage('saved-charts'); setCurrentPage('settings'); }}
+            onOpenSnapshot={handleOpenSnapshot}
             onLogout={handleLogout}
             userType={userType}
+          />
+        )}
+
+        {currentPage === 'snapshot' && (
+          <SnapshotPage
+            results={results}
+            formData={formData}
+            onBack={() => setCurrentPage('saved-charts')}
           />
         )}
 
@@ -474,7 +491,7 @@ function App() {
         )}
 
       </div>
-      <Disclaimer />
+      {currentPage !== 'snapshot' && <Disclaimer />}
     </div>
   );
 }

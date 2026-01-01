@@ -222,3 +222,236 @@ engine_output:
   severity_scale: 0_to_100
   normalization: percentile
   default_visibility: true
+#########
+version: 1.1
+module: vision_engine
+scope: family
+
+engine_mode:
+  narrative_generation: forbidden
+  output_type: structured_enums_only
+
+# ==================================================
+# GLOBAL ENGINE RULES
+# ==================================================
+
+global_rules:
+  gender_based_logic: forbidden
+  collective_child_evaluation: forbidden
+  fatalistic_predictions: forbidden
+  death_or_lifespan_inference: forbidden
+
+  allowed_outputs:
+    - enum
+    - boolean
+    - score
+
+# ==================================================
+# CHILD EVALUATION ENGINE
+# ==================================================
+
+child_vision_engine:
+
+  role_assignment:
+    fixed_role: Future Direction Carrier
+    role_variation: forbidden
+
+  evaluation_axes:
+    required:
+      - caregiving_orientation
+      - conflict_expression
+      - karmic_load
+      - resilience_index
+      - legacy_expression
+
+# ==================================================
+# AXIS 1: CAREGIVING ORIENTATION
+# ==================================================
+
+caregiving_orientation:
+
+  enum_values:
+    - high
+    - moderate
+    - low
+
+  indicators:
+
+    high:
+      any_of:
+        - moon_strength >= 0.7
+        - fourth_house_benefic_count >= 2
+        - venus_jupiter_connection == true
+        - moon_aspected_by_benefics == true
+
+    moderate:
+      any_of:
+        - moon_strength between 0.4 and 0.7
+        - mixed_benefic_malefic_influence_on_4th == true
+
+    low:
+      any_of:
+        - moon_strength < 0.4
+        - fourth_house_afflicted == true
+        - ketu_in_4th == true
+
+  resolution_rule:
+    priority: high > moderate > low
+    default: moderate
+
+# ==================================================
+# AXIS 2: CONFLICT & ASSERTION EXPRESSION
+# ==================================================
+
+conflict_expression:
+
+  enum_values:
+    - confrontational
+    - defensive
+    - avoidant
+
+  indicators:
+
+    confrontational:
+      any_of:
+        - mars_strength >= 0.7
+        - rahu_mars_connection == true
+        - sixth_house_activation == strong
+        - eleventh_house_activation == strong
+
+    defensive:
+      any_of:
+        - mars_under_saturn_aspect == true
+        - mars_in_dusthana == true
+
+    avoidant:
+      any_of:
+        - mars_strength < 0.4
+        - strong_jupiter_venus_dampening == true
+
+  resolution_rule:
+    priority: confrontational > defensive > avoidant
+    default: defensive
+
+# ==================================================
+# AXIS 3: KARMIC LOAD SENSITIVITY
+# ==================================================
+
+karmic_load:
+
+  enum_values:
+    - heavy
+    - moderate
+    - light
+
+  indicators:
+
+    heavy:
+      any_of:
+        - saturn_ketu_connection == true
+        - eighth_house_activation == strong
+        - twelfth_house_activation == strong
+
+    moderate:
+      any_of:
+        - single_nodal_affliction == true
+        - saturn_aspects_lagna == true
+
+    light:
+      any_of:
+        - lagna_lord_strong == true
+        - benefic_dominant_chart == true
+
+  resolution_rule:
+    priority: heavy > moderate > light
+    default: moderate
+
+# ==================================================
+# AXIS 4: RESILIENCE INDEX (SAFE HEALTH SIGNAL)
+# ==================================================
+
+resilience_index:
+
+  enum_values:
+    - stable
+    - sensitive
+    - requires_attention
+
+  indicators:
+
+    stable:
+      all_of:
+        - lagna_strength >= 0.6
+        - moon_strength >= 0.6
+        - current_dasha_supportive == true
+
+    sensitive:
+      any_of:
+        - moon_saturn_stress == true
+        - sixth_house_activation == moderate
+        - eighth_house_activation == moderate
+
+    requires_attention:
+      any_of:
+        - repeated_moon_affliction == true
+        - sixth_house_activation == strong
+        - adverse_dasha_running == true
+
+  resolution_rule:
+    priority: requires_attention > sensitive > stable
+    default: sensitive
+
+# ==================================================
+# AXIS 5: LEGACY EXPRESSION STYLE
+# ==================================================
+
+legacy_expression:
+
+  enum_values:
+    - preserver
+    - reformer
+    - bridge_builder
+
+  indicators:
+
+    preserver:
+      any_of:
+        - sun_saturn_strength >= 0.7
+        - fixed_sign_emphasis == strong
+        - strong_traditional_yogas == true
+
+    reformer:
+      any_of:
+        - rahu_strength >= 0.7
+        - air_fire_dominance == true
+        - eleventh_house_activation == strong
+
+    bridge_builder:
+      any_of:
+        - jupiter_mercury_balance == true
+        - dual_sign_emphasis == strong
+        - ninth_fourth_house_link == true
+
+  resolution_rule:
+    priority: preserver > reformer > bridge_builder
+    default: bridge_builder
+
+# ==================================================
+# FINAL CHILD OUTPUT CONTRACT (ENGINE SIDE)
+# ==================================================
+
+child_engine_output:
+
+  output_object:
+    child_id: required
+    role: "Future Direction Carrier"
+    caregiving_orientation: enum
+    conflict_expression: enum
+    karmic_load: enum
+    resilience_index: enum
+    legacy_expression: enum
+
+  validation:
+    missing_axis: ENGINE_ERROR
+    invalid_enum: ENGINE_ERROR
+    free_text_detected: ENGINE_ERROR

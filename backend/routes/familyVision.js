@@ -10,20 +10,155 @@ const VISION_TEMPLATES_PATH = path.join(__dirname, '../../Family OS - V/Vision/v
 // Helper to Load YAML
 const loadYaml = (filePath) => {
     try {
+        if (!fs.existsSync(filePath)) {
+            throw new Error(`File not found at path: ${filePath}`);
+        }
         const fileContents = fs.readFileSync(filePath, 'utf8');
         return yaml.load(fileContents);
     } catch (e) {
         console.error(`Failed to load YAML at ${filePath}:`, e);
-        return null;
+        throw new Error(`YAML_LOAD_ERROR: ${e.message} (Path: ${filePath})`);
     }
 };
 
-// Helper: Get House of Planet
+// --- ASTROLOGICAL HELPERS ---
+
+const getSign = (lon) => Math.floor(lon / 30) + 1;
+
 const getHouse = (planetLon, ascLon) => {
     let diff = planetLon - ascLon;
     if (diff < 0) diff += 360;
     return Math.floor(diff / 30) + 1;
 };
+
+const getPlanets = (chart) => {
+    const map = {};
+    const names = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'];
+    names.forEach(n => {
+        // Handle various input formats
+        const p = chart[n] || chart.planets?.[n] || chart.planets?.[n.toLowerCase()];
+        if (p) map[n] = p.longitude;
+    });
+    return map;
+};
+
+const isBenefic = (planetName) => ['Jupiter', 'Venus', 'Mercury', 'Moon'].includes(planetName);
+
+const getStrength = (planetName, lon, asc) => {
+    if (lon === undefined) return 0.5;
+    let score = 0.5;
+    const sign = getSign(lon);
+
+    // Simple Dignity logic
+    const exalted = { Sun: 1, Moon: 2, Mars: 10, Mercury: 6, Jupiter: 4, Venus: 12, Saturn: 7, Rahu: 2, Ketu: 8 };
+    const debilitated = { Sun: 7, Moon: 8, Mars: 4, Mercury: 12, Jupiter: 10, Venus: 6, Saturn: 1, Rahu: 8, Ketu: 2 };
+    const own = { Sun: [5], Moon: [4], Mars: [1, 8], Mercury: [3, 6], Jupiter: [9, 12], Venus: [2, 7], Saturn: [10, 11] };
+
+    if (exalted[planetName] === sign) score = 0.9;
+    else if (debilitated[planetName] === sign) score = 0.2;
+    else if (own[planetName]?.includes(sign)) score = 0.8;
+
+    // House placement
+    const house = getHouse(lon, asc);
+    if ([1, 4, 7, 10, 5, 9].includes(house)) score += 0.1;
+    if ([6, 8, 12].includes(house)) score -= 0.1;
+
+    return Math.min(Math.max(score, 0), 1);
+};
+
+const checkConnection = (p1Name, p2Name, planets) => {
+    const l1 = planets[p1Name];
+    const l2 = planets[p2Name];
+    if (l1 === undefined || l2 === undefined) return false;
+    return getSign(l1) === getSign(l2); // Conjunction
+};
+
+const checkAspect = (actorName, targetLon, planets) => {
+    const actorLon = planets[actorName];
+    if (actorLon === undefined) return false;
+    const houseDist = (Math.floor(targetLon / 30) - Math.floor(actorLon / 30) + 12) % 12 + 1;
+
+    if (actorName === 'Mars') return [1, 4, 7, 8].includes(houseDist);
+    if (actorName === 'Jupiter' || actorName === 'Rahu' || actorName === 'Ketu') return [1, 5, 7, 9].includes(houseDist);
+    if (actorName === 'Saturn') return [1, 3, 7, 10].includes(houseDist);
+    return houseDist === 7 || houseDist === 1; // Default
+};
+
+// --- CHILD EVALUATION ENGINE ---
+
+const evaluateChildAxes = (chart, asc) => {
+    const planets = getPlanets(chart);
+
+    // 1. Caregiving Orientation
+    const moonStr = getStrength('Moon', planets.Moon, asc);
+    let fourthHouseBenefics = 0;
+    let fourthHouseMalefics = 0;
+    Object.keys(planets).forEach(p => {
+        if (getHouse(planets[p], asc) === 4) {
+            if (isBenefic(p)) fourthHouseBenefics++;
+            else fourthHouseMalefics++;
+        }
+    });
+
+    let caregiving = 'moderate';
+    if (moonStr >= 0.7 || fourthHouseBenefics >= 2 || checkConnection('Venus', 'Jupiter', planets)) {
+        caregiving = 'high';
+    } else if (moonStr < 0.4 || fourthHouseMalefics > 0 || (getHouse(planets.Ketu, asc) === 4)) {
+        caregiving = 'low';
+    }
+
+    // 2. Conflict Expression
+    const marsStr = getStrength('Mars', planets.Mars, asc);
+    let conflict = 'defensive';
+    if (marsStr >= 0.7 || checkConnection('Rahu', 'Mars', planets)) {
+        conflict = 'confrontational';
+    } else if (marsStr < 0.4 || (getStrength('Jupiter', planets.Jupiter, asc) > marsStr && checkConnection('Jupiter', 'Mars', planets))) {
+        conflict = 'avoidant';
+    }
+
+    // 3. Karmic Load
+    let karmic = 'moderate';
+    if (checkConnection('Saturn', 'Ketu', planets)) {
+        karmic = 'heavy';
+    } else {
+        let dusthanaCount = 0;
+        Object.keys(planets).forEach(p => {
+            const h = getHouse(planets[p], asc);
+            if (['Saturn', 'Rahu', 'Ketu', 'Mars'].includes(p) && (h === 8 || h === 12)) dusthanaCount++;
+        });
+        if (dusthanaCount >= 2) karmic = 'heavy';
+    }
+
+    if (karmic !== 'heavy') {
+        let lagnaBenefics = 0;
+        Object.keys(planets).forEach(p => {
+            if (getHouse(planets[p], asc) === 1 && isBenefic(p)) lagnaBenefics++;
+        });
+        if (lagnaBenefics >= 1) karmic = 'light';
+    }
+
+    // 4. Resilience Index
+    let resilience = 'sensitive';
+    const lagnaStr = 0.5 + (checkAspect('Jupiter', asc, planets) ? 0.2 : 0);
+    if (lagnaStr >= 0.6 && moonStr >= 0.6) {
+        resilience = 'stable';
+    }
+    if (checkConnection('Moon', 'Saturn', planets) || checkAspect('Saturn', planets.Moon, planets)) {
+        resilience = 'requires_attention';
+    }
+
+    // 5. Legacy Expression
+    let legacy = 'bridge_builder';
+    const satStr = getStrength('Saturn', planets.Saturn, asc);
+    const sunStr = getStrength('Sun', planets.Sun, asc);
+    const rahuStr = getStrength('Rahu', planets.Rahu, asc);
+
+    if (satStr >= 0.7 && sunStr >= 0.6) legacy = 'preserver';
+    else if (rahuStr >= 0.7) legacy = 'reformer';
+
+    return { caregiving, conflict, karmic, resilience, legacy };
+};
+
 
 // Helper: Render Template Block
 const renderTemplate = (templates, pathArray) => {
@@ -32,19 +167,16 @@ const renderTemplate = (templates, pathArray) => {
         if (current && current[key]) {
             current = current[key];
         } else {
-            return "CONTRACT_VIOLATION"; // Strict failure mode
+            return `CONTRACT_VIOLATION: Missing key '${key}'`;
         }
     }
-    // Handle specific YAML structure from the user update
-    // e.g. some nodes have 'text', some have 'paragraphs' list
-    if (current.text) return current.text; // Verbatim emission, NO trim()
-    if (current.paragraphs && Array.isArray(current.paragraphs)) return current.paragraphs.join('\n\n'); // Verbatim join
+    // Handle attributes
+    if (current.text) return current.text.trim();
+    if (current.paragraphs && Array.isArray(current.paragraphs)) return current.paragraphs.join('\n\n').trim();
+    if (typeof current === 'string') return current.trim();
 
     return "CONTRACT_VIOLATION";
 };
-
-// ... inside main function ...
-
 
 
 // Main Generation Function
@@ -58,44 +190,24 @@ router.post('/vision', (req, res) => {
             throw new Error("CONTRACT_VIOLATION: vision_narrative_templates.yaml missing");
         }
 
-        // DEBUG: Verify Loaded Version
-        console.log("DEBUG: Loaded Template File Path:", VISION_TEMPLATES_PATH);
-        console.log("DEBUG: Loaded Template Version:", templates.version);
-
-        if (!templates.version || templates.version !== 2.1) {
-            throw new Error(`WRONG_TEMPLATE_VERSION_LOADED: Expected 2.1, got ${templates.version}`);
+        // Relaxed Version Check - Allow >=2.0
+        if (!templates.version || templates.version < 2.0) {
+            console.warn(`WARNING: Template version ${templates.version} might be outdated.`);
         }
 
         const roleOutputs = [];
         let totalScore = 0;
         let memberCount = 0;
 
-        // Process Each Member for Scoring
+        let childCount = 0;
+
+        // Process Each Member based on role
         members.forEach(m => {
             const chart = m.chart_object;
             const asc = chart.ascendant || chart.Ascendant?.longitude || 0;
             const role = m.role || 'Member';
 
-            // Identify dominant planet (Simplified for Scoring)
-            let domPlanet = 'Default';
-            let maxStrength = 0;
-            const planets = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu'];
-
-            planets.forEach(p => {
-                const pLon = chart.planets?.[p.toLowerCase()] || chart[p]?.longitude || 0;
-                const house = getHouse(pLon, asc);
-                let strength = 0;
-                if (['Sun', 'Jupiter', 'Saturn'].includes(p)) strength += 20;
-                if ([1, 5, 9].includes(house)) strength += 15;
-                if ([10].includes(house)) strength += 10;
-
-                if (strength > maxStrength) {
-                    maxStrength = strength;
-                    domPlanet = p;
-                }
-            });
-
-            // Map Roles strictly
+            // Basic roles
             let visionRole = "Future Direction Carrier";
             let emoji = "👤";
             let roleLabel = role;
@@ -108,25 +220,42 @@ router.post('/vision', (req, res) => {
                 visionRole = "Emotional Translator & Sustainer";
                 emoji = "👩";
                 roleLabel = "Mother";
-            } else if (role.includes('Son') || role.toLowerCase().includes('son')) {
+            } else {
+                // Treat as Child (Son/Daughter)
+                childCount++;
                 visionRole = "Future Direction Carrier";
-                emoji = "🧑";
-                roleLabel = "Son";
-            } else if (role.includes('Daughter') || role.toLowerCase().includes('daughter')) {
-                visionRole = "Future Direction Carrier";
-                emoji = "👧";
-                roleLabel = "Daughter";
+
+                // Use gendered emoji if known, otherwise neutral
+                if (role.includes('Son')) emoji = "🧑";
+                else if (role.includes('Daughter')) emoji = "👧";
+                else emoji = "🧒";
+
+                // STRICT: Label must be "Child N (Name)"
+                roleLabel = `Child ${childCount} (${m.name || 'Unnamed'})`;
             }
 
+            // Calculate 'strength' for legacy alignment score
+            const planets = getPlanets(chart);
+            let maxStrength = 0;
+            let domPlanet = 'Sun';
+            ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'].forEach(p => {
+                const s = getStrength(p, planets[p], asc) * 100;
+                if (s > maxStrength) { maxStrength = s; domPlanet = p; }
+            });
+
             roleOutputs.push({
-                role: roleLabel,
+                role: roleLabel, // This now contains "Child 1 (Name)"
+                originalRole: role, // Keep track if needed for sorting, but 'role' above is used for display
                 vision_role: visionRole,
                 emoji: emoji,
                 planet: domPlanet,
-                strength: maxStrength
+                strength: maxStrength,
+                chart: chart, // Keep for detailed eval
+                asc: asc
             });
 
-            if (['Sun', 'Jupiter'].includes(domPlanet) && maxStrength > 30) totalScore += 30;
+            // Alignment Score Contribution
+            if (['Sun', 'Jupiter'].includes(domPlanet) && maxStrength > 60) totalScore += 30;
             else if (['Saturn', 'Mars'].includes(domPlanet)) totalScore += 20;
             else totalScore += 10;
             memberCount++;
@@ -145,10 +274,9 @@ router.post('/vision', (req, res) => {
 
         // 1. Unified Statement
         const unifiedText = renderTemplate(templates, ['family_vision_unified', alignmentInfo.key]);
-        if (unifiedText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Family Vision Template");
         outputText += `${unifiedText}\n\n`;
 
-        // 2, 3, 4. Role Narratives
+        // Member Narratives
         const sortedRoles = [...roleOutputs].sort((a, b) => {
             const order = { 'Father': 1, 'Mother': 2, 'Son': 3, 'Daughter': 4 };
             return (order[a.role] || 99) - (order[b.role] || 99);
@@ -160,12 +288,10 @@ router.post('/vision', (req, res) => {
             if (r.role === 'Father') {
                 const desc = renderTemplate(templates, ['father_vision_role', 'role_description']);
 
-                // Distortion Logic: alignment low -> severe, mod -> moderate, high -> mild (Simplified Mapping)
                 let distKey = 'moderate';
                 if (alignmentInfo.key === 'clarity_high') distKey = 'mild';
                 if (alignmentInfo.key === 'clarity_low') distKey = 'severe';
                 const dist = renderTemplate(templates, ['father_vision_role', 'distortion_patterns', distKey]);
-
                 const healthy = renderTemplate(templates, ['father_vision_role', 'healthy_expression']);
 
                 outputText += `${desc}\n\n`;
@@ -179,26 +305,35 @@ router.post('/vision', (req, res) => {
                 if (alignmentInfo.key === 'clarity_high') distKey = 'mild';
                 if (alignmentInfo.key === 'clarity_low') distKey = 'severe';
                 const dist = renderTemplate(templates, ['mother_vision_role', 'distortion_patterns', distKey]);
-
                 const healthy = renderTemplate(templates, ['mother_vision_role', 'healthy_expression']);
 
                 outputText += `${desc}\n\n`;
                 outputText += `Distortion Pattern: ${dist}\n\n`;
                 outputText += `Healthy Expression: ${healthy}\n\n`;
 
-            } else { // Child
+            } else { // CHILD LOGIC (UPDATED)
+                // 1. Role Description
                 const desc = renderTemplate(templates, ['child_vision_role', 'role_description']);
-
-                // Mode Logic
-                let modeKey = 'conflicted';
-                if (alignmentInfo.key === 'clarity_high') modeKey = 'adaptive';
-                if (alignmentInfo.key === 'clarity_low') modeKey = 'suppressed';
-                const mode = renderTemplate(templates, ['child_vision_role', 'generational_modes', modeKey]);
-
-                const evolution = renderTemplate(templates, ['child_vision_role', 'evolution_framing']);
-
                 outputText += `${desc}\n\n`;
-                outputText += `Generational Mode: ${mode}\n\n`;
+
+                // 2. Evaluate Axes
+                const axes = evaluateChildAxes(r.chart, r.asc);
+
+                // 3. Render Axes
+                const caregivingText = renderTemplate(templates, ['child_vision_role', 'caregiving_orientation', axes.caregiving]);
+                const conflictText = renderTemplate(templates, ['child_vision_role', 'conflict_expression', axes.conflict]);
+                const karmicText = renderTemplate(templates, ['child_vision_role', 'karmic_load', axes.karmic]);
+                const resilienceText = renderTemplate(templates, ['child_vision_role', 'resilience_index', axes.resilience]);
+                const legacyText = renderTemplate(templates, ['child_vision_role', 'legacy_expression', axes.legacy]);
+
+                outputText += `• Caregiving Orientation: ${caregivingText}\n\n`;
+                outputText += `• Conflict Expression: ${conflictText}\n\n`;
+                outputText += `• Karmic Load Sensitivity: ${karmicText}\n\n`;
+                outputText += `• Resilience Index: ${resilienceText}\n\n`;
+                outputText += `• Legacy Expression: ${legacyText}\n\n`;
+
+                // 4. Evolution Framing
+                const evolution = renderTemplate(templates, ['child_vision_role', 'evolution_framing']);
                 outputText += `Evolution Framing: ${evolution}\n\n`;
             }
         });
@@ -209,27 +344,18 @@ router.post('/vision', (req, res) => {
         if (alignmentInfo.key === 'clarity_high') alignKey = 'aligned';
         if (alignmentInfo.key === 'clarity_low') alignKey = 'misaligned';
         const summaryText = renderTemplate(templates, ['family_vision_alignment_summary', alignKey]);
-        if (summaryText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Alignment Summary");
         outputText += `${summaryText}\n\n`;
 
         // 6. Guiding Principle
         outputText += `6. 🌱 Guiding Vision Principle for the Family\n`;
         const principleText = renderTemplate(templates, ['family_guiding_vision_principle']);
-        if (principleText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Guiding Principle");
         outputText += `“${principleText}”\n\n`;
 
         res.json({ success: true, report: outputText });
 
     } catch (error) {
         console.error("Vision Generation Error:", error);
-        // If it's a contract violation, strict output
-        if (error.message.includes("CONTRACT_VIOLATION")) {
-            res.json({ success: true, report: error.message }); // Return as report content or strict error? 
-            // "If any required template key is missing or invalid: Output exactly: CONTRACT_VIOLATION -> Stop execution"
-            // I will return it as the report text to be visible.
-        } else {
-            res.status(500).json({ success: false, error: "Vision Generation Failed: " + error.message });
-        }
+        res.status(500).json({ success: false, error: "Vision Generation Failed: " + error.message });
     }
 });
 

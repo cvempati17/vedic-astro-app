@@ -221,3 +221,44 @@ internal_blocks:
     allowed_template_keys:
       - VISION_RENDER_STATUS
     enabled_for_ui: false
+###
+# ==================================================
+# CHILD-LEVEL VISION ENFORCEMENT (EXTENSION)
+# ==================================================
+
+child_output_rules:
+  evaluation_mode: individual
+  collective_child_output: forbidden
+  gender_based_narrative: forbidden
+  gender_based_logic: forbidden
+
+  safety_constraints:
+    fatalistic_predictions: forbidden
+    death_or_lifespan_prediction: forbidden
+    medical_diagnosis_language: forbidden
+
+  max_supported_children: 6
+
+child_required_axes:
+  caregiving_orientation:
+    allowed: [high, moderate, low]
+
+  conflict_expression:
+    allowed: [confrontational, defensive, avoidant]
+
+  karmic_load:
+    allowed: [heavy, moderate, light]
+
+  resilience_index:
+    allowed: [stable, sensitive, requires_attention]
+
+  legacy_expression:
+    allowed: [preserver, reformer, bridge_builder]
+
+child_section:
+  repeatable: true
+  min_instances: 1
+  max_instances: 6
+
+  vision_role:
+    fixed_value: "Future Direction Carrier"

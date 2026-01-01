@@ -7,7 +7,7 @@ import RibbonMenu from '../components/RibbonMenu';
 import { Icons } from '../components/uiIcons.jsx';
 import './SavedChartsPage.css';
 
-const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenBTR, onOpenBTRNew, onOpenForeignTravelNew, onOpenJobBusinessNew, onOpenBusinessPartnershipInput, onOpenBusinessPartnershipV6, onOpenAstrogravityTest, onOpenGeminiTest, onOpenPalmistry, onOpenPlanetaryChangesImpact, onOpenFamilyOS, onOpenFamilyVision, onOpenMuhurat, onOpenTithi, onOpenSettings, onLogout, userType = 'basic' }) => {
+const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onOpenMatchTraditional, onOpenNamakaran, onOpenBTR, onOpenBTRNew, onOpenForeignTravelNew, onOpenJobBusinessNew, onOpenBusinessPartnershipInput, onOpenBusinessPartnershipV6, onOpenAstrogravityTest, onOpenGeminiTest, onOpenPalmistry, onOpenPlanetaryChangesImpact, onOpenFamilyOS, onOpenFamilyVision, onOpenMuhurat, onOpenTithi, onOpenSnapshot, onOpenSettings, onLogout, userType = 'basic' }) => {
     const { t } = useTranslation(); // Initialize hook
     const [charts, setCharts] = useState([]);
     // ... (rest of the file until sidebar)
@@ -532,6 +532,37 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
         setActionMenuOpen(actionMenuOpen === id ? null : id);
     };
 
+    const handleSnapshotClick = () => {
+        if (selectedIds.length !== 1) {
+            alert(t('savedCharts.selectOneSnapshot', 'Please select exactly one chart for Snap Shot.'));
+            return;
+        }
+        const chart = charts.find(c => c._id === selectedIds[0]);
+        if (!chart) return;
+
+        if (!chart.chartData) {
+            alert(t('savedCharts.noChartData', 'Chart data not calculated. Please edit and save the chart first.'));
+            return;
+        }
+
+        const formData = {
+            name: chart.name,
+            date: chart.dateOfBirth,
+            time: chart.timeOfBirth,
+            city: chart.placeOfBirth?.city,
+            latitude: chart.placeOfBirth?.lat,
+            longitude: chart.placeOfBirth?.lng,
+            timezone: chart.placeOfBirth?.timezone,
+            gender: chart.gender
+        };
+
+        if (onOpenSnapshot) {
+            onOpenSnapshot(chart.chartData, formData);
+        } else {
+            console.error("onOpenSnapshot prop missing");
+        }
+    };
+
     if (loading && !isAddingNew) return <div className="loading-container">{t('savedCharts.loading', 'Loading charts...')}</div>;
 
     return (
@@ -635,6 +666,20 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                                     actions: [
                                         { key: 'newChart', label: 'New Chart', onClick: handleAddNew, variant: 'primary', icon: Icons.chart() },
                                         { key: 'palmistry', label: 'Palmistry', onClick: () => { if (onOpenPalmistry) { onOpenPalmistry(); } else { alert('Palmistry handler missing!'); } }, icon: Icons.chart() }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            key: 'component',
+                            label: 'Component',
+                            icon: Icons.grid(),
+                            groups: [
+                                {
+                                    key: 'snapShotGroup',
+                                    label: 'Snapshot',
+                                    actions: [
+                                        { key: 'snapShot', label: 'Snap Shot', onClick: handleSnapshotClick, variant: 'primary', icon: Icons.report() }
                                     ]
                                 }
                             ]
