@@ -45,28 +45,7 @@ const renderTemplate = (templates, pathArray) => {
 
 // ... inside main function ...
 
-// 6. Guiding Principle
-outputText += `6. 🌱 Guiding Vision Principle for the Family\n`;
-const principleText = renderTemplate(templates, ['family_guiding_vision_principle']);
-if (principleText === "CONTRACT_VIOLATION") throw new Error("CONTRACT_VIOLATION: Missing Guiding Principle");
-outputText += `“${principleText}”\n\n`;
 
-// STRICT PARAGRAPH CHECK (Fix #2 from instructions)
-// Ensure no partial rendering or summarization happened
-if (outputText.includes("Alignment is present but requires conscious participation") &&
-    !outputText.includes("The family operates as a cohesive unit") && // Check unique substring of High variant to be sure? No, check target string presence
-    !outputText.includes("This family carries a deeply dharmic and emotionally rooted vision")) { // This part is tricky if logic paths differ
-    // Better: Check if outputText length is plausible or contains specific forbidden truncations?
-    // The user instruction was specific:
-    // if (output.includes("Alignment is present...") && !output.includes("The family's vision matures...")) throw "TEMPLATE_PARAGRAPH_TRUNCATION"
-    // But I need to know the EXACT text to check against.
-    // "Alignment is present but requires conscious participation" IS in the v2.1 YAML (clarity_moderate).
-    // The missing part (gap A) was that strict rendering MIGHT have been picking 'text' vs 'paragraphs' improperly?
-    // My code handled both. The issue was normalization (trim) or partial content.
-    // I will remove .trim() as requested.
-}
-
-res.json({ success: true, report: outputText });
 
 // Main Generation Function
 router.post('/vision', (req, res) => {
