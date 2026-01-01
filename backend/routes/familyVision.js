@@ -54,6 +54,14 @@ router.post('/vision', (req, res) => {
             throw new Error("CONTRACT_VIOLATION: vision_narrative_templates.yaml missing");
         }
 
+        // DEBUG: Verify Loaded Version
+        console.log("DEBUG: Loaded Template File Path:", VISION_TEMPLATES_PATH);
+        console.log("DEBUG: Loaded Template Version:", templates.version);
+
+        if (!templates.version || templates.version !== 2.1) {
+            throw new Error(`WRONG_TEMPLATE_VERSION_LOADED: Expected 2.1, got ${templates.version}`);
+        }
+
         const roleOutputs = [];
         let totalScore = 0;
         let memberCount = 0;
