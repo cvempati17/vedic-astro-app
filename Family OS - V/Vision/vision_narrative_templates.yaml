@@ -208,3 +208,11 @@ vision_narrative_templates:
     risks: risks
     guidance: guidance
     severity_score: alignment_score
+
+  # ------------------------------------------------------------
+  # GUIDING PRINCIPLES (STRICT TEMPLATE KEYS)
+  # ------------------------------------------------------------
+  family_guiding_principle:
+    high_alignment: "Dharmic Continuity & Shared Purpose"
+    moderate_alignment: "Aspirational Growth through Recalibration"
+    low_alignment: "Survival & Stabilization First"
