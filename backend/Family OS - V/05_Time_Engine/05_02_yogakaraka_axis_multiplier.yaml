@@ -1,0 +1,95 @@
+metadata:
+  version: "1.0.0"
+  purpose: >
+    Defines axis-specific intensity multipliers when a Yogakaraka
+    planet is operating in Mahadasha or Antardasha.
+    This file is consumed by the Dasha Intensity Engine.
+  scope_rules:
+    - Applies ONLY if planet is Yogakaraka for the native's Lagna
+    - Applies ONLY to Dasha-based intensity
+    - Does NOT apply to Transits
+    - Does NOT apply to Natal base strength
+    - Multipliers are multiplicative, never additive
+
+# --------------------------------------------------
+# GLOBAL DEFAULTS
+# --------------------------------------------------
+defaults:
+  mahadasha_multiplier: 1.25
+  antardasha_multiplier: 1.15
+  pratyantar_multiplier: 1.05
+
+# --------------------------------------------------
+# AXIS-SPECIFIC MODULATION
+# --------------------------------------------------
+axes:
+
+  authority:
+    description: >
+      Leadership, control, governance, family headship.
+    mahadasha: 1.30
+    antardasha: 1.18
+    pratyantar: 1.06
+
+  career:
+    description: >
+      Profession, reputation, karma in the public sphere.
+    mahadasha: 1.35
+    antardasha: 1.20
+    pratyantar: 1.08
+
+  wealth:
+    description: >
+      Income, assets, savings, financial stability.
+    mahadasha: 1.30
+    antardasha: 1.18
+    pratyantar: 1.06
+
+  family:
+    description: >
+      Family cohesion, lineage continuity, household stability.
+    mahadasha: 1.20
+    antardasha: 1.15
+    pratyantar: 1.05
+
+  care:
+    description: >
+      Emotional labor, nurturing, responsibility for dependents.
+    mahadasha: 1.15
+    antardasha: 1.12
+    pratyantar: 1.04
+
+  conflict:
+    description: >
+      Disputes, litigation, internal family friction.
+    mahadasha: 1.10
+    antardasha: 1.08
+    pratyantar: 1.03
+
+  legacy:
+    description: >
+      Long-term impact, inheritance, old age security, dharmic outcome.
+    mahadasha: 1.40
+    antardasha: 1.22
+    pratyantar: 1.10
+
+  emotional_load:
+    description: >
+      Psychological burden, stress accumulation, fatigue.
+    mahadasha: 1.10
+    antardasha: 1.08
+    pratyantar: 1.03
+
+# --------------------------------------------------
+# SAFETY CAPS (NON-NEGOTIABLE)
+# --------------------------------------------------
+caps:
+  max_axis_multiplier: 1.40
+  max_combined_dasha_multiplier: 1.50
+  min_effective_multiplier: 0.90
+
+notes:
+  - Yogakaraka amplifies promise, not guarantees outcome
+  - Axis multipliers are applied AFTER functional nature weighting
+  - If multiple Yogakaraka planets exist (rare), apply only the dominant one
+  - No axis may exceed the defined caps even with multiple layers active

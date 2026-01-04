@@ -1,0 +1,138 @@
+metadata:
+  version: "1.0.0"
+  ayanamsa: "lahiri"
+  purpose: >
+    Defines functional nature of planets per Lagna.
+    This file determines beneficence, maleficence,
+    and yogakaraka status for Dasha intensity computation.
+  rules:
+    - Kendrādhipati dosha applied
+    - Trik lords treated as functional malefics
+    - Yogakaraka only when ruling Kendra + Trikona
+    - Moon beneficence depends on lordship only (no paksha here)
+
+lagnas:
+
+  Aries:
+    lagna_lord: Mars
+    yogakaraka: []
+    functional_benefic: [Sun, Jupiter]
+    functional_malefic: [Mercury, Venus, Saturn]
+    neutral: [Moon, Mars]
+    notes: >
+      Mars is Lagna lord (neutral).
+      Jupiter owns 9th (trine) → benefic.
+      Saturn owns 10th + 11th → functional malefic.
+
+  Taurus:
+    lagna_lord: Venus
+    yogakaraka: [Saturn]
+    functional_benefic: [Saturn, Mercury]
+    functional_malefic: [Mars, Jupiter, Moon]
+    neutral: [Sun, Venus]
+    notes: >
+      Saturn owns 9th + 10th → Yogakaraka.
+      Jupiter owns 8th + 11th → functional malefic.
+
+  Gemini:
+    lagna_lord: Mercury
+    yogakaraka: []
+    functional_benefic: [Venus]
+    functional_malefic: [Mars, Jupiter, Saturn]
+    neutral: [Sun, Moon, Mercury]
+    notes: >
+      Venus owns 5th → benefic.
+      Jupiter owns 7th + 10th (kendras only) → malefic.
+
+  Cancer:
+    lagna_lord: Moon
+    yogakaraka: [Mars]
+    functional_benefic: [Mars, Jupiter]
+    functional_malefic: [Venus, Mercury, Saturn]
+    neutral: [Sun, Moon]
+    notes: >
+      Mars owns 5th + 10th → Yogakaraka.
+      Jupiter owns 6th + 9th → mixed but benefic-leaning.
+
+  Leo:
+    lagna_lord: Sun
+    yogakaraka: []
+    functional_benefic: [Mars, Jupiter]
+    functional_malefic: [Venus, Saturn]
+    neutral: [Sun, Moon, Mercury]
+    notes: >
+      Mars owns 4th + 9th → strong benefic.
+      Saturn owns 6th + 7th → malefic.
+
+  Virgo:
+    lagna_lord: Mercury
+    yogakaraka: []
+    functional_benefic: [Venus]
+    functional_malefic: [Mars, Moon, Jupiter, Saturn]
+    neutral: [Sun, Mercury]
+    notes: >
+      Venus owns 2nd + 9th → benefic.
+      Jupiter owns 4th + 7th → kendrādhipati dosha.
+
+  Libra:
+    lagna_lord: Venus
+    yogakaraka: [Saturn]
+    functional_benefic: [Saturn, Mercury]
+    functional_malefic: [Mars, Sun, Jupiter]
+    neutral: [Moon, Venus]
+    notes: >
+      Saturn owns 4th + 5th → Yogakaraka.
+      Sun owns 11th → malefic.
+
+  Scorpio:
+    lagna_lord: Mars
+    yogakaraka: []
+    functional_benefic: [Sun, Jupiter, Moon]
+    functional_malefic: [Mercury, Venus, Saturn]
+    neutral: [Mars]
+    notes: >
+      Sun owns 10th → benefic.
+      Jupiter owns 2nd + 5th → benefic.
+      Saturn owns 3rd + 4th → malefic.
+
+  Sagittarius:
+    lagna_lord: Jupiter
+    yogakaraka: []
+    functional_benefic: [Sun, Mars]
+    functional_malefic: [Venus, Mercury, Saturn]
+    neutral: [Moon, Jupiter]
+    notes: >
+      Sun owns 9th → benefic.
+      Mars owns 5th → benefic.
+      Saturn owns 2nd + 3rd → malefic.
+
+  Capricorn:
+    lagna_lord: Saturn
+    yogakaraka: [Venus]
+    functional_benefic: [Venus, Mercury]
+    functional_malefic: [Mars, Jupiter, Moon]
+    neutral: [Sun, Saturn]
+    notes: >
+      Venus owns 5th + 10th → Yogakaraka.
+      Jupiter owns 3rd + 12th → malefic.
+
+  Aquarius:
+    lagna_lord: Saturn
+    yogakaraka: [Venus]
+    functional_benefic: [Venus, Mercury]
+    functional_malefic: [Mars, Jupiter, Moon]
+    neutral: [Sun, Saturn]
+    notes: >
+      Venus owns 4th + 9th → Yogakaraka.
+      Jupiter owns 2nd + 11th → malefic.
+
+  Pisces:
+    lagna_lord: Jupiter
+    yogakaraka: []
+    functional_benefic: [Moon, Mars]
+    functional_malefic: [Venus, Mercury, Saturn, Sun]
+    neutral: [Jupiter]
+    notes: >
+      Mars owns 2nd + 9th → benefic.
+      Moon owns 5th → benefic.
+      Sun owns 6th → malefic.

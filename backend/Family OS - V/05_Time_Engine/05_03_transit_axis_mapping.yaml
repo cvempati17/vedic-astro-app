@@ -1,0 +1,192 @@
+metadata:
+  version: "1.0.0"
+  ayanamsa: "lahiri"
+  purpose: >
+    Defines how planetary transits map to life axes,
+    how gate states (OPEN / HOLD / BLOCK) are triggered,
+    and which planetary interactions are valid.
+  core_principles:
+    - Transits do not create promise, only timing
+    - Only Saturn, Jupiter, Rahu, Ketu control gates
+    - Effects are axis-based, not event-based
+    - All rules are lagna-relative
+    - Multipliers are applied AFTER family mahadasha intensity
+
+# --------------------------------------------------
+# AXIS ↔ HOUSE MAPPING (LAGNA-RELATIVE)
+# --------------------------------------------------
+axes:
+
+  career:
+    houses: [10, 11]
+    secondary_houses: [6]
+    description: >
+      Profession, public role, achievement, income from work.
+
+  authority:
+    houses: [1, 10]
+    secondary_houses: [4]
+    description: >
+      Leadership, control, decision power, family headship.
+
+  wealth:
+    houses: [2, 11]
+    secondary_houses: [8]
+    description: >
+      Assets, savings, income stability, shared resources.
+
+  family:
+    houses: [2, 4]
+    secondary_houses: [9]
+    description: >
+      Household stability, lineage, inner security.
+
+  care:
+    houses: [4, 6]
+    secondary_houses: [12]
+    description: >
+      Emotional labor, caregiving, service, responsibility for dependents.
+
+  conflict:
+    houses: [6, 8, 12]
+    secondary_houses: [3]
+    description: >
+      Disputes, litigation, illness, hidden stress.
+
+  legacy:
+    houses: [9, 12]
+    secondary_houses: [5]
+    description: >
+      Long-term outcome, inheritance, old-age security, dharma.
+
+  emotional_load:
+    houses: [4, 8, 12]
+    secondary_houses: []
+    description: >
+      Psychological pressure, fatigue, internal burden.
+
+# --------------------------------------------------
+# PLANETARY TRANSIT BEHAVIOR (GATE LOGIC)
+# --------------------------------------------------
+planets:
+
+  Saturn:
+    nature: blocker
+    valid_interactions:
+      - conjunction
+      - full_aspect
+    blocks_when:
+      - house_in_axis
+      - aspecting_axis_lord
+      - transiting_6_8_12_from_axis_house
+    gate_effects:
+      primary: BLOCK
+      secondary: HOLD
+    notes: >
+      Saturn never opens gates.
+      Primary block if conjunct or strong aspect.
+      Otherwise hold (delay).
+
+  Jupiter:
+    nature: opener
+    valid_interactions:
+      - conjunction
+      - trine
+      - kendra
+    opens_when:
+      - house_in_axis
+      - aspecting_axis_lord
+      - trine_or_kendra_to_axis_house
+    gate_effects:
+      primary: OPEN
+    notes: >
+      Jupiter never blocks.
+      Provides permission, relief, expansion.
+
+  Rahu:
+    nature: distorter
+    valid_interactions:
+      - conjunction
+    effects:
+      - spike
+      - instability
+    gate_effects:
+      primary: HOLD
+      override_rules:
+        can_override: HOLD
+        cannot_override: BLOCK
+    notes: >
+      Rahu amplifies intensity but destabilizes.
+      Never converts BLOCK to OPEN.
+
+  Ketu:
+    nature: suppressor
+    valid_interactions:
+      - conjunction
+    effects:
+      - withdrawal
+      - detachment
+    gate_effects:
+      primary: BLOCK
+    notes: >
+      Ketu causes disengagement.
+      Never opens gates.
+
+# --------------------------------------------------
+# ASPECT RULES (SIMPLIFIED, ENGINE-SAFE)
+# --------------------------------------------------
+aspects:
+
+  Saturn:
+    full_aspects: [3, 7, 10]
+
+  Jupiter:
+    full_aspects: [5, 7, 9]
+
+  Rahu:
+    full_aspects: []
+
+  Ketu:
+    full_aspects: []
+
+rules:
+  - Only full aspects listed above are considered
+  - Partial aspects are ignored (determinism > completeness)
+  - House ownership is lagna-relative
+  - Aspecting axis lord is equivalent to aspecting axis house
+
+# --------------------------------------------------
+# GATE RESOLUTION PRIORITY (HARD RULE)
+# --------------------------------------------------
+gate_priority:
+  - BLOCK
+  - HOLD
+  - OPEN
+
+resolution_logic:
+  description: >
+    When multiple planets influence an axis at the same time,
+    the most restrictive gate always wins.
+  examples:
+    - Saturn BLOCK + Jupiter OPEN → BLOCK
+    - Ketu BLOCK + Rahu HOLD → BLOCK
+    - Rahu HOLD + Jupiter OPEN → HOLD
+
+# --------------------------------------------------
+# TRANSIT MULTIPLIER BOUNDS (REFERENCE)
+# --------------------------------------------------
+multipliers:
+  OPEN:
+    min: 1.10
+    max: 1.35
+  HOLD:
+    min: 0.85
+    max: 1.00
+  BLOCK:
+    min: 0.55
+    max: 0.75
+
+notes:
+  - Multipliers are applied after family mahadasha intensity
+  - This file never alters natal or dasha logic
+  - Transit effects are temporary and reversible
