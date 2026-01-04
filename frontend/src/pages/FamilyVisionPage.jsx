@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import './PalmistryPage.css'; // Reuse existing styles
+import FamilyTimeline from '../components/FamilyTimeline';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -600,6 +601,12 @@ const FamilyVisionPage = ({ onBack }) => {
                                 04. Family Matrix – Baseline (Natal Structure)
                             </div>
 
+                            <div style={{ marginTop: '20px', marginBottom: '10px', color: '#6c728f', fontSize: '0.9em', textTransform: 'uppercase', letterSpacing: '1px', borderTop: '1px solid #2e324a', paddingTop: '20px' }}>Time & Guidance</div>
+
+                            <div onClick={() => setActiveTab('time_timeline')} style={menuLinkStyle(activeTab === 'time_timeline')}>
+                                05. Family Timeline
+                            </div>
+
                             <div style={{ marginTop: 'auto' }}>
                                 <button style={{ ...buttonStyle, width: '100%' }} onClick={() => { setReport(null); setMissionReport(null); setPhilosophyReport(null); setActiveTab('01_vision'); }}>
                                     ↻ New Report
@@ -1108,6 +1115,18 @@ const FamilyVisionPage = ({ onBack }) => {
                                     <div style={{ marginTop: '50px', padding: '30px', textAlign: 'center', borderTop: '1px solid #2e324a', color: '#6b7280', fontStyle: 'italic' }}>
                                         "By aligning these seven layers, families evolve from random biological groups into conscious, purposeful organisms."
                                     </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'time_timeline' && (
+                                <div style={{ background: '#12162a', padding: '40px', borderRadius: '10px', border: '1px solid #2a2f4a', color: '#d1d5db' }}>
+                                    <FamilyTimeline
+                                        members={inputRows.map(r => {
+                                            const c = savedCharts.find(sc => sc._id === r.chartId);
+                                            return c ? { ...c, role: r.relation, id: c._id, chart_object: c } : null;
+                                        }).filter(Boolean)}
+                                        familyId={selectedFamilyId || `session_${Date.now()}`}
+                                    />
                                 </div>
                             )}
 
