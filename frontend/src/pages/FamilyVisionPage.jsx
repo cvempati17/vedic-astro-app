@@ -843,6 +843,90 @@ const FamilyVisionPage = ({ onBack }) => {
 
                                                             </div>
                                                         </div>
+
+                                                        {/* Emotional Risk Overlay (New) */}
+                                                        {supportModeEnabled && (
+                                                            <div style={{ background: '#111827', padding: '20px', borderRadius: '8px', border: '1px solid #7f1d1d', marginBottom: '20px' }}>
+                                                                <h3 style={{ color: '#fca5a5', marginTop: 0, borderBottom: '1px solid #7f1d1d', paddingBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                                                                    <span>🧠 Emotional Risk Overlay</span>
+                                                                    <span style={{ fontSize: '0.6em', color: '#fca5a5', background: 'rgba(239, 68, 68, 0.1)', padding: '2px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}>
+                                                                        {matrixReport.intervention_gate?.selected_mode === 'safety_escalation' ? '⚠️ Mode: Safety Escalation' : '✅ Mode: User-Enabled'}
+                                                                    </span>
+                                                                </h3>
+
+                                                                <div style={{ color: '#9ca3af', fontSize: '0.9em', marginBottom: '20px', fontStyle: 'italic', borderLeft: '3px solid #fca5a5', paddingLeft: '10px' }}>
+                                                                    ⚠️ This overlay is not diagnostic, not predictive, and not clinical. It is rendered only because Support Mode is enabled and Gate conditions are satisfied.
+                                                                </div>
+
+                                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+
+                                                                    {/* Risk Signal 1: Accumulated Emotional Load */}
+                                                                    {(matrixReport.baseline.matrix_axes.emotional_dependency >= 30 && matrixReport.time_evolution.deltas.cohesion_delta < 0) && (
+                                                                        <div style={{ background: '#1f2937', padding: '15px', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
+                                                                            <div style={{ color: '#fca5a5', fontWeight: 'bold', marginBottom: '10px' }}>Risk Signal 1 — Accumulated Emotional Load</div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db', marginBottom: '10px' }}>
+                                                                                <strong style={{ color: '#9ca3af' }}>Condition:</strong> Emotional dependency moderate/high while cohesion is declining.
+                                                                            </div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db' }}>
+                                                                                <strong style={{ color: '#ffb3b3' }}>Risk Framing:</strong> Unexpressed strain may compound internally rather than surface through explicit conflict.
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Risk Signal 2: Silent Stress Channels */}
+                                                                    {(matrixReport.baseline.matrix_axes.decision_influence > 55 && matrixReport.baseline.matrix_axes.care_flow < 45) && (
+                                                                        <div style={{ background: '#1f2937', padding: '15px', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
+                                                                            <div style={{ color: '#fca5a5', fontWeight: 'bold', marginBottom: '10px' }}>Risk Signal 2 — Silent Stress Channels</div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db', marginBottom: '10px' }}>
+                                                                                <strong style={{ color: '#9ca3af' }}>Condition:</strong> High decision influence combined with low care flow.
+                                                                            </div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db' }}>
+                                                                                <strong style={{ color: '#ffb3b3' }}>Risk Framing:</strong> Responsibility-bearing roles may experience stress without corresponding emotional support exchange.
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Risk Signal 3: Parent-Child Compression */}
+                                                                    {(matrixReport.baseline.matrix_axes.emotional_dependency > matrixReport.baseline.matrix_axes.care_flow) && (
+                                                                        <div style={{ background: '#1f2937', padding: '15px', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
+                                                                            <div style={{ color: '#fca5a5', fontWeight: 'bold', marginBottom: '10px' }}>Risk Signal 3 — Parent–Child Emotional Compression</div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db', marginBottom: '10px' }}>
+                                                                                <strong style={{ color: '#9ca3af' }}>Condition:</strong> Dependency levels exceed visible care signals.
+                                                                            </div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db' }}>
+                                                                                <strong style={{ color: '#ffb3b3' }}>Risk Framing:</strong> Emotional needs may be internalized rather than actively processed across roles.
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Risk Signal 4: Phase Sensitivity */}
+                                                                    {(matrixReport.time_evolution.current_phase.phase_code === 'fracture_risk') && (
+                                                                        <div style={{ background: '#1f2937', padding: '15px', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
+                                                                            <div style={{ color: '#fca5a5', fontWeight: 'bold', marginBottom: '10px' }}>Risk Signal 4 — Phase Sensitivity</div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db', marginBottom: '10px' }}>
+                                                                                <strong style={{ color: '#9ca3af' }}>Condition:</strong> Current phase = Fracture Risk Phase.
+                                                                            </div>
+                                                                            <div style={{ fontSize: '0.85em', color: '#d1d5db' }}>
+                                                                                <strong style={{ color: '#ffb3b3' }}>Risk Framing:</strong> Awareness and pacing are more critical during this phase.
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Fallback if no risks detected but mode is on */}
+                                                                    {!(
+                                                                        (matrixReport.baseline.matrix_axes.emotional_dependency >= 30 && matrixReport.time_evolution.deltas.cohesion_delta < 0) ||
+                                                                        (matrixReport.baseline.matrix_axes.decision_influence > 55 && matrixReport.baseline.matrix_axes.care_flow < 45) ||
+                                                                        (matrixReport.baseline.matrix_axes.emotional_dependency > matrixReport.baseline.matrix_axes.care_flow) ||
+                                                                        (matrixReport.time_evolution.current_phase.phase_code === 'fracture_risk')
+                                                                    ) && (
+                                                                            <div style={{ color: '#9ca3af', fontStyle: 'italic', gridColumn: '1 / -1', textAlign: 'center' }}>
+                                                                                No specific high-priority emotional risk signals detected in the current matrix structure.
+                                                                            </div>
+                                                                        )}
+
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </>
                                                 )}
 
