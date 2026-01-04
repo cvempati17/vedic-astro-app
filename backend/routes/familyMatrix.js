@@ -169,6 +169,89 @@ router.post('/family-matrix', async (req, res) => {
             resource_flow: Math.floor(totalRes / count)
         };
 
+        // --- TRACE GENERATION (NEW) ---
+        const generateAggregateTrace = (axisName, members, score) => {
+            const planetsUsed = [];
+            let ruleEffect = "";
+            let ruleId = "";
+
+            // Map Axis to Planets & Rules
+            if (axisName === 'authority_flow') {
+                members.forEach(m => planetsUsed.push({ name: 'Sun', strength: m.planets.Sun || 0, chart: 'D1' }));
+                ruleId = 'FM-AUTH-01'; ruleEffect = "Sun dictates authority flow";
+            } else if (axisName === 'care_flow') {
+                members.forEach(m => planetsUsed.push({ name: 'Moon', strength: m.planets.Moon || 0, chart: 'D1' }));
+                ruleId = 'FM-CARE-01'; ruleEffect = "Moon dictates care flow";
+            } else if (axisName === 'emotional_dependency') {
+                members.forEach(m => {
+                    planetsUsed.push({ name: 'Moon', strength: m.planets.Moon || 0, chart: 'D1' });
+                    planetsUsed.push({ name: 'Saturn', strength: m.planets.Saturn || 0, chart: 'D1' });
+                });
+                ruleId = 'FM-DEP-01'; ruleEffect = "Moon + Saturn interaction creates dependency";
+            } else if (axisName === 'decision_influence') {
+                members.forEach(m => {
+                    planetsUsed.push({ name: 'Mercury', strength: m.planets.Mercury || 0, chart: 'D1' });
+                    planetsUsed.push({ name: 'Jupiter', strength: m.planets.Jupiter || 0, chart: 'D1' });
+                });
+                ruleId = 'FM-DEC-01'; ruleEffect = "Mercury + Jupiter drive decision influence";
+            } else if (axisName === 'resource_flow') {
+                members.forEach(m => {
+                    planetsUsed.push({ name: 'Venus', strength: m.planets.Venus || 0, chart: 'D1' });
+                    planetsUsed.push({ name: 'Jupiter', strength: m.planets.Jupiter || 0, chart: 'D1' });
+                });
+                ruleId = 'FM-RES-01'; ruleEffect = "Venus + Jupiter drive resource flow";
+            }
+
+            return {
+                axis: axisName,
+                final_score: score,
+                trace: {
+                    planets: planetsUsed.map(p => ({
+                        planet: p.name,
+                        chart: p.chart,
+                        strength: p.strength,
+                        source: "04_01_family_matrix_planetary_strength_scoring.yaml"
+                    })),
+                    rules_applied: [
+                        {
+                            rule_id: ruleId,
+                            rule_type: "axis_base_calculation",
+                            file: "02_01_family_matrix_engine.yaml",
+                            effect: ruleEffect
+                        },
+                        {
+                            rule_id: "FM-AGG-AVG",
+                            rule_type: "aggregation",
+                            file: "02_01_family_matrix_engine.yaml",
+                            effect: "Family average of member scores"
+                        }
+                    ],
+                    axis_contributions: members.map(m => {
+                        // Re-calc individual for trace accuracy
+                        const sub = calculateAxes(m.planets);
+                        return {
+                            axis: axisName,
+                            value: sub[axisName],
+                            weight: Number((1 / members.length).toFixed(2))
+                        };
+                    }),
+                    aggregation: {
+                        method: "weighted_average",
+                        normalization: "0-100",
+                        final_score: score
+                    }
+                }
+            };
+        };
+
+        const traceData = {
+            authority_flow: generateAggregateTrace('authority_flow', memberData, matrixAxes.authority_flow),
+            care_flow: generateAggregateTrace('care_flow', memberData, matrixAxes.care_flow),
+            emotional_dependency: generateAggregateTrace('emotional_dependency', memberData, matrixAxes.emotional_dependency),
+            decision_influence: generateAggregateTrace('decision_influence', memberData, matrixAxes.decision_influence),
+            resource_flow: generateAggregateTrace('resource_flow', memberData, matrixAxes.resource_flow)
+        };
+
         // 3. Role Pair Matrix
         const rolePairMatrix = [];
         for (let i = 0; i < memberData.length; i++) {
@@ -251,6 +334,7 @@ router.post('/family-matrix', async (req, res) => {
             scope: scope,
             baseline: {
                 matrix_axes: matrixAxes,
+                trace_data: traceData,
                 role_pair_matrix: rolePairMatrix,
                 member_flows: memberFlows
             },

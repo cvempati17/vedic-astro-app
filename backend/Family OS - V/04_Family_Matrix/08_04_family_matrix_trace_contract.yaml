@@ -1,0 +1,45 @@
+family_matrix_trace_contract:
+  metadata:
+    file: 08_04_family_matrix_trace_contract.yaml
+    version: "1.0.0"
+    purpose: >
+      Defines mandatory traceability schema for explaining
+      how each Family Matrix score was computed.
+    principle: >
+      Every rendered numeric score must be traceable back
+      to planetary inputs via explicit rules.
+      No inferred or synthesized explanations are allowed.
+
+  trace_levels:
+    - planet
+    - rule
+    - axis
+    - aggregation
+
+  required_fields:
+    planet:
+      - planet_name
+      - chart_type
+      - strength_score
+      - source_file
+
+    rule:
+      - rule_id
+      - rule_type
+      - rule_file
+      - effect
+
+    axis:
+      - axis_name
+      - contribution_value
+      - weight
+
+    aggregation:
+      - aggregation_method
+      - final_axis_score
+      - normalization_applied
+
+  renderer_constraints:
+    forbid_text_generation: true
+    forbid_score_adjustment: true
+    require_exact_values: true

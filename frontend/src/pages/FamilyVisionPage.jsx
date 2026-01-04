@@ -177,6 +177,19 @@ const FamilyVisionPage = ({ onBack }) => {
     const [currentMembers, setCurrentMembers] = useState([]);
     const [consentChecks, setConsentChecks] = useState({ understand: false, choose: false });
 
+    // Trace View State
+    const [traceData, setTraceData] = useState(null);
+    const [showTraceModal, setShowTraceModal] = useState(false);
+    const [activeTraceTab, setActiveTraceTab] = useState('planets');
+
+    const openTrace = (axisKey) => {
+        if (matrixReport?.baseline?.trace_data?.[axisKey]) {
+            setTraceData(matrixReport.baseline.trace_data[axisKey]);
+            setShowTraceModal(true);
+            setActiveTraceTab('planets');
+        }
+    };
+
     const handleSupportToggle = () => {
         if (!supportModeEnabled) {
             // Turning ON -> Show Modal
@@ -653,8 +666,11 @@ const FamilyVisionPage = ({ onBack }) => {
                                                         {Object.entries(matrixReport.baseline.matrix_axes).map(([key, value]) => (
                                                             <div
                                                                 key={key}
-                                                                style={{ background: '#0f1220', padding: '15px', borderRadius: '6px', border: '1px solid #2e324a', cursor: 'help' }}
-                                                                title={getAxisTooltip(key, value)}
+                                                                onClick={() => openTrace(key)}
+                                                                style={{ background: '#0f1220', padding: '15px', borderRadius: '6px', border: '1px solid #2e324a', cursor: 'pointer', transition: 'border-color 0.2s' }}
+                                                                title={`${getAxisTooltip(key, value)}\n\n👉 Click for full provenance trace.`}
+                                                                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#60a5fa'}
+                                                                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#2e324a'}
                                                             >
                                                                 <div style={{ color: '#9ca3af', fontSize: '0.8em', textTransform: 'uppercase', marginBottom: '5px' }}>{key.replace('_', ' ')}</div>
                                                                 <div style={{ color: '#fff', fontSize: '1.2em', fontWeight: 'bold' }}>{value}</div>
@@ -1091,6 +1107,122 @@ const FamilyVisionPage = ({ onBack }) => {
 
                         </div>
                     </>
+                )}
+                {/* Trace Modal */}
+                {showTraceModal && traceData && (
+                    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div style={{ background: '#111827', width: '800px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '12px', border: '1px solid #374151', display: 'flex', flexDirection: 'column' }}>
+                            {/* Header */}
+                            <div style={{ padding: '20px', borderBottom: '1px solid #374151', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <h3 style={{ margin: 0, color: '#e6c87a' }}>Why this score? <span style={{ color: '#9ca3af' }}>{(traceData.axis || '').replace('_', ' ').toUpperCase()} = {traceData.final_score}</span></h3>
+                                    <div style={{ fontSize: '0.8em', color: '#6b7280' }}>Provenance Trace: {new Date().toLocaleTimeString()}</div>
+                                </div>
+                                <button onClick={() => setShowTraceModal(false)} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '1.5em', cursor: 'pointer' }}>×</button>
+                            </div>
+
+                            {/* Tabs */}
+                            <div style={{ display: 'flex', borderBottom: '1px solid #374151', background: '#1f2937' }}>
+                                {['planets', 'rules', 'axis', 'aggregation'].map(tab => (
+                                    <div
+                                        key={tab}
+                                        onClick={() => setActiveTraceTab(tab)}
+                                        style={{
+                                            padding: '15px 25px',
+                                            cursor: 'pointer',
+                                            color: activeTraceTab === tab ? '#60a5fa' : '#9ca3af',
+                                            borderBottom: activeTraceTab === tab ? '2px solid #60a5fa' : 'none',
+                                            fontWeight: activeTraceTab === tab ? 'bold' : 'normal',
+                                            textTransform: 'capitalize'
+                                        }}
+                                    >
+                                        {tab}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Content */}
+                            <div style={{ padding: '20px', color: '#d1d5db', fontSize: '0.9em' }}>
+                                {activeTraceTab === 'planets' && (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                        <thead>
+                                            <tr style={{ textAlign: 'left', color: '#9ca3af', borderBottom: '1px solid #374151' }}>
+                                                <th style={{ padding: '10px' }}>Planet</th>
+                                                <th style={{ padding: '10px' }}>Chart</th>
+                                                <th style={{ padding: '10px' }}>Strength</th>
+                                                <th style={{ padding: '10px' }}>Source File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {traceData.trace.planets.map((p, i) => (
+                                                <tr key={i} style={{ borderBottom: '1px solid #1f2937' }}>
+                                                    <td style={{ padding: '10px' }}>{p.planet}</td>
+                                                    <td style={{ padding: '10px' }}>{p.chart}</td>
+                                                    <td style={{ padding: '10px' }}>{p.strength}</td>
+                                                    <td style={{ padding: '10px', fontFamily: 'monospace', color: '#6b7280' }}>{p.source}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+
+                                {/* Rules Tab */}
+                                {activeTraceTab === 'rules' && (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                        <thead>
+                                            <tr style={{ textAlign: 'left', color: '#9ca3af', borderBottom: '1px solid #374151' }}>
+                                                <th style={{ padding: '10px' }}>Rule ID</th>
+                                                <th style={{ padding: '10px' }}>Type</th>
+                                                <th style={{ padding: '10px' }}>Effect</th>
+                                                <th style={{ padding: '10px' }}>Source File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {traceData.trace.rules_applied.map((r, i) => (
+                                                <tr key={i} style={{ borderBottom: '1px solid #1f2937' }}>
+                                                    <td style={{ padding: '10px', color: '#ea580c' }}>{r.rule_id}</td>
+                                                    <td style={{ padding: '10px' }}>{r.rule_type}</td>
+                                                    <td style={{ padding: '10px' }}>{r.effect}</td>
+                                                    <td style={{ padding: '10px', fontFamily: 'monospace', color: '#6b7280' }}>{r.file}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+
+                                {/* Axis Tab */}
+                                {activeTraceTab === 'axis' && (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                        <thead>
+                                            <tr style={{ textAlign: 'left', color: '#9ca3af', borderBottom: '1px solid #374151' }}>
+                                                <th style={{ padding: '10px' }}>Axis</th>
+                                                <th style={{ padding: '10px' }}>Contribution Value</th>
+                                                <th style={{ padding: '10px' }}>Weight</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {traceData.trace.axis_contributions.map((a, i) => (
+                                                <tr key={i} style={{ borderBottom: '1px solid #1f2937' }}>
+                                                    <td style={{ padding: '10px', textTransform: 'uppercase' }}>{a.axis.replace('_', ' ')}</td>
+                                                    <td style={{ padding: '10px' }}>{a.value}</td>
+                                                    <td style={{ padding: '10px' }}>{a.weight}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+
+                                {/* Aggregation Tab */}
+                                {activeTraceTab === 'aggregation' && (
+                                    <div style={{ padding: '20px', background: '#1f2937', borderRadius: '8px' }}>
+                                        <div style={{ marginBottom: '10px' }}><strong style={{ color: '#9ca3af' }}>Method:</strong> {traceData.trace.aggregation.method.replace('_', ' ')}</div>
+                                        <div style={{ marginBottom: '10px' }}><strong style={{ color: '#9ca3af' }}>Normalization:</strong> {traceData.trace.aggregation.normalization}</div>
+                                        <div style={{ fontSize: '1.2em', color: '#60a5fa' }}><strong style={{ color: '#9ca3af' }}>Final Score:</strong> {traceData.trace.aggregation.final_score}</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

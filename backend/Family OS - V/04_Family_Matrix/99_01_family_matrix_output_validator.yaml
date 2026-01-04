@@ -33,6 +33,18 @@ validation_rules:
     require_timestamp: true
     require_family_id: true
 
+  trace_validation:
+    require_trace_for_scores: true
+    enforce_axis_trace:
+      - authority
+      - care
+      - dependency
+      - decision
+      - resource
+
+    forbid_missing_trace: true
+    forbid_trace_synthesis: true
+
   forbidden_terms:
     - archetype
     - core_dynamic
