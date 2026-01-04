@@ -178,7 +178,7 @@ router.post('/calculate', async (req, res) => {
         const natalLayer = { members: {} };
         const memberData = members.map(m => {
             const chart = m.chart_object.planets || m.chart_object; // Normalize
-            const asc = chart.Ascendant || (typeof chart.ascendant === 'object' ? chart.ascendant.longitude : chart.ascendant);
+            const asc = Number(chart.Ascendant || (typeof chart.ascendant === 'object' ? chart.ascendant.longitude : chart.ascendant)) || 0;
 
             // Calc Base Strengths
             const axisStrengths = {};
@@ -243,8 +243,19 @@ router.post('/calculate', async (req, res) => {
         const individualDashaLayer = {}; // m.id -> axis -> [{time, intensity}]
 
         memberData.forEach(m => {
-            const lagnaSign = getSignName(m.ascendant);
+            let lagnaSign = getSignName(m.ascendant);
+            if (!lagnaSign) {
+                console.warn(`[TimeEngine] Invalid Ascendant for member ${m.id} (${m.ascendant}). Defaulting to Aries.`);
+                lagnaSign = "Aries";
+            }
             const funcNature = functionalNature.lagnas[lagnaSign];
+
+            if (!funcNature) {
+                console.error(`[TimeEngine] Functional Nature not found for lagna: ${lagnaSign}`);
+                individualDashaLayer[m.id] = {};
+                return;
+            }
+
             const yogakarakas = funcNature.yogakaraka || [];
 
             individualDashaLayer[m.id] = {};
