@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // --- CONSTANTS & PATHS ---
-const BASE_PATH = path.join(__dirname, '../../Family OS - V/04_Family_Matrix');
+const BASE_PATH = path.join(__dirname, '../Family OS - V/04_Family_Matrix');
 const FILES = {
     EXECUTION: '00_01_family_matrix_execution_sequence.yaml',
     ENGINE: '02_01_family_matrix_engine.yaml',
