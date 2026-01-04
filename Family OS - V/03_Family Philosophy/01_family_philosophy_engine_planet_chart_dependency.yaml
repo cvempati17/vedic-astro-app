@@ -1,0 +1,228 @@
+# ============================================================
+# family_philosophy_engine_planet_chart_dependency.yaml
+# Family OS – Family Philosophy Engine Dependency Map
+# ============================================================
+
+family_philosophy_engine_dependency:
+  metadata:
+    engine: Family_Philosophy
+    file: family_philosophy_engine_planet_chart_dependency.yaml
+    version: "1.0.0"
+    purpose: "Defines planetary authority and chart pathways governing family belief systems"
+    design_principle: >
+      Family Philosophy is not opinion.
+      It is inherited belief hardened by experience.
+      It governs what is considered right, wrong, acceptable, shameful,
+      and non-negotiable — especially under pressure.
+
+  ############################################################
+  # 1. PRIMARY PLANETARY GOVERNANCE (BELIEF CORE)
+  ############################################################
+
+  primary_planets:
+
+    Jupiter:
+      role: "Belief, Meaning & Dharma"
+      philosophy_function:
+        - defines moral framework
+        - establishes meaning of right and wrong
+        - transmits wisdom and guidance
+      failure_mode_if_weak:
+        - moral_confusion
+        - hollow_traditions
+      charts:
+        D1:
+          why: "Visible belief expression in daily life"
+          houses_emphasized: [5, 9]
+        D9:
+          why: "Inner conviction and matured ethics"
+          houses_emphasized: [5, 9]
+        D12:
+          why: "Inherited belief systems from lineage"
+          houses_emphasized: [9]
+
+    Saturn:
+      role: "Rule Hardening & Obligation"
+      philosophy_function:
+        - converts belief into duty
+        - defines taboo, shame, and discipline
+        - enforces tradition through fear or respect
+      failure_mode_if_weak:
+        - belief_drift
+        - lack_of_structure
+      charts:
+        D1:
+          why: "Daily enforcement of beliefs"
+          houses_emphasized: [6, 10]
+        D12:
+          why: "Ancestral rules and karmic conditioning"
+          houses_emphasized: [6]
+
+  ############################################################
+  # 2. SECONDARY PLANETARY SUPPORT (IDENTITY & TRANSMISSION)
+  ############################################################
+
+  secondary_planets:
+
+    Sun:
+      role: "Identity Anchoring"
+      philosophy_function:
+        - ties beliefs to family identity
+        - defines pride and honor codes
+      distortion_if_afflicted:
+        - ego_based_morality
+        - authoritarian_beliefs
+      charts:
+        D1:
+          why: "Public and personal belief identity"
+          houses_emphasized: [1, 10]
+        D9:
+          why: "Inner ownership of beliefs"
+          houses_emphasized: [1]
+
+    Moon:
+      role: "Emotional Transmission"
+      philosophy_function:
+        - emotionally imprints beliefs
+        - transmits guilt, fear, or safety norms
+      distortion_if_afflicted:
+        - inherited_fear
+        - emotional_guilt_cycles
+      charts:
+        D1:
+          why: "Emotional behavior modeling"
+          houses_emphasized: [4]
+        D12:
+          why: "Maternal and ancestral emotional inheritance"
+          houses_emphasized: [4]
+
+    Mercury:
+      role: "Rationalization & Interpretation"
+      philosophy_function:
+        - explains beliefs logically
+        - adapts philosophy to context
+      distortion_if_afflicted:
+        - intellectual_justification_of_harm
+        - inconsistent_rules
+      charts:
+        D1:
+          why: "Verbal and cognitive belief framing"
+          houses_emphasized: [3]
+        D9:
+          why: "Interpretive maturity of belief"
+          houses_emphasized: [3]
+
+  ############################################################
+  # 3. MODIFIER PLANETS (EVOLUTION & RELEASE)
+  ############################################################
+
+  modifier_planets:
+
+    Rahu:
+      role: "Belief Disruption & Modernization"
+      philosophy_function:
+        - challenges tradition
+        - introduces unconventional belief systems
+      risk_if_unchecked:
+        - ideological_extremes
+        - rejection_of_roots
+      charts:
+        D1:
+          why: "Visible rebellion or reform"
+          houses_emphasized: [3, 11]
+        D9:
+          why: "Inner ideological restlessness"
+          houses_emphasized: [1]
+
+    Ketu:
+      role: "Belief Detachment & Pruning"
+      philosophy_function:
+        - removes obsolete beliefs
+        - detaches identity from dogma
+      risk_if_excessive:
+        - nihilism
+        - loss_of_cultural_identity
+      charts:
+        D1:
+          why: "Withdrawal from belief systems"
+          houses_emphasized: [12]
+        D9:
+          why: "Spiritual detachment from ideology"
+          houses_emphasized: [12]
+        D12:
+          why: "Breaking ancestral belief loops"
+          houses_emphasized: [12]
+
+    Venus:
+      role: "Value Softening & Harmony"
+      philosophy_function:
+        - humanizes rigid beliefs
+        - introduces compassion and flexibility
+      distortion_if_afflicted:
+        - belief_dilution
+        - people_pleasing_morality
+      charts:
+        D1:
+          why: "Behavioral values and harmony"
+          houses_emphasized: [2, 7]
+        D9:
+          why: "Value alignment in relationships"
+          houses_emphasized: [7]
+
+  ############################################################
+  # 4. CHART PRIORITY & WEIGHTING
+  ############################################################
+
+  chart_weighting:
+    D12: 0.35  # ancestral belief inheritance
+    D9: 0.30   # matured inner conviction
+    D1: 0.35   # lived and enforced philosophy
+
+  ############################################################
+  # 5. ENGINE STRENGTH COMPUTATION LOGIC
+  ############################################################
+
+  philosophy_strength_formula: >
+    philosophy_strength =
+      (Jupiter_strength * 0.30) +
+      (Saturn_strength * 0.30) +
+      (Sun_strength * 0.10) +
+      (Moon_strength * 0.10) +
+      (Mercury_strength * 0.10) +
+      (Venus_balance * 0.05) +
+      (Rahu_pressure * 0.03) +
+      (Ketu_pruning * 0.02)
+
+  interpretation_guidelines:
+    coherent_philosophy:
+      condition: "Jupiter and Saturn both strong and aligned"
+      outcome: "Stable, ethical, and livable belief system"
+    rigid_philosophy:
+      condition: "Saturn strong, Venus weak"
+      outcome: "Fear-based or duty-only morality"
+    confused_philosophy:
+      condition: "Mercury afflicted, Jupiter weak"
+      outcome: "Inconsistent or rationalized beliefs"
+    evolving_philosophy:
+      condition: "Rahu strong, Jupiter supportive"
+      outcome: "Modernized beliefs without root loss"
+    dissolved_philosophy:
+      condition: "Ketu stronger than Jupiter"
+      outcome: "Belief vacuum or disengagement"
+
+  ############################################################
+  # 6. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: PHI-DEP-01
+      description: "Family Philosophy must include Jupiter and Saturn"
+      severity: fatal
+
+    - rule_id: PHI-DEP-02
+      description: "At least one emotional transmitter (Moon or Venus) must be present"
+      severity: error
+
+    - rule_id: PHI-DEP-03
+      description: "Ketu dominance over Jupiter flags belief disengagement risk"
+      severity: warning

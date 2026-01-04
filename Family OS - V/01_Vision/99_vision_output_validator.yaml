@@ -1,0 +1,129 @@
+vision_output_validator:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    profile: tolerant
+    last_updated: 2026-01-02
+
+  philosophy:
+    - Vision represents identity and meaning, not execution
+    - Controlled compression is allowed
+    - Loss of core meaning is not allowed
+    - Children must always be protected
+    - Vision must remain non-fatalistic
+
+  validation_modes:
+    blocking: fail
+    non_blocking: warn
+
+  family_level_checks:
+
+    alignment_level:
+      required: true
+      on_missing: fail
+
+    alignment_rationale:
+      required: true
+      min_length_chars: 40
+      on_missing: fail
+
+    vision_summary:
+      required: true
+      min_length_chars: 120
+      on_missing: fail
+      on_too_short: warn
+
+    guiding_vision_principle:
+      required: true
+      on_missing: fail
+
+  member_level_checks:
+
+    common_requirements:
+      vision_role:
+        required: true
+        on_missing: fail
+
+      caution_or_shadow:
+        required: true
+        on_missing: fail
+
+    father:
+      must_include:
+        - moral_anchor
+      on_missing: warn
+
+    mother:
+      must_include:
+        - emotional_translation
+      on_missing: warn
+
+    child:
+      must_include:
+        - protection_rule
+      forbidden:
+        - execution_duty
+        - emotional_burden
+      on_violation: fail
+
+    elder:
+      must_include:
+        - advisory_only
+      forbidden:
+        - execution_role
+      on_violation: fail
+
+  compression_awareness:
+
+    allow_semantic_compression: true
+
+    compression_warnings:
+      vision_summary_below_chars: 150
+      member_section_below_chars: 80
+
+    warning_messages:
+      over_compressed_summary: "Vision summary may be overly compressed"
+      over_compressed_member: "Member vision role may be overly compressed"
+
+  language_safety_rules:
+
+    forbid_fatalistic_phrases:
+      - "will inevitably"
+      - "must suffer"
+      - "no choice"
+      - "inescapable"
+      - "fated to"
+
+    forbid_role_erasure: true
+
+    astrology_language_rules:
+      allow_abstract_astrology: true
+      forbid_deterministic_astrology: true
+
+  output_behavior:
+
+    on_fail:
+      - block_ui_render
+      - log_validation_error
+
+    on_warn:
+      - render_output
+      - log_warning
+
+  logging_schema:
+
+    required_fields:
+      - timestamp
+      - family_id
+      - validator_version
+      - severity
+      - violated_rules
+      - affected_sections
+
+  success_criteria:
+    - Core identity meaning preserved
+    - Role integrity intact
+    - Child protection enforced
+    - Non-fatalistic language maintained

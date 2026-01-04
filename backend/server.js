@@ -1,5 +1,5 @@
 const express = require('express');
-// Forced Restart 2
+// Forced Restart 35
 
 const cors = require('cors');
 require('dotenv').config();
@@ -10,6 +10,9 @@ const chartRoutes = require('./routes/charts');
 const muhuratRoutes = require('./routes/muhurat');
 const tithiRoutes = require('./routes/tithi');
 const familyVisionRoutes = require('./routes/familyVision');
+const familyMissionRoutes = require('./routes/familyMission');
+const familyPhilosophyRoutes = require('./routes/familyPhilosophy');
+const familyRoutes = require('./routes/families');
 
 // Connect to Database
 // Connect to Database
@@ -37,7 +40,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/charts', chartRoutes);
 app.use('/api/muhurat', muhuratRoutes);
 app.use('/api/tithi', tithiRoutes);
+console.log('--- SERVER RELOADING ROUTES ---');
 app.use('/api/family-values', familyVisionRoutes);
+app.use('/api/family-mission', familyMissionRoutes);
+app.use('/api/family-philosophy', familyPhilosophyRoutes);
+const familyMatrixRoutes = require('./routes/familyMatrix');
+app.use('/api', familyMatrixRoutes);
+app.use('/api/families', familyRoutes);
 
 const ZODIAC_SIGNS = [
     'Aries',

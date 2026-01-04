@@ -1,0 +1,166 @@
+# ============================================================
+# vision_planetary_strength_scoring.yaml
+# Family OS – Vision Engine Planetary Strength Formula
+# ============================================================
+
+vision_planetary_strength_scoring:
+  metadata:
+    engine: Vision
+    file: vision_planetary_strength_scoring.yaml
+    version: "1.0.0"
+    purpose: >
+      Defines how planetary strength is computed specifically
+      for the Vision engine — i.e., long-term direction,
+      existential purpose, and karmic trajectory of the family.
+    principle: >
+      Vision is not ambition.
+      Vision is the karmic direction the family is pushed toward,
+      regardless of comfort or resistance.
+      Planets contribute to vision only when they shape
+      meaning, direction, endurance, and destiny-scale choices.
+
+  ############################################################
+  # 1. PLANET WEIGHTING FOR VISION
+  ############################################################
+
+  planetary_weights:
+    Saturn: 0.25   # endurance, long-term destiny, inevitability
+    Jupiter: 0.25  # dharma, meaning, philosophy, expansion
+    Sun: 0.15      # authority, leadership direction
+    Rahu: 0.15     # future pull, unfinished karma
+    Ketu: 0.10     # past-life release, detachment
+    Moon: 0.05     # emotional alignment with vision
+    Mercury: 0.03  # articulation of vision
+    Venus: 0.02    # value attraction (least important)
+    Mars: 0.00     # execution, not vision
+
+  ############################################################
+  # 2. PLANETARY BASE STRENGTH INPUTS
+  ############################################################
+
+  base_strength_inputs:
+    dignity:
+      exalted: 1.20
+      own_sign: 1.10
+      friendly_sign: 1.00
+      neutral_sign: 0.90
+      enemy_sign: 0.75
+      debilitated: 0.60
+
+    house_strength:
+      kendra: 1.10
+      trikona: 1.10
+      upachaya: 1.00
+      dusthana: 0.70
+
+    motion_state:
+      direct: 1.00
+      retrograde:
+        Jupiter: 1.10   # deep philosophical rework
+        Saturn: 1.05   # intensified karmic focus
+        others: 0.95
+
+    combustion:
+      mild: 0.85
+      severe: 0.70
+
+    avastha:
+      baladi:
+        bal: 1.10
+        kumar: 1.00
+        yuva: 1.05
+        vriddha: 0.90
+        mrita: 0.70
+
+  ############################################################
+  # 3. ASPECT CONTRIBUTION MULTIPLIERS (VISION CONTEXT)
+  ############################################################
+
+  aspect_multipliers:
+    benefic_aspect:
+      Jupiter: 1.15
+      Venus: 1.05
+      Moon: 1.05
+
+    malefic_aspect:
+      Saturn: 0.95
+      Mars: 0.90
+      Rahu: 0.90
+      Ketu: 0.95
+
+    special_cases:
+      Jupiter_aspects_Saturn: 1.20   # dharma stabilizes destiny
+      Rahu_aspects_Jupiter: 0.85     # distorted belief systems
+      Ketu_aspects_Sun: 0.90         # authority dissolution
+
+  ############################################################
+  # 4. DIVISIONAL CHART MODIFIERS
+  ############################################################
+
+  chart_modifiers:
+    D1: 0.40   # lived direction
+    D9: 0.35   # dharmic alignment
+    D12: 0.25  # ancestral vision karma
+
+  ############################################################
+  # 5. FINAL PLANETARY STRENGTH FORMULA
+  ############################################################
+
+  formulas:
+
+    individual_planet_strength: >
+      planet_strength =
+        base_dignity *
+        house_strength *
+        motion_state *
+        combustion *
+        avastha *
+        aspect_multiplier
+
+    weighted_planet_vision_contribution: >
+      planet_vision_score =
+        planet_strength *
+        planetary_weight *
+        chart_modifier
+
+    total_vision_strength: >
+      vision_strength_score =
+        Σ (planet_vision_score for all planets)
+
+  ############################################################
+  # 6. INTERPRETATION BANDS
+  ############################################################
+
+  interpretation:
+    very_strong_vision:
+      range: ">= 0.85"
+      meaning: "Clear, inevitable long-term family direction"
+    strong_vision:
+      range: "0.70 – 0.84"
+      meaning: "Stable direction with minor course corrections"
+    conflicted_vision:
+      range: "0.50 – 0.69"
+      meaning: "Competing destinies and belief systems"
+    weak_vision:
+      range: "0.35 – 0.49"
+      meaning: "Drift, lack of shared purpose"
+    karmic_fog:
+      range: "< 0.35"
+      meaning: "Vision obscured by unresolved past karma"
+
+  ############################################################
+  # 7. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: VIS-STR-01
+      description: "Saturn or Jupiter must contribute at least 40% of total vision score"
+      severity: fatal
+
+    - rule_id: VIS-STR-02
+      description: "Mars contribution must be zero or ignored"
+      severity: error
+
+    - rule_id: VIS-STR-03
+      description: "Excess Rahu without Jupiter moderation flags distorted vision"
+      severity: warning

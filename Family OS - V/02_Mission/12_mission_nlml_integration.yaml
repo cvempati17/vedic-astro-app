@@ -1,0 +1,229 @@
+mission_nlml_integration:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    status: stable
+    last_updated: 2026-01-01
+    compatibility:
+      vision_module: ">=1.0"
+      mission_module: ">=1.0"
+      nlml_core: ">=1.0"
+
+  metadata:
+    module: mission
+    layer: nakshatra_level_modulation
+    purpose: >
+      Integrates Nakshatra-Level Modulation Layer (NLML)
+      into the Mission system to refine execution style,
+      responsibility handling, emotional load processing,
+      and parent–child karmic dynamics without altering
+      core mission vectors or dasha logic.
+    dependency_files:
+      - 02_mission_engine.yaml
+      - 03_mission_aspect_modifiers.yaml
+      - 07_mission_member_output_contract.yaml
+      - 08_mission_responsibility_distribution.yaml
+      - 10_mission_dasha_evolution.yaml
+      - nlml_core.yaml
+
+  governing_principles:
+    - Nakshatra modulates expression, not obligation
+    - NLML refines how mission is carried, not what it is
+    - Emotional inheritance flows primarily through Nakshatra
+    - Parent–child karmic contracts are Nakshatra-sensitive
+    - NLML effects are subtle, cumulative, and reversible
+
+  nlml_application_scope:
+
+    applies_to:
+      - execution_style
+      - emotional_labor_processing
+      - response_to_pressure
+      - delegation_patterns
+      - parent_child_expectation_flow
+
+    does_not_apply_to:
+      - mission_vector_score
+      - maha_dasha_classification
+      - responsibility_percentage_calculation
+
+  nakshatra_behavioral_clusters:
+
+    dhruva_sthiram:
+      description: >
+        Fixed and enduring nakshatras.
+        Mission expression favors persistence,
+        loyalty, and long-term responsibility.
+      execution_bias:
+        - endurance
+        - resistance_to_change
+      risks:
+        - rigidity
+        - delayed_release
+      modulation_guidance:
+        - introduce_planned_flexibility
+        - schedule_periodic_review
+
+    chara:
+      description: >
+        Mobile nakshatras.
+        Mission expression favors adaptability,
+        multitasking, and movement.
+      execution_bias:
+        - rapid_engagement
+        - variety
+      risks:
+        - inconsistency
+        - unfinished_cycles
+      modulation_guidance:
+        - limit_parallel_responsibilities
+        - enforce_completion_markers
+
+    mridu:
+      description: >
+        Soft nakshatras.
+        Mission expression emphasizes care,
+        emotional sensitivity, and protection.
+      execution_bias:
+        - nurturing
+        - supportive_roles
+      risks:
+        - overgiving
+        - boundary_erosion
+      modulation_guidance:
+        - formalize_limits
+        - redistribute_emotional_labor
+
+    tikshna:
+      description: >
+        Sharp nakshatras.
+        Mission expression emphasizes precision,
+        confrontation, and decisive action.
+      execution_bias:
+        - directness
+        - intensity
+      risks:
+        - conflict_generation
+        - burnout
+      modulation_guidance:
+        - soften_delivery
+        - insert_pause_protocols
+
+  nakshatra_gana_modulation:
+
+    deva:
+      mission_effects:
+        - ethical_sensitivity
+        - idealism
+      risks:
+        - avoidance_of_hard_decisions
+      corrective_actions:
+        - ground_values_in_action
+        - tolerate_imperfection
+
+    manushya:
+      mission_effects:
+        - practicality
+        - balance
+      risks:
+        - compromise_of_higher_values
+      corrective_actions:
+        - periodic_value_reaffirmation
+
+    rakshasa:
+      mission_effects:
+        - intensity
+        - transformational_drive
+      risks:
+        - power_struggles
+        - control_patterns
+      corrective_actions:
+        - ethical_boundary_enforcement
+        - conscious_power_sharing
+
+  parent_child_nakshatra_contracts:
+
+    inheritance_vectors:
+      description: >
+        Defines how emotional and responsibility patterns
+        transfer between parent and child based on Nakshatra resonance.
+      modulation_rules:
+        same_nakshatra:
+          effect: amplified_pattern_transfer
+          risk: repetition_without_awareness
+          guidance: conscious_pattern_interrupt
+        same_gana:
+          effect: philosophical_alignment
+          risk: blind_spots
+          guidance: invite_external_perspectives
+        incompatible_clusters:
+          effect: friction_and_learning
+          risk: misinterpretation
+          guidance: explain_intent_explicitly
+
+  rahu_ketu_nlml_overlay:
+
+    rahu_nakshatra:
+      effects:
+        - hunger_for_experience
+        - unconventional_mission_expression
+      risks:
+        - instability
+        - ethical_shortcuts
+      guidance:
+        - anchor_actions_to_values
+        - slow_down_expansion_cycles
+
+    ketu_nakshatra:
+      effects:
+        - detachment_from_outcomes
+        - internalization_of_mission
+      risks:
+        - disengagement
+        - abdication_of_responsibility
+      guidance:
+        - define_minimum_obligation_floor
+        - maintain_light_external_commitments
+
+  nlml_integration_rules:
+
+    modulation_intensity:
+      default: subtle
+      escalation_conditions:
+        - repeated_mission_failure_modes
+        - chronic_emotional_friction
+      escalation_effect: moderate
+
+    precedence_order:
+      - dasha_evolution
+      - mission_responsibility_distribution
+      - nlml_modulation
+      - narrative_rendering
+
+  output_schema:
+
+    family_level:
+      dominant_nakshatra_cluster: string
+      execution_style_bias: string
+      emotional_processing_pattern: string
+      nlml_guidance_summary: string
+
+    member_level_overlay:
+      member_name:
+        nakshatra_cluster: string
+        mission_expression_style: string
+        nlml_risk_flags: []
+        corrective_micro_adjustments: []
+
+  enforcement_rules:
+    - NLML must not override mission obligations
+    - NLML guidance must remain non-deterministic
+    - Parent–child modulation requires explicit awareness
+    - Emotional inheritance must be named, not assumed
+
+  usage_constraints:
+    - This layer refines outputs; it does not compute them
+    - NLML effects must be explainable to users
+    - Language must emphasize awareness over fate

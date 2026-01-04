@@ -1,0 +1,249 @@
+# ============================================================
+# 07_family_philosophy_member_output_contract.yaml
+# Family OS – Family Philosophy Member-Level Output Contract
+# ============================================================
+
+family_philosophy_member_output_contract:
+  metadata:
+    engine: Family_Philosophy
+    file: 07_family_philosophy_member_output_contract.yaml
+    version: "1.0.1"   # PATCH: renderer + validator alignment (no semantic reduction)
+    purpose: >
+      Defines how the shared family philosophy is experienced,
+      interpreted, and enacted by each family member role.
+      This contract ensures role-sensitive expression without
+      fragmenting the core belief system.
+    depends_on:
+      - 02_family_philosophy_engine.yaml
+      - 03_family_philosophy_engine_aspect_modifiers.yaml
+      - 04_family_philosophy_planetary_strength_scoring.yaml
+      - 05_family_philosophy_planetary_strength_aspect_modifiers.yaml
+      - 06_family_philosophy_narrative_templates.yaml
+    governing_principle: >
+      One philosophy, many experiences.
+      Roles shape expression, not belief ownership.
+
+  ############################################################
+  # 1. UNIVERSAL MEMBER OUTPUT CONTRACT
+  ############################################################
+
+  universal_contract:
+    required_fields:
+      - perceived_philosophy
+      - emotional_experience
+      - behavioral_expectation
+      - internal_conflict_risk
+      - growth_opportunity
+    prohibitions:
+      - role_blame
+      - deterministic_labeling
+      - moral_judgment_of_individual
+    notes: >
+      Member-level outputs must describe experience and behavior,
+      never assign fault or philosophical ownership to a role.
+
+  ############################################################
+  # 2. FATHER / PRIMARY AUTHORITY ROLE
+  ############################################################
+
+  father_role:
+    role_definition: >
+      Carrier and stabilizer of philosophical continuity.
+      Often embodies authority, discipline, and moral boundaries.
+
+    philosophy_experience:
+      perceived_philosophy: >
+        Philosophy is experienced as responsibility and duty.
+        Beliefs are something to uphold, protect, and transmit
+        across generations.
+
+      emotional_experience:
+        when_philosophy_strong: >
+          Sense of purpose, stability, and moral clarity.
+        when_philosophy_conflicted: >
+          Inner tension between authority, care, and adaptability.
+
+      behavioral_expectation:
+        expression_style:
+          - rule_setting
+          - expectation_clarification
+          - corrective_guidance
+        risk_pattern:
+          - over_identification_with_belief
+          - resistance_to_reinterpretation
+
+      internal_conflict_risk:
+        triggers:
+          - loss_of_authority
+          - belief_challenge_by_children
+          - rapid_value_shift
+        manifestation: >
+          Rigidity, emotional withdrawal, or moral frustration.
+
+      growth_opportunity:
+        integration_path: >
+          Transform authority into mentorship.
+          Allow belief refinement without loss of identity,
+          respect, or coherence.
+
+  ############################################################
+  # 3. MOTHER / EMOTIONAL TRANSLATOR ROLE
+  ############################################################
+
+  mother_role:
+    role_definition: >
+      Emotional translator and humanizer of family philosophy.
+      Softens, contextualizes, and relationally grounds beliefs.
+
+    philosophy_experience:
+      perceived_philosophy: >
+        Philosophy is experienced through care, emotional safety,
+        and relational harmony.
+
+      emotional_experience:
+        when_philosophy_compassionate: >
+          Sense of fulfillment, emotional alignment, and trust.
+        when_philosophy_rigid: >
+          Emotional burden or internal conflict.
+
+      behavioral_expectation:
+        expression_style:
+          - nurturing_explanation
+          - mediation
+          - emotional_buffering
+        risk_pattern:
+          - over_accommodation
+          - emotional_self_suppression
+
+      internal_conflict_risk:
+        triggers:
+          - harsh_enforcement
+          - unresolved_family_tension
+        manifestation: >
+          Silent resentment, emotional exhaustion,
+          or loss of self-priority.
+
+      growth_opportunity:
+        integration_path: >
+          Balance empathy with healthy boundaries.
+          Preserve compassion without self-erasure.
+
+  ############################################################
+  # 4. CHILD / NEXT GENERATION ROLE
+  ############################################################
+
+  child_role:
+    role_definition: >
+      Receiver, interpreter, and future transformer of family philosophy.
+      Experiences beliefs before consciously choosing or reshaping them.
+
+    philosophy_experience:
+      perceived_philosophy: >
+        Philosophy is experienced as rules, expectations,
+        and emotional atmosphere rather than abstract belief.
+
+      emotional_experience:
+        when_philosophy_coherent: >
+          Sense of safety, belonging, and clarity.
+        when_philosophy_inconsistent: >
+          Confusion, rebellion, or disengagement.
+
+      behavioral_expectation:
+        expression_style:
+          - compliance
+          - questioning
+          - selective_adoption
+        risk_pattern:
+          - internalized_pressure
+          - covert_resistance
+
+      internal_conflict_risk:
+        triggers:
+          - mixed_messages
+          - conditional_acceptance
+        manifestation: >
+          Anxiety, secrecy, identity confusion,
+          or withdrawal from dialogue.
+
+      growth_opportunity:
+        integration_path: >
+          Encourage dialogue and personal meaning-making.
+          Allow interpretation without fear of rejection.
+
+  ############################################################
+  # 5. ELDER / ANCESTRAL INFLUENCE ROLE
+  ############################################################
+
+  elder_role:
+    role_definition: >
+      Custodian of inherited philosophy, memory, and precedent.
+      Represents continuity across generations.
+
+    philosophy_experience:
+      perceived_philosophy: >
+        Philosophy is experienced as tradition and legacy.
+        Change may feel like erosion of identity or meaning.
+
+      emotional_experience:
+        when_respected: >
+          Sense of relevance, dignity, and contribution.
+        when_challenged: >
+          Unease, fear of obsolescence, or loss of influence.
+
+      behavioral_expectation:
+        expression_style:
+          - storytelling
+          - moral_referencing
+          - precedent_setting
+        risk_pattern:
+          - nostalgia_rigidity
+          - resistance_to_evolution
+
+      internal_conflict_risk:
+        triggers:
+          - rapid_reform
+          - dismissal_of_tradition
+        manifestation: >
+          Withdrawal, moral criticism,
+          or disengagement from dialogue.
+
+      growth_opportunity:
+        integration_path: >
+          Participate in philosophical evolution as guide,
+          not gatekeeper. Allow tradition to inform
+          without constraining growth.
+
+  ############################################################
+  # 6. ROLE INTERACTION SAFETY RULES
+  ############################################################
+
+  interaction_safety:
+    rules:
+      - philosophy_must_not_be_weaponized
+      - disagreement_is_not_disloyalty
+      - authority_does_not_equal_infallibility
+      - compassion_does_not_equal_weakness
+      - generational_difference_is_not_moral_failure
+    enforcement:
+      severity: fatal
+      scope: member_output_only
+    note: >
+      Violation of interaction safety rules must abort
+      member-level rendering and trigger validator failure.
+
+  ############################################################
+  # 7. FINAL MEMBER OUTPUT STRUCTURE
+  ############################################################
+
+  member_output_schema:
+    fields:
+      - role
+      - perceived_philosophy
+      - emotional_experience
+      - behavioral_expectation
+      - internal_conflict_risk
+      - growth_opportunity
+    output_note: >
+      Member-level philosophy output must preserve
+      family unity while acknowledging individual experience.
+

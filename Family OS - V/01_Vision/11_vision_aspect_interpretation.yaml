@@ -1,0 +1,276 @@
+vision_aspect_modifiers:
+  metadata:
+    file: vision_aspect_modifiers.yaml
+    version: "1.0.0"
+    purpose: "Modify family vision vectors using planetary aspects"
+    principle: >
+      Aspects do not create vision.
+      They distort, amplify, suppress, or redirect existing vision vectors.
+
+  ####################################################################
+  # 1. ASPECT FUNDAMENTALS
+  ####################################################################
+
+  aspect_definitions:
+    conjunction: { angle: 0, nature: "fusion" }
+    opposition: { angle: 180, nature: "polarization" }
+    trine: { angle: 120, nature: "harmonization" }
+    square: { angle: 90, nature: "tension" }
+    sextile: { angle: 60, nature: "opportunity" }
+    special_aspects:
+      saturn: [3, 7, 10]
+      mars: [4, 7, 8]
+      jupiter: [5, 7, 9]
+      rahu_ketu: [5, 7, 9]
+
+  ####################################################################
+  # 2. ASPECT EFFECT TYPES
+  ####################################################################
+
+  aspect_effects:
+    amplify: "Strengthen an existing vision layer"
+    suppress: "Reduce expression of a vision layer"
+    distort: "Create fear-based or ego-based deviation"
+    redirect: "Shift vision layer emphasis"
+    delay: "Slow manifestation but increase durability"
+    accelerate: "Fast manifestation with instability risk"
+
+  ####################################################################
+  # 3. SUN ASPECT MODIFIERS (DIRECTION & AUTHORITY)
+  ####################################################################
+
+  sun_aspect_rules:
+
+    - id: VSN-ASP-SUN-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [conjunction, square, opposition]
+      then:
+        modify:
+          target_layer: legacy_vision
+          effect: delay
+          note: "Authority matures late but becomes enduring"
+
+    - id: VSN-ASP-SUN-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine, conjunction]
+      then:
+        modify:
+          target_layer: ethical_vision
+          effect: amplify
+          note: "Dharmic leadership and moral clarity"
+
+    - id: VSN-ASP-SUN-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        modify:
+          target_layer: evolutionary_vision
+          effect: distort
+          risk: "Ego-driven future chasing"
+
+    - id: VSN-ASP-SUN-04
+      if:
+        aspecting_planet: Mars
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target_layer: growth_vision
+          effect: accelerate
+          note: "Heroic, action-driven family direction"
+
+  ####################################################################
+  # 4. MOON ASPECT MODIFIERS (PSYCHOLOGICAL SAFETY)
+  ####################################################################
+
+  moon_aspect_rules:
+
+    - id: VSN-ASP-MO-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [conjunction, square]
+      then:
+        modify:
+          target_layer: survival_vision
+          effect: distort
+          risk: "Fear-based security obsession"
+
+    - id: VSN-ASP-MO-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine, conjunction]
+      then:
+        modify:
+          target_layer: ethical_vision
+          effect: amplify
+          note: "Emotional wisdom and generosity"
+
+    - id: VSN-ASP-MO-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target_layer: evolutionary_vision
+          effect: accelerate
+          risk: "Emotional restlessness"
+
+    - id: VSN-ASP-MO-04
+      if:
+        aspecting_planet: Venus
+        aspect_type in [trine, conjunction]
+      then:
+        modify:
+          target_layer: growth_vision
+          effect: harmonize
+          note: "Family vision seeks happiness and peace"
+
+  ####################################################################
+  # 5. MARS ASPECT MODIFIERS (WILL & CONFLICT)
+  ####################################################################
+
+  mars_aspect_rules:
+
+    - id: VSN-ASP-MAR-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [square, opposition]
+      then:
+        modify:
+          target_layer: growth_vision
+          effect: delay
+          note: "Stop–go energy in family ambitions"
+
+    - id: VSN-ASP-MAR-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target_layer: ethical_vision
+          effect: amplify
+          note: "Righteous action and protection of values"
+
+    - id: VSN-ASP-MAR-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target_layer: evolutionary_vision
+          effect: accelerate
+          risk: "Reckless disruption"
+
+  ####################################################################
+  # 6. SATURN ASPECT MODIFIERS (STRUCTURE & ENDURANCE)
+  ####################################################################
+
+  saturn_aspect_rules:
+
+    - id: VSN-ASP-SAT-01
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target_layer: legacy_vision
+          effect: harmonize
+          note: "Stable wisdom transmission"
+
+    - id: VSN-ASP-SAT-02
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target_layer: evolutionary_vision
+          effect: distort
+          risk: "Forced or fear-driven change"
+
+    - id: VSN-ASP-SAT-03
+      if:
+        aspecting_planet: Moon
+        aspect_type in [square]
+      then:
+        modify:
+          target_layer: survival_vision
+          effect: suppress
+          note: "Emotional dryness reduces family warmth"
+
+  ####################################################################
+  # 7. JUPITER ASPECT MODIFIERS (WISDOM & MEANING)
+  ####################################################################
+
+  jupiter_aspect_rules:
+
+    - id: VSN-ASP-JUP-01
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        modify:
+          target_layer: ethical_vision
+          effect: distort
+          risk: "False ideology or inflated beliefs"
+
+    - id: VSN-ASP-JUP-02
+      if:
+        aspecting_planet: Ketu
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target_layer: legacy_vision
+          effect: redirect
+          note: "Wisdom through detachment"
+
+  ####################################################################
+  # 8. NODE ASPECT MODIFIERS (EVOLUTIONARY PRESSURE)
+  ####################################################################
+
+  node_aspect_rules:
+
+    - id: VSN-ASP-ND-01
+      if:
+        rahu_aspects in [Sun, Moon]
+      then:
+        modify:
+          target_layer: evolutionary_vision
+          effect: accelerate
+          note: "Identity or emotional evolution forced"
+
+    - id: VSN-ASP-ND-02
+      if:
+        ketu_aspects in [Sun, Moon]
+      then:
+        modify:
+          target_layer: legacy_vision
+          effect: suppress
+          note: "Letting go of identity or emotional attachment"
+
+  ####################################################################
+  # 9. ASPECT RESOLUTION LOGIC
+  ####################################################################
+
+  resolution_logic:
+    priority_order:
+      - conjunction
+      - opposition
+      - square
+      - trine
+      - sextile
+
+    conflict_resolution:
+      rule: >
+        If multiple aspect effects target the same vision layer,
+        apply effects in priority order and average intensity.
+
+  ####################################################################
+  # 10. FINAL OUTPUT MODIFICATION
+  ####################################################################
+
+  final_modulation:
+    description: >
+      Aspect modifiers adjust the weight, speed, and purity
+      of vision layers but never replace the base vision vectors.

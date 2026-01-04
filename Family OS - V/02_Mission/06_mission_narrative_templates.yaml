@@ -1,0 +1,142 @@
+mission_narrative_templates:
+
+  metadata:
+    module: mission
+    layer: narrative
+    purpose: >
+      Converts computed mission vectors, aspect-modulated results,
+      and execution readiness scores into human-readable family mission narratives.
+    dependency_files:
+      - 01_mission_engine_planetary_dependencies.yaml
+      - 02_mission_engine.yaml
+      - 03_mission_aspect_modifiers.yaml
+      - 04_mission_planetary_strength_scoring.yaml
+      - 05_mission_planetary_strength_aspect_modifiers.yaml
+
+  narrative_tiers:
+
+    high_alignment:
+      condition:
+        mission_vector_score: ">=75"
+        execution_readiness: immediate_action
+      tone: confident_responsible
+      template: >
+        This family carries a clear and actionable karmic mission.
+        There is a strong obligation toward visible work, sustained responsibility,
+        and meaningful contribution to society.
+        Mission fulfillment requires disciplined execution, ethical conduct,
+        and acceptance of leadership or service-oriented roles.
+        Avoid spiritual bypassing or postponement of duties under the guise of detachment.
+
+    strong_but_delayed:
+      condition:
+        mission_vector_score: ">=75"
+        execution_readiness: phased_execution
+      tone: patient_structured
+      template: >
+        The karmic mission of this family is strong, but its execution
+        unfolds in stages rather than immediate results.
+        Persistence, long-term planning, and respect for timing are essential.
+        Delays are not denial; they are part of karmic maturation.
+        Premature force or frustration may weaken outcomes.
+
+    mixed_alignment:
+      condition:
+        mission_vector_score: "50–74"
+      tone: corrective_guiding
+      template: >
+        This family holds a partially defined mission.
+        Competing responsibilities or unclear role distribution may dilute impact.
+        Mission success depends on conscious role clarity,
+        realistic goal-setting, and avoidance of internal comparison or resentment.
+        Progress is achieved through cooperation rather than individual dominance.
+
+    preparatory_phase:
+      condition:
+        mission_vector_score: "30–49"
+      tone: stabilizing_instructional
+      template: >
+        This phase of life emphasizes preparation rather than execution.
+        The immediate mission is to stabilize routines, build skills,
+        and resolve internal or structural weaknesses.
+        External contribution will naturally arise once foundational discipline
+        and confidence are established.
+
+    low_alignment:
+      condition:
+        mission_vector_score: "<30"
+      tone: cautionary_supportive
+      template: >
+        The family is undergoing karmic recalibration.
+        Pressing for achievement or social validation may lead to exhaustion or conflict.
+        The true mission at this stage is healing, simplification,
+        and release of inherited burdens that obstruct sustainable action.
+
+  execution_risk_warnings:
+
+    burnout_risk:
+      trigger:
+        risk_pattern: burnout
+      message: >
+        There is a tendency to overextend effort without adequate recovery.
+        Sustainable mission fulfillment requires pacing,
+        delegation, and respect for physical and emotional limits.
+
+    authority_conflict:
+      trigger:
+        risk_pattern: authority_conflict
+      message: >
+        Power struggles or unclear leadership may undermine mission outcomes.
+        Clear responsibility boundaries and respectful decision frameworks are advised.
+
+    ethical_drift:
+      trigger:
+        risk_pattern: ethical_compromise
+      message: >
+        Short-term gains achieved through compromised values
+        may weaken long-term karmic returns.
+        Re-alignment with ethical principles is necessary for mission stability.
+
+  reinforcement_messages:
+
+    saturn_supported:
+      trigger:
+        planet: Saturn
+        strength: strong
+      message: >
+        Saturnian support indicates that patience, discipline,
+        and long-term responsibility are key allies in fulfilling the family mission.
+
+    jupiter_supported:
+      trigger:
+        planet: Jupiter
+        strength: strong
+      message: >
+        Jupiterian influence supports ethical expansion,
+        teaching, guidance, and value-based leadership within the mission framework.
+
+    mars_supported:
+      trigger:
+        planet: Mars
+        strength: strong
+      message: >
+        Mars provides the courage and initiative required
+        to act decisively when mission clarity is present.
+        Action must remain aligned with restraint and wisdom.
+
+  narrative_output_contract:
+
+    family_level:
+      required_fields:
+        - mission_summary
+        - alignment_tier
+        - execution_readiness
+        - dominant_axes
+        - key_risks
+        - guidance_message
+
+    usage_rules:
+      - Narratives must not introduce new logic or scores
+      - All statements must be derived from upstream computation
+      - Tone must remain non-fatalistic and responsibility-oriented
+      - Avoid absolute predictions; emphasize conscious participation

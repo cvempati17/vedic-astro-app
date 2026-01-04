@@ -1,0 +1,17 @@
+family_matrix_interpretation_engine:
+  version: "1.0"
+  rules:
+    family_level:
+      - rule_id: FMX_INT_FAM_004
+        condition: "decision_influence >= 80"
+        template_id: FMX_TMP_FAM_DECISION_CENTRALIZED
+    temporal_level:
+      - rule_id: FMX_INT_TIME_001
+        condition: "current_phase == 'fracture_risk'"
+        template_id: FMX_TMP_TIME_FRACTURE_RISK
+      - rule_id: FMX_INT_TIME_002
+        condition: "cohesion_delta < 0 AND friction_delta > 0"
+        template_id: FMX_TMP_TIME_PRESSURE_ACCUMULATION
+      - rule_id: FMX_INT_TIME_003
+        condition: "current_phase == 'strained'"
+        template_id: FMX_TMP_TIME_STRAINED

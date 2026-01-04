@@ -1,0 +1,304 @@
+# ============================================================
+# family_philosophy_engine_aspect_modifiers.yaml
+# Family OS – Family Philosophy Aspect Modulation Layer
+# version: "1.0.1"
+# ============================================================
+
+family_philosophy_engine_aspect_modifiers:
+  metadata:
+    engine: Family_Philosophy
+    file: family_philosophy_engine_aspect_modifiers.yaml
+    version: "1.0.0"
+    purpose: "Modulates family belief systems using planetary aspects"
+    depends_on:
+      - family_philosophy_engine_planet_chart_dependency.yaml
+    principle: >
+      Philosophy is belief under time and pressure.
+      Planets define belief.
+      Aspects decide rigidity, flexibility, fear, compassion,
+      rebellion, or transcendence.
+
+  ############################################################
+  # 1. ASPECT SEMANTICS (PHILOSOPHY CONTEXT)
+  ############################################################
+
+  aspect_semantics:
+    standard_aspect:
+      applies_to: [Sun, Moon, Mercury, Venus]
+      degrees: [7]
+      effect: "Direct mirroring of belief and value patterns"
+
+    special_aspects:
+      Saturn: [3, 7, 10]
+      Mars: [4, 7, 8]
+      Jupiter: [5, 7, 9]
+      Rahu: [5, 7, 9]
+      Ketu: [5, 7, 9]
+
+  ############################################################
+  # 2. JUPITER ASPECT MODIFIERS (MEANING & DHARMA)
+  ############################################################
+
+  jupiter_aspect_rules:
+    - id: PHI-ASP-JUP-01
+      if:
+        aspected_by: Saturn
+        aspect_type: [conjunction, square]
+      then:
+        philosophy_effect:
+          rigidity: increased
+          description: "Beliefs harden into duty and obligation"
+
+    - id: PHI-ASP-JUP-02
+      if:
+        aspected_by: Venus
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          compassion: increased
+          description: "Beliefs soften with empathy and humanity"
+
+    - id: PHI-ASP-JUP-03
+      if:
+        aspected_by: Rahu
+        aspect_type: [conjunction, opposition]
+      then:
+        philosophy_effect:
+          ideological_extremes: risk
+          description: "Beliefs pulled toward radical or unconventional ideologies"
+
+    - id: PHI-ASP-JUP-04
+      if:
+        aspected_by: Ketu
+        aspect_type: conjunction
+      then:
+        philosophy_effect:
+          belief_detachment: high
+          risk: "Loss of meaning or disengagement from belief systems"
+
+  ############################################################
+  # 3. SATURN ASPECT MODIFIERS (RULES & SHAME)
+  ############################################################
+
+  saturn_aspect_rules:
+    - id: PHI-ASP-SAT-01
+      if:
+        aspected_by: Moon
+        aspect_type: [square, opposition]
+      then:
+        philosophy_effect:
+          guilt_transmission: high
+          description: "Beliefs enforced through fear, shame, or emotional pressure"
+
+    - id: PHI-ASP-SAT-02
+      if:
+        aspected_by: Venus
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          softened_rules: true
+          description: "Rules tempered with care and relationship awareness"
+
+    - id: PHI-ASP-SAT-03
+      if:
+        aspected_by: Rahu
+        aspect_type: [square, opposition]
+      then:
+        philosophy_effect:
+          rebellion_triggered: true
+          description: "Rigid beliefs provoke backlash or rejection"
+
+  ############################################################
+  # 4. SUN ASPECT MODIFIERS (IDENTITY & PRIDE)
+  ############################################################
+
+  sun_aspect_rules:
+    - id: PHI-ASP-SUN-01
+      if:
+        aspected_by: Saturn
+        aspect_type: [conjunction, square]
+      then:
+        philosophy_effect:
+          authoritarian_identity: increased
+          description: "Beliefs tied to authority and obedience"
+
+    - id: PHI-ASP-SUN-02
+      if:
+        aspected_by: Jupiter
+        aspect_type: [trine, sextile]
+      then:
+        philosophy_effect:
+          dignified_belief_identity: true
+          description: "Beliefs carried with wisdom, not ego"
+
+    - id: PHI-ASP-SUN-03
+      if:
+        aspected_by: Rahu
+        aspect_type: [conjunction, opposition]
+      then:
+        philosophy_effect:
+          identity_conflict: high
+          risk: "Beliefs adopted for status or image"
+
+  ############################################################
+  # 5. MOON ASPECT MODIFIERS (EMOTIONAL IMPRINTING)
+  ############################################################
+
+  moon_aspect_rules:
+    - id: PHI-ASP-MOON-01
+      if:
+        aspected_by: Saturn
+        aspect_type: [square, opposition]
+      then:
+        philosophy_effect:
+          inherited_fear: high
+          description: "Beliefs transmitted through anxiety and emotional restriction"
+
+    - id: PHI-ASP-MOON-02
+      if:
+        aspected_by: Venus
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          emotional_safety: increased
+          description: "Beliefs experienced as nurturing rather than controlling"
+
+    - id: PHI-ASP-MOON-03
+      if:
+        aspected_by: Rahu
+        aspect_type: conjunction
+      then:
+        philosophy_effect:
+          emotional_confusion: high
+          risk: "Inconsistent emotional belief signals"
+
+  ############################################################
+  # 6. MERCURY ASPECT MODIFIERS (INTERPRETATION & LOGIC)
+  ############################################################
+
+  mercury_aspect_rules:
+    - id: PHI-ASP-MER-01
+      if:
+        mercury_aspects: Jupiter
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          coherent_explanation: strong
+          description: "Beliefs explained clearly and consistently"
+
+    - id: PHI-ASP-MER-02
+      if:
+        mercury_aspects: Saturn
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          rationalized_control: risk
+          description: "Rules justified logically but emotionally harsh"
+
+    - id: PHI-ASP-MER-03
+      if:
+        mercury_afflicted: true
+      then:
+        philosophy_effect:
+          inconsistency: high
+          risk: "Contradictory or self-serving belief logic"
+
+  ############################################################
+  # 7. VENUS ASPECT MODIFIERS (VALUES & HARMONY)
+  ############################################################
+
+  venus_aspect_rules:
+    - id: PHI-ASP-VEN-01
+      if:
+        venus_aspects: Jupiter
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          compassionate_ethics: high
+          description: "Beliefs prioritize kindness and balance"
+
+    - id: PHI-ASP-VEN-02
+      if:
+        venus_aspects: Saturn
+        aspect_type: standard_7th
+      then:
+        philosophy_effect:
+          restrained_affection: true
+          description: "Care exists but is expressed conditionally"
+
+    - id: PHI-ASP-VEN-03
+      if:
+        venus_afflicted: true
+      then:
+        philosophy_effect:
+          value_confusion: high
+          risk: "People-pleasing or inconsistent moral boundaries"
+
+  ############################################################
+  # 8. RAHU–KETU AXIS MODIFIERS (DISRUPTION VS RELEASE)
+  ############################################################
+
+  nodal_aspect_rules:
+    - id: PHI-ASP-NOD-01
+      if:
+        rahu_ketu_axis_active: true
+      then:
+        philosophy_effect:
+          belief_reset: true
+          description: "Major generational belief shift"
+
+    - id: PHI-ASP-NOD-02
+      if:
+        ketu_aspects: Jupiter
+        aspect_type: conjunction
+      then:
+        philosophy_effect:
+          philosophical_void: risk
+          description: "Detachment without replacement belief system"
+
+  ############################################################
+  # 9. CHART-SPECIFIC MODULATION
+  ############################################################
+
+  chart_specific_rules:
+    D1:
+      note: "Affects lived and enforced beliefs"
+      weight_modifier: 1.0
+    D9:
+      note: "Affects internal conviction and maturity"
+      weight_modifier: 0.8
+    D12:
+      note: "Affects ancestral belief inheritance"
+      weight_modifier: 0.9
+
+  ############################################################
+  # 10. ASPECT RESOLUTION LOGIC
+  ############################################################
+
+  resolution_logic:
+    priority_order:
+      - conjunction
+      - opposition
+      - square
+      - trine
+      - sextile
+
+    override_rules:
+      - if: "Jupiter afflicted AND Saturn strong"
+        then: "Rigid belief system flag raised"
+      - if: "Moon afflicted AND Saturn afflicted"
+        then: "Fear-based philosophy inheritance flagged"
+
+  ############################################################
+  # 11. FINAL MODULATED OUTPUT
+  ############################################################
+
+  resolved_philosophy_aspect_modulation:
+    belief_rigidity_index:
+      description: "Degree of inflexibility in beliefs"
+    compassion_index:
+      description: "Ability of philosophy to humanize behavior"
+    fear_transmission_flag:
+      description: "Whether beliefs propagate fear or guilt"
+    belief_coherence_score:
+      description: "Logical and emotional consistency of philosophy"

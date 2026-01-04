@@ -299,6 +299,7 @@ function App() {
             results={results}
             formData={formData}
             onBack={() => setCurrentPage('saved-charts')}
+            onUpdate={handleOpenSnapshot}
           />
         )}
 
@@ -468,6 +469,8 @@ function App() {
             />
           </ErrorBoundary>
         )}
+
+
 
         {currentPage === 'balas-info' && (
           <BalasInfoPage

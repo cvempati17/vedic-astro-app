@@ -1,0 +1,51 @@
+# FAMILY PHILOSOPHY ENGINE CONFIGURATION
+version: "1.0"
+
+planetary_weights:
+  rigidity:
+    Saturn: 1.5
+    Sun: 1.2
+    Mars: 1.0
+    Mercury: -0.5
+    Jupiter: -0.2
+    Venus: -0.5
+    Moon: -0.8
+    Rahu: -0.2
+    Ketu: 1.0
+
+  compassion:
+    Jupiter: 1.5
+    Venus: 1.4
+    Moon: 1.3
+    Mercury: 0.5
+    Sun: 0.2
+    Mars: -0.5
+    Saturn: -0.5
+    Rahu: -0.2
+    Ketu: 0.8
+
+  coherence:
+    Mercury: 1.5
+    Sun: 1.2
+    Jupiter: 1.0
+    Saturn: 0.8
+    Venus: 0.5
+    Moon: 0.2
+    Mars: 0.0
+    Rahu: -1.0
+    Ketu: -0.5
+
+thresholds:
+  rigidity_high: 10
+  rigidity_low: 5
+  compassion_high: 12
+  coherence_high: 8
+
+nakshatra_modulation:
+  Ashwini:
+    tone: "urgent"
+    instinct: "action-oriented"
+  Bharani:
+    tone: "intense"
+    instinct: "transformative"
+  # ... (can add more as needed, just placeholders for now)

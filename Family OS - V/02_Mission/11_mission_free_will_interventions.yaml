@@ -1,0 +1,219 @@
+mission_free_will_interventions:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    status: stable
+    last_updated: 2026-01-01
+    compatibility:
+      vision_module: ">=1.0"
+      mission_module: ">=1.0"
+
+  metadata:
+    module: mission
+    layer: free_will_intervention
+    purpose: >
+      Defines conscious intervention pathways that allow the family
+      to alter mission outcomes, reduce suffering, and redirect effort
+      without violating karmic structure or timing.
+    dependency_files:
+      - 02_mission_engine.yaml
+      - 03_mission_aspect_modifiers.yaml
+      - 04_mission_planetary_strength_scoring.yaml
+      - 07_mission_member_output_contract.yaml
+      - 08_mission_responsibility_distribution.yaml
+      - 10_mission_dasha_evolution.yaml
+
+  philosophical_position:
+    - Karma defines constraints, not compulsion
+    - Free will operates through choice of response and pacing
+    - Intervention changes trajectory, not destiny category
+    - Conscious reduction of load is a valid karmic act
+    - Acceptance and action are both interventions
+
+  intervention_modes:
+
+    mitigation:
+      description: >
+        Reduces intensity, friction, or suffering
+        without attempting to override karmic themes.
+      examples:
+        - load_reduction
+        - pacing_adjustment
+        - emotional_boundary_setting
+
+    redirection:
+      description: >
+        Channels mission energy into alternate,
+        more sustainable expressions.
+      examples:
+        - role_reassignment
+        - scope_redefinition
+        - value_realignment
+
+    amplification:
+      description: >
+        Strengthens favorable conditions
+        when timing and capacity support it.
+      examples:
+        - responsibility_expansion
+        - visibility_increase
+        - leadership_assumption
+
+    acceptance:
+      description: >
+        Conscious non-action or endurance
+        when intervention would increase harm.
+      examples:
+        - honoring_delay
+        - rest_cycles
+        - surrender_of_control
+
+  intervention_triggers:
+
+    low_execution_readiness:
+      condition:
+        execution_readiness: preparation_required
+      recommended_modes:
+        - mitigation
+        - acceptance
+
+    chronic_overload:
+      condition:
+        capacity_band: critical
+      recommended_modes:
+        - mitigation
+        - redirection
+
+    ethical_tension_detected:
+      condition:
+        coherence_conflict_type: ethical_tension
+      recommended_modes:
+        - redirection
+        - acceptance
+
+    expansion_supported:
+      condition:
+        dominant_execution_mode: expansion
+        execution_readiness: immediate_action
+      recommended_modes:
+        - amplification
+
+  role_specific_interventions:
+
+    father:
+      common_patterns:
+        - over_responsibility
+        - identity_fused_with_work
+      interventions:
+        mitigation:
+          - delegate_authority
+          - reduce_decision_volume
+        redirection:
+          - mentor_others
+          - shift_from_doing_to_guiding
+        acceptance:
+          - allow_delays
+          - release_outcome_fixation
+
+    mother:
+      common_patterns:
+        - emotional_overfunctioning
+        - invisible_labor
+      interventions:
+        mitigation:
+          - boundary_reinforcement
+          - reduce_emotional_labor
+        redirection:
+          - shared_responsibility_structures
+          - value_based_prioritization
+        acceptance:
+          - self_needs_validation
+          - disengagement_from_guilt
+
+    child:
+      common_patterns:
+        - pressure_internalization
+        - fear_of_failure
+      interventions:
+        mitigation:
+          - expectation_softening
+          - process_orientation
+        redirection:
+          - exploratory_learning
+          - skill_diversification
+        acceptance:
+          - delayed_responsibility
+          - protected_growth_phase
+
+    dependent_or_elder:
+      common_patterns:
+        - control_through_advice
+        - dependency_entanglement
+      interventions:
+        mitigation:
+          - advice_limits
+          - emotional_detachment_practices
+        redirection:
+          - symbolic_contribution
+          - legacy_storytelling
+        acceptance:
+          - role_transition
+          - receiving_support_without_shame
+
+  intervention_effect_model:
+
+    parameters_affected:
+      - mission_load_percentage
+      - execution_pace
+      - role_distribution
+      - emotional_friction_index
+
+    effect_bounds:
+      - interventions_cannot_change_dasha_type
+      - interventions_cannot_eliminate_core_karma
+      - interventions_can_reduce_suffering
+      - interventions_can_delay_or_phase_execution
+
+  feedback_loops:
+
+    short_term:
+      review_window: 3_months
+      indicators:
+        - reduced_conflict
+        - stabilized_energy
+        - clarity_of_roles
+
+    long_term:
+      review_window: 12_months
+      indicators:
+        - sustainability_index_improvement
+        - coherence_status_upgrade
+        - reduced_failure_modes
+
+  output_schema:
+
+    family_level:
+      recommended_intervention_modes: []
+      priority_actions: []
+      expected_outcomes: []
+      review_timeline: string
+
+    member_level:
+      member_name:
+        intervention_mode: mitigation | redirection | amplification | acceptance
+        specific_actions: []
+        expected_shift: string
+        caution_note: string
+
+  enforcement_rules:
+    - No intervention may increase suffering knowingly
+    - Amplification is invalid during corrective or withdrawal phases
+    - Acceptance is an active choice, not resignation
+    - Repeated failure triggers reclassification, not blame
+
+  usage_constraints:
+    - This layer provides guidance, not obligation
+    - Outputs must be framed as options, not commands
+    - Language must preserve dignity and agency

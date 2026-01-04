@@ -707,7 +707,7 @@ const SavedChartsPage = ({ onBack, onLoadChart, onEditChart, onOpenMatchNew, onO
                                         { key: 'btrNew', label: t('nav.birthTimeRectification', 'Birth Time Rectification'), onClick: onOpenBTRNew, icon: Icons.table() },
                                         { key: 'planetaryImpact', label: 'Planetry Changes and Its Impact', onClick: onOpenPlanetaryChangesImpact, icon: Icons.chart() },
                                         { key: 'familyOS', label: 'Family OS', onClick: onOpenFamilyOS, icon: Icons.chart() },
-                                        { key: 'familyOSVision', label: 'Family OS - Vision', onClick: onOpenFamilyVision, icon: Icons.chart() },
+                                        { key: 'familyOSVision', label: 'Family OS - V1.0', onClick: onOpenFamilyVision, icon: Icons.chart() },
                                         { key: 'muhurat', label: 'Muhurat', onClick: onOpenMuhurat, icon: Icons.chart() },
                                         { key: 'tithi', label: 'Thithi Calculator', onClick: onOpenTithi, icon: Icons.chart() }
                                     ]

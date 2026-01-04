@@ -1,0 +1,44 @@
+# FAMILY PHILOSOPHY OUTPUT VALIDATOR
+# STRICTNESS: HIGH
+# MODE: BLOCKING
+
+version: "1.0"
+module: "Family Philosophy"
+
+validation_profile:
+  strictness: "strict"
+  failure_mode: "block_render"
+
+required_sections:
+  - "Core Philosophical Identity"
+  - "Belief Strength & Stability"
+  - "Rigidity vs Flexibility Balance"
+  - "Compassion & Enforcement Style"
+  - "Fear / Shame Transmission"
+  - "Belief Coherence"
+  - "Nakshatra-Level Instinctive Tone"
+  - "Role-Based Lived Experience"
+  - "Free-Will & Evolution Potential"
+
+forbidden_patterns:
+  - pattern: "destiny is fixed"
+    severity: "fatal"
+    message: "Fatalistic language detected."
+  - pattern: "you will suffer"
+    severity: "fatal"
+    message: "Harmful/Fear-inducing language."
+  - pattern: "bad karma"
+    severity: "error"
+    message: "Avoid simplifying complex karma."
+
+checks:
+  min_word_count: 500
+  max_word_count: 3000
+  role_coverage:
+    - "Father"
+    - "Mother"
+    - "Child"
+
+logging:
+  log_failures: true
+  log_path: "logs/philosophy_validation.log"

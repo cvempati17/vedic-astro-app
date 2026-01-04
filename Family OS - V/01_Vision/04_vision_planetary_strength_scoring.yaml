@@ -1,0 +1,59 @@
+planetary_strength_scoring:
+  domain: vision
+  description: >
+    Determines how sustainable and actionable vision is
+    based on the dignity, placement, and strength of
+    key vision-related planets.
+
+planets_considered:
+  sun:
+    weight: 0.30
+    strength_factors:
+      exalted: +15
+      own_sign: +12
+      friendly_sign: +8
+      debilitated: -15
+      combust: -10
+
+  jupiter:
+    weight: 0.35
+    strength_factors:
+      exalted: +18
+      own_sign: +14
+      retrograde: -5
+      debilitated: -18
+
+  moon:
+    weight: 0.20
+    strength_factors:
+      bright_phase: +10
+      dark_phase: -10
+      afflicted: -12
+
+  saturn:
+    weight: 0.15
+    strength_factors:
+      own_sign: +10
+      exalted: +12
+      harsh_affliction: -10
+
+house_bonus:
+  house_9: +10
+  house_5: +8
+  house_11: +6
+
+normalization:
+  min_score: 0
+  max_score: 100
+  method: weighted_average
+
+interpretation_bands:
+  high:
+    range: 70_to_100
+    label: strong_sustainable_vision
+  moderate:
+    range: 40_to_69
+    label: fluctuating_vision
+  low:
+    range: 0_to_39
+    label: fragile_or_inherited_vision

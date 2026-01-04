@@ -1,0 +1,169 @@
+# ============================================================
+# family_philosophy_planetary_strength_scoring.yaml
+# Family OS – Family Philosophy Engine Planetary Strength Formula
+# ============================================================
+
+family_philosophy_planetary_strength_scoring:
+  metadata:
+    engine: Family_Philosophy
+    file: family_philosophy_planetary_strength_scoring.yaml
+    version: "1.0.0"
+    purpose: >
+      Defines how planetary strength is computed specifically
+      for the Family Philosophy engine — i.e., what the family
+      fundamentally believes, what is non-negotiable,
+      and how beliefs behave under pressure.
+    principle: >
+      Family Philosophy is not opinion.
+      It is the deep karmic belief structure that persists
+      across generations, crises, and success.
+      Planets contribute only if they shape values,
+      ethics, meaning, restraint, and belief rigidity or flexibility.
+
+  ############################################################
+  # 1. PLANET WEIGHTING FOR FAMILY PHILOSOPHY
+  ############################################################
+
+  planetary_weights:
+    Jupiter: 0.30   # dharma, belief systems, ethics, wisdom
+    Saturn: 0.25   # rules, discipline, moral boundaries
+    Ketu: 0.15     # detachment, spiritual philosophy, renunciation
+    Sun: 0.10      # authoritative belief, lineage ideology
+    Moon: 0.10     # emotional belief inheritance
+    Mercury: 0.05  # interpretation and articulation of beliefs
+    Venus: 0.05    # value-based harmony and aesthetics
+    Rahu: 0.00     # illusion (excluded by default)
+    Mars: 0.00     # force is not philosophy
+
+  ############################################################
+  # 2. PLANETARY BASE STRENGTH INPUTS
+  ############################################################
+
+  base_strength_inputs:
+    dignity:
+      exalted: 1.20
+      own_sign: 1.10
+      friendly_sign: 1.00
+      neutral_sign: 0.90
+      enemy_sign: 0.75
+      debilitated: 0.60
+
+    house_strength:
+      trikona: 1.15   # 1,5,9 → belief and meaning
+      kendra: 1.05
+      upachaya: 0.95
+      dusthana: 0.70
+
+    motion_state:
+      direct: 1.00
+      retrograde:
+        Jupiter: 1.10   # re-evaluated belief systems
+        Saturn: 1.05   # intensified moral rigidity
+        Ketu: 1.10     # deep spiritualization
+        others: 0.95
+
+    combustion:
+      mild: 0.85
+      severe: 0.70
+
+    avastha:
+      baladi:
+        bal: 1.10
+        kumar: 1.00
+        yuva: 1.05
+        vriddha: 0.90
+        mrita: 0.65
+
+  ############################################################
+  # 3. ASPECT CONTRIBUTION MULTIPLIERS (PHILOSOPHY CONTEXT)
+  ############################################################
+
+  aspect_multipliers:
+    benefic_aspect:
+      Jupiter: 1.15
+      Moon: 1.05
+      Venus: 1.05
+
+    malefic_aspect:
+      Saturn: 0.95
+      Rahu: 0.85
+      Mars: 0.90
+
+    special_cases:
+      Jupiter_aspects_Saturn: 1.20   # ethical structure stabilized
+      Saturn_aspects_Jupiter: 1.10   # belief enforced as rule
+      Ketu_aspects_Jupiter: 0.90     # belief transcended
+      Rahu_aspects_Jupiter: 0.80     # belief distorted into dogma
+
+  ############################################################
+  # 4. DIVISIONAL CHART MODIFIERS
+  ############################################################
+
+  chart_modifiers:
+    D9: 0.40    # dharma & belief maturity
+    D12: 0.30   # ancestral philosophy
+    D1: 0.20    # lived belief expression
+    D5: 0.10    # legacy belief transmission
+
+  ############################################################
+  # 5. FINAL PLANETARY STRENGTH FORMULA
+  ############################################################
+
+  formulas:
+
+    individual_planet_strength: >
+      planet_strength =
+        base_dignity *
+        house_strength *
+        motion_state *
+        combustion *
+        avastha *
+        aspect_multiplier
+
+    weighted_planet_philosophy_contribution: >
+      planet_philosophy_score =
+        planet_strength *
+        planetary_weight *
+        chart_modifier
+
+    total_family_philosophy_strength: >
+      family_philosophy_strength_score =
+        Σ (planet_philosophy_score for all planets)
+
+  ############################################################
+  # 6. INTERPRETATION BANDS
+  ############################################################
+
+  interpretation:
+    unshakeable_philosophy:
+      range: ">= 0.85"
+      meaning: "Clear, rigid, multi-generational belief system"
+    strong_philosophy:
+      range: "0.70 – 0.84"
+      meaning: "Stable values with adaptive capacity"
+    conflicted_philosophy:
+      range: "0.55 – 0.69"
+      meaning: "Competing belief systems"
+    fragile_philosophy:
+      range: "0.40 – 0.54"
+      meaning: "Beliefs bend easily under pressure"
+    philosophical_void:
+      range: "< 0.40"
+      meaning: "Lack of shared belief or moral anchor"
+
+  ############################################################
+  # 7. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: FP-STR-01
+      description: "Jupiter must contribute ≥ 30% of philosophy score"
+      severity: fatal
+
+    - rule_id: FP-STR-02
+      description: "Mars and Rahu must not dominate philosophy computation"
+      severity: error
+
+    - rule_id: FP-STR-03
+      description: "Strong Saturn without Jupiter flags rigid dogma risk"
+      severity: warning

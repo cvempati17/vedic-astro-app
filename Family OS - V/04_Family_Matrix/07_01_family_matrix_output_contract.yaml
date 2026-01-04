@@ -1,0 +1,57 @@
+# FAMILY MATRIX OUTPUT CONTRACT
+version: "1.0"
+
+family_matrix_output:
+  metadata:
+    engine: Family_Matrix
+    version: "1.0"
+  
+  # 1. ROOT STRUCTURE
+  structure:
+    - family_id
+    - matrix_overview
+    - cohesion_metrics
+    - interpersonal_dynamics
+    - audit_trail
+
+  # 2. SECTIONS DEFINITION
+  
+  # A. Matrix Overview
+  matrix_overview:
+    archetype: 
+      type: "String" # Derived from 02_01
+    core_dynamic: 
+      type: "String" # Generated from high-level aspects
+    stability_rating: 
+      type: "Number" # 1-10
+
+  # B. Cohesion Metrics
+  cohesion_metrics:
+    emotional_glue: 
+      type: "String"
+    friction_points: 
+      type: "String"
+    growth_potential: 
+      type: "String"
+
+  # C. Interpersonal Dynamics (Pairwise)
+  interpersonal_dynamics:
+    list_type: "Array"
+    item_structure:
+      role_pair: "String" # e.g. "Father-Mother"
+      synergy_score: "Number"
+      primary_interaction: "String" # Text from 03_*
+      challenge: "String" # Text from 03_* (Hard)
+      strength: "String" # Text from 03_* (Soft)
+      
+  # D. Audit Trail (Mandatory)
+  audit_trail:
+    calculation_steps: "Array"
+    files_used: "Array"
+    validator_status: "String"
+
+  # 3. PROHIBITIONS
+  prohibitions:
+    - "No floating text outside defined keys"
+    - "No null values for required fields"
+    - "No 'Unknown' in archetype"

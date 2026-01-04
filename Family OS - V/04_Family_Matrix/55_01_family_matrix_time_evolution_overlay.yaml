@@ -1,0 +1,104 @@
+family_matrix_time_evolution_overlay:
+
+  metadata:
+    version: "1.0.0"
+    domain: family_matrix
+    overlay_type: temporal
+    auto_switch: true
+    principles:
+      - baseline_preserving
+      - non_fatalistic
+      - phase_based
+      - reversible_states
+
+  # --------------------------------------------------
+  # AUTO-SWITCH MODES
+  # --------------------------------------------------
+  supported_modes:
+    primary: mahadasha_antardasha
+    fallback: rolling_window
+
+  # --------------------------------------------------
+  # DASHA INFLUENCE MAP (FAMILY-LEVEL EFFECT)
+  # --------------------------------------------------
+  dasha_influence_map:
+
+    jupiter:
+      cohesion_delta: +15
+      friction_delta: -5
+      narrative_tag: expansion_support
+
+    moon:
+      cohesion_delta: +10
+      friction_delta: +5
+      narrative_tag: emotional_amplification
+
+    saturn:
+      cohesion_delta: -20
+      friction_delta: +25
+      narrative_tag: withdrawal_and_pressure
+
+    mars:
+      cohesion_delta: -15
+      friction_delta: +20
+      narrative_tag: conflict_activation
+
+    rahu:
+      cohesion_delta: -25
+      friction_delta: +30
+      narrative_tag: destabilization_and_confusion
+
+    ketu:
+      cohesion_delta: -10
+      friction_delta: +15
+      narrative_tag: disengagement_and_detachment
+
+  # --------------------------------------------------
+  # ANTARDASHA INTENSITY MODULATION
+  # --------------------------------------------------
+  antardasha_scaling:
+    same_planet: 1.0
+    supportive_planet: 0.75
+    conflicting_planet: 1.35
+
+  # --------------------------------------------------
+  # ROLLING WINDOW FALLBACK
+  # --------------------------------------------------
+  rolling_window:
+    default_window_years: 5
+    aggregation_method: weighted_average
+    decay_factor: 0.85
+    narrative_tag: cumulative_pressure
+
+  # --------------------------------------------------
+  # STATE CLASSIFICATION (RELATIVE, NOT ABSOLUTE)
+  # --------------------------------------------------
+  phase_states:
+
+    cohesive:
+      condition:
+        cohesion_score: ">=70"
+        friction_score: "<40"
+      label: Cohesive Phase
+
+    strained:
+      condition:
+        cohesion_score: ">=40"
+        friction_score: ">=40"
+      label: Strain Accumulation Phase
+
+    fracture_risk:
+      condition:
+        cohesion_score: "<40"
+        friction_score: ">=60"
+      label: Fracture Risk Phase
+
+  # --------------------------------------------------
+  # SAFETY GUARDS
+  # --------------------------------------------------
+  safeguards:
+    forbid_event_prediction: true
+    forbid_relationship_labels:
+      - divorce
+      - separation
+    require_conflict_repair_engine: true

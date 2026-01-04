@@ -1,0 +1,222 @@
+mission_member_output_contract:
+
+  metadata:
+    module: mission
+    layer: member_output_contract
+    purpose: >
+      Defines how the family-level mission is translated into
+      role-specific execution responsibilities, capacity limits,
+      failure modes, and corrective guidance for each family member.
+    dependency_files:
+      - 02_mission_engine.yaml
+      - 03_mission_aspect_modifiers.yaml
+      - 04_mission_planetary_strength_scoring.yaml
+      - 05_mission_planetary_strength_aspect_modifiers.yaml
+      - 06_mission_narrative_templates.yaml
+
+  governing_principles:
+    - Mission is expressed through action, not identity
+    - No single member carries the entire mission load
+    - Execution must remain sustainable across life phases
+    - Responsibility must scale with capacity and life stage
+    - Correction is preferable to endurance-based suffering
+
+  member_roles:
+
+    father:
+      default_role: primary_executor
+      mission_orientation: outward_action
+      responsibility_domains:
+        - professional_execution
+        - economic_provision
+        - external_decision_making
+      expected_behaviors:
+        - assume_ownership_of_outcomes
+        - maintain_structural_discipline
+        - protect_family_from_external_instability
+      capacity_indicators:
+        healthy:
+          - consistent_energy_levels
+          - clarity_in_decision_making
+        overload:
+          - chronic_fatigue
+          - irritability
+          - withdrawal_from_family_dialogue
+      failure_modes:
+        - work_identity_overfusion
+        - authoritarian_execution
+        - emotional_detachment
+      corrective_guidance:
+        - delegate_non_essential_tasks
+        - consciously_schedule_rest
+        - invite_feedback_from_other_members
+      caution_areas:
+        - workaholism
+        - rigidity
+        - resistance_to_support
+
+    mother:
+      default_role: stabilizer_and_integrator
+      mission_orientation: sustaining_action
+      responsibility_domains:
+        - emotional_regulation
+        - value_alignment
+        - continuity_of_effort
+      expected_behaviors:
+        - preserve_ethics_under_pressure
+        - stabilize_execution_cycles
+        - support_conflict_resolution
+      capacity_indicators:
+        healthy:
+          - emotional_availability
+          - balanced_giving
+        overload:
+          - emotional_exhaustion
+          - silent_resentment
+          - loss_of_personal_space
+      failure_modes:
+        - self_erasure
+        - emotional_overfunctioning
+        - avoidance_of_personal_needs
+      corrective_guidance:
+        - reassert_personal_boundaries
+        - request_practical_support
+        - disengage_from_unnecessary_emotional_labor
+      caution_areas:
+        - martyrdom_patterns
+        - guilt_based_decisions
+
+    child:
+      default_role: future_carrier
+      mission_orientation: preparatory_action
+      responsibility_domains:
+        - learning_and_skill_building
+        - adaptability
+        - future_mission_extension
+      expected_behaviors:
+        - develop_relevant_capabilities
+        - observe_execution_patterns
+        - gradually_assume_responsibility
+      capacity_indicators:
+        healthy:
+          - curiosity
+          - steady_learning
+        overload:
+          - anxiety
+          - resistance
+          - disengagement
+      failure_modes:
+        - premature_pressure_internalization
+        - comparison_with_parents
+        - rejection_of_structure
+      corrective_guidance:
+        - reduce_expectational_load
+        - emphasize_process_over_outcome
+        - allow_exploration
+      caution_areas:
+        - fear_of_failure
+        - rebellion_against_responsibility
+
+    dependent_or_elder:
+      default_role: wisdom_holder_or_support_receiver
+      mission_orientation: advisory_or_passive
+      responsibility_domains:
+        - guidance_when_invited
+        - tradition_preservation
+        - moral_witnessing
+      expected_behaviors:
+        - offer_experience_without_control
+        - allow_younger_members_to_execute
+      capacity_indicators:
+        healthy:
+          - emotional_acceptance
+          - non_intrusive_presence
+        overload:
+          - interference
+          - guilt_projection
+      failure_modes:
+        - control_through_advice
+        - dependency_entanglement
+      corrective_guidance:
+        - release_operational_control
+        - accept_support_gracefully
+      caution_areas:
+        - emotional_manipulation
+        - resistance_to_role_transition
+
+  inter_role_dynamics:
+
+    father_mother:
+      common_tensions:
+        - execution_vs_emotional_process
+        - authority_vs_consensus
+      repair_guidance:
+        - clarify_decision_domains
+        - separate_emotional_validation_from_execution_decisions
+
+    parent_child:
+      common_tensions:
+        - expectation_mismatch
+        - autonomy_vs_structure
+      repair_guidance:
+        - adjust_responsibility_to_age
+        - reaffirm_unconditional_support
+
+    elder_family:
+      common_tensions:
+        - advice_becoming_control
+        - guilt_based_compliance
+      repair_guidance:
+        - reaffirm_current_execution_authority
+        - preserve_respect_without_operational_override
+
+  mission_alignment_modes:
+
+    high_alignment:
+      condition:
+        mission_vector_score: ">=75"
+      guidance: >
+        All members are expected to actively participate
+        within their defined domains while respecting capacity limits.
+
+    mixed_alignment:
+      condition:
+        mission_vector_score: "50–74"
+      guidance: >
+        Role clarity and boundary enforcement are critical.
+        Overcompensation by any one member must be avoided.
+
+    low_alignment:
+      condition:
+        mission_vector_score: "<50"
+      guidance: >
+        Reduce execution pressure.
+        Prioritize stabilization, healing, and gradual re-engagement.
+
+  output_schema:
+
+    family_reference:
+      - mission_summary
+      - alignment_tier
+      - execution_readiness
+
+    member_level_output:
+      member_name:
+        assigned_role: string
+        responsibility_domains: []
+        expected_behaviors: []
+        capacity_status: healthy | overloaded
+        failure_risks: []
+        corrective_actions: []
+        role_specific_guidance: string
+
+  enforcement_rules:
+    - No member may be assigned responsibility beyond capacity
+    - Role corrections must precede redistribution
+    - Endurance without correction is a failure condition
+    - Mission success is collective, not individual
+
+  usage_constraints:
+    - This layer must not introduce new astrological logic
+    - Language must remain non-fatalistic and adaptive
+    - Guidance must support sustainability over achievement

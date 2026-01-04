@@ -1,0 +1,183 @@
+# ============================================================
+# vision_engine_planet_chart_dependency.yaml
+# Family OS – Vision Engine Dependency Map
+# ============================================================
+
+vision_engine_dependency:
+  metadata:
+    engine: Vision
+    file: vision_engine_planet_chart_dependency.yaml
+    version: "1.0.0"
+    purpose: "Defines how planetary forces and charts determine family Vision"
+    design_principle: >
+      Vision is not action.
+      Vision is direction.
+      It is shaped by authority (Sun),
+      endurance (Saturn),
+      meaning (Jupiter),
+      evolution pressure (Rahu),
+      and release of obsolete paths (Ketu).
+
+  ############################################################
+  # 1. PRIMARY PLANETARY GOVERNANCE
+  ############################################################
+
+  primary_planets:
+
+    Sun:
+      role: "Directional Authority"
+      vision_function:
+        - defines lineage identity
+        - determines what the family stands for
+        - sets non-negotiable purpose
+      failure_mode_if_weak:
+        - lack_of_direction
+        - identity_confusion
+      charts:
+        D1:
+          why: "Core identity and visible life direction"
+          houses_emphasized: [1, 9, 10]
+        D9:
+          why: "Inner conviction and matured purpose"
+          houses_emphasized: [1, 9]
+
+    Saturn:
+      role: "Continuity & Realism"
+      vision_function:
+        - ensures vision is sustainable
+        - filters fantasy from reality
+        - binds vision to time and duty
+      failure_mode_if_weak:
+        - unrealistic_vision
+        - repeated_abandonment
+      charts:
+        D1:
+          why: "Karmic endurance in worldly life"
+          houses_emphasized: [2, 4, 10]
+        D9:
+          why: "Long-term dharmic continuity"
+          houses_emphasized: [6, 9, 12]
+        D12:
+          why: "Ancestral vision inheritance"
+          houses_emphasized: [1, 9]
+
+  ############################################################
+  # 2. SECONDARY PLANETARY SUPPORT
+  ############################################################
+
+  secondary_planets:
+
+    Jupiter:
+      role: "Meaning & Dharma"
+      vision_function:
+        - gives ethical justification
+        - expands vision beyond survival
+        - defines wisdom-based goals
+      distortion_if_afflicted:
+        - moral_confusion
+        - hollow_idealism
+      charts:
+        D1:
+          why: "Life philosophy and guidance"
+          houses_emphasized: [5, 9]
+        D9:
+          why: "Dharmic refinement of vision"
+          houses_emphasized: [5, 9]
+        D12:
+          why: "Inherited belief systems"
+          houses_emphasized: [9]
+
+    Rahu:
+      role: "Evolutionary Pressure"
+      vision_function:
+        - forces growth beyond comfort
+        - pulls vision toward the future
+        - breaks stagnant lineage paths
+      distortion_if_unchecked:
+        - obsession_with_status
+        - unstable_or_extreme_vision
+      charts:
+        D1:
+          why: "Visible ambition and disruption"
+          houses_emphasized: [3, 10, 11]
+        D9:
+          why: "Inner restlessness driving change"
+          houses_emphasized: [1, 7]
+
+  ############################################################
+  # 3. MODIFIER PLANET (CLOSURE & PRUNING)
+  ############################################################
+
+  modifier_planets:
+
+    Ketu:
+      role: "Vision Pruning & Release"
+      vision_function:
+        - removes outdated goals
+        - detaches family from false identity
+        - enables transcendence of old vision
+      risk_if_excessive:
+        - vision_void
+        - disengagement_from_world
+      charts:
+        D1:
+          why: "Withdrawal from obsolete ambitions"
+          houses_emphasized: [4, 12]
+        D9:
+          why: "Spiritual detachment from identity"
+          houses_emphasized: [12]
+        D12:
+          why: "Breaking ancestral vision loops"
+          houses_emphasized: [12]
+
+  ############################################################
+  # 4. CHART PRIORITY & WEIGHTING
+  ############################################################
+
+  chart_weighting:
+    D1: 0.45   # lived, visible direction
+    D9: 0.35   # internalized, matured vision
+    D12: 0.20  # ancestral and inherited direction
+
+  ############################################################
+  # 5. ENGINE STRENGTH COMPUTATION LOGIC
+  ############################################################
+
+  vision_strength_formula: >
+    vision_strength =
+      (Sun_strength * 0.30) +
+      (Saturn_strength * 0.30) +
+      (Jupiter_strength * 0.20) +
+      (Rahu_strength * 0.15) +
+      (Ketu_balance * 0.05)
+
+  interpretation_guidelines:
+    strong_vision:
+      condition: "Sun + Saturn both strong"
+      outcome: "Clear, stable, sustainable family direction"
+    distorted_vision:
+      condition: "Rahu strong, Saturn weak"
+      outcome: "Fast-changing or unrealistic goals"
+    collapsed_vision:
+      condition: "Sun weak, Ketu strong"
+      outcome: "Loss of purpose or disengagement"
+    evolving_vision:
+      condition: "Rahu strong, Jupiter strong"
+      outcome: "Future-oriented but meaningful direction"
+
+  ############################################################
+  # 6. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: VSN-DEP-01
+      description: "Vision engine must include Sun and Saturn"
+      severity: fatal
+
+    - rule_id: VSN-DEP-02
+      description: "At least one of Jupiter or Rahu must influence Vision"
+      severity: error
+
+    - rule_id: VSN-DEP-03
+      description: "Ketu may not exceed Sun strength in Vision"
+      severity: warning

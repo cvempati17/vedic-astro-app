@@ -1,0 +1,277 @@
+vision_engine:
+  metadata:
+    file: vision.yaml
+    version: "1.1.0"
+    scope: "Family-level long-term karmic vision"
+    basis:
+      astrology: "Vedic / Sidereal / Lahiri Ayanamsa"
+      charts_used: [D1, D9]
+      dashas: "Vimshottari"
+    architecture:
+      type: "Composed + Weighted Rule Engine"
+      modifiers:
+        aspects_file: "vision_aspect_modifiers.yaml"
+    design_principle: >
+      Vision is not selected.
+      Vision is computed as a weighted emergent property
+      of structural, ethical, psychological, directional,
+      activation, and evolutionary forces.
+
+  ####################################################################
+  # 1. VISION DEFINITION
+  ####################################################################
+
+  vision_definition:
+    description: >
+      Vision represents the long-term karmic direction of the family
+      treated as a single evolving organism.
+      It answers:
+        - What must be preserved?
+        - What must be pursued?
+        - What must be released?
+        - What must be transmitted forward?
+
+  ####################################################################
+  # 2. VISION LAYERS (ALL SIMULTANEOUSLY ACTIVE)
+  ####################################################################
+
+  vision_layers:
+    survival_vision:
+      meaning: "Continuity, safety, basic structure"
+    growth_vision:
+      meaning: "Expansion, ambition, material or social rise"
+    ethical_vision:
+      meaning: "Dharma, wisdom, moral compass"
+    evolutionary_vision:
+      meaning: "Breaking patterns, future movement"
+    legacy_vision:
+      meaning: "Transmission beyond the current generation"
+
+  ####################################################################
+  # 3. INPUT DIMENSIONS
+  ####################################################################
+
+  vision_inputs:
+
+    planetary:
+      - sun_strength
+      - moon_strength
+      - mars_strength
+      - mercury_strength
+      - jupiter_strength
+      - venus_strength
+      - saturn_strength
+      - rahu_strength
+      - ketu_strength
+
+    houses:
+      - sun_house
+      - moon_house
+      - mars_house
+      - jupiter_house
+      - saturn_house
+      - rahu_house
+      - ketu_house
+
+    divisional:
+      - d9_lagna
+      - sun_d9_strength
+      - jupiter_d9_strength
+      - saturn_d9_strength
+
+    psychological:
+      - moon_sign
+      - moon_element
+      - moon_nakshatra
+
+    elemental:
+      - lagna_element
+      - dominant_element_family
+
+    temporal:
+      - dominant_current_maha_dasha
+      - overlapping_maha_dashas
+      - maha_dasha_start_patterns
+
+  ####################################################################
+  # 4. PLANETARY VISION AXIOMS (NON-NEGOTIABLE)
+  ####################################################################
+
+  planetary_axioms:
+
+    sun:
+      governs: "Direction, authority, identity"
+      default_layer: legacy_vision
+
+    moon:
+      governs: "Emotional safety, psychological needs"
+      default_layer: survival_vision
+
+    mars:
+      governs: "Will, courage, activation"
+      default_layer: growth_vision
+
+    mercury:
+      governs: "Adaptation, learning, strategy"
+      default_layer: growth_vision
+
+    jupiter:
+      governs: "Meaning, ethics, wisdom"
+      default_layer: ethical_vision
+
+    venus:
+      governs: "Harmony, bonding, enjoyment"
+      default_layer: growth_vision
+
+    saturn:
+      governs: "Responsibility, endurance, structure"
+      default_layer: survival_vision
+
+    rahu:
+      governs: "Future pull, disruption, acceleration"
+      default_layer: evolutionary_vision
+
+    ketu:
+      governs: "Release, simplification, detachment"
+      default_layer: legacy_vision
+
+  ####################################################################
+  # 5. PLANET-SPECIFIC VISION RULES
+  ####################################################################
+
+  sun_vision_rules:
+    - if: { sun_house: [1, 10] }
+      then: { layer: legacy_vision, theme: "Public authority and leadership" }
+
+    - if: { sun_house: 9 }
+      then: { layer: ethical_vision, theme: "Dharmic direction and belief leadership" }
+
+    - if: { sun_afflicted: true }
+      then: { risk: "Ego-driven or confused family direction" }
+
+  moon_vision_rules:
+    - if: { moon_element: Earth }
+      then: { layer: survival_vision, theme: "Security before ambition" }
+
+    - if: { moon_element: Fire }
+      then: { layer: growth_vision, theme: "Courage-driven emotional direction" }
+
+    - if: { moon_element: Air }
+      then: { layer: evolutionary_vision, theme: "Mental and social reform" }
+
+    - if: { moon_element: Water }
+      then: { layer: ethical_vision, theme: "Healing and emotional depth" }
+
+  mars_vision_rules:
+    - if: { mars_house: [1, 3, 10] }
+      then: { layer: growth_vision, theme: "Bold execution and initiative" }
+
+    - if: { mars_house: 6 }
+      then: { layer: survival_vision, theme: "Protection through struggle" }
+
+    - if: { mars_afflicted: true }
+      then: { risk: "Reactive or aggressive vision pursuit" }
+
+  jupiter_vision_rules:
+    - if: { jupiter_house: [5, 9] }
+      then: { layer: ethical_vision, theme: "Teaching, guidance, values" }
+
+    - if: { jupiter_afflicted: true }
+      then: { risk: "Dogma or moral rigidity" }
+
+  venus_vision_rules:
+    - if: { venus_strong: true }
+      then: { layer: growth_vision, theme: "Harmonious expansion and bonding" }
+
+  saturn_vision_rules:
+    - if: { saturn_house: [1, 2, 4] }
+      then: { layer: survival_vision, theme: "Preserve structure and security" }
+
+    - if: { saturn_house: [9, 10] }
+      then: { layer: legacy_vision, theme: "Institutional or societal legacy" }
+
+    - if: { saturn_afflicted: true }
+      then: { risk: "Fear-based rigidity" }
+
+  node_vision_rules:
+    - if: { rahu_strong: true }
+      then: { layer: evolutionary_vision, theme: "Move toward unfamiliar futures" }
+
+    - if: { ketu_strong: true }
+      then: { layer: legacy_vision, theme: "Release outdated identity" }
+
+    - if: { maha_dasha_start_patterns: Rahu_multiple }
+      then: { layer: evolutionary_vision, theme: "Accelerated generational evolution" }
+
+  ####################################################################
+  # 6. ELEMENTAL BIAS MATRIX
+  ####################################################################
+
+  elemental_vision_bias:
+    Earth: "Preserve, accumulate, sustain"
+    Fire: "Lead, initiate, transform"
+    Air: "Innovate, reform, communicate"
+    Water: "Heal, connect, deepen"
+
+  ####################################################################
+  # 7. TEMPORAL (MAHA-DASHA) MODIFIERS
+  ####################################################################
+
+  dasha_modifiers:
+    Saturn:
+      amplifies: survival_vision
+      delays: growth_vision
+
+    Jupiter:
+      amplifies: ethical_vision
+
+    Rahu:
+      amplifies: evolutionary_vision
+      destabilizes: survival_vision
+
+    Venus:
+      amplifies: growth_vision
+
+    Mercury:
+      amplifies: growth_vision_through_learning
+
+  ####################################################################
+  # 8. VISION WEIGHTING ENGINE
+  ####################################################################
+
+  vision_weighting:
+    weights:
+      saturn: 0.22
+      jupiter: 0.18
+      sun: 0.15
+      moon: 0.15
+      mars: 0.10
+      nodes: 0.12
+      venus_mercury: 0.08
+
+    resolution_logic: >
+      Aggregate all active vision vectors by layer,
+      apply planetary weights,
+      then apply aspect-based modifiers,
+      then select:
+        - Primary Vision
+        - Secondary Vision
+
+  ####################################################################
+  # 9. FINAL OUTPUT CONTRACT
+  ####################################################################
+
+  resolved_output:
+    primary_vision:
+      description: "Dominant long-term family direction"
+
+    secondary_vision:
+      description: "Supporting or corrective direction"
+
+    risks:
+      description: "Failure modes if one force dominates"
+
+    lifecycle_expression:
+      early_phase: "Survival-led"
+      mid_phase: "Growth and reform"
+      late_phase: "Legacy and wisdom transmission"

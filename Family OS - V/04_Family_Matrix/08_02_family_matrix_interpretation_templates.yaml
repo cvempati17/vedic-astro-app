@@ -1,0 +1,7 @@
+family_matrix_interpretation_templates:
+  version: "1.0"
+  templates:
+    FMX_TMP_FAM_DECISION_CENTRALIZED: "Decision influence is concentrated, allowing choices and direction-setting to propagate quickly through the family system with limited diffusion."
+    FMX_TMP_TIME_FRACTURE_RISK: "The family system is operating under elevated structural strain. Existing patterns may feel stressed, requiring conscious regulation to prevent further accumulation of pressure."
+    FMX_TMP_TIME_PRESSURE_ACCUMULATION: "Current conditions indicate gradual buildup of friction relative to cohesion. This phase reflects increasing load rather than sudden change."
+    FMX_TMP_TIME_STRAINED: "The family structure is absorbing significant load. Stability is currently maintained, but internal friction is accumulating beneath the surface coherence."

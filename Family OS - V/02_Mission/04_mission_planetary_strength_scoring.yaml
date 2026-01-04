@@ -1,0 +1,169 @@
+# ============================================================
+# mission_planetary_strength_scoring.yaml
+# Family OS – Mission Engine Planetary Strength Formula
+# ============================================================
+
+mission_planetary_strength_scoring:
+  metadata:
+    engine: Mission
+    file: mission_planetary_strength_scoring.yaml
+    version: "1.0.0"
+    purpose: >
+      Defines how planetary strength is computed specifically
+      for the Mission engine — i.e., how the family *executes*
+      its vision through action, service, responsibility,
+      and real-world contribution.
+    principle: >
+      Vision says *why*.
+      Mission says *how*.
+      Mission is judged not by belief but by sustained action,
+      coordination, sacrifice, and delivery.
+
+  ############################################################
+  # 1. PLANET WEIGHTING FOR MISSION
+  ############################################################
+
+  planetary_weights:
+    Saturn: 0.25   # discipline, sustained effort, responsibility
+    Mars: 0.20     # execution, courage, enforcement
+    Mercury: 0.20  # coordination, planning, logistics
+    Sun: 0.15      # authority, leadership in action
+    Jupiter: 0.10  # ethical guidance in execution
+    Moon: 0.05     # emotional support of mission
+    Venus: 0.03    # harmony during work
+    Rahu: 0.02     # acceleration, experimentation
+    Ketu: 0.00     # detachment (not mission-oriented)
+
+  ############################################################
+  # 2. PLANETARY BASE STRENGTH INPUTS
+  ############################################################
+
+  base_strength_inputs:
+    dignity:
+      exalted: 1.15
+      own_sign: 1.10
+      friendly_sign: 1.00
+      neutral_sign: 0.90
+      enemy_sign: 0.75
+      debilitated: 0.60
+
+    house_strength:
+      upachaya: 1.15   # 3,6,10,11 → mission thrives on growth houses
+      kendra: 1.05
+      trikona: 1.00
+      dusthana: 0.70
+
+    motion_state:
+      direct: 1.00
+      retrograde:
+        Saturn: 1.10   # intensified duty
+        Mars: 1.05     # redirected force
+        Mercury: 1.05  # internal planning
+        others: 0.95
+
+    combustion:
+      mild: 0.85
+      severe: 0.70
+
+    avastha:
+      baladi:
+        bal: 1.10
+        kumar: 1.00
+        yuva: 1.05
+        vriddha: 0.90
+        mrita: 0.65
+
+  ############################################################
+  # 3. ASPECT CONTRIBUTION MULTIPLIERS (MISSION CONTEXT)
+  ############################################################
+
+  aspect_multipliers:
+    benefic_aspect:
+      Jupiter: 1.10
+      Venus: 1.05
+      Moon: 1.05
+
+    malefic_aspect:
+      Saturn: 0.95
+      Mars: 0.95
+      Rahu: 0.90
+      Ketu: 0.90
+
+    special_cases:
+      Saturn_aspects_Mars: 1.15   # disciplined execution
+      Mars_aspects_Saturn: 1.10   # duty activated by action
+      Mercury_aspects_Saturn: 1.10 # structured planning
+      Rahu_aspects_Mercury: 0.85  # chaotic execution
+
+  ############################################################
+  # 4. DIVISIONAL CHART MODIFIERS
+  ############################################################
+
+  chart_modifiers:
+    D1: 0.45   # lived execution
+    D10: 0.30  # karma yoga / public mission
+    D9: 0.15   # ethical alignment
+    D6: 0.10   # service, struggle, health during mission
+
+  ############################################################
+  # 5. FINAL PLANETARY STRENGTH FORMULA
+  ############################################################
+
+  formulas:
+
+    individual_planet_strength: >
+      planet_strength =
+        base_dignity *
+        house_strength *
+        motion_state *
+        combustion *
+        avastha *
+        aspect_multiplier
+
+    weighted_planet_mission_contribution: >
+      planet_mission_score =
+        planet_strength *
+        planetary_weight *
+        chart_modifier
+
+    total_mission_strength: >
+      mission_strength_score =
+        Σ (planet_mission_score for all planets)
+
+  ############################################################
+  # 6. INTERPRETATION BANDS
+  ############################################################
+
+  interpretation:
+    unstoppable_mission:
+      range: ">= 0.85"
+      meaning: "Family executes purpose relentlessly"
+    strong_mission:
+      range: "0.70 – 0.84"
+      meaning: "Reliable delivery with manageable strain"
+    strained_mission:
+      range: "0.55 – 0.69"
+      meaning: "Effort exists but coordination issues"
+    fragile_mission:
+      range: "0.40 – 0.54"
+      meaning: "Execution breaks under pressure"
+    mission_drift:
+      range: "< 0.40"
+      meaning: "Actions misaligned or inconsistent"
+
+  ############################################################
+  # 7. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: MIS-STR-01
+      description: "Saturn + Mars must contribute ≥ 40% of mission score"
+      severity: fatal
+
+    - rule_id: MIS-STR-02
+      description: "Mercury must be present for coordination"
+      severity: error
+
+    - rule_id: MIS-STR-03
+      description: "Excess Rahu without Saturn/Mercury flags chaos risk"
+      severity: warning

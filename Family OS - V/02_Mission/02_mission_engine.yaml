@@ -1,0 +1,381 @@
+mission_engine:
+  metadata:
+    file: mission.yaml
+    version: "1.0.0"
+    scope: "Execution of family vision into action"
+    depends_on:
+      - vision.yaml
+    basis:
+      astrology: "Vedic / Sidereal / Lahiri"
+      charts_used: [D1, D9]
+      dashas: "Vimshottari"
+    design_principle: >
+      Mission converts long-term vision into
+      daily, yearly, and generational execution rules.
+      Mission answers:
+        - What must be done?
+        - Who does it?
+        - How aggressively?
+        - With what discipline?
+        - Over what time horizon?
+
+  ####################################################################
+  # 1. MISSION DEFINITION
+  ####################################################################
+
+  mission_definition:
+    description: >
+      Mission is the executable layer of the Family OS.
+      It translates vision vectors into:
+        - Roles
+        - Actions
+        - Timelines
+        - Operating constraints
+
+  ####################################################################
+  # 2. MISSION INPUTS
+  ####################################################################
+
+  mission_inputs:
+
+    inherited_from_vision:
+      - primary_vision
+      - secondary_vision
+      - vision_risks
+
+    planetary_inputs:
+      - sun_strength
+      - mars_strength
+      - mercury_strength
+      - saturn_strength
+      - jupiter_strength
+      - venus_strength
+      - rahu_strength
+      - ketu_strength
+
+    houses:
+      - sun_house
+      - mars_house
+      - mercury_house
+      - saturn_house
+      - jupiter_house
+
+    psychological:
+      - moon_sign
+      - moon_element
+
+    temporal:
+      - dominant_current_maha_dasha
+      - antar_dasha
+      - generational_dasha_overlap
+
+    role_context:
+      - father
+      - mother
+      - child
+
+  ####################################################################
+  # 3. CORE PLANETARY MISSION AXIOMS
+  ####################################################################
+
+  planetary_mission_axioms:
+
+    sun:
+      governs: "Authority, command, purpose enforcement"
+      mission_function: "Direction-setting"
+
+    mars:
+      governs: "Action, courage, conflict"
+      mission_function: "Execution"
+
+    mercury:
+      governs: "Planning, learning, coordination"
+      mission_function: "Strategy & optimization"
+
+    saturn:
+      governs: "Discipline, endurance, accountability"
+      mission_function: "Sustainability & control"
+
+    jupiter:
+      governs: "Guidance, ethics, growth boundaries"
+      mission_function: "Moral oversight"
+
+    venus:
+      governs: "Harmony, motivation, bonding"
+      mission_function: "Human sustainability"
+
+    rahu:
+      governs: "Experimentation, acceleration"
+      mission_function: "Innovation pressure"
+
+    ketu:
+      governs: "Minimalism, disengagement"
+      mission_function: "Pruning excess"
+
+  ####################################################################
+  # 4. MISSION MODES (HOW THE FAMILY OPERATES)
+  ####################################################################
+
+  mission_modes:
+
+    preservation_mode:
+      activated_when:
+        - primary_vision == survival_vision
+        - saturn_strong == true
+      behavior:
+        - minimize risk
+        - protect resources
+        - slow expansion
+
+    expansion_mode:
+      activated_when:
+        - primary_vision == growth_vision
+        - mars_strong == true
+      behavior:
+        - aggressive action
+        - capital deployment
+        - role specialization
+
+    reform_mode:
+      activated_when:
+        - primary_vision == evolutionary_vision
+        - rahu_strong == true
+      behavior:
+        - break routines
+        - adopt new systems
+        - tolerate instability
+
+    wisdom_mode:
+      activated_when:
+        - primary_vision == legacy_vision
+        - jupiter_strong == true
+      behavior:
+        - mentoring
+        - teaching
+        - consolidation
+
+  ####################################################################
+  # 5. SUN-BASED MISSION RULES (COMMAND & PURPOSE)
+  ####################################################################
+
+  sun_mission_rules:
+
+    - id: MSN-SUN-01
+      if:
+        sun_house in [1, 10]
+      then:
+        mission_role: "Command authority"
+        responsibility: "Set direction and final intent"
+
+    - id: MSN-SUN-02
+      if:
+        sun_house == 9
+      then:
+        mission_role: "Ethical commander"
+        responsibility: "Align actions with dharma"
+
+    - id: MSN-SUN-03
+      if:
+        sun_afflicted == true
+      then:
+        mission_risk: "Ego conflicts or unclear leadership"
+
+  ####################################################################
+  # 6. MARS-BASED MISSION RULES (EXECUTION ENGINE)
+  ####################################################################
+
+  mars_mission_rules:
+
+    - id: MSN-MAR-01
+      if:
+        mars_house in [1, 3, 10]
+      then:
+        mission_role: "Primary executor"
+        execution_style: "Direct and forceful"
+
+    - id: MSN-MAR-02
+      if:
+        mars_house == 6
+      then:
+        mission_role: "Conflict handler"
+        execution_style: "Problem-solving through struggle"
+
+    - id: MSN-MAR-03
+      if:
+        mars_afflicted == true
+      then:
+        mission_risk: "Overreaction or burnout"
+
+  ####################################################################
+  # 7. MERCURY-BASED MISSION RULES (STRATEGY & LEARNING)
+  ####################################################################
+
+  mercury_mission_rules:
+
+    - id: MSN-MER-01
+      if:
+        mercury_strong == true
+      then:
+        mission_role: "Planner & coordinator"
+        responsibility: "Optimize processes and communication"
+
+    - id: MSN-MER-02
+      if:
+        mercury_house in [3, 6, 11]
+      then:
+        mission_role: "Operational strategist"
+
+    - id: MSN-MER-03
+      if:
+        mercury_afflicted == true
+      then:
+        mission_risk: "Overthinking or miscommunication"
+
+  ####################################################################
+  # 8. SATURN-BASED MISSION RULES (DISCIPLINE & LOAD BEARING)
+  ####################################################################
+
+  saturn_mission_rules:
+
+    - id: MSN-SAT-01
+      if:
+        saturn_house in [1, 2, 4]
+      then:
+        mission_role: "Load bearer"
+        responsibility: "Ensure continuity and stability"
+
+    - id: MSN-SAT-02
+      if:
+        saturn_house in [10]
+      then:
+        mission_role: "Accountability head"
+        responsibility: "Public responsibility and reputation"
+
+    - id: MSN-SAT-03
+      if:
+        saturn_afflicted == true
+      then:
+        mission_risk: "Rigidity, exhaustion"
+
+  ####################################################################
+  # 9. JUPITER-BASED MISSION RULES (GUARDRAILS)
+  ####################################################################
+
+  jupiter_mission_rules:
+
+    - id: MSN-JUP-01
+      if:
+        jupiter_strong == true
+      then:
+        mission_role: "Advisor"
+        responsibility: "Ensure ethical expansion"
+
+    - id: MSN-JUP-02
+      if:
+        jupiter_afflicted == true
+      then:
+        mission_risk: "Moral confusion or excess tolerance"
+
+  ####################################################################
+  # 10. VENUS-BASED MISSION RULES (HUMAN SUSTAINABILITY)
+  ####################################################################
+
+  venus_mission_rules:
+
+    - id: MSN-VEN-01
+      if:
+        venus_strong == true
+      then:
+        mission_role: "Harmony keeper"
+        responsibility: "Maintain relationships and morale"
+
+    - id: MSN-VEN-02
+      if:
+        venus_afflicted == true
+      then:
+        mission_risk: "Avoidance of hard decisions"
+
+  ####################################################################
+  # 11. NODE-BASED MISSION RULES (EXPERIMENTATION & PRUNING)
+  ####################################################################
+
+  node_mission_rules:
+
+    - id: MSN-NOD-01
+      if:
+        rahu_strong == true
+      then:
+        mission_role: "Experiment driver"
+        responsibility: "Try new paths and technologies"
+
+    - id: MSN-NOD-02
+      if:
+        ketu_strong == true
+      then:
+        mission_role: "Simplifier"
+        responsibility: "Remove obsolete commitments"
+
+  ####################################################################
+  # 12. ROLE-BASED MISSION MODIFIERS
+  ####################################################################
+
+  role_modifiers:
+
+    father:
+      bias:
+        - saturn
+        - sun
+      execution_style: "Long-term, conservative"
+
+    mother:
+      bias:
+        - mars
+        - moon
+      execution_style: "Fast, emotionally driven"
+
+    child:
+      bias:
+        - mercury
+        - rahu
+      execution_style: "Adaptive, experimental"
+
+  ####################################################################
+  # 13. TEMPORAL (DAŚĀ) MISSION MODIFIERS
+  ####################################################################
+
+  dasha_mission_modifiers:
+
+    Saturn:
+      slows: execution_speed
+      increases: durability
+
+    Mars:
+      increases: execution_speed
+      increases: conflict_risk
+
+    Mercury:
+      increases: learning_rate
+
+    Rahu:
+      increases: experimentation
+      decreases: predictability
+
+  ####################################################################
+  # 14. FINAL MISSION OUTPUT CONTRACT
+  ####################################################################
+
+  resolved_mission_output:
+    mission_mode:
+      description: "Current operating mode"
+
+    active_roles:
+      description: "Who does what now"
+
+    execution_style:
+      description: "How actions are taken"
+
+    risks:
+      description: "Failure modes under stress"
+
+    success_criteria:
+      description: "What defines mission success in this phase"

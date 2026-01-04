@@ -1,0 +1,183 @@
+mission_vision_coherence_resolver:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    status: stable
+    last_updated: 2026-01-01
+    compatibility:
+      vision_module: ">=1.0"
+      mission_module: ">=1.0"
+
+  metadata:
+    module: integration
+    layer: vision_mission_coherence
+    purpose: >
+      Detects, explains, and resolves conflicts between
+      family Vision (identity, values, long-term direction)
+      and Mission (action, responsibility, execution load),
+      ensuring philosophical alignment does not degrade
+      operational sustainability.
+    dependency_files:
+      - vision_engine.yaml
+      - vision_narrative_templates.yaml
+      - mission_engine.yaml
+      - mission_narrative_templates.yaml
+      - 08_mission_responsibility_distribution.yaml
+
+  governing_assumptions:
+    - Vision defines meaning; Mission defines action
+    - Neither Vision nor Mission is superior in isolation
+    - Long-term incoherence manifests as burnout, guilt, or stagnation
+    - Resolution favors recalibration over abandonment
+
+  coherence_dimensions:
+
+    value_execution_alignment:
+      description: >
+        Measures whether daily actions support
+        stated family values and philosophy.
+      indicators:
+        - mission_actions_contradict_values
+        - ethical_drift_under_pressure
+        - symbolic_vision_without_practice
+
+    identity_load_alignment:
+      description: >
+        Evaluates whether execution demands
+        exceed what the family identity can sustainably carry.
+      indicators:
+        - mission_load_exceeds_identity_capacity
+        - role_enforcement_against_nature
+        - forced_responsibility_adoption
+
+    time_horizon_alignment:
+      description: >
+        Ensures short-term mission goals
+        do not sabotage long-term vision.
+      indicators:
+        - short_term_gain_long_term_cost
+        - impatience_against_lifecycle
+        - premature_scaling
+
+    emotional_integrity_alignment:
+      description: >
+        Assesses emotional coherence between
+        meaning and effort.
+      indicators:
+        - guilt_driven_execution
+        - resentment_toward_vision
+        - emotional_disengagement_from_mission
+
+  conflict_detection_rules:
+
+    vision_strong_mission_weak:
+      condition:
+        vision_clarity_score: ">=75"
+        mission_vector_score: "<50"
+      classification: symbolic_overreach
+      explanation: >
+        The family clearly knows who it wants to be,
+        but current structures do not support execution.
+        Pressure to act may create guilt or self-judgment.
+
+    vision_weak_mission_strong:
+      condition:
+        vision_clarity_score: "<50"
+        mission_vector_score: ">=75"
+      classification: mechanical_life_pattern
+      explanation: >
+        The family is highly active and responsible,
+        but lacks a shared sense of meaning or direction.
+        This risks burnout or existential dissatisfaction.
+
+    values_misaligned_execution:
+      condition:
+        value_execution_alignment: misaligned
+      classification: ethical_tension
+      explanation: >
+        Actions taken to fulfill mission
+        are drifting away from core values,
+        weakening long-term coherence.
+
+    overload_against_identity:
+      condition:
+        identity_load_alignment: misaligned
+      classification: identity_violation
+      explanation: >
+        Mission demands exceed what the family’s
+        identity and emotional architecture can sustain.
+
+  resolution_strategies:
+
+    symbolic_overreach:
+      primary_action:
+        - reduce_mission_scope
+        - strengthen_execution_support
+      guidance: >
+        Ground vision through small, consistent actions.
+        Avoid self-criticism for slow progress.
+
+    mechanical_life_pattern:
+      primary_action:
+        - revisit_family_vision
+        - articulate_shared_meaning
+      guidance: >
+        Pause expansion.
+        Clarify why the family is doing what it is doing.
+
+    ethical_tension:
+      primary_action:
+        - realign_decisions_with_values
+        - adjust_success_metrics
+      guidance: >
+        Long-term stability requires ethical congruence,
+        even at the cost of short-term efficiency.
+
+    identity_violation:
+      primary_action:
+        - redistribute_responsibilities
+        - release_nonessential_obligations
+      guidance: >
+        Mission must serve identity,
+        not overwrite it.
+
+  escalation_protocol:
+
+    unresolved_conflict_cycles:
+      trigger:
+        coherence_conflict_persists_cycles: ">=3"
+      action:
+        - enforce_mission_pause
+        - initiate_vision_recalibration
+      message: >
+        Repeated incoherence indicates
+        structural misalignment.
+        Continuing without correction
+        will compound long-term damage.
+
+  output_schema:
+
+    family_level:
+      coherence_status: coherent | mildly_incoherent | critically_incoherent
+      detected_conflicts: []
+      dominant_conflict_type: string
+      resolution_guidance: string
+
+    member_impact_overlay:
+      member_name:
+        role_stress_index: 0-100
+        identity_pressure_flag: boolean
+        recommended_adjustment: string
+
+  enforcement_rules:
+    - Vision must not be used to justify suffering
+    - Mission must not ignore emotional signals
+    - Coherence resolution overrides expansion goals
+    - Sustained incoherence is treated as a system fault
+
+  usage_constraints:
+    - Resolver does not modify Vision or Mission data directly
+    - Outputs are advisory but must be surfaced prominently
+    - Language must avoid blame and moralization

@@ -1,0 +1,267 @@
+# ============================================================
+# 05_family_philosophy_planetary_strength_aspect_modifiers.yaml
+# Family OS – Family Philosophy Aspect-Based Strength Modifiers
+# ============================================================
+
+family_philosophy_planetary_strength_aspect_modifiers:
+  metadata:
+    engine: Family_Philosophy
+    file: 05_family_philosophy_planetary_strength_aspect_modifiers.yaml
+    version: "1.0.1"
+    purpose: >
+      Applies aspect-based modulation to planetary strength
+      used by the Family Philosophy engine.
+      These modifiers govern how beliefs are stabilized,
+      distorted, enforced, softened, or transcended under pressure.
+    depends_on:
+      - family_philosophy_planetary_strength_scoring.yaml
+    principle: >
+      Philosophy is not static belief.
+      It is belief under stress.
+      Aspects decide whether philosophy becomes:
+      wisdom, rigidity, hypocrisy, flexibility, or transcendence.
+
+  ############################################################
+  # 1. ASPECT SEMANTICS (PHILOSOPHY CONTEXT)
+  ############################################################
+
+  aspect_semantics:
+    standard_aspect:
+      applies_to: [Sun, Moon, Mercury, Venus]
+      degrees: [7]
+      philosophy_effect: "Direct interaction affecting belief coherence"
+
+    special_aspects:
+      Saturn: [3, 7, 10]
+      Mars: [4, 7, 8]
+      Jupiter: [5, 7, 9]
+      Rahu: [5, 7, 9]
+      Ketu: [5, 7, 9]
+
+  ############################################################
+  # 2. JUPITER-DRIVEN PHILOSOPHY MODIFIERS (CORE BELIEF)
+  ############################################################
+
+  jupiter_aspect_modifiers:
+    - id: FP-ASP-JUP-01
+      if:
+        target_planet: [Saturn, Sun]
+        aspected_by: Jupiter
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 1.25
+          effect: "Ethical belief system clarified and strengthened"
+
+    - id: FP-ASP-JUP-02
+      if:
+        target_planet: [Moon, Mercury]
+        aspected_by: Jupiter
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 1.15
+          effect: "Beliefs emotionally and intellectually integrated"
+
+    - id: FP-ASP-JUP-03
+      if:
+        jupiter_afflicted: true
+      then:
+        philosophy_modifier:
+          multiplier: 0.85
+          effect: "Belief system loses moral coherence"
+
+  ############################################################
+  # 3. SATURN-DRIVEN PHILOSOPHY MODIFIERS (RULES & RIGIDITY)
+  ############################################################
+
+  saturn_aspect_modifiers:
+    - id: FP-ASP-SAT-01
+      if:
+        target_planet: Jupiter
+        aspected_by: Saturn
+        aspect_type: [3, 7, 10]
+      then:
+        philosophy_modifier:
+          multiplier: 1.15
+          effect: "Beliefs enforced as non-negotiable rules"
+
+    - id: FP-ASP-SAT-02
+      if:
+        target_planet: [Moon, Venus]
+        aspected_by: Saturn
+        aspect_type: [3, 7, 10]
+      then:
+        philosophy_modifier:
+          multiplier: 0.85
+          effect: "Emotional warmth sacrificed for doctrine"
+
+    - id: FP-ASP-SAT-03
+      if:
+        saturn_afflicted: true
+      then:
+        philosophy_modifier:
+          multiplier: 0.80
+          effect: "Rigid belief without moral grounding"
+
+  ############################################################
+  # 4. KETU-DRIVEN PHILOSOPHY MODIFIERS (TRANSCENDENCE)
+  ############################################################
+
+  ketu_aspect_modifiers:
+    - id: FP-ASP-KET-01
+      if:
+        target_planet: [Jupiter, Sun]
+        aspected_by: Ketu
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 0.90
+          effect: "Detachment from inherited belief systems"
+
+    - id: FP-ASP-KET-02
+      if:
+        target_planet: Moon
+        aspected_by: Ketu
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 0.85
+          effect: "Emotional disengagement from belief"
+
+    - id: FP-ASP-KET-03
+      if:
+        ketu_strong: true
+      then:
+        philosophy_modifier:
+          multiplier: 1.05
+          effect: "Spiritualized, non-dogmatic philosophy"
+
+  ############################################################
+  # 5. RAHU-DRIVEN PHILOSOPHY MODIFIERS (DISTORTION)
+  ############################################################
+
+  rahu_aspect_modifiers:
+    - id: FP-ASP-RAH-01
+      if:
+        target_planet: Jupiter
+        aspected_by: Rahu
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 0.75
+          effect: "Belief system distorted into ideology or fear"
+
+    - id: FP-ASP-RAH-02
+      if:
+        target_planet: Sun
+        aspected_by: Rahu
+        aspect_type: [5, 7, 9]
+      then:
+        philosophy_modifier:
+          multiplier: 0.85
+          effect: "Authoritative belief becomes performative"
+
+  ############################################################
+  # 6. MOON-DRIVEN PHILOSOPHY MODIFIERS (EMOTIONAL BELIEF)
+  ############################################################
+
+  moon_aspect_modifiers:
+    - id: FP-ASP-MOON-01
+      if:
+        target_planet: Moon
+        aspected_by: Jupiter
+        aspect_type: standard_7th
+      then:
+        philosophy_modifier:
+          multiplier: 1.10
+          effect: "Beliefs emotionally nourishing and inclusive"
+
+    - id: FP-ASP-MOON-02
+      if:
+        target_planet: Moon
+        aspected_by: Saturn
+        aspect_type: standard_7th
+      then:
+        philosophy_modifier:
+          multiplier: 0.90
+          effect: "Belief internalized as duty, not comfort"
+
+  ############################################################
+  # 7. MERCURY & VENUS MODIFIERS (INTERPRETATION & HARMONY)
+  ############################################################
+
+  mercury_aspect_modifiers:
+    - id: FP-ASP-MER-01
+      if:
+        target_planet: Mercury
+        aspected_by: Jupiter
+        aspect_type: standard_7th
+      then:
+        philosophy_modifier:
+          multiplier: 1.10
+          effect: "Clear articulation of beliefs"
+
+    - id: FP-ASP-MER-02
+      if:
+        mercury_afflicted: true
+      then:
+        philosophy_modifier:
+          multiplier: 0.85
+          effect: "Contradictory belief explanations"
+
+  venus_aspect_modifiers:
+    - id: FP-ASP-VEN-01
+      if:
+        target_planet: Venus
+        aspected_by: Jupiter
+        aspect_type: standard_7th
+      then:
+        philosophy_modifier:
+          multiplier: 1.05
+          effect: "Values harmonize belief system"
+
+    - id: FP-ASP-VEN-02
+      if:
+        target_planet: Venus
+        aspected_by: Saturn
+        aspect_type: standard_7th
+      then:
+        philosophy_modifier:
+          multiplier: 0.90
+          effect: "Aesthetic values suppressed by doctrine"
+
+  ############################################################
+  # 8. MULTI-ASPECT RESOLUTION LOGIC
+  ############################################################
+
+  resolution_logic:
+    stacking_method: multiplicative
+    max_positive_multiplier: 1.30
+    min_negative_multiplier: 0.70
+
+    override_rules:
+      - if: "Jupiter aspects Saturn AND Saturn strong"
+        then: "Mark philosophy as rigid-but-stable"
+
+      - if: "Rahu aspects Jupiter AND Jupiter weak"
+        then: "Flag ideological distortion risk"
+
+      - if: "Ketu strong AND Jupiter strong"
+        then: "Mark philosophy as spiritually evolved"
+
+  ############################################################
+  # 9. FINAL OUTPUT
+  ############################################################
+
+  resolved_family_philosophy_aspect_strength_adjustment:
+    adjusted_planet_strength:
+      description: "Planetary strength after philosophy aspect modulation"
+    belief_rigidity_index:
+      description: "Degree of inflexibility in beliefs"
+    belief_distortion_score:
+      description: "Risk of dogma or illusion"
+    philosophical_resilience:
+      description: "Stability of beliefs under pressure"
+    transcendence_potential:
+      description: "Ability to evolve beyond inherited philosophy"

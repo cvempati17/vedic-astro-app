@@ -1,0 +1,152 @@
+55_03_family_matrix_emotional_risk_overlay:
+
+  metadata:
+    version: "1.0.0"
+    domain: family_matrix
+    overlay_type: emotional_risk
+    principles:
+      - risk_not_destiny
+      - non_diagnostic
+      - child_safe_language
+      - responsibility_bounded
+      - support_oriented
+
+  # --------------------------------------------------
+  # REQUIRED INPUTS
+  # --------------------------------------------------
+  required_inputs:
+    - baseline_family_matrix
+    - family_matrix_time_evolution_overlay
+    - family_matrix_conflict_repair_overlay
+    - emotional_architecture_engine
+
+  # --------------------------------------------------
+  # EMOTIONAL RISK ACTIVATION SIGNALS
+  # --------------------------------------------------
+  emotional_risk_signals:
+
+    prolonged_conflict_without_repair:
+      trigger:
+        conflict_state: repair_failure_risk
+        duration: sustained
+      risk_delta: +30
+      narrative_tag: emotional_overload
+
+    emotional_withdrawal_environment:
+      trigger:
+        dominant_pattern: withdrawal
+      risk_delta: +20
+      narrative_tag: emotional_isolation
+
+    authority_fragmentation:
+      trigger:
+        family_structure: fractured
+      risk_delta: +15
+      narrative_tag: loss_of_containment
+
+    high_friction_low_expression:
+      trigger:
+        friction_score: ">=60"
+        emotional_expression: "<40"
+      risk_delta: +25
+      narrative_tag: internalized_distress
+
+  # --------------------------------------------------
+  # PROTECTIVE / MITIGATING SIGNALS
+  # --------------------------------------------------
+  protective_factors:
+
+    active_repair_attempts:
+      condition:
+        repair_capacity: ">=60"
+      risk_reduction: -20
+      narrative_tag: repair_buffer
+
+    emotional_validation_presence:
+      condition:
+        emotional_attunement: ">=60"
+      risk_reduction: -15
+      narrative_tag: emotional_support
+
+    external_support_systems:
+      condition:
+        support_network: present
+      risk_reduction: -15
+      narrative_tag: external_stability
+
+  # --------------------------------------------------
+  # ROLE-SPECIFIC RISK MODULATION
+  # --------------------------------------------------
+  role_modulation:
+
+    father:
+      sensitivity_factor: 0.8
+      narrative_modifier: responsibility_pressure
+
+    mother:
+      sensitivity_factor: 1.0
+      narrative_modifier: emotional_burden
+
+    child:
+      sensitivity_factor: 1.4
+      narrative_modifier: internalization_risk
+
+  # --------------------------------------------------
+  # EMOTIONAL RISK STATES (NON-CLINICAL)
+  # --------------------------------------------------
+  emotional_risk_states:
+
+    low_risk:
+      condition:
+        emotional_risk_score: "<30"
+      label: Low Emotional Risk
+      narrative: >
+        The emotional environment is generally supportive,
+        with sufficient outlets for expression and repair.
+
+    elevated_risk:
+      condition:
+        min_score: ">=30"
+        max_score: "<60"
+      label: Elevated Emotional Risk
+      narrative: >
+        Emotional strain may be present, particularly during
+        periods of conflict or withdrawal. Supportive intervention
+        can significantly reduce long-term impact.
+
+    high_risk:
+      condition:
+        emotional_risk_score: ">=60"
+      label: High Emotional Risk
+      narrative: >
+        Sustained emotional strain may overwhelm coping capacity.
+        Active support, communication, and external assistance
+        are strongly recommended.
+
+  # --------------------------------------------------
+  # GUIDANCE OUTPUT (SUPPORT-ORIENTED)
+  # --------------------------------------------------
+  guidance_templates:
+
+    general:
+      - Encourage open, non-judgmental communication
+      - Reduce emotional isolation during high-stress phases
+      - Seek trusted external support when needed
+
+    child_specific:
+      - Ensure emotional reassurance without role reversal
+      - Avoid placing responsibility for family stability on the child
+      - Provide consistent emotional presence
+
+  # --------------------------------------------------
+  # SAFETY GUARDS (CRITICAL)
+  # --------------------------------------------------
+  safeguards:
+    forbid_diagnostic_labels:
+      - depression
+      - suicidal_tendency
+      - mental_disorder
+    forbid_event_prediction: true
+    forbid_child_blame: true
+    forbid_parent_blame: true
+    require_care_and_support_section: true

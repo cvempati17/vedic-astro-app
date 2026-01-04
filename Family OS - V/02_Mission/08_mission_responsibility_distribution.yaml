@@ -1,0 +1,195 @@
+mission_responsibility_distribution:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    status: stable
+    last_updated: 2026-01-01
+    compatibility:
+      vision_module: ">=1.0"
+      mission_module: ">=1.0"
+
+  metadata:
+    module: mission
+    layer: responsibility_distribution
+    purpose: >
+      Defines how mission responsibilities are quantitatively and
+      qualitatively distributed across family members, ensuring
+      sustainability, fairness, and alignment with capacity.
+    dependency_files:
+      - 02_mission_engine.yaml
+      - 04_mission_planetary_strength_scoring.yaml
+      - 05_mission_planetary_strength_aspect_modifiers.yaml
+      - 07_mission_member_output_contract.yaml
+
+  core_principles:
+    - Responsibility must match capacity
+    - No role is permanently overloaded
+    - Distribution is dynamic, not fixed
+    - Redistribution is a correction, not a failure
+    - Collective sustainability overrides individual endurance
+
+  responsibility_units:
+    definition: >
+      Atomic, assignable units of effort required
+      for mission execution.
+    unit_types:
+      - time_commitment
+      - decision_load
+      - emotional_labor
+      - physical_effort
+      - cognitive_focus
+
+  capacity_scaling_model:
+
+    capacity_bands:
+      high:
+        description: >
+          Member has surplus energy and stability.
+        load_multiplier: 1.2
+      normal:
+        description: >
+          Member is functioning within sustainable limits.
+        load_multiplier: 1.0
+      constrained:
+        description: >
+          Member is under stress or limited by life phase.
+        load_multiplier: 0.7
+      critical:
+        description: >
+          Member is overloaded and must shed responsibility.
+        load_multiplier: 0.4
+
+  baseline_role_allocation:
+
+    father:
+      default_load_percentage: 35
+      primary_units:
+        - decision_load
+        - time_commitment
+        - economic_execution
+      secondary_units:
+        - emotional_labor
+
+    mother:
+      default_load_percentage: 30
+      primary_units:
+        - emotional_labor
+        - continuity_management
+      secondary_units:
+        - decision_support
+
+    child:
+      default_load_percentage: 20
+      primary_units:
+        - learning_effort
+        - adaptive_focus
+      secondary_units:
+        - limited_time_commitment
+
+    dependent_or_elder:
+      default_load_percentage: 15
+      primary_units:
+        - advisory_input
+      secondary_units:
+        - moral_support
+
+  redistribution_triggers:
+
+    overload_detection:
+      indicators:
+        - capacity_status: overloaded
+        - recurring_failure_modes
+        - health_or_emotional_strain
+      action: initiate_redistribution
+
+    life_phase_shift:
+      indicators:
+        - education_phase
+        - caregiving_phase
+        - health_transition
+      action: rebalance_loads
+
+    dasha_pressure:
+      indicators:
+        - reduced_execution_readiness
+      action: temporary_load_reduction
+
+  redistribution_rules:
+
+    priority_order:
+      - protect_critical_capacity
+      - preserve_core_mission_continuity
+      - minimize_role_conflict
+      - avoid_shame_or_blame
+
+    constraints:
+      - children_must_not_absorb_parental_burden
+      - elders_must_not_resume_execution_roles
+      - emotional_labor_must_not_be_invisible
+
+    adjustment_methods:
+      - reassign_tasks
+      - reduce_scope
+      - extend_timelines
+      - introduce_external_support
+
+  conflict_prevention_mechanisms:
+
+    visibility_rules:
+      - all_responsibilities_must_be_named
+      - hidden_labor_is_invalid
+
+    consent_checks:
+      - redistribution_requires_explicit_acknowledgment
+      - silent_transfer_is_prohibited
+
+    review_cycles:
+      frequency: quarterly
+      purpose: >
+        Ensure distribution remains aligned
+        with capacity and mission phase.
+
+  mission_alignment_overlays:
+
+    high_alignment:
+      guidance: >
+        Maintain balanced load while allowing
+        temporary intensification with recovery windows.
+
+    mixed_alignment:
+      guidance: >
+        Reduce ambition scope and reinforce
+        role clarity before increasing load.
+
+    low_alignment:
+      guidance: >
+        Strip responsibilities to essentials.
+        Survival and stabilization override contribution.
+
+  output_schema:
+
+    family_level:
+      total_mission_load: percentage
+      sustainability_index: 0-100
+      redistribution_events: []
+
+    member_level:
+      member_name:
+        assigned_load_percentage: number
+        capacity_band: high | normal | constrained | critical
+        active_units: []
+        deferred_units: []
+        redistribution_notes: string
+
+  enforcement_rules:
+    - Any load above 40% on one member requires justification
+    - Capacity_band_critical forces automatic redistribution
+    - Sustainability_index below 60 triggers review
+    - Chronic imbalance is a system failure, not a personal one
+
+  usage_constraints:
+    - This file must not override member_output_contract roles
+    - Distribution decisions must remain reversible
+    - Language must emphasize fairness and adaptability

@@ -1,0 +1,48 @@
+# FAMILY MATRIX OUTPUT VALIDATOR
+version: "1.1"
+
+validation_rules:
+
+  required_governance_outputs:
+    - family_id
+    - module
+    - scope
+    - validation.execution_sequence_valid
+    - intervention_gate.selected_mode
+    - intervention_gate.allowed_overlays
+    - intervention_gate.blocked_overlays
+
+  forbidden_execution_conditions:
+
+    - id: FMX-VAL-GATE-01
+      if:
+        conflict_repair_overlay_executed: true
+        gate_output.allowed_overlays: does_not_include_family_matrix_conflict_repair_overlay
+      then:
+        error: "[SYSTEM ERROR] Conflict repair overlay executed without gate approval."
+
+    - id: FMX-VAL-GATE-02
+      if:
+        emotional_risk_overlay_executed: true
+        gate_output.allowed_overlays: does_not_include_family_matrix_emotional_risk_overlay
+      then:
+        error: "[SYSTEM ERROR] Emotional risk overlay executed without gate approval."
+
+  audit_requirements:
+    require_gate_decision_log: true
+    require_timestamp: true
+    require_family_id: true
+
+  forbidden_terms:
+    - archetype
+    - core_dynamic
+    - glue
+    - synergy
+    - narrative
+    - advice
+    - divorce
+    - separation
+
+  on_fail:
+    action: "ABORT_RENDER"
+    message: "[SYSTEM ERROR][VALIDATION_FAILED] : [Reason]"

@@ -1,0 +1,255 @@
+mission_dasha_evolution:
+
+  version:
+    major: 1
+    minor: 0
+    patch: 0
+    status: stable
+    last_updated: 2026-01-01
+    compatibility:
+      vision_module: ">=1.0"
+      mission_module: ">=1.0"
+
+  metadata:
+    module: mission
+    layer: dasha_evolution
+    purpose: >
+      Models how the family mission evolves across Mahā-Daśā periods,
+      ensuring that responsibility, execution expectations, and load
+      distribution remain appropriate to time, capacity, and karmic phase.
+    dependency_files:
+      - 02_mission_engine.yaml
+      - 04_mission_planetary_strength_scoring.yaml
+      - 07_mission_member_output_contract.yaml
+      - 08_mission_responsibility_distribution.yaml
+      - 09_mission_vision_coherence_resolver.yaml
+
+  governing_principles:
+    - Mission is time-sensitive, not static
+    - Each Mahā-Daśā permits only certain forms of execution
+    - Pressure applied outside dasha compatibility causes failure
+    - Expansion phases must follow consolidation phases
+    - Responsibility must ebb and flow with karmic timing
+
+  dasha_classification_model:
+
+    execution_capacity_bands:
+      expansion:
+        description: >
+          Periods favorable for growth, visibility,
+          responsibility increase, and outward contribution.
+      consolidation:
+        description: >
+          Periods for stabilizing gains, refining systems,
+          and protecting what has been built.
+      corrective:
+        description: >
+          Periods requiring repair, restructuring,
+          or ethical realignment.
+      withdrawal:
+        description: >
+          Periods emphasizing rest, healing,
+          learning, or reduced outward obligation.
+
+  maha_dasha_profiles:
+
+    Sun:
+      dominant_mode: expansion
+      mission_focus:
+        - leadership
+        - visibility
+        - authority_assumption
+      execution_guidance:
+        - accept_responsibility_publicly
+        - avoid_ego_based_overreach
+      load_adjustment:
+        recommended_change: "+10%"
+        caution: burnout_through_pride
+      misalignment_risks:
+        - authoritarianism
+        - neglect_of_emotional_feedback
+
+    Moon:
+      dominant_mode: consolidation
+      mission_focus:
+        - emotional_stability
+        - family_cohesion
+        - internal_alignment
+      execution_guidance:
+        - prioritize_emotional_health
+        - slow_decision_cycles
+      load_adjustment:
+        recommended_change: "-10%"
+        caution: emotional_overfunctioning
+      misalignment_risks:
+        - mood_driven_decisions
+        - dependency_patterns
+
+    Mars:
+      dominant_mode: expansion
+      mission_focus:
+        - action
+        - conflict_resolution
+        - initiative
+      execution_guidance:
+        - channel_energy_constructively
+        - avoid_reactive_execution
+      load_adjustment:
+        recommended_change: "+15%"
+        caution: aggression_and_burnout
+      misalignment_risks:
+        - impulsivity
+        - conflict_escalation
+
+    Mercury:
+      dominant_mode: consolidation
+      mission_focus:
+        - learning
+        - coordination
+        - communication
+      execution_guidance:
+        - optimize_processes
+        - upskill_family_members
+      load_adjustment:
+        recommended_change: "0%"
+        caution: overthinking
+      misalignment_risks:
+        - analysis_paralysis
+        - fragmented_focus
+
+    Jupiter:
+      dominant_mode: expansion
+      mission_focus:
+        - teaching
+        - guidance
+        - ethical_growth
+      execution_guidance:
+        - expand_with_integrity
+        - mentor_next_generation
+      load_adjustment:
+        recommended_change: "+10%"
+        caution: excess_or_complacency
+      misalignment_risks:
+        - moral_superiority
+        - unchecked_expansion
+
+    Venus:
+      dominant_mode: consolidation
+      mission_focus:
+        - harmony
+        - value_alignment
+        - relationship_stability
+      execution_guidance:
+        - balance_work_and_pleasure
+        - protect_relationships
+      load_adjustment:
+        recommended_change: "-5%"
+        caution: comfort_traps
+      misalignment_risks:
+        - avoidance_of_difficulty
+        - indulgence
+
+    Saturn:
+      dominant_mode: corrective
+      mission_focus:
+        - discipline
+        - restructuring
+        - endurance
+      execution_guidance:
+        - accept_delays_without_resistance
+        - simplify_and_strengthen
+      load_adjustment:
+        recommended_change: "-15%"
+        caution: despair_or_overburdening
+      misalignment_risks:
+        - rigidity
+        - chronic_fatigue
+
+    Rahu:
+      dominant_mode: expansion
+      mission_focus:
+        - unconventional_paths
+        - rapid_growth
+        - innovation
+      execution_guidance:
+        - maintain_ethical_anchors
+        - avoid_shortcuts
+      load_adjustment:
+        recommended_change: "+20%"
+        caution: instability
+      misalignment_risks:
+        - ethical_drift
+        - chaos
+
+    Ketu:
+      dominant_mode: withdrawal
+      mission_focus:
+        - detachment
+        - internal_realignment
+        - release
+      execution_guidance:
+        - reduce_external_obligations
+        - focus_on_inner_work
+      load_adjustment:
+        recommended_change: "-25%"
+        caution: disengagement
+      misalignment_risks:
+        - apathy
+        - loss_of_direction
+
+  dasha_transition_protocols:
+
+    entry_phase:
+      guidance: >
+        First 6–12 months require observation
+        before adjusting mission load aggressively.
+
+    mid_phase:
+      guidance: >
+        Core execution patterns stabilize.
+        Fine-tune responsibility distribution.
+
+    exit_phase:
+      guidance: >
+        Gradually unwind incompatible responsibilities
+        and prepare for next dasha mode.
+
+  mission_adjustment_rules:
+
+    allowed_actions:
+      - increase_or_reduce_load
+      - reassign_roles
+      - change_execution_pace
+      - defer_nonessential_goals
+
+    prohibited_actions:
+      - force_expansion_in_withdrawal
+      - shame_based_pressure
+      - ignoring_capacity_signals
+
+  output_schema:
+
+    family_level:
+      current_maha_dasha: string
+      dominant_execution_mode: expansion | consolidation | corrective | withdrawal
+      recommended_load_adjustment: string
+      mission_focus_themes: []
+      caution_flags: []
+
+    member_level_overlay:
+      member_name:
+        adjusted_load_percentage: number
+        execution_emphasis: string
+        rest_or_action_bias: rest | balanced | action
+        dasha_specific_guidance: string
+
+  enforcement_rules:
+    - Dasha mode overrides ambition
+    - Expansion without timing support is invalid
+    - Withdrawal phases must be honored
+    - Chronic violation leads to coherence escalation
+
+  usage_constraints:
+    - This layer must not alter Vision definitions
+    - Outputs must flow into responsibility_distribution
+    - Language must normalize change, not frame it as failure

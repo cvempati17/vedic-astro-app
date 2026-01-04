@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import BirthChart from '../components/BirthChart';
 import { calculateNakshatra } from '../utils/nakshatraUtils';
@@ -6,11 +7,78 @@ import { calculateVimshottariDasha, formatDate, calculateAntardashas } from '../
 import { calculateDignity, getPlanetNature, calculateAvastha } from '../utils/strengthUtils';
 import './SnapshotPage.css';
 
-const SnapshotPage = ({ results, formData, onBack }) => {
+const SnapshotPage = ({ results, formData, onBack, onUpdate }) => {
     const { t } = useTranslation();
     const [theme, setTheme] = useState('light'); // Force light for snapshot or respect app? User said "without color".
 
     if (!results || !formData) return <div className="loading">Loading Snapshot...</div>;
+
+    const [charts, setCharts] = useState([]);
+    const [selectedChartId, setSelectedChartId] = useState('');
+    const [loadingCharts, setLoadingCharts] = useState(false);
+
+    // Fetch Charts for Dropdown
+    useEffect(() => {
+        const fetchCharts = async () => {
+            setLoadingCharts(true);
+            const token = localStorage.getItem('token');
+            const localCharts = JSON.parse(localStorage.getItem('savedCharts') || '[]');
+
+            let allCharts = localCharts;
+
+            if (token) {
+                try {
+                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                    const response = await axios.get(`${API_URL}/api/charts`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    // Merge, avoiding duplicates if any (simple concat for now as in SavedChartsPage)
+                    allCharts = [...response.data, ...localCharts];
+                } catch (err) {
+                    console.error('Error fetching charts for snapshot dropdown:', err);
+                }
+            }
+            setCharts(allCharts);
+
+            // Try to set default selection based on current formData
+            // Matching by Name and Date to be relatively safe
+            const current = allCharts.find(c =>
+                c.name === formData.name &&
+                (c.dateOfBirth === formData.date || new Date(c.dateOfBirth).toISOString().split('T')[0] === formData.date)
+            );
+            if (current) {
+                setSelectedChartId(current._id);
+            }
+            setLoadingCharts(false);
+        };
+
+        fetchCharts();
+    }, [formData]); // Re-run if formData changes (e.g. after Generate) to update selection
+
+    const handleGenerate = () => {
+        const chart = charts.find(c => c._id === selectedChartId);
+        if (!chart) return;
+
+        if (!chart.chartData) {
+            alert("This chart data has not been calculated yet. Please open it in Saved Charts and save it properly.");
+            return;
+        }
+
+        const newFormData = {
+            name: chart.name,
+            date: chart.dateOfBirth, // Or format if needed
+            time: chart.timeOfBirth,
+            city: chart.placeOfBirth?.city,
+            latitude: chart.placeOfBirth?.lat,
+            longitude: chart.placeOfBirth?.lng,
+            timezone: chart.placeOfBirth?.timezone,
+            gender: chart.gender
+        };
+
+        if (onUpdate) {
+            onUpdate(chart.chartData, newFormData);
+        }
+    };
 
     // --- Helpers ---
     const getRasiName = (long) => {
@@ -292,7 +360,28 @@ const SnapshotPage = ({ results, formData, onBack }) => {
 
                 {/* Main Content Header (First Page) */}
                 <div className="snapshot-header-center">
-                    <h1>{formData.name}</h1>
+                    <div className="snapshot-selection-container no-print">
+                        <select
+                            value={selectedChartId}
+                            onChange={(e) => setSelectedChartId(e.target.value)}
+                            className="snapshot-member-select"
+                        >
+                            <option value="" disabled>Select Member</option>
+                            {charts.map((c, idx) => (
+                                <option key={c._id || idx} value={c._id}>
+                                    {c.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={handleGenerate} className="snapshot-generate-btn">
+                            Generate
+                        </button>
+                    </div>
+                    {/* Print-only static name, or keeping it visible but subtle? 
+                        User requested "bring name, make that as dropdown". 
+                        So the dropdown REPLACES the H1 in view mode. 
+                        But on print, we want the text. */}
+                    <h1 className="print-only-title" style={{ display: 'none' }}>{formData.name}</h1>
                     <p>Born on {formData.date} at {formData.time} in {formData.city}</p>
                     <div className="basic-info-row">
                         <span>Rasi: {getRasiName(results.Moon?.longitude)}</span>

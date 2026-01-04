@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Path to YAML Rules - STRICT SOURCE OF TRUTH
-const VISION_TEMPLATES_PATH = path.join(__dirname, '../../Family OS - V/Vision/vision_narrative_templates.yaml');
+const VISION_TEMPLATES_PATH = path.join(__dirname, '../../Family OS - V/01_Vision/06_vision_narrative_templates.yaml');
 
 // Helper to Load YAML
 const loadYaml = (filePath) => {
@@ -187,7 +187,7 @@ router.post('/vision', (req, res) => {
         // LOAD TEMPLATES STRICTLY
         const templates = loadYaml(VISION_TEMPLATES_PATH);
         if (!templates) {
-            throw new Error("CONTRACT_VIOLATION: vision_narrative_templates.yaml missing");
+            throw new Error("CONTRACT_VIOLATION: 06_vision_narrative_templates.yaml missing");
         }
 
         // Relaxed Version Check - Allow >=2.0
@@ -263,14 +263,28 @@ router.post('/vision', (req, res) => {
 
         // Determine Alignment Level
         const avgScore = memberCount > 0 ? totalScore / memberCount : 20;
-        let alignmentInfo = { key: 'clarity_moderate', label: 'Moderate' };
-        if (avgScore > 25) alignmentInfo = { key: 'clarity_high', label: 'High' };
-        if (avgScore < 15) alignmentInfo = { key: 'clarity_low', label: 'Low' };
+        let alignmentInfo = {
+            key: 'clarity_moderate',
+            label: 'Moderate',
+            rationale: "Vision is present but requires conscious effort to align individual paths."
+        };
+        if (avgScore > 25) alignmentInfo = {
+            key: 'clarity_high',
+            label: 'High',
+            rationale: "Strong planetary alignment supports a unified family purpose."
+        };
+        if (avgScore < 15) alignmentInfo = {
+            key: 'clarity_low',
+            label: 'Low',
+            rationale: "Individual karmic paths are divergent; focus on basic harmony first."
+        };
 
         // ----------------------------------------------------------------
         // RENDER OUTPUT (STRICT TEMPLATE EMISSION)
         // ----------------------------------------------------------------
         let outputText = `1. 🌟 FAMILY VISION STATEMENT (Unified Statement)\n`;
+        outputText += `(Alignment: ${alignmentInfo.label})\n`;
+        outputText += `Rationale: ${alignmentInfo.rationale}\n\n`;
 
         // 1. Unified Statement
         const unifiedText = renderTemplate(templates, ['family_vision_unified', alignmentInfo.key]);
@@ -284,6 +298,7 @@ router.post('/vision', (req, res) => {
 
         sortedRoles.forEach((r, idx) => {
             outputText += `${idx + 2}. ${r.emoji} ${r.role} – Vision Role: “${r.vision_role}”\n`;
+            let caution = "";
 
             if (r.role === 'Father') {
                 const desc = renderTemplate(templates, ['father_vision_role', 'role_description']);
@@ -294,9 +309,11 @@ router.post('/vision', (req, res) => {
                 const dist = renderTemplate(templates, ['father_vision_role', 'distortion_patterns', distKey]);
                 const healthy = renderTemplate(templates, ['father_vision_role', 'healthy_expression']);
 
+                caution = `Caution: ${dist}`; // Explicit cautionary label
+
                 outputText += `${desc}\n\n`;
-                outputText += `Distortion Pattern: ${dist}\n\n`;
-                outputText += `Healthy Expression: ${healthy}\n\n`;
+                outputText += `⚠️ ${caution}\n`;
+                outputText += `✅ Healthy Expression: ${healthy}\n\n`;
 
             } else if (r.role === 'Mother') {
                 const desc = renderTemplate(templates, ['mother_vision_role', 'role_description']);
@@ -307,14 +324,20 @@ router.post('/vision', (req, res) => {
                 const dist = renderTemplate(templates, ['mother_vision_role', 'distortion_patterns', distKey]);
                 const healthy = renderTemplate(templates, ['mother_vision_role', 'healthy_expression']);
 
+                caution = `Caution: ${dist}`;
+
                 outputText += `${desc}\n\n`;
-                outputText += `Distortion Pattern: ${dist}\n\n`;
-                outputText += `Healthy Expression: ${healthy}\n\n`;
+                outputText += `⚠️ ${caution}\n`;
+                outputText += `✅ Healthy Expression: ${healthy}\n\n`;
 
             } else { // CHILD LOGIC (UPDATED)
                 // 1. Role Description
                 const desc = renderTemplate(templates, ['child_vision_role', 'role_description']);
-                outputText += `${desc}\n\n`;
+
+                caution = "Protection Rule: Ensure vision is invited, not imposed.";
+
+                outputText += `${desc}\n`;
+                outputText += `🛡️ ${caution}\n\n`;
 
                 // 2. Evaluate Axes
                 const axes = evaluateChildAxes(r.chart, r.asc);
@@ -350,6 +373,37 @@ router.post('/vision', (req, res) => {
         outputText += `6. 🌱 Guiding Vision Principle for the Family\n`;
         const principleText = renderTemplate(templates, ['family_guiding_vision_principle']);
         outputText += `“${principleText}”\n\n`;
+
+        // --------------------------------------------------------
+        // VALIDATION CHECK (Shared Engine: 99_vision_output_validator.yaml)
+        // --------------------------------------------------------
+        const validateOutput = require('../utils/outputValidator');
+        const validatorPath = path.join(__dirname, '../../Family OS - V/01_Vision/99_vision_output_validator.yaml');
+        const validationResult = validateOutput(outputText, validatorPath, 'session_family_id');
+
+        if (validationResult.status === 'FAIL') {
+            const timestamp = new Date().toISOString();
+            console.error(`[${timestamp}] VISION GENERATION VALIDATION FAILED`);
+            console.error(`Violated Rules: ${JSON.stringify(validationResult.violated_rules)}`);
+            console.error(`Errors: ${JSON.stringify(validationResult.errors)}`);
+            console.error(`RAW OUTPUT DUMP:\n${outputText}`);
+
+            const safeErrorMsg = `
+🚫 **Vision Output Temporarily Unavailable**
+
+The system detected an internal consistency issue while preparing your family’s Vision analysis.
+*Rules Violated: ${validationResult.violated_rules.join(', ') || 'Internal Consistency'}*
+
+Please retry in a moment.
+            `;
+
+            res.json({ success: true, report: safeErrorMsg });
+            return;
+        }
+
+        if (validationResult.status === 'PASS_WITH_WARNINGS') {
+            console.warn("Vision Validation Passed with Warnings:", validationResult.warnings);
+        }
 
         res.json({ success: true, report: outputText });
 

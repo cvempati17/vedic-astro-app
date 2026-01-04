@@ -1,0 +1,27 @@
+# FAMILY MATRIX ENGINE ASPECT MODIFIER TARGETING
+version: "1.0"
+
+aspect_targeting:
+  
+  # Defines WHERE modifiers from 03_* are applied in the final matrix
+  
+  targeting_rules:
+    
+    overview_block:
+      apply: ["Jupiter_Moon", "Saturn_Moon", "Rahu_Contact"]
+      priority: "high"
+      
+    conflict_dynamics_block:
+      apply: ["Mars_Mercury", "Rahu_Sun", "Sun_Mars_Trine"]
+      priority: "critical"
+      
+    emotional_safety_block:
+      apply: ["Moon_Venus_Trine", "Ket_Venus", "Saturn_Moon"]
+      priority: "high"
+      
+    communication_block:
+      apply: ["Mercury_Jupiter", "Mercury_Mars"]
+      priority: "moderate"
+
+  conflict_resolution:
+    rule: "If both hard and soft aspects apply to same block, output both but list Hard Aspect first as 'Challenge' and Soft as 'Resource'."

@@ -1,0 +1,313 @@
+mission_aspect_modifiers:
+  metadata:
+    file: mission_aspect_modifiers.yaml
+    version: "1.0.0"
+    scope: "Modify mission execution using planetary aspects"
+    principle: >
+      Aspects do not define mission.
+      They modulate speed, friction, durability, conflict,
+      and coordination of mission execution.
+
+  ####################################################################
+  # 1. ASPECT DEFINITIONS
+  ####################################################################
+
+  aspect_definitions:
+    conjunction: { angle: 0, effect_bias: "fusion" }
+    opposition:  { angle: 180, effect_bias: "polarization" }
+    square:      { angle: 90, effect_bias: "friction" }
+    trine:       { angle: 120, effect_bias: "flow" }
+    sextile:     { angle: 60, effect_bias: "opportunity" }
+
+    vedic_special_aspects:
+      Saturn: [3, 7, 10]
+      Mars: [4, 7, 8]
+      Jupiter: [5, 7, 9]
+      Rahu: [5, 7, 9]
+      Ketu: [5, 7, 9]
+
+  ####################################################################
+  # 2. MISSION MODULATION TYPES
+  ####################################################################
+
+  mission_effects:
+    accelerate: "Increase execution speed"
+    delay: "Slow execution but increase durability"
+    block: "Cause stoppages or repeated retries"
+    stabilize: "Reduce volatility and errors"
+    destabilize: "Increase unpredictability"
+    amplify: "Increase impact/output"
+    suppress: "Reduce initiative or follow-through"
+    distort: "Cause misaligned or ego-driven execution"
+
+  ####################################################################
+  # 3. SUN ASPECT MODIFIERS (COMMAND & DIRECTION)
+  ####################################################################
+
+  sun_aspect_rules:
+
+    - id: MSN-ASP-SUN-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [conjunction, square, opposition]
+      then:
+        modify:
+          target: leadership_execution
+          effect: delay
+          note: "Authority matures late but becomes stable"
+
+    - id: MSN-ASP-SUN-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine, conjunction]
+      then:
+        modify:
+          target: leadership_execution
+          effect: stabilize
+          note: "Ethical clarity strengthens command"
+
+    - id: MSN-ASP-SUN-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        modify:
+          target: leadership_execution
+          effect: distort
+          risk: "Ego-driven or image-based decisions"
+
+    - id: MSN-ASP-SUN-04
+      if:
+        aspecting_planet: Mars
+        aspect_type == conjunction
+      then:
+        modify:
+          target: leadership_execution
+          effect: accelerate
+          risk: "Command becomes impulsive"
+
+  ####################################################################
+  # 4. MARS ASPECT MODIFIERS (EXECUTION & CONFLICT)
+  ####################################################################
+
+  mars_aspect_rules:
+
+    - id: MSN-ASP-MAR-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [square, opposition]
+      then:
+        modify:
+          target: execution_flow
+          effect: block
+          note: "Stop–go execution pattern"
+
+    - id: MSN-ASP-MAR-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target: execution_flow
+          effect: stabilize
+          note: "Action aligned with purpose"
+
+    - id: MSN-ASP-MAR-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type == conjunction
+      then:
+        modify:
+          target: execution_flow
+          effect: accelerate
+          risk: "Reckless or experimental action"
+
+    - id: MSN-ASP-MAR-04
+      if:
+        aspecting_planet: Moon
+        aspect_type in [square, opposition]
+      then:
+        modify:
+          target: execution_flow
+          effect: distort
+          risk: "Emotionally reactive actions"
+
+  ####################################################################
+  # 5. MERCURY ASPECT MODIFIERS (PLANNING & COORDINATION)
+  ####################################################################
+
+  mercury_aspect_rules:
+
+    - id: MSN-ASP-MER-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [conjunction]
+      then:
+        modify:
+          target: planning_cycle
+          effect: delay
+          note: "Over-analysis but durable plans"
+
+    - id: MSN-ASP-MER-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target: planning_cycle
+          effect: amplify
+          note: "Strategic intelligence"
+
+    - id: MSN-ASP-MER-03
+      if:
+        aspecting_planet: Rahu
+        aspect_type == conjunction
+      then:
+        modify:
+          target: planning_cycle
+          effect: destabilize
+          risk: "Chaotic or constantly changing plans"
+
+  ####################################################################
+  # 6. SATURN ASPECT MODIFIERS (DISCIPLINE & LOAD)
+  ####################################################################
+
+  saturn_aspect_rules:
+
+    - id: MSN-ASP-SAT-01
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target: sustainability
+          effect: stabilize
+          note: "Balanced discipline and wisdom"
+
+    - id: MSN-ASP-SAT-02
+      if:
+        aspecting_planet: Rahu
+        aspect_type == conjunction
+      then:
+        modify:
+          target: sustainability
+          effect: distort
+          risk: "Fear-driven or forced restructuring"
+
+    - id: MSN-ASP-SAT-03
+      if:
+        aspecting_planet: Moon
+        aspect_type in [square]
+      then:
+        modify:
+          target: sustainability
+          effect: suppress
+          note: "Emotional fatigue affects endurance"
+
+  ####################################################################
+  # 7. JUPITER ASPECT MODIFIERS (ETHICAL GUARDRAILS)
+  ####################################################################
+
+  jupiter_aspect_rules:
+
+    - id: MSN-ASP-JUP-01
+      if:
+        aspecting_planet: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        modify:
+          target: ethical_guardrails
+          effect: distort
+          risk: "Ends justify means thinking"
+
+    - id: MSN-ASP-JUP-02
+      if:
+        aspecting_planet: Ketu
+        aspect_type == conjunction
+      then:
+        modify:
+          target: ethical_guardrails
+          effect: suppress
+          note: "Detached or minimalist ethics"
+
+  ####################################################################
+  # 8. VENUS ASPECT MODIFIERS (MOTIVATION & COHESION)
+  ####################################################################
+
+  venus_aspect_rules:
+
+    - id: MSN-ASP-VEN-01
+      if:
+        aspecting_planet: Saturn
+        aspect_type in [square, conjunction]
+      then:
+        modify:
+          target: morale
+          effect: suppress
+          note: "Duty overrides pleasure"
+
+    - id: MSN-ASP-VEN-02
+      if:
+        aspecting_planet: Jupiter
+        aspect_type in [trine]
+      then:
+        modify:
+          target: morale
+          effect: amplify
+          note: "Joyful cooperation"
+
+  ####################################################################
+  # 9. NODE ASPECT MODIFIERS (EXPERIMENTATION & PRUNING)
+  ####################################################################
+
+  node_aspect_rules:
+
+    - id: MSN-ASP-NOD-01
+      if:
+        rahu_aspects in [Mars, Mercury]
+      then:
+        modify:
+          target: execution_flow
+          effect: accelerate
+          risk: "Unstable innovation"
+
+    - id: MSN-ASP-NOD-02
+      if:
+        ketu_aspects in [Mars, Mercury]
+      then:
+        modify:
+          target: execution_flow
+          effect: suppress
+          note: "Withdrawal from action"
+
+  ####################################################################
+  # 10. ASPECT RESOLUTION LOGIC
+  ####################################################################
+
+  resolution_logic:
+    priority_order:
+      - conjunction
+      - opposition
+      - square
+      - trine
+      - sextile
+
+    stacking_rule: >
+      Multiple modifiers on the same target are
+      applied in priority order and averaged
+      unless one is marked as 'block'.
+
+  ####################################################################
+  # 11. FINAL EFFECT APPLICATION
+  ####################################################################
+
+  final_application:
+    description: >
+      Aspect modifiers adjust:
+        - speed
+        - durability
+        - friction
+        - ethical alignment
+        - morale
+      of mission execution,
+      without redefining mission intent.

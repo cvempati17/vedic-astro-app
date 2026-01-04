@@ -1,0 +1,67 @@
+# FAMILY MATRIX ENGINE LOGIC
+version: "1.0"
+
+family_matrix_engine:
+  
+  # Core Matrix Calculation Logic
+  calculation_logic:
+    
+    # 1. Family Cohesion Index
+    cohesion_index:
+      inputs: ["Moon", "Venus", "Jupiter", "4th_House"]
+      formula: "weighted_average(Moon*1.5, Venus*1.2, Jupiter*1.0, 4H_Lord*1.3)"
+      thresholds:
+        high: 12.0
+        moderate: 8.0
+        low: 4.0
+        
+    # 2. Friction / Conflict Index
+    friction_index:
+      inputs: ["Mars", "Saturn", "Rahu", "6th_House", "8th_House"]
+      formula: "weighted_sum(Mars*1.4, Saturn*1.2, Rahu*1.0, 6H_Lord*0.8, 8H_Lord*1.1)"
+      thresholds:
+        volatile: 15.0
+        reactive: 10.0
+        balanced: 5.0
+        
+    # 3. Growth / Evolution Index
+    growth_index:
+      inputs: ["Jupiter", "Mercury", "Ascendant", "9th_House"]
+      formula: "weighted_average(Jupiter*1.5, Mercury*1.2, Asc*1.0, 9H_Lord*1.3)"
+      thresholds:
+        transformative: 11.0
+        steady: 7.0
+        stagnant: 3.0
+
+  # Relationship Dynamics (Pairwise)
+  relationship_dynamics:
+    
+    synastry_weights:
+      conjunction: 1.0  # 0 deg
+      opposition: -0.8  # 180 deg
+      trine: 0.8        # 120 deg
+      square: -1.0      # 90 deg
+      sextile: 0.5      # 60 deg
+      
+    orb_allowance:
+      luminaries: 7.0   # Sun/Moon
+      planets: 5.0      # Others
+      nodes: 3.0        # Rahu/Ketu
+
+  # Matrix Archetypes (Output Keys)
+  matrix_archetypes:
+    
+    cohesion:
+      high: "Unified Front"
+      moderate: "Loose Federation"
+      low: "Individual Silos"
+      
+    friction:
+      volatile: "Dynamic Tension"
+      reactive: "Situational Spark"
+      balanced: "Peaceful Coexistence"
+      
+    growth:
+      transformative: "Evolutionary Hub"
+      steady: "Stable Foundation"
+      stagnant: "Preservation Focus"

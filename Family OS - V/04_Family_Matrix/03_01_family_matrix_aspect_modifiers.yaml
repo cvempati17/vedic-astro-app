@@ -1,0 +1,50 @@
+# FAMILY MATRIX ASPECT MODIFIERS (SEMANTICS)
+version: "1.0"
+
+aspect_modifiers:
+
+  # 1. Hard Aspects (Squares, Oppositions, Conjunctions w/ Malefics)
+  hard_aspects:
+    Saturn_Moon:
+      text: "Emotional constriction or feeling of duty outweighing nurturance."
+      intensity: -2.0
+      
+    Mars_Mercury:
+      text: "Communication tends to be sharp, direct, or argumentative."
+      intensity: -1.5
+      
+    Rahu_Sun:
+      text: "Ego clashes driven by desire for recognition or dominance."
+      intensity: -1.8
+      
+    Ket_Venus:
+      text: "Detachment in showing affection; love felt but not expressed demonstratively."
+      intensity: -1.2
+
+  # 2. Soft Aspects (Trines, Sextiles, Conjunctions w/ Benefics)
+  soft_aspects:
+    Jupiter_Moon:
+      text: "Emotional abundance, generating a natural sense of safety and optimism."
+      intensity: 2.0
+      
+    Venus_Mercury:
+      text: "Communication is diplomatic, pleasant, and oriented toward agreement."
+      intensity: 1.5
+      
+    Sun_Mars_Trine:
+      text: "Shared energy and drive; conflict is resolved through active doing."
+      intensity: 1.8
+      
+    Moon_Venus_Trine:
+      text: "Deep emotional harmony and aesthetic appreciation of home life."
+      intensity: 2.0
+
+  # 3. Nodal Aspects (Karmic)
+  nodal_aspects:
+    Rahu_Contact:
+      text: "Urgent, slightly obsessive pull toward this dynamic; feels destined but chaotic."
+      intensity: 0.0 # Neutral but intense
+      
+    Ketu_Contact:
+      text: "Sense of past-life familiarity; can lead to disengagement or spiritual bond."
+      intensity: 0.0 # Neutral but dissolving

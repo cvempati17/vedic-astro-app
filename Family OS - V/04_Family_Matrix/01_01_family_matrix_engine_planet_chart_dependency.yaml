@@ -1,0 +1,60 @@
+# FAMILY MATRIX PLANET CHART DEPENDENCY
+version: "1.0"
+
+planet_dependency_map:
+  
+  # Core Planets - Required for all calculations
+  required_points:
+    - Sun
+    - Moon
+    - Mars
+    - Mercury
+    - Jupiter
+    - Venus
+    - Saturn
+    - Rahu
+    - Ketu
+    - Ascendant
+
+  # Dependency Definitions
+  dependencies:
+    Sun:
+      role: "Ego / Authority / Vitality"
+      critical_for: ["rigidity", "leadership_dynamics"]
+    
+    Moon:
+      role: "Emotion / Nurturing / Reactivity"
+      critical_for: ["emotional_safety", "empathy_index"]
+    
+    Mercury:
+      role: "Communication / Intellect"
+      critical_for: ["conflict_resolution", "dialogue_flow"]
+    
+    Mars:
+      role: "Drive / Aggression / Defense"
+      critical_for: ["conflict_style", "boundary_enforcement"]
+    
+    Jupiter:
+      role: "Wisdom / Expansion / Optimism"
+      critical_for: ["growth_potential", "shared_values"]
+      
+    Venus:
+      role: "Harmony / Affection / Value"
+      critical_for: ["relational_glue", "appreciation_style"]
+      
+    Saturn:
+      role: "Structure / Discipline / Restriction"
+      critical_for: ["stability", "duty_adherence"]
+      
+    Rahu:
+      role: "Obsession / Innovation / Disruption"
+      critical_for: ["unpredictability_factor", "evolutionary_pressure"]
+      
+    Ketu:
+      role: "Detachment / Spirituality / Past"
+      critical_for: ["karmic_release", "inherited_patterns"]
+
+  data_structure_enforcement:
+    input_format: "nested_object"
+    fields: ["longitude", "house", "nakshatra", "sign_id"]
+    missing_data_action: "ABORT_CALCULATION"

@@ -1,0 +1,139 @@
+55_02_family_matrix_conflict_repair_overlay:
+
+  metadata:
+    version: "1.0.0"
+    domain: family_matrix
+    overlay_type: conflict_repair
+    principles:
+      - process_not_destiny
+      - repair_capacity_matters
+      - non_fatalistic
+      - phase_sensitive
+
+  # --------------------------------------------------
+  # REQUIRED INPUTS (FROM PREVIOUS STEPS)
+  # --------------------------------------------------
+  required_inputs:
+    - baseline_family_matrix
+    - family_matrix_time_evolution_overlay
+
+  # --------------------------------------------------
+  # CONFLICT ACTIVATION SIGNALS
+  # --------------------------------------------------
+  conflict_activation_signals:
+
+    mars_saturn:
+      trigger: hard_aspect
+      conflict_delta: +20
+      repair_penalty: -15
+      narrative_tag: suppressed_anger
+
+    mars_rahu:
+      trigger: conjunction_or_square
+      conflict_delta: +25
+      repair_penalty: -20
+      narrative_tag: explosive_conflict
+
+    saturn_moon:
+      trigger: conjunction_or_opposition
+      conflict_delta: +15
+      repair_penalty: -25
+      narrative_tag: emotional_withdrawal
+
+    rahu_venus:
+      trigger: hard_aspect
+      conflict_delta: +20
+      repair_penalty: -20
+      narrative_tag: value_disruption
+
+  # --------------------------------------------------
+  # REPAIR CAPACITY SIGNALS
+  # --------------------------------------------------
+  repair_capacity_signals:
+
+    jupiter_moon:
+      trigger: conjunction_or_trine
+      repair_boost: +25
+      narrative_tag: emotional_repair
+
+    jupiter_venus:
+      trigger: conjunction_or_trine
+      repair_boost: +20
+      narrative_tag: value_reconciliation
+
+    mercury_jupiter:
+      trigger: conjunction_or_trine
+      repair_boost: +15
+      narrative_tag: dialogue_restoration
+
+    moon_venus:
+      trigger: trine_or_sextile
+      repair_boost: +15
+      narrative_tag: emotional_softening
+
+  # --------------------------------------------------
+  # TIME-SENSITIVE MODULATION
+  # --------------------------------------------------
+  time_pressure_modulation:
+
+    high_pressure_phase:
+      condition:
+        phase: fracture_risk
+      conflict_multiplier: 1.3
+      repair_multiplier: 0.7
+
+    moderate_pressure_phase:
+      condition:
+        phase: strained
+      conflict_multiplier: 1.1
+      repair_multiplier: 0.9
+
+    low_pressure_phase:
+      condition:
+        phase: cohesive
+      conflict_multiplier: 0.8
+      repair_multiplier: 1.1
+
+  # --------------------------------------------------
+  # CONFLICT–REPAIR BALANCE STATES
+  # --------------------------------------------------
+  conflict_repair_states:
+
+    repair_dominant:
+      condition:
+        repair_capacity: ">=70"
+        conflict_intensity: "<40"
+      label: Repair-Dominant Phase
+      narrative: >
+        Conflicts arise but are actively repaired through communication,
+        emotional availability, and shared values.
+
+    fragile_balance:
+      condition:
+        repair_capacity: ">=40"
+        conflict_intensity: ">=40"
+      label: Fragile Repair Phase
+      narrative: >
+        Conflict and repair exist in tension. Without conscious effort,
+        unresolved issues may accumulate.
+
+    repair_failure_risk:
+      condition:
+        repair_capacity: "<40"
+        conflict_intensity: ">=60"
+      label: Repair Failure Risk Phase
+      narrative: >
+        Repair mechanisms are under strain. Conflict may persist
+        without resolution unless external support or intervention occurs.
+
+  # --------------------------------------------------
+  # SAFETY GUARDS
+  # --------------------------------------------------
+  safeguards:
+    forbid_event_prediction: true
+    forbid_relationship_labels:
+      - divorce
+      - separation
+      - abuse
+    forbid_child_blame: true
+    require_emotional_architecture_engine: true

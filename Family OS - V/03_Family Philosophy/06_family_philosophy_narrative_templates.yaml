@@ -1,0 +1,189 @@
+# ============================================================
+# 06_family_philosophy_narrative_templates.yaml
+# Family OS – Family Philosophy Narrative Templates
+# ============================================================
+
+family_philosophy_narrative_templates:
+  metadata:
+    engine: Family_Philosophy
+    file: 06_family_philosophy_narrative_templates.yaml
+    version: "1.0.0"
+    purpose: >
+      Provides deterministic, template-only narrative text
+      for rendering Family Philosophy outputs.
+      These templates MUST be used verbatim, with only
+      minimal connective grammar allowed.
+
+  ############################################################
+  # 1. CORE PHILOSOPHICAL IDENTITY
+  ############################################################
+
+  core_philosophical_identity:
+
+    coexisting_beliefs:
+      text: >
+        Multiple belief interpretations coexist within the family.
+        This can create internal dialogue and generational contrast
+        in how values are understood and expressed, while still
+        preserving a shared moral center.
+
+    unified_belief_system:
+      text: >
+        The family shares a clearly defined and commonly understood
+        belief system. Values are expressed consistently across
+        members, creating a strong sense of philosophical unity.
+
+  ############################################################
+  # 2. BELIEF STRENGTH & STABILITY
+  ############################################################
+
+  belief_strength_and_stability:
+
+    strong_enduring:
+      text: >
+        The family holds a strong and enduring philosophy.
+        Core values tend to persist across time and circumstances,
+        providing stability during periods of change.
+
+    moderate_stability:
+      text: >
+        The family philosophy provides a general sense of direction,
+        though its strength varies depending on circumstances
+        and individual interpretation.
+
+    fragile_philosophy:
+      text: >
+        Shared beliefs are present but lack consistency.
+        Values may shift easily in response to pressure or change.
+
+  ############################################################
+  # 3. RIGIDITY VS FLEXIBILITY BALANCE
+  ############################################################
+
+  rigidity_vs_flexibility:
+
+    guiding_principles:
+      text: >
+        Beliefs function as guiding principles rather than fixed rules.
+        Structure is present, while adaptability is encouraged when
+        context and experience require it.
+
+    rule_bound:
+      text: >
+        Beliefs are expressed primarily as clear rules and expectations.
+        Consistency is valued, sometimes at the expense of flexibility.
+
+    loosely_defined:
+      text: >
+        Beliefs are loosely defined and open to interpretation.
+        Experience often takes precedence over formal structure.
+
+  ############################################################
+  # 4. COMPASSION & ENFORCEMENT STYLE
+  ############################################################
+
+  compassion_and_enforcement:
+
+    balanced_expression:
+      text: >
+        Compassion and structure coexist within the family philosophy.
+        Expectations are clear, while emotional context and individual
+        circumstances are acknowledged.
+
+    rule_emphasized:
+      text: >
+        Beliefs are enforced primarily through rules and expectations.
+        Care is present but expressed through structure rather than
+        emotional reassurance.
+
+    care_emphasized:
+      text: >
+        Beliefs are communicated primarily through care and emotional
+        understanding, with minimal reliance on enforcement.
+
+  ############################################################
+  # 5. FEAR / SHAME TRANSMISSION
+  ############################################################
+
+  fear_shame_transmission:
+
+    low_fear:
+      text: >
+        Beliefs are generally transmitted through explanation and example
+        rather than fear or emotional pressure. Emotional safety is
+        prioritized over guilt-based compliance.
+
+    mixed_fear:
+      text: >
+        While beliefs are often explained openly, subtle emotional pressure
+        may arise during moments of high expectation or stress.
+
+    fear_based:
+      text: >
+        Beliefs are frequently transmitted through fear, guilt,
+        or emotional control, creating anxiety around deviation.
+
+  ############################################################
+  # 6. BELIEF COHERENCE
+  ############################################################
+
+  belief_coherence:
+
+    high_coherence:
+      text: >
+        Values are clearly understood and consistently expressed
+        across the family. Beliefs and actions tend to align closely.
+
+    moderate_coherence:
+      text: >
+        Core values are shared across the family, though interpretation
+        may vary between individuals or across generations.
+        Clarifying meaning strengthens consistency.
+
+    low_coherence:
+      text: >
+        Beliefs vary significantly between members, creating confusion
+        about expectations and philosophical direction.
+
+  ############################################################
+  # 7. NAKSHATRA-LEVEL INSTINCTIVE TONE (SUPPORTING)
+  ############################################################
+
+  nlml_instinctive_tone:
+
+    purposeful_striving:
+      text: >
+        At an instinctive level, the family philosophy emphasizes
+        progress, effort, and meaningful direction.
+
+    protective_orientation:
+      text: >
+        Instinctively, beliefs emphasize safety, preservation,
+        and safeguarding what is valued.
+
+    adaptive_learning:
+      text: >
+        Instinctive responses favor learning through experience
+        and gradual adjustment rather than fixed positions.
+
+  ############################################################
+  # 8. SUMMARY STATEMENTS
+  ############################################################
+
+  philosophy_summary:
+
+    balanced_evolving:
+      text: >
+        The family philosophy balances continuity with adaptability,
+        grounded in shared values and capable of evolving through
+        conscious participation.
+
+    rigid_stable:
+      text: >
+        The family philosophy emphasizes stability and consistency,
+        providing clear direction and enduring structure.
+
+    fluid_exploratory:
+      text: >
+        The family philosophy remains flexible and exploratory,
+        allowing values to evolve through experience and dialogue.

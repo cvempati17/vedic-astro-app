@@ -1,0 +1,225 @@
+# ============================================================
+# 12_family_philosophy_nlml_integration.yaml
+# Family OS – Family Philosophy Nakshatra-Level Modulation Layer
+# ============================================================
+
+family_philosophy_nlml_integration:
+  metadata:
+    engine: Family_Philosophy
+    file: 12_family_philosophy_nlml_integration.yaml
+    version: "1.0.0"
+    purpose: >
+      Introduces Nakshatra-level modulation to the Family Philosophy
+      engine. This layer refines belief tone, emotional inheritance,
+      ethical instinct, and rigidity or fluidity of philosophy.
+      NLML does NOT override planetary logic.
+      It modulates expression, instinct, and transmission style.
+    depends_on:
+      - 02_family_philosophy_engine.yaml
+      - 03_family_philosophy_engine_aspect_modifiers.yaml
+      - 04_family_philosophy_planetary_strength_scoring.yaml
+      - 05_family_philosophy_planetary_strength_aspect_modifiers.yaml
+      - 06_family_philosophy_narrative_templates.yaml
+      - 07_family_philosophy_member_output_contract.yaml
+      - 11_family_philosophy_free_will_interventions.yaml
+    governing_principle: >
+      Rāśi defines belief domain.
+      Graha defines belief force.
+      Nakshatra defines belief instinct.
+
+  ############################################################
+  # 1. NAKSHATRA MODULATION SCOPE
+  ############################################################
+
+  nlml_scope:
+    applicable_planets:
+      - Moon
+      - Jupiter
+      - Saturn
+      - Sun
+    modulation_domains:
+      - belief_transmission_style
+      - emotional_ethics
+      - rigidity_vs_fluidity
+      - shame_vs_conscience
+      - legacy_instinct
+
+  ############################################################
+  # 2. DHARMIC / VALUE-CENTRIC NAKSHATRAS
+  ############################################################
+
+  dharmic_nakshatras:
+
+    Punarvasu:
+      planet_focus: Jupiter
+      philosophy_modulation:
+        belief_instinct: renewal
+        rigidity_modifier: -0.10
+        compassion_modifier: +0.10
+      narrative_tone: >
+        Beliefs are periodically renewed rather than enforced.
+        Correction allows return, not permanent exclusion.
+
+    Pushya:
+      planet_focus: Saturn
+      philosophy_modulation:
+        belief_instinct: nourishment_through_structure
+        rigidity_modifier: +0.05
+        compassion_modifier: +0.05
+      narrative_tone: >
+        Philosophy emphasizes duty as care.
+        Structure exists to support, not suppress.
+
+    Anuradha:
+      planet_focus: Saturn
+      philosophy_modulation:
+        belief_instinct: loyalty_and_devotion
+        rigidity_modifier: +0.10
+        shame_risk: moderate
+      narrative_tone: >
+        Beliefs emphasize loyalty and perseverance,
+        sometimes prioritizing unity over individual truth.
+
+  ############################################################
+  # 3. SHAME / FEAR-SENSITIVE NAKSHATRAS
+  ############################################################
+
+  shame_sensitive_nakshatras:
+
+    Ashlesha:
+      planet_focus: Mercury
+      philosophy_modulation:
+        belief_instinct: psychological_binding
+        fear_transmission_risk: high
+      narrative_tone: >
+        Beliefs may be transmitted subtly through emotional
+        pressure rather than explicit rules.
+
+    Magha:
+      planet_focus: Sun
+      philosophy_modulation:
+        belief_instinct: ancestral_authority
+        rigidity_modifier: +0.15
+        pride_risk: high
+      narrative_tone: >
+        Philosophy is tied strongly to lineage and honor.
+        Authority may be inherited rather than questioned.
+
+    Mula:
+      planet_focus: Ketu
+      philosophy_modulation:
+        belief_instinct: root_dismantling
+        detachment_risk: high
+      narrative_tone: >
+        Inherited belief systems may be questioned or uprooted,
+        sometimes without immediate replacement.
+
+  ############################################################
+  # 4. COMPASSION / HEALING NAKSHATRAS
+  ############################################################
+
+  compassion_nakshatras:
+
+    Rohini:
+      planet_focus: Moon
+      philosophy_modulation:
+        belief_instinct: emotional_nourishment
+        compassion_modifier: +0.15
+      narrative_tone: >
+        Beliefs are experienced as nurturing and growth-oriented.
+
+    Revati:
+      planet_focus: Mercury
+      philosophy_modulation:
+        belief_instinct: gentle_guidance
+        rigidity_modifier: -0.15
+      narrative_tone: >
+        Philosophy emphasizes protection and safe transition,
+        especially during change.
+
+    Hasta:
+      planet_focus: Moon
+      philosophy_modulation:
+        belief_instinct: practical_ethics
+        adaptability_modifier: +0.10
+      narrative_tone: >
+        Beliefs are applied pragmatically and adjusted
+        based on lived outcomes.
+
+  ############################################################
+  # 5. RIGIDITY / DISCIPLINE NAKSHATRAS
+  ############################################################
+
+  rigidity_nakshatras:
+
+    Shravana:
+      planet_focus: Moon
+      philosophy_modulation:
+        belief_instinct: learning_and_listening
+        rigidity_modifier: +0.05
+      narrative_tone: >
+        Philosophy is transmitted through repetition,
+        instruction, and moral education.
+
+    UttaraAshadha:
+      planet_focus: Sun
+      philosophy_modulation:
+        belief_instinct: moral_victory
+        rigidity_modifier: +0.15
+      narrative_tone: >
+        Beliefs emphasize righteousness and endurance,
+        sometimes at the cost of flexibility.
+
+  ############################################################
+  # 6. NODAL / KARMIC DISRUPTION NAKSHATRAS
+  ############################################################
+
+  nodal_nakshatras:
+
+    Ardra:
+      planet_focus: Rahu
+      philosophy_modulation:
+        belief_instinct: emotional_purge
+        instability_risk: high
+      narrative_tone: >
+        Beliefs may undergo intense disruption
+        before reform or clarity emerges.
+
+    Shatabhisha:
+      planet_focus: Rahu
+      philosophy_modulation:
+        belief_instinct: systemic_reform
+        detachment_risk: moderate
+      narrative_tone: >
+        Philosophy seeks reform through analysis,
+        sometimes emotionally distant.
+
+  ############################################################
+  # 7. MODULATION APPLICATION RULES
+  ############################################################
+
+  nlml_application_rules:
+    precedence:
+      - planetary_strength
+      - aspect_modulation
+      - nakshatra_modulation
+    max_total_modifier: 0.20
+    min_total_modifier: -0.20
+    stacking_method: additive
+    safety_note: >
+      Nakshatra modulation refines expression and instinct.
+      It must never overturn planetary or aspect conclusions.
+
+  ############################################################
+  # 8. NLML OUTPUT ANCHORS
+  ############################################################
+
+  nlml_output_effects:
+    belief_instinct_profile:
+      description: "Instinctive mode of belief transmission"
+    emotional_ethics_tone:
+      description: "Emotional quality of philosophical enforcement"
+    rigidity_fluidity_bias:
+      description: "Subtle tilt toward rigidity or adaptability"
+    karmic_inheritance_signature:
+      description: "Pattern of belief inheritance across generations"

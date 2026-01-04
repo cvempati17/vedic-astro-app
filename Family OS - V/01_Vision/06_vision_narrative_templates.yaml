@@ -1,0 +1,325 @@
+version: 2.1
+module: vision
+rendering_mode: template_emission_only
+
+global_constraints:
+  allow_free_text: false
+  allow_paraphrasing: false
+  allow_synonyms: false
+  allow_fallback_generation: false
+  allow_abstract_slogans: false
+  placeholder_replacement:
+    allowed: false
+  failure_mode:
+    on_missing_template: TEMPLATE_KEY_NOT_FOUND
+
+# ==================================================
+# 1. FAMILY VISION — UNIFIED STATEMENT
+# ==================================================
+
+family_vision_unified:
+
+  clarity_high:
+    template_key: FAMILY_VISION_UNIFIED_HIGH
+    paragraphs:
+      - |
+        This family holds a clear and internally aligned vision rooted in emotional security, moral integrity, and shared values. Direction is reinforced through mutual understanding and a stable emotional foundation.
+      - |
+        Protection and empowerment operate in harmony, allowing growth to unfold without compromising trust or connection.
+
+  clarity_moderate:
+    template_key: FAMILY_VISION_UNIFIED_MODERATE
+    paragraphs:
+      - |
+        This family carries a deeply dharmic and emotionally rooted vision, centered on emotional security, moral integrity, and inner growth rather than outward dominance or material ambition alone.
+      - |
+        Alignment is present but requires conscious participation, especially as individual needs and expressions evolve.
+
+  clarity_low:
+    template_key: FAMILY_VISION_UNIFIED_LOW
+    paragraphs:
+      - |
+        The family experiences periods of uncertainty regarding shared direction, often influenced by emotional sensitivity and situational pressure.
+      - |
+        Re-establishing vision depends on renewed emotional grounding and ethical coherence.
+
+# ==================================================
+# 1A. FAMILY VISION — COMBINED VARIANTS
+# ==================================================
+
+family_vision_combined_variants:
+
+  clarity_moderate__parent_dominant:
+    template_key: FAMILY_VISION_MODERATE_PARENT_DOMINANT
+    text: |
+      While a shared vision exists, parental stabilization outweighs the child’s evolving expression, creating a need for conscious handoff rather than prolonged containment.
+
+  clarity_moderate__child_conflicted:
+    template_key: FAMILY_VISION_MODERATE_CHILD_CONFLICTED
+    text: |
+      The family’s vision is present but strained by tension between inherited expectations and the child’s emerging autonomy.
+
+  clarity_low__emotional_overfunctioning:
+    template_key: FAMILY_VISION_LOW_EMOTIONAL_OVERFUNCTIONING
+    text: |
+      Emotional effort temporarily substitutes for shared clarity, masking deeper misalignment within the family vision.
+
+# ==================================================
+# 2. FATHER — VISION ROLE
+# ==================================================
+
+father_vision_role:
+  archetype_label: "Principle Holder & Moral Compass"
+
+  role_description:
+    template_key: FATHER_ROLE_BASE
+    text: |
+      The father’s vision role is to act as a steady moral and ethical anchor, contextualizing family direction within enduring values and long-term meaning.
+
+  distortion_patterns:
+
+    mild:
+      template_key: FATHER_DISTORTION_MILD
+      text: |
+        Mild strain may appear as hesitation in asserting values, leading to ambiguity rather than conflict.
+
+    moderate:
+      template_key: FATHER_DISTORTION_MODERATE
+      text: |
+        Moderate strain can manifest as rigidity, where structure is emphasized over emotional responsiveness.
+
+    severe:
+      template_key: FATHER_DISTORTION_SEVERE
+      text: |
+        Severe distortion replaces inspiration with control, enforcing vision through authority rather than guidance.
+
+  healthy_expression:
+    template_key: FATHER_HEALTHY_EXPRESSION
+    text: |
+      In balance, the father leads by example, creating a stable moral reference without imposing direction.
+
+# ==================================================
+# 3. MOTHER — VISION ROLE
+# ==================================================
+
+mother_vision_role:
+  archetype_label: "Emotional Translator & Sustainer"
+
+  role_description:
+    template_key: MOTHER_ROLE_BASE
+    text: |
+      The mother translates the family’s vision into lived emotional reality, ensuring belonging, care, and emotional continuity.
+
+  distortion_patterns:
+
+    mild:
+      template_key: MOTHER_DISTORTION_MILD
+      text: |
+        Mild imbalance appears as emotional over-involvement before responsibility is shared.
+
+    moderate:
+      template_key: MOTHER_DISTORTION_MODERATE
+      text: |
+        Moderate strain leads to emotional compensation replacing mutual engagement.
+
+    severe:
+      template_key: MOTHER_DISTORTION_SEVERE
+      text: |
+        Severe distortion results in silent absorption of systemic strain, reducing emotional sustainability.
+
+  healthy_expression:
+    template_key: MOTHER_HEALTHY_EXPRESSION
+    text: |
+      In balance, emotional care sustains growth without suppressing independence.
+
+# ==================================================
+# 4. CHILD — VISION ROLE
+# ==================================================
+
+
+
+# ==================================================
+# 4A. PARENT → CHILD TRANSITION BRIDGES
+# ==================================================
+
+parent_child_transition_bridges:
+
+  stabilization_to_handoff:
+    template_key: PARENT_CHILD_HANDOFF_STABILIZED
+    text: |
+      The stabilizing influence of the parents forms the ground from which the child’s independent direction can safely emerge.
+
+  overprotection_risk:
+    template_key: PARENT_CHILD_OVERPROTECTION
+    text: |
+      When protection exceeds empowerment, the child’s evolutionary role is delayed rather than strengthened.
+
+# ==================================================
+# 5. FAMILY VISION ALIGNMENT SUMMARY
+# ==================================================
+
+family_vision_alignment_summary:
+
+  aligned:
+    template_key: FAMILY_ALIGNMENT_ALIGNED
+    text: |
+      Values, emotions, and direction are coherently integrated, allowing the vision to be lived consistently.
+
+  moderately_aligned:
+    template_key: FAMILY_ALIGNMENT_MODERATE
+    text: |
+      A shared foundation exists, though awareness is required to balance stability and evolution.
+
+  misaligned:
+    template_key: FAMILY_ALIGNMENT_LOW
+    text: |
+      Gaps between intention and experience call for renewed alignment and conscious re-grounding.
+
+# ==================================================
+# 6. GUIDING VISION PRINCIPLE (FIXED)
+# ==================================================
+
+family_guiding_vision_principle:
+  template_key: FAMILY_GUIDING_VISION_PRINCIPLE
+  text: |
+    Create emotional safety without restricting growth; guide without controlling; protect without limiting courage.
+
+# ==================================================
+# INTERNAL RENDERING FOOTER (NON-UI)
+# ==================================================
+
+rendering_footer:
+  enabled_for_ui: false
+  template_key: VISION_RENDER_STATUS
+  text: |
+    Vision narrative rendered using template emission mode.
+##########
+# ==================================================
+# CHILD — VISION ROLE (INDIVIDUAL TEMPLATE)
+# ==================================================
+
+child_vision_role:
+  archetype_label: "Future Direction Carrier"
+
+  # ----------------------------------------------
+  # BASE ROLE DESCRIPTION (ALWAYS RENDERED)
+  # ----------------------------------------------
+
+  role_description:
+    template_key: CHILD_ROLE_BASE
+    text: |
+      This child represents the forward-moving edge of the family’s vision, where inherited values encounter changing contexts and future possibilities. The role is not to replicate the past, but to carry its essence into forms that remain relevant, ethical, and alive.
+
+  # ----------------------------------------------
+  # AXIS 1 — CAREGIVING ORIENTATION
+  # ----------------------------------------------
+
+  caregiving_orientation:
+
+    high:
+      template_key: CHILD_CAREGIVING_HIGH
+      text: |
+        This child shows a natural inclination toward emotional responsibility and supportive presence. Care for family members tends to arise organically, especially during periods of vulnerability or transition.
+
+    moderate:
+      template_key: CHILD_CAREGIVING_MODERATE
+      text: |
+        This child balances independence with care. Support is offered when consciously engaged, rather than through constant emotional availability.
+
+    low:
+      template_key: CHILD_CAREGIVING_LOW
+      text: |
+        This child prioritizes autonomy and self-direction. Caregiving, when present, is expressed practically rather than emotionally, and often requires clear boundaries.
+
+  # ----------------------------------------------
+  # AXIS 2 — CONFLICT & ASSERTION EXPRESSION
+  # ----------------------------------------------
+
+  conflict_expression:
+
+    confrontational:
+      template_key: CHILD_CONFLICT_CONFRONTATIONAL
+      text: |
+        This child tends to address conflict directly. When boundaries are crossed or values challenged, assertion is likely to be open and visible.
+
+    defensive:
+      template_key: CHILD_CONFLICT_DEFENSIVE
+      text: |
+        This child responds to conflict cautiously. Protection of self and position takes precedence over open confrontation.
+
+    avoidant:
+      template_key: CHILD_CONFLICT_AVOIDANT
+      text: |
+        This child prefers distance over direct engagement in conflict. Harmony is often maintained by withdrawal rather than opposition.
+
+  # ----------------------------------------------
+  # AXIS 3 — KARMIC LOAD SENSITIVITY
+  # ----------------------------------------------
+
+  karmic_load:
+
+    heavy:
+      template_key: CHILD_KARMIC_LOAD_HEAVY
+      text: |
+        This child appears to carry a deeper sense of responsibility toward unresolved family patterns. Emotional or situational weight may be felt more strongly than by others.
+
+    moderate:
+      template_key: CHILD_KARMIC_LOAD_MODERATE
+      text: |
+        This child engages with family responsibilities selectively, responding to pressure without becoming overwhelmed by it.
+
+    light:
+      template_key: CHILD_KARMIC_LOAD_LIGHT
+      text: |
+        This child experiences relative freedom from inherited emotional weight, allowing movement through family dynamics with greater ease.
+
+  # ----------------------------------------------
+  # AXIS 4 — RESILIENCE INDEX (SAFE HEALTH SIGNAL)
+  # ----------------------------------------------
+
+  resilience_index:
+
+    stable:
+      template_key: CHILD_RESILIENCE_STABLE
+      text: |
+        This child demonstrates strong adaptive capacity. Stress is typically absorbed and processed without lasting disruption.
+
+    sensitive:
+      template_key: CHILD_RESILIENCE_SENSITIVE
+      text: |
+        This child responds sensitively to stress and environmental pressure. Periodic support and reassurance enhance long-term balance.
+
+    requires_attention:
+      template_key: CHILD_RESILIENCE_REQUIRES_ATTENTION
+      text: |
+        This child benefits from consistent structure and attentive support during demanding phases. Awareness and care strengthen overall resilience.
+
+  # ----------------------------------------------
+  # AXIS 5 — LEGACY EXPRESSION STYLE
+  # ----------------------------------------------
+
+  legacy_expression:
+
+    preserver:
+      template_key: CHILD_LEGACY_PRESERVER
+      text: |
+        This child carries the family’s values forward through continuity and respect for tradition, ensuring stability across generations.
+
+    reformer:
+      template_key: CHILD_LEGACY_REFORMER
+      text: |
+        This child expresses legacy through change and reinterpretation, challenging outdated patterns while retaining core meaning.
+
+    bridge_builder:
+      template_key: CHILD_LEGACY_BRIDGE_BUILDER
+      text: |
+        This child integrates tradition and innovation, acting as a connector between past wisdom and future direction.
+
+  # ----------------------------------------------
+  # EVOLUTION FRAMING (ALWAYS RENDERED)
+  # ----------------------------------------------
+
+  evolution_framing:
+    template_key: CHILD_EVOLUTION_FRAMING
+    text: |
+      Fulfillment in this role arises through conscious integration—honoring inherited values while shaping an authentic, self-directed path forward.

@@ -1,0 +1,192 @@
+# ============================================================
+# 56_01_family_matrix_intervention_gate.yaml
+# Family OS – Explicit Intervention Activation Gate
+# ============================================================
+
+family_matrix_intervention_gate:
+
+  ####################################################################
+  # METADATA & GOVERNANCE
+  ####################################################################
+
+  metadata:
+    file: 56_01_family_matrix_intervention_gate.yaml
+    version: "1.0.0"
+    domain: family_matrix
+    layer: governance
+    purpose: >
+      Explicit, consent-based activation gate controlling whether
+      intervention overlays (repair, emotional risk) are allowed
+      to execute after Family Matrix analysis.
+    design_principles:
+      - diagnostic_first
+      - consent_required
+      - non_fatalistic
+      - no_silent_intervention
+      - reversible_states
+    depends_on:
+      - 02_01_family_matrix_engine.yaml
+      - 55_01_family_matrix_time_evolution_overlay.yaml
+
+  ####################################################################
+  # DEFAULT BEHAVIOR (FAIL-SAFE)
+  ####################################################################
+
+  default_state:
+    mode: diagnostic_only
+    intervention_allowed: false
+
+  ####################################################################
+  # SUPPORTED ACTIVATION MODES
+  ####################################################################
+
+  activation_modes:
+
+    diagnostic_only:
+      description: >
+        Structural and temporal analysis only.
+        No repair or emotional risk overlays may execute.
+      allow_overlays: []
+      forbid_overlays:
+        - family_matrix_conflict_repair_overlay
+        - family_matrix_emotional_risk_overlay
+
+    user_requested_support:
+      description: >
+        User explicitly requests guidance, mediation,
+        or conflict understanding.
+      required_conditions:
+        - user_consent_explicit: true
+      allow_overlays:
+        - family_matrix_conflict_repair_overlay
+      forbid_overlays:
+        - family_matrix_emotional_risk_overlay
+
+    safety_escalation:
+      description: >
+        Elevated emotional strain detected AND
+        explicit user consent present.
+      required_conditions:
+        - user_consent_explicit: true
+        - risk_acknowledgement_confirmed: true
+      allow_overlays:
+        - family_matrix_conflict_repair_overlay
+        - family_matrix_emotional_risk_overlay
+      forbid_overlays: []
+
+  ####################################################################
+  # INPUT SIGNALS (READ-ONLY)
+  ####################################################################
+
+  input_signals:
+
+    from_family_matrix:
+      - authority_flow
+      - care_flow
+      - emotional_dependency
+      - decision_influence
+      - resource_flow
+
+    from_time_evolution:
+      - current_phase
+      - cohesion_delta
+      - friction_delta
+
+    from_user_context:
+      - user_consent_explicit
+      - support_mode_requested
+      - risk_acknowledgement_confirmed
+
+  ####################################################################
+  # ESCALATION ELIGIBILITY (NO AUTO-ACTIVATION)
+  ####################################################################
+
+  escalation_eligibility_rules:
+
+    - id: FMX-GATE-ELIG-01
+      if:
+        current_phase: fracture_risk
+        cohesion_delta: "<0"
+        friction_delta: ">0"
+      then:
+        eligible_modes:
+          - user_requested_support
+          - safety_escalation
+      note: >
+        Eligibility does not imply activation.
+        User consent is still mandatory.
+
+    - id: FMX-GATE-ELIG-02
+      if:
+        emotional_dependency: ">=70"
+      then:
+        eligible_modes:
+          - user_requested_support
+      note: >
+        High emotional load suggests support may be helpful,
+        but does not trigger intervention automatically.
+
+  ####################################################################
+  # HARD SAFETY GUARDS (NON-NEGOTIABLE)
+  ####################################################################
+
+  hard_guards:
+
+    forbid_automatic_activation: true
+
+    forbid_without_user_consent: true
+
+    forbid_event_prediction: true
+
+    forbid_relationship_labels:
+      - divorce
+      - separation
+      - abandonment
+      - estrangement
+
+    forbid_clinical_diagnosis: true
+
+    forbid_irreversible_states: true
+
+  ####################################################################
+  # EXECUTION CONTROL
+  ####################################################################
+
+  execution_control:
+
+    preconditions:
+      - intervention_mode_selected
+      - required_conditions_met
+
+    on_violation:
+      action: abort_overlay_execution
+      error_message: "[SYSTEM ERROR] Intervention gate violation: consent or conditions not satisfied."
+
+  ####################################################################
+  # AUDIT & TRACEABILITY
+  ####################################################################
+
+  audit:
+
+    log_gate_decision: true
+    log_fields:
+      - family_id
+      - selected_mode
+      - allowed_overlays
+      - timestamp
+    immutable_log: true
+
+  ####################################################################
+  # OUTPUT (FOR ENGINE CONSUMPTION ONLY)
+  ####################################################################
+
+  gate_output:
+
+    selected_mode:
+      description: "Final activation mode chosen"
+
+    allowed_overlays:
+      description: "List of overlays permitted to execute"
+
+    blocked_overlays:
+      description: "List of overlays explicitly blocked"

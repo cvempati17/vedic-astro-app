@@ -1,0 +1,214 @@
+# ============================================================
+# mission_engine_planet_chart_dependency.yaml
+# Family OS – Mission Engine Dependency Map
+# ============================================================
+
+mission_engine_dependency:
+  metadata:
+    engine: Mission
+    file: mission_engine_planet_chart_dependency.yaml
+    version: "1.0.0"
+    purpose: "Defines planetary authority and chart pathways for Mission execution"
+    design_principle: >
+      Mission is action under karma.
+      Vision chooses direction.
+      Mission chooses effort, sacrifice, discipline, and execution.
+      Mission succeeds only when will (Mars) and endurance (Saturn)
+      are aligned with purpose (Sun) and logic (Mercury).
+
+  ############################################################
+  # 1. PRIMARY PLANETARY GOVERNANCE (EXECUTION CORE)
+  ############################################################
+
+  primary_planets:
+
+    Mars:
+      role: "Executional Will"
+      mission_function:
+        - initiates action
+        - confronts obstacles
+        - enforces effort
+      failure_mode_if_weak:
+        - procrastination
+        - avoidance_of_conflict
+      charts:
+        D1:
+          why: "Physical and behavioral execution"
+          houses_emphasized: [1, 3, 6, 10]
+        D10:
+          why: "Professional effort and contribution"
+          houses_emphasized: [6, 10]
+
+    Saturn:
+      role: "Sustained Discipline"
+      mission_function:
+        - maintains long-term effort
+        - accepts delay and hardship
+        - completes what Mars starts
+      failure_mode_if_weak:
+        - abandonment_midway
+        - burnout_cycles
+      charts:
+        D1:
+          why: "Daily duty and life pressure"
+          houses_emphasized: [6, 10]
+        D10:
+          why: "Career responsibility and endurance"
+          houses_emphasized: [10]
+        D12:
+          why: "Inherited duty and obligation karma"
+          houses_emphasized: [6]
+
+  ############################################################
+  # 2. SECONDARY PLANETARY SUPPORT (ALIGNMENT & OPTIMIZATION)
+  ############################################################
+
+  secondary_planets:
+
+    Sun:
+      role: "Purpose Validation"
+      mission_function:
+        - legitimizes effort
+        - aligns action with identity
+        - prevents meaningless work
+      distortion_if_afflicted:
+        - ego_driven_mission
+        - authority_conflict
+      charts:
+        D1:
+          why: "Personal authority and confidence"
+          houses_emphasized: [1, 10]
+        D9:
+          why: "Inner approval of effort"
+          houses_emphasized: [1]
+
+    Mercury:
+      role: "Execution Intelligence"
+      mission_function:
+        - plans actions
+        - coordinates logistics
+        - optimizes effort
+      distortion_if_afflicted:
+        - scattered_effort
+        - analysis_paralysis
+      charts:
+        D1:
+          why: "Operational decision-making"
+          houses_emphasized: [3, 6]
+        D10:
+          why: "Work strategy and efficiency"
+          houses_emphasized: [6]
+
+    Venus:
+      role: "Sustainability & Motivation"
+      mission_function:
+        - maintains harmony during effort
+        - prevents emotional exhaustion
+        - provides reward and morale
+      distortion_if_afflicted:
+        - comfort_avoidance
+        - pleasure_over_duty
+      charts:
+        D1:
+          why: "Daily motivation and balance"
+          houses_emphasized: [2, 7]
+        D9:
+          why: "Inner satisfaction with effort"
+          houses_emphasized: [7]
+
+  ############################################################
+  # 3. MODIFIER PLANET (ACCELERATION & COMPULSION)
+  ############################################################
+
+  modifier_planets:
+
+    Rahu:
+      role: "Compulsion & Acceleration"
+      mission_function:
+        - forces action before readiness
+        - introduces unconventional effort paths
+        - increases ambition and pressure
+      risk_if_unchecked:
+        - burnout
+        - misaligned hustle
+      charts:
+        D1:
+          why: "Visible ambition and stress"
+          houses_emphasized: [6, 10, 11]
+        D10:
+          why: "Unorthodox career pressure"
+          houses_emphasized: [10]
+
+    Ketu:
+      role: "Effort Release & Completion"
+      mission_function:
+        - detaches from obsolete work
+        - ends over-servicing
+        - redirects effort inward when needed
+      risk_if_excessive:
+        - disengagement
+        - mission_void
+      charts:
+        D1:
+          why: "Withdrawal from pointless action"
+          houses_emphasized: [12]
+        D9:
+          why: "Spiritualization of effort"
+          houses_emphasized: [12]
+        D12:
+          why: "Breaking inherited duty loops"
+          houses_emphasized: [6, 12]
+
+  ############################################################
+  # 4. CHART PRIORITY & WEIGHTING
+  ############################################################
+
+  chart_weighting:
+    D1: 0.40   # daily lived action
+    D10: 0.35  # work, contribution, career
+    D9: 0.15   # inner alignment with effort
+    D12: 0.10  # inherited obligation patterns
+
+  ############################################################
+  # 5. ENGINE STRENGTH COMPUTATION LOGIC
+  ############################################################
+
+  mission_strength_formula: >
+    mission_strength =
+      (Mars_strength * 0.30) +
+      (Saturn_strength * 0.30) +
+      (Sun_strength * 0.15) +
+      (Mercury_strength * 0.15) +
+      (Venus_balance * 0.05) +
+      (Rahu_pressure * 0.05)
+
+  interpretation_guidelines:
+    strong_mission:
+      condition: "Mars and Saturn both strong and aligned"
+      outcome: "Consistent execution and completion"
+    misaligned_mission:
+      condition: "Rahu strong, Sun weak"
+      outcome: "High effort with unclear purpose"
+    burned_out_mission:
+      condition: "Saturn strong, Venus weak"
+      outcome: "Duty without joy or sustainability"
+    abandoned_mission:
+      condition: "Mars weak, Ketu strong"
+      outcome: "Withdrawal before completion"
+
+  ############################################################
+  # 6. VALIDATION RULES
+  ############################################################
+
+  validation_rules:
+    - rule_id: MSN-DEP-01
+      description: "Mission engine must include Mars and Saturn"
+      severity: fatal
+
+    - rule_id: MSN-DEP-02
+      description: "Mission must include at least one cognition planet (Sun or Mercury)"
+      severity: error
+
+    - rule_id: MSN-DEP-03
+      description: "Rahu pressure must be moderated by Saturn or Mercury"
+      severity: warning

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Operating System - The 7 Layers</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.7;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 60px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(to right, #a8d5ba, #6b9e78);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .intro {
+            background: #f8fafc;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 60px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #444;
+            border-left: 6px solid #6b9e78;
+        }
+
+        .visual-section {
+            text-align: center;
+            margin: 80px 0;
+        }
+
+        .visual-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4em;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .images img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s ease;
+        }
+
+        .images img:hover {
+            transform: scale(1.03);
+        }
+
+        .layer-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .layer-card {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .layer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .layer-header {
+            padding: 25px;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.3em;
+        }
+
+        .layer-1 .layer-header {
+            background: #5a7d9a;
+        }
+
+        .layer-2 .layer-header {
+            background: #66b39a;
+        }
+
+        .layer-3 .layer-header {
+            background: #e9a749;
+        }
+
+        .layer-4 .layer-header {
+            background: #e67e5e;
+        }
+
+        .layer-5 .layer-header {
+            background: #c95d8e;
+        }
+
+        .layer-6 .layer-header {
+            background: #8a6faf;
+        }
+
+        .layer-7 .layer-header {
+            background: #6b9e78;
+        }
+
+        .layer-body {
+            padding: 30px;
+        }
+
+        .core-question {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .layer-body ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .layer-body li {
+            margin-bottom: 18px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .layer-body li:before {
+            content: "▸";
+            color: #6b9e78;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .layer-body strong {
+            color: #2c3e50;
+        }
+
+        .summary {
+            background: linear-gradient(to right, #f0f7f4, #e8f0e8);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #444;
+            margin-top: 80px;
+            border-top: 5px solid #6b9e78;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 2.6em;
+            }
+
+            .images {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Family Operating System</h1>
+            <p class="subtitle">A Conscious Framework for Multi-Generational Family Evolution</p>
+        </header>
+
+        <div class="intro">
+            <p>The <strong>Family Operating System</strong> is a comprehensive, layered framework that treats the family
+                as a living organism bound by karma and purpose. Inspired by systemic thinking, karmic principles, and
+                modern family dynamics, it provides a structured way to understand, heal, and consciously evolve family
+                life across generations.</p>
+        </div>
+
+        <div class="visual-section">
+            <h2>Visual Representations</h2>
+            <div class="images">
+                <img src="./Summary_Family_OS.png" alt="Summary visualization of Family OS">
+                <img src="./Detail_Family_OS.png" alt="Detailed structure of Family OS">
+            </div>
+        </div>
+
+        <h2
+            style="text-align:center; font-family:'Playfair Display',serif; font-size:2.6em; color:#2c3e50; margin-bottom:50px;">
+            The Seven Layers</h2>
+
+        <div class="layer-list">
+            <div class="layer-card layer-1">
+                <div class="layer-header">1. The Existential Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: Why the family exists at all.</div>
+                    <p>This is the deepest layer, defining the soul-level purpose of the family lineage.</p>
+                    <ul>
+                        <li><strong>Vision</strong>: Defines the long-term karmic direction — the ultimate evolutionary
+                            goal or dharma the family soul is meant to pursue across lifetimes.</li>
+                        <li><strong>Mission</strong>: Defines what the family must actively do in this lifetime to
+                            fulfill its vision through action.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-2">
+                <div class="layer-header">2. The Ideological Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: What the family believes.</div>
+                    <p>This layer governs the shared worldview and principles that guide family behavior.</p>
+                    <ul>
+                        <li><strong>Family Philosophy</strong>: Defines core beliefs about duty, ethics, and life's
+                            meaning.</li>
+                        <li><strong>Family Matrix</strong>: Defines the structural ideology of power — the underlying
+                            rules and hierarchies that shape authority and influence.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-3">
+                <div class="layer-header">3. The Material Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: How the family survives and executes.</div>
+                    <p>This practical layer focuses on resources, roles, and execution in the physical world.</p>
+                    <ul>
+                        <li><strong>Responsibility & Roles</strong>: Defines who carries which duties.</li>
+                        <li><strong>Decision Control</strong>: Defines who decides what.</li>
+                        <li><strong>Money & Work Logic</strong>: Defines how wealth is earned, managed, and distributed.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-4">
+                <div class="layer-header">4. The Emotional Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: How emotions move and heal.</div>
+                    <p>This layer addresses the flow and processing of feelings within the family system.</p>
+                    <ul>
+                        <li><strong>Emotional Architecture</strong>: Defines how emotions are created, expressed, and
+                            transmitted across generations.</li>
+                        <li><strong>Conflict & Repair</strong>: Defines why conflicts arise and the pathways for
+                            resolution and healing.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-5">
+                <div class="layer-header">5. The Relational Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: Who is bound to whom and how.</div>
+                    <p>This layer maps the bonds and contracts that tie family members together.</p>
+                    <ul>
+                        <li><strong>Boundaries & Dependency</strong>: Defines emotional and practical interdependencies.
+                        </li>
+                        <li><strong>Parent–Child Karmic Contracts</strong>: Defines why children are born into the
+                            family — the specific soul agreements and lessons.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-6">
+                <div class="layer-header">6. The Temporal Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: How the family evolves over time.</div>
+                    <p>This layer tracks the family's development as a dynamic entity.</p>
+                    <ul>
+                        <li><strong>Time Evolution</strong>: Defines how the family organism evolves over years — phases
+                            of growth, challenge, and transformation.</li>
+                        <li><strong>Unified Mahā-Daśā Family Timeline</strong>: Merges all members’ planetary periods
+                            into a single evolutionary timeline.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layer-card layer-7">
+                <div class="layer-header">7. The Terminal Layer</div>
+                <div class="layer-body">
+                    <div class="core-question">Core Question: How the family hands over and closes.</div>
+                    <p>This final layer concerns legacy and closure.</p>
+                    <ul>
+                        <li><strong>Legacy Care & Aging</strong>: Defines aging quality, inheritance of wisdom and
+                            resources, and preparation for transition across generations.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <p>The <strong>Family Operating System</strong> offers a powerful, holistic guide for conscious family
+                living. By understanding and aligning these seven layers, families can uncover hidden patterns, heal
+                intergenerational wounds, make intentional decisions, and evolve toward their highest collective purpose
+                — ensuring strength, harmony, and meaningful legacy for generations to come.</p>
+        </div>
+    </div>
+</body>
+
+</html>

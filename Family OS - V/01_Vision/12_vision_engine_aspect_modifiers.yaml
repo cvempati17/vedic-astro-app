@@ -1,0 +1,334 @@
+# ============================================================
+# vision_engine_aspect_modifiers.yaml
+# Family OS – Vision Engine Aspect Modulation Layer
+# ============================================================
+
+vision_engine_aspect_modifiers:
+  metadata:
+    engine: Vision
+    file: vision_engine_aspect_modifiers.yaml
+    version: "1.0.0"
+    purpose: "Modulates Vision engine planetary authority using aspects"
+    depends_on:
+      - vision_engine_planet_chart_dependency.yaml
+    principle: >
+      Planets define Vision.
+      Aspects decide clarity, distortion, delay, acceleration,
+      or completion of that Vision.
+      Aspects never replace planets — they bend them.
+
+  ############################################################
+  # 1. ASPECT SEMANTIC DEFINITIONS (VISION CONTEXT)
+  ############################################################
+
+  aspect_semantics:
+    conjunction:
+      effect: "Fusion and amplification of vision forces"
+    opposition:
+      effect: "Vision split or identity tension"
+    square:
+      effect: "Vision conflict and internal resistance"
+    trine:
+      effect: "Natural clarity and alignment"
+    sextile:
+      effect: "Opportunity to refine vision consciously"
+
+  standard_aspect:
+    applies_to: [Sun, Moon, Mercury, Venus]
+    degrees: [7]
+    effect: "Direct mirroring influence"
+
+ 
+    vedic_special_aspects:
+      Saturn: [3, 7, 10]
+      Mars: [4, 7, 8]
+      Jupiter: [5, 7, 9]
+      Rahu: [5, 7, 9]
+      Ketu: [5, 7, 9]
+
+  ############################################################
+  # 2. SUN ASPECT MODIFIERS (DIRECTION & AUTHORITY)
+  ############################################################
+
+  sun_aspect_rules:
+
+    - id: VSN-ASP-SUN-01
+      if:
+        aspected_by: Saturn
+        aspect_type in [conjunction, trine]
+      then:
+        vision_effect:
+          clarity: increased
+          stability: high
+          description: "Clear, sustainable lineage direction"
+
+    - id: VSN-ASP-SUN-02
+      if:
+        aspected_by: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        vision_effect:
+          distortion: high
+          risk: "Ego-driven or status-based vision"
+
+    - id: VSN-ASP-SUN-03
+      if:
+        aspected_by: Ketu
+        aspect_type == conjunction
+      then:
+        vision_effect:
+          detachment: high
+          risk: "Loss of worldly direction or disengagement"
+
+    - id: VSN-ASP-SUN-04
+      if:
+        aspected_by: Jupiter
+        aspect_type in [trine, sextile]
+      then:
+        vision_effect:
+          ethical_alignment: strong
+          description: "Purpose aligned with dharma"
+
+  ############################################################
+  # 3. SATURN ASPECT MODIFIERS (CONTINUITY & REALISM)
+  ############################################################
+
+  saturn_aspect_rules:
+
+    - id: VSN-ASP-SAT-01
+      if:
+        aspected_by: Jupiter
+        aspect_type in [trine]
+      then:
+        vision_effect:
+          sustainability: very_high
+          description: "Vision matures gracefully over time"
+
+    - id: VSN-ASP-SAT-02
+      if:
+        aspected_by: Rahu
+        aspect_type in [conjunction, square]
+      then:
+        vision_effect:
+          pressure: extreme
+          risk: "Forced vision changes under stress"
+
+    - id: VSN-ASP-SAT-03
+      if:
+        aspected_by: Moon
+        aspect_type in [square, opposition]
+      then:
+        vision_effect:
+          emotional_drag: high
+          risk: "Fear-based conservatism"
+
+  ############################################################
+  # 4. JUPITER ASPECT MODIFIERS (MEANING & DHARMA)
+  ############################################################
+
+  jupiter_aspect_rules:
+
+    - id: VSN-ASP-JUP-01
+      if:
+        aspected_by: Saturn
+        aspect_type == square
+      then:
+        vision_effect:
+          expansion_blocked: true
+          risk: "Ethics suppressed by duty"
+
+    - id: VSN-ASP-JUP-02
+      if:
+        aspected_by: Rahu
+        aspect_type in [conjunction, opposition]
+      then:
+        vision_effect:
+          inflated_ideals: true
+          risk: "Grand vision without grounding"
+
+    - id: VSN-ASP-JUP-03
+      if:
+        aspected_by: Ketu
+        aspect_type == conjunction
+      then:
+        vision_effect:
+          wisdom_without_ambition: true
+          description: "Philosophical but non-expansive vision"
+
+  ############################################################
+  # 5. RAHU ASPECT MODIFIERS (EVOLUTIONARY PRESSURE)
+  ############################################################
+
+  rahu_aspect_rules:
+
+    - id: VSN-ASP-RAH-01
+      if:
+        aspected_by: Saturn
+        aspect_type in [square, opposition]
+      then:
+        vision_effect:
+          instability: high
+          description: "Old vs new vision conflict"
+
+    - id: VSN-ASP-RAH-02
+      if:
+        aspected_by: Jupiter
+        aspect_type in [trine]
+      then:
+        vision_effect:
+          future_alignment: strong
+          description: "Innovative yet ethical direction"
+
+    - id: VSN-ASP-RAH-03
+      if:
+        aspected_by: Moon
+        aspect_type in [conjunction]
+      then:
+        vision_effect:
+          emotional_obsession: high
+          risk: "Vision driven by insecurity"
+
+  ############################################################
+  # 6. KETU ASPECT MODIFIERS (PRUNING & COMPLETION)
+  ############################################################
+
+  ketu_aspect_rules:
+
+    - id: VSN-ASP-KET-01
+      if:
+        aspected_by: Jupiter
+        aspect_type in [trine]
+      then:
+        vision_effect:
+          enlightened_release: true
+          description: "Vision transcends ego safely"
+
+    - id: VSN-ASP-KET-02
+      if:
+        aspected_by: Saturn
+        aspect_type in [square, opposition]
+      then:
+        vision_effect:
+          withdrawal_conflict: true
+          risk: "Duty vs detachment struggle"
+
+    - id: VSN-ASP-KET-03
+      if:
+        aspected_by: Rahu
+        aspect_type == conjunction
+      then:
+        vision_effect:
+          karmic_axis_activation: extreme
+          description: "Major lineage direction reset"
+###############################
+# Mercury
+#########
+mercury_aspect_rules:
+
+  - id: VSN-ASP-MER-01
+    if:
+      mercury_aspects: Sun
+      aspect_type: standard_7th
+    then:
+      vision_effect:
+        cognition_bias: high
+        description: "Vision filtered through logic, data, or rationalization"
+        risk: "Overthinking direction, analysis paralysis"
+
+  - id: VSN-ASP-MER-02
+    if:
+      mercury_aspects: Saturn
+      aspect_type: standard_7th
+    then:
+      vision_effect:
+        rigidity: increased
+        description: "Vision constrained by rules and definitions"
+
+  - id: VSN-ASP-MER-03
+    if:
+      mercury_afflicted: true
+    then:
+      vision_effect:
+        distortion: true
+        risk: "Confused or contradictory family direction"
+
+###############
+# Venus
+#############
+venus_aspect_rules:
+
+  - id: VSN-ASP-VEN-01
+    if:
+      venus_aspects: Sun
+      aspect_type: standard_7th
+    then:
+      vision_effect:
+        comfort_bias: high
+        description: "Vision prioritizes harmony, comfort, or approval"
+
+  - id: VSN-ASP-VEN-02
+    if:
+      venus_aspects: Saturn
+      aspect_type: standard_7th
+    then:
+      vision_effect:
+        restrained_pleasure: true
+        description: "Vision sacrifices comfort for long-term stability"
+
+  - id: VSN-ASP-VEN-03
+    if:
+      venus_afflicted: true
+    then:
+      vision_effect:
+        value_confusion: true
+        risk: "Vision diluted by conflicting desires or people-pleasing"
+
+  ############################################################
+  # 7. CHART-SPECIFIC MODULATION
+  ############################################################
+
+  chart_specific_rules:
+
+    D1:
+      note: "Affects visible, lived family direction"
+      weight_modifier: 1.0
+
+    D9:
+      note: "Affects inner conviction and maturity of vision"
+      weight_modifier: 0.8
+
+    D12:
+      note: "Affects ancestral and inherited vision patterns"
+      weight_modifier: 0.6
+
+  ############################################################
+  # 8. ASPECT RESOLUTION LOGIC
+  ############################################################
+
+  resolution_logic:
+    priority_order:
+      - conjunction
+      - opposition
+      - square
+      - trine
+      - sextile
+
+    override_rules:
+      - if: "Sun severely afflicted AND Saturn afflicted"
+        then: "Vision considered unstable regardless of Jupiter"
+      - if: "Ketu stronger than Sun"
+        then: "Vision disengagement risk flagged"
+
+  ############################################################
+  # 9. FINAL MODULATED OUTPUT
+  ############################################################
+
+  resolved_vision_aspect_modulation:
+    vision_clarity_index:
+      description: "Net clarity after aspect modulation"
+    vision_stability_index:
+      description: "Ability to sustain direction over time"
+    distortion_flags:
+      description: "Detected risks and confusion patterns"
+    evolutionary_pressure_score:
+      description: "Degree of forced change acting on vision"

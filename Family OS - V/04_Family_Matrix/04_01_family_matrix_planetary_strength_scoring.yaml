@@ -1,0 +1,40 @@
+# FAMILY MATRIX PLANETARY STRENGTH SCORING
+version: "1.0"
+
+planetary_strength:
+  
+  # Base Strength (Normalized 0-10)
+  # Derived from Shadbala or Simplified Logic
+  base_calculation:
+    exalted: 10.0
+    moolatrikona: 8.5
+    own_sign: 7.0
+    great_friend: 6.0
+    friend: 5.0
+    neutral: 4.0
+    enemy: 2.5
+    great_enemy: 1.0
+    debilitated: 0.5
+    
+  # House Placement Modifiers
+  house_modifiers:
+    kendra: 1.25    # 1, 4, 7, 10
+    trikona: 1.15   # 1, 5, 9
+    dusthana: 0.75  # 6, 8, 12
+    upachaya: 1.10  # 3, 6, 10, 11 (growth over time)
+    
+  # Retrograde Status
+  retrograde_modifier:
+    benefic: 1.2   # Stronger to do good
+    malefic: 1.3   # Stronger to do harm/restrict
+    
+  # Combustion
+  combustion_modifier:
+    deep: 0.2      # Burned out
+    partial: 0.6   # Weakened
+
+  output_keys:
+    # Used for matrix inputs
+    - strength_score_raw
+    - strength_score_adjusted
+    - dignity_label

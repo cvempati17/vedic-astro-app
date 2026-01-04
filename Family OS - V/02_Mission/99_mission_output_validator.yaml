@@ -1,0 +1,74 @@
+mission_output_validator:
+
+  version: 1.0.0
+  mode: strict
+
+  family_level_checks:
+
+    mission_mode:
+      required: true
+      must_include:
+        - mission_mode
+        - rationale
+
+    narrative:
+      required: true
+      min_length_chars: 200
+
+    execution_risks:
+      required: true
+      min_count: 1
+      must_include_mitigation: true
+
+    planetary_reinforcements:
+      required: true
+      min_count: 1
+      allowed_planets:
+        - Saturn
+        - Jupiter
+        - Mercury
+        - Mars
+        - Rahu
+        - Ketu
+
+  role_level_checks:
+
+    common:
+      role_name: required
+      responsibility: required
+      caution_or_failure_mode: required
+
+    child:
+      must_include:
+        - protection_rule
+      forbidden:
+        - execution_duty
+        - emotional_burden
+
+    elder:
+      must_include:
+        - advisory_only
+      forbidden:
+        - execution_role
+
+  language_rules:
+
+    forbidden_phrases:
+      - "will definitely"
+      - "must suffer"
+      - "no choice"
+      - "fated to"
+
+    astrology_safety:
+      planetary_reference_required_if_astrology_mentioned: true
+
+  failure_behavior:
+    on_failure:
+      - block_ui_render
+      - emit_error_report
+    error_format:
+      type: structured
+      include:
+        - missing_sections
+        - missing_roles
+        - violated_rules

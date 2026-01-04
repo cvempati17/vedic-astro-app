@@ -1,0 +1,457 @@
+engine:
+  name: vision_engine
+  version: 1.0
+  domain: family_vision
+  description: >
+    Determines the long-term directional intelligence of the family system.
+    Vision represents meaning, future-orientation, and trans-generational intent.
+    This engine does not predict outcomes; it models orientation and aspiration.
+
+execution:
+  stage: core_section
+  order: 1
+  depends_on:
+    - house_level_abstraction_engine
+    - planetary_strength_scoring_standard
+    - nakshatra_level_modulation_layer
+    - global_aspect_impact_modifiers
+
+scope:
+  levels:
+    - family
+    - father
+    - mother
+    - child
+
+input_requirements:
+  charts:
+    - D1
+    - D9
+  dashas:
+    optional: true
+  required_fields:
+    - lagna
+    - moon
+    - sun
+    - jupiter
+    - saturn
+    - nakshatra
+
+core_concept:
+  definition: >
+    Vision is the family’s shared capacity to imagine, commit to, and sustain
+    a meaningful future beyond immediate survival.
+  polarity:
+    positive: clarity, purpose, continuity
+    negative: confusion, drift, inherited aimlessness
+
+vision_axes:
+  - axis: meaning_vs_survival
+    description: >
+      Whether the family orients toward values and meaning
+      or remains stuck in short-term survival logic.
+  - axis: continuity_vs_fragmentation
+    description: >
+      Whether vision is shared across generations or fragmented.
+  - axis: aspiration_vs_resignation
+    description: >
+      Whether the family believes in growth or accepts stagnation.
+
+house_influences:
+  primary:
+    - house: 9
+      role: philosophy_future_meaning
+    - house: 5
+      role: creative_projection_children
+    - house: 11
+      role: collective_goals
+  secondary:
+    - house: 1
+      role: identity_alignment
+    - house: 4
+      role: emotional_security_base
+
+planetary_roles:
+  sun:
+    role: core_direction_authority
+    default_weight: 0.25
+  jupiter:
+    role: wisdom_expansion_ethics
+    default_weight: 0.30
+  moon:
+    role: emotional_belief_system
+    default_weight: 0.20
+  saturn:
+    role: sustainability_realism
+    default_weight: 0.15
+  mercury:
+    role: articulation_of_vision
+    default_weight: 0.10
+
+nakshatra_modulation:
+  enabled: true
+  dimensions:
+    - emotional_memory
+    - inherited_belief_bias
+    - aspiration_style
+
+evaluation_steps:
+
+  - step: extract_raw_indicators
+    description: >
+      Collects raw chart indicators relevant to vision.
+    actions:
+      - map_planets_to_houses
+      - detect_house_strengths
+      - fetch_planetary_strengths
+      - attach_nakshatra_profiles
+
+  - step: calculate_axis_scores
+    description: >
+      Computes base scores for each vision axis.
+    axes_scoring:
+      meaning_vs_survival:
+        positive_conditions:
+          - jupiter_strong_in_9_or_11
+          - sun_connected_to_9
+        negative_conditions:
+          - moon_afflicted_in_4
+          - saturn_dominant_without_jupiter_support
+      continuity_vs_fragmentation:
+        positive_conditions:
+          - benefic_links_5_9
+          - strong_11th_house
+        negative_conditions:
+          - nodes_afflicting_9_or_5
+      aspiration_vs_resignation:
+        positive_conditions:
+          - jupiter_above_threshold
+          - supportive_sun_saturn_relation
+        negative_conditions:
+          - saturn_overpowering_sun
+          - repeated_dasha_failures_flag
+
+  - step: apply_aspect_modifiers
+    description: >
+      Adjusts axis scores based on aspect perception.
+    use_files:
+      - vision_aspect_modifiers.yaml
+      - vision_engine_aspect_modifiers.yaml
+
+  - step: apply_planetary_strength_modifiers
+    description: >
+      Scales scores by planetary strength and dignity.
+    use_files:
+      - vision_planetary_strength_aspect_modifiers.yaml
+      - vision_planetary_strength_scoring.yaml
+
+  - step: apply_nakshatra_modulation
+    description: >
+      Modulates lived experience of vision.
+    effects:
+      - soften_or_intensify_aspiration
+      - convert_idealism_to_practicality
+      - convert_confusion_to_seeking
+
+  - step: derive_narrative
+    description: >
+      Converts scores into human-readable insight.
+    narrative_templates:
+      high_alignment: >
+        The family carries a clear sense of direction and shared purpose,
+        allowing members to act with confidence and continuity.
+      moderate_alignment: >
+        The family possesses aspiration but may experience periods of
+        confusion or misalignment that require conscious recalibration.
+      low_alignment: >
+        Vision within the family is fragmented or inherited through struggle,
+        requiring intentional effort to define shared meaning.
+
+  - step: generate_guidance
+    description: >
+      Provides non-fatalistic, actionable guidance.
+    guidance_rules:
+      if_high_alignment:
+        - protect_long_term_goals
+        - mentor_next_generation
+      if_moderate_alignment:
+        - align_decisions_to_core_values
+        - clarify_shared_future
+      if_low_alignment:
+        - pause_major_decisions
+        - rebuild_philosophical_foundation
+
+  - step: tag_risks
+    description: >
+      Flags common vision-related risks.
+    risk_tags:
+      - inherited_confusion
+      - idealism_without_structure
+      - survival_dominant_thinking
+
+  - step: output_contract_mapping
+    description: >
+      Maps engine output to member-level output contract.
+    output_fields:
+      narrative: derived_narrative
+      scores:
+        alignment: normalized_vision_score
+      guidance: guidance_list
+      timeline: optional_dasha_projection
+
+free_will_hooks:
+  enabled: true
+  hooks:
+    - condition: low_alignment
+      recommendation: >
+        Conscious articulation of shared family values
+        significantly improves long-term outcomes.
+    - condition: moderate_alignment
+      recommendation: >
+        Periodic reflection and recalibration prevents drift.
+    - condition: high_alignment
+      recommendation: >
+        Maintain humility and adaptability to avoid rigidity.
+
+ethical_constraints:
+  - no_predictions
+  - no_fatalistic_language
+  - no_value_judgment
+
+engine_output:
+  severity_scale: 0_to_100
+  normalization: percentile
+  default_visibility: true
+#########
+version: 1.1
+module: vision_engine
+scope: family
+
+engine_mode:
+  narrative_generation: forbidden
+  output_type: structured_enums_only
+
+# ==================================================
+# GLOBAL ENGINE RULES
+# ==================================================
+
+global_rules:
+  gender_based_logic: forbidden
+  collective_child_evaluation: forbidden
+  fatalistic_predictions: forbidden
+  death_or_lifespan_inference: forbidden
+
+  allowed_outputs:
+    - enum
+    - boolean
+    - score
+
+# ==================================================
+# CHILD EVALUATION ENGINE
+# ==================================================
+
+child_vision_engine:
+
+  role_assignment:
+    fixed_role: Future Direction Carrier
+    role_variation: forbidden
+
+  evaluation_axes:
+    required:
+      - caregiving_orientation
+      - conflict_expression
+      - karmic_load
+      - resilience_index
+      - legacy_expression
+
+# ==================================================
+# AXIS 1: CAREGIVING ORIENTATION
+# ==================================================
+
+caregiving_orientation:
+
+  enum_values:
+    - high
+    - moderate
+    - low
+
+  indicators:
+
+    high:
+      any_of:
+        - moon_strength >= 0.7
+        - fourth_house_benefic_count >= 2
+        - venus_jupiter_connection == true
+        - moon_aspected_by_benefics == true
+
+    moderate:
+      any_of:
+        - moon_strength between 0.4 and 0.7
+        - mixed_benefic_malefic_influence_on_4th == true
+
+    low:
+      any_of:
+        - moon_strength < 0.4
+        - fourth_house_afflicted == true
+        - ketu_in_4th == true
+
+  resolution_rule:
+    priority: high > moderate > low
+    default: moderate
+
+# ==================================================
+# AXIS 2: CONFLICT & ASSERTION EXPRESSION
+# ==================================================
+
+conflict_expression:
+
+  enum_values:
+    - confrontational
+    - defensive
+    - avoidant
+
+  indicators:
+
+    confrontational:
+      any_of:
+        - mars_strength >= 0.7
+        - rahu_mars_connection == true
+        - sixth_house_activation == strong
+        - eleventh_house_activation == strong
+
+    defensive:
+      any_of:
+        - mars_under_saturn_aspect == true
+        - mars_in_dusthana == true
+
+    avoidant:
+      any_of:
+        - mars_strength < 0.4
+        - strong_jupiter_venus_dampening == true
+
+  resolution_rule:
+    priority: confrontational > defensive > avoidant
+    default: defensive
+
+# ==================================================
+# AXIS 3: KARMIC LOAD SENSITIVITY
+# ==================================================
+
+karmic_load:
+
+  enum_values:
+    - heavy
+    - moderate
+    - light
+
+  indicators:
+
+    heavy:
+      any_of:
+        - saturn_ketu_connection == true
+        - eighth_house_activation == strong
+        - twelfth_house_activation == strong
+
+    moderate:
+      any_of:
+        - single_nodal_affliction == true
+        - saturn_aspects_lagna == true
+
+    light:
+      any_of:
+        - lagna_lord_strong == true
+        - benefic_dominant_chart == true
+
+  resolution_rule:
+    priority: heavy > moderate > light
+    default: moderate
+
+# ==================================================
+# AXIS 4: RESILIENCE INDEX (SAFE HEALTH SIGNAL)
+# ==================================================
+
+resilience_index:
+
+  enum_values:
+    - stable
+    - sensitive
+    - requires_attention
+
+  indicators:
+
+    stable:
+      all_of:
+        - lagna_strength >= 0.6
+        - moon_strength >= 0.6
+        - current_dasha_supportive == true
+
+    sensitive:
+      any_of:
+        - moon_saturn_stress == true
+        - sixth_house_activation == moderate
+        - eighth_house_activation == moderate
+
+    requires_attention:
+      any_of:
+        - repeated_moon_affliction == true
+        - sixth_house_activation == strong
+        - adverse_dasha_running == true
+
+  resolution_rule:
+    priority: requires_attention > sensitive > stable
+    default: sensitive
+
+# ==================================================
+# AXIS 5: LEGACY EXPRESSION STYLE
+# ==================================================
+
+legacy_expression:
+
+  enum_values:
+    - preserver
+    - reformer
+    - bridge_builder
+
+  indicators:
+
+    preserver:
+      any_of:
+        - sun_saturn_strength >= 0.7
+        - fixed_sign_emphasis == strong
+        - strong_traditional_yogas == true
+
+    reformer:
+      any_of:
+        - rahu_strength >= 0.7
+        - air_fire_dominance == true
+        - eleventh_house_activation == strong
+
+    bridge_builder:
+      any_of:
+        - jupiter_mercury_balance == true
+        - dual_sign_emphasis == strong
+        - ninth_fourth_house_link == true
+
+  resolution_rule:
+    priority: preserver > reformer > bridge_builder
+    default: bridge_builder
+
+# ==================================================
+# FINAL CHILD OUTPUT CONTRACT (ENGINE SIDE)
+# ==================================================
+
+child_engine_output:
+
+  output_object:
+    child_id: required
+    role: "Future Direction Carrier"
+    caregiving_orientation: enum
+    conflict_expression: enum
+    karmic_load: enum
+    resilience_index: enum
+    legacy_expression: enum
+
+  validation:
+    missing_axis: ENGINE_ERROR
+    invalid_enum: ENGINE_ERROR
+    free_text_detected: ENGINE_ERROR

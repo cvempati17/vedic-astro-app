@@ -1,0 +1,253 @@
+# ============================================================
+# mission_planetary_strength_aspect_modifiers.yaml
+# Family OS – Mission Engine Aspect-Based Strength Modifiers
+# ============================================================
+
+mission_planetary_strength_aspect_modifiers:
+  metadata:
+    engine: Mission
+    file: mission_planetary_strength_aspect_modifiers.yaml
+    version: "1.0.0"
+    purpose: >
+      Applies aspect-based modulation to planetary strength
+      used by the Mission engine.
+      These modifiers affect execution quality, coordination,
+      discipline, sustainability, and failure risk — not ideology.
+    depends_on:
+      - mission_planetary_strength_scoring.yaml
+    principle: >
+      Mission succeeds or fails not because of intent,
+      but because of interaction between effort, discipline,
+      clarity, and pressure.
+      Aspects decide whether action flows, stalls, explodes,
+      or collapses under load.
+
+  ############################################################
+  # 1. ASPECT SEMANTICS (MISSION CONTEXT)
+  ############################################################
+
+  aspect_semantics:
+    standard_aspect:
+      applies_to: [Sun, Moon, Mercury, Venus]
+      degrees: [7]
+      mission_effect: "Direct interaction affecting execution and coordination"
+
+    special_aspects:
+      Saturn: [3, 7, 10]
+      Mars: [4, 7, 8]
+      Jupiter: [5, 7, 9]
+      Rahu: [5, 7, 9]
+      Ketu: [5, 7, 9]
+
+  ############################################################
+  # 2. SATURN-DRIVEN EXECUTION MODIFIERS (DISCIPLINE)
+  ############################################################
+
+  saturn_aspect_modifiers:
+
+    - id: MIS-ASP-SAT-01
+      if:
+        target_planet in [Mars, Mercury]
+        aspected_by: Saturn
+        aspect_type in [3, 7, 10]
+      then:
+        mission_modifier:
+          multiplier: 1.20
+          effect: "Disciplined execution and sustainable workflow"
+
+    - id: MIS-ASP-SAT-02
+      if:
+        target_planet in [Moon, Venus]
+        aspected_by: Saturn
+        aspect_type in [3, 7, 10]
+      then:
+        mission_modifier:
+          multiplier: 0.90
+          effect: "Emotional comfort sacrificed for duty"
+
+    - id: MIS-ASP-SAT-03
+      if:
+        saturn_afflicted: true
+      then:
+        mission_modifier:
+          multiplier: 0.85
+          effect: "Breakdown in responsibility continuity"
+
+  ############################################################
+  # 3. MARS-DRIVEN EXECUTION MODIFIERS (FORCE & ACTION)
+  ############################################################
+
+  mars_aspect_modifiers:
+
+    - id: MIS-ASP-MAR-01
+      if:
+        target_planet == Saturn
+        aspected_by: Mars
+        aspect_type in [4, 7, 8]
+      then:
+        mission_modifier:
+          multiplier: 1.15
+          effect: "Duty activated through decisive action"
+
+    - id: MIS-ASP-MAR-02
+      if:
+        target_planet == Mercury
+        aspected_by: Mars
+        aspect_type in [4, 7, 8]
+      then:
+        mission_modifier:
+          multiplier: 0.90
+          effect: "Hasty decisions and coordination strain"
+
+    - id: MIS-ASP-MAR-03
+      if:
+        mars_afflicted: true
+      then:
+        mission_modifier:
+          multiplier: 0.85
+          effect: "Conflict-prone execution"
+
+  ############################################################
+  # 4. MERCURY-DRIVEN COORDINATION MODIFIERS
+  ############################################################
+
+  mercury_aspect_modifiers:
+
+    - id: MIS-ASP-MER-01
+      if:
+        aspected_by: Saturn
+        target_planet == Mercury
+        aspect_type == standard_7th
+      then:
+        mission_modifier:
+          multiplier: 1.15
+          effect: "Structured planning and reliable coordination"
+
+    - id: MIS-ASP-MER-02
+      if:
+        aspected_by: Jupiter
+        target_planet == Mercury
+        aspect_type == standard_7th
+      then:
+        mission_modifier:
+          multiplier: 1.10
+          effect: "Strategic and ethical planning"
+
+    - id: MIS-ASP-MER-03
+      if:
+        mercury_afflicted: true
+      then:
+        mission_modifier:
+          multiplier: 0.80
+          effect: "Communication failure and execution errors"
+
+  ############################################################
+  # 5. SUN-DRIVEN AUTHORITY MODIFIERS
+  ############################################################
+
+  sun_aspect_modifiers:
+
+    - id: MIS-ASP-SUN-01
+      if:
+        target_planet == Sun
+        aspected_by: Saturn
+        aspect_type in [3, 7, 10]
+      then:
+        mission_modifier:
+          multiplier: 1.10
+          effect: "Authority backed by responsibility"
+
+    - id: MIS-ASP-SUN-02
+      if:
+        target_planet == Sun
+        aspected_by: Rahu
+        aspect_type in [5, 7, 9]
+      then:
+        mission_modifier:
+          multiplier: 0.85
+          effect: "Authority driven by ambition over service"
+
+  ############################################################
+  # 6. JUPITER-DRIVEN ETHICAL MODIFIERS
+  ############################################################
+
+  jupiter_aspect_modifiers:
+
+    - id: MIS-ASP-JUP-01
+      if:
+        target_planet in [Saturn, Mars]
+        aspected_by: Jupiter
+        aspect_type in [5, 7, 9]
+      then:
+        mission_modifier:
+          multiplier: 1.10
+          effect: "Ethical execution and moral restraint"
+
+    - id: MIS-ASP-JUP-02
+      if:
+        jupiter_afflicted: true
+      then:
+        mission_modifier:
+          multiplier: 0.90
+          effect: "Mission loses moral compass"
+
+  ############################################################
+  # 7. RAHU–KETU MODIFIERS (ACCELERATION VS WITHDRAWAL)
+  ############################################################
+
+  nodal_aspect_modifiers:
+
+    - id: MIS-ASP-RAH-01
+      if:
+        target_planet in [Mars, Mercury]
+        aspected_by: Rahu
+        aspect_type in [5, 7, 9]
+      then:
+        mission_modifier:
+          multiplier: 0.85
+          effect: "Chaotic acceleration and unstable execution"
+
+    - id: MIS-ASP-KET-01
+      if:
+        target_planet in [Mars, Sun]
+        aspected_by: Ketu
+        aspect_type in [5, 7, 9]
+      then:
+        mission_modifier:
+          multiplier: 0.80
+          effect: "Withdrawal from action or authority"
+
+  ############################################################
+  # 8. MULTI-ASPECT RESOLUTION RULES
+  ############################################################
+
+  resolution_logic:
+    stacking_method: multiplicative
+    max_positive_multiplier: 1.30
+    min_negative_multiplier: 0.70
+
+    override_rules:
+      - if: "Saturn aspects Mars AND Mercury strong"
+        then: "Flag mission as highly executable"
+
+      - if: "Mars afflicted AND Mercury afflicted"
+        then: "Flag execution breakdown risk"
+
+      - if: "Rahu aspects Mars AND Saturn weak"
+        then: "Flag reckless mission acceleration"
+
+  ############################################################
+  # 9. FINAL OUTPUT
+  ############################################################
+
+  resolved_mission_aspect_strength_adjustment:
+    adjusted_planet_strength:
+      description: "Planetary strength after aspect-based mission modulation"
+    execution_stability_index:
+      description: "Reliability of sustained action"
+    coordination_integrity_score:
+      description: "Clarity and coherence of execution"
+    burnout_risk_flag:
+      description: "Risk of collapse due to overdrive"
+    mission_success_probability:
+      description: "Likelihood of mission fulfillment"
