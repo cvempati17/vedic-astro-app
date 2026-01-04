@@ -47,6 +47,7 @@ app.use('/api/family-philosophy', familyPhilosophyRoutes);
 const familyMatrixRoutes = require('./routes/familyMatrix');
 app.use('/api', familyMatrixRoutes);
 app.use('/api/families', familyRoutes);
+app.use('/api/time-engine', require('./routes/timeEngine'));
 
 const ZODIAC_SIGNS = [
     'Aries',
