@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // --- PATHS ---
-const BASE_PATH = path.join(__dirname, '../../Family OS - V/03_Family Philosophy');
+const BASE_PATH = path.join(__dirname, '../Family OS - V/03_Family Philosophy');
 const TEMPLATES_PATH = path.join(BASE_PATH, '06_family_philosophy_narrative_templates.yaml');
 const MEMBER_CONTRACT_PATH = path.join(BASE_PATH, '07_family_philosophy_member_output_contract.yaml');
 const FREE_WILL_PATH = path.join(BASE_PATH, '11_family_philosophy_free_will_interventions.yaml');

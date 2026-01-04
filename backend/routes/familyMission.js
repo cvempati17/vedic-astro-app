@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Path to YAML Rules - STRICT SOURCE OF TRUTH
-const MISSION_TEMPLATES_PATH = path.join(__dirname, '../../Family OS - V/02_Mission/06_mission_narrative_templates.yaml');
+const MISSION_TEMPLATES_PATH = path.join(__dirname, '../Family OS - V/02_Mission/06_mission_narrative_templates.yaml');
 
 // Helper to Load YAML
 const loadYaml = (filePath) => {
@@ -346,7 +346,7 @@ router.post('/mission', (req, res) => {
         // VALIDATION CHECK (Shared Engine: 99_mission_output_validator.yaml)
         // --------------------------------------------------------
         const validateOutput = require('../utils/outputValidator');
-        const validatorPath = path.join(__dirname, '../../Family OS - V/02_Mission/99_mission_output_validator.yaml');
+        const validatorPath = path.join(__dirname, '../Family OS - V/02_Mission/99_mission_output_validator.yaml');
         const validationResult = validateOutput(outputText, validatorPath, 'session_family_id');
 
         if (validationResult.status === 'FAIL') {

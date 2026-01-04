@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Path to YAML Rules - STRICT SOURCE OF TRUTH
-const VISION_TEMPLATES_PATH = path.join(__dirname, '../../Family OS - V/01_Vision/06_vision_narrative_templates.yaml');
+const VISION_TEMPLATES_PATH = path.join(__dirname, '../Family OS - V/01_Vision/06_vision_narrative_templates.yaml');
 
 // Helper to Load YAML
 const loadYaml = (filePath) => {
@@ -378,7 +378,7 @@ router.post('/vision', (req, res) => {
         // VALIDATION CHECK (Shared Engine: 99_vision_output_validator.yaml)
         // --------------------------------------------------------
         const validateOutput = require('../utils/outputValidator');
-        const validatorPath = path.join(__dirname, '../../Family OS - V/01_Vision/99_vision_output_validator.yaml');
+        const validatorPath = path.join(__dirname, '../Family OS - V/01_Vision/99_vision_output_validator.yaml');
         const validationResult = validateOutput(outputText, validatorPath, 'session_family_id');
 
         if (validationResult.status === 'FAIL') {
