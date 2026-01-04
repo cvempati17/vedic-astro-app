@@ -1,0 +1,236 @@
+metadata:
+  version: "1.0.0"
+  ayanamsa: "lahiri"
+  purpose: >
+    Defines how Base Natal Strength (0–100) is calculated
+    for each life axis using houses, lords, and yogas.
+    This layer answers WHAT EXISTS in the chart.
+  core_principles:
+    - Axis-based, not planet-based
+    - Deterministic and inspectable
+    - Lagna-relative
+    - No time dependency
+    - Output is capped at 100
+
+# --------------------------------------------------
+# GLOBAL WEIGHTS (USED BY ALL AXES)
+# --------------------------------------------------
+global_weights:
+  house_strength_weight: 0.55
+  lord_strength_weight: 0.30
+  yoga_weight: 0.15
+
+caps:
+  max_axis_strength: 100
+  min_axis_strength: 0
+  no_yoga_cap: 40   # if no supporting yoga exists
+
+notes:
+  - House strength may come from Bhava strength / occupancy rules
+  - Lord strength may come from dignity, placement, aspects
+  - Yoga presence is boolean + type-based bonus
+  - Exact planet strength math is external to this file
+
+# --------------------------------------------------
+# AXIS DEFINITIONS
+# --------------------------------------------------
+axes:
+
+  career:
+    description: >
+      Profession, karma in the world, reputation, achievement.
+    houses:
+      primary: [10]
+      secondary: [11]
+    house_contribution:
+      primary_house_weight: 0.70
+      secondary_house_weight: 0.30
+    lords:
+      primary_lord: 10
+      secondary_lord: 11
+    supporting_yogas:
+      strong:
+        - dharma_karma_adhipati
+        - raja_yoga
+      moderate:
+        - amala_yoga
+    calculation:
+      formula: >
+        BaseCareer =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  wealth:
+    description: >
+      Income, assets, financial stability, accumulation.
+    houses:
+      primary: [2]
+      secondary: [11]
+    house_contribution:
+      primary_house_weight: 0.60
+      secondary_house_weight: 0.40
+    lords:
+      primary_lord: 2
+      secondary_lord: 11
+    supporting_yogas:
+      strong:
+        - dhana_yoga
+        - raja_yoga
+      moderate:
+        - chandra_mangala_yoga
+    calculation:
+      formula: >
+        BaseWealth =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  family:
+    description: >
+      Household stability, lineage, inner security.
+    houses:
+      primary: [2, 4]
+      secondary: []
+    house_contribution:
+      primary_house_weight: 1.0
+    lords:
+      primary_lord: [2, 4]
+    supporting_yogas:
+      strong:
+        - griha_yoga
+      moderate:
+        - moon_venus_association
+    calculation:
+      formula: >
+        BaseFamily =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  authority:
+    description: >
+      Leadership, control, command, governance.
+    houses:
+      primary: [1, 10]
+      secondary: []
+    house_contribution:
+      primary_house_weight: 1.0
+    lords:
+      primary_lord: [1, 10]
+    supporting_yogas:
+      strong:
+        - raja_yoga
+      moderate:
+        - adhi_yoga
+    calculation:
+      formula: >
+        BaseAuthority =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  care:
+    description: >
+      Nurturing, service, responsibility toward dependents.
+    houses:
+      primary: [4, 6]
+      secondary: [12]
+    house_contribution:
+      primary_house_weight: 0.75
+      secondary_house_weight: 0.25
+    lords:
+      primary_lord: [4, 6]
+      secondary_lord: 12
+    supporting_yogas:
+      strong:
+        - seva_yoga
+      moderate:
+        - moon_strength
+    calculation:
+      formula: >
+        BaseCare =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  conflict:
+    description: >
+      Disputes, illness, obstacles, internal and external friction.
+    houses:
+      primary: [6, 8]
+      secondary: [12]
+    house_contribution:
+      primary_house_weight: 0.70
+      secondary_house_weight: 0.30
+    lords:
+      primary_lord: [6, 8]
+      secondary_lord: 12
+    supporting_yogas:
+      strong:
+        - vipareeta_raja_yoga
+      moderate:
+        - dusthana_relief_yoga
+    calculation:
+      formula: >
+        BaseConflict =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  legacy:
+    description: >
+      Long-term outcome, inheritance, dharmic footprint, old age security.
+    houses:
+      primary: [9, 12]
+      secondary: [5]
+    house_contribution:
+      primary_house_weight: 0.75
+      secondary_house_weight: 0.25
+    lords:
+      primary_lord: [9, 12]
+      secondary_lord: 5
+    supporting_yogas:
+      strong:
+        - moksha_yoga
+        - pitru_kripa_yoga
+      moderate:
+        - trine_lord_strength
+    calculation:
+      formula: >
+        BaseLegacy =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+  emotional_load:
+    description: >
+      Psychological burden, stress, internal pressure.
+    houses:
+      primary: [4, 8, 12]
+      secondary: []
+    house_contribution:
+      primary_house_weight: 1.0
+    lords:
+      primary_lord: [4, 8, 12]
+    supporting_yogas:
+      strong:
+        - chandra_graha_yoga
+      moderate:
+        - saturn_moon_contact
+    calculation:
+      formula: >
+        BaseEmotionalLoad =
+          (HouseStrength × global.house_strength_weight)
+        + (LordStrength × global.lord_strength_weight)
+        + (YogaBonus × global.yoga_weight)
+
+# --------------------------------------------------
+# HARD RULES (NON-NEGOTIABLE)
+# --------------------------------------------------
+rules:
+  - If no supporting yoga exists for an axis, cap BaseNatalStrength at metadata.no_yoga_cap
+  - Axis strength must be normalized to 0–100
+  - No axis may borrow strength from another axis
+  - This file must be applied BEFORE any Dasha or Transit logic
+  - Code must not infer or invent yogas not listed here
