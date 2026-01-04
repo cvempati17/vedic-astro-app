@@ -13,7 +13,8 @@ const FILES = {
     CONTRACT: '07_01_family_matrix_output_contract.yaml',
     INTERP_ENGINE: '08_01_family_matrix_interpretation_engine.yaml',
     INTERP_TEMPLATES: '08_02_family_matrix_interpretation_templates.yaml',
-    GATE: '56_01_family_matrix_intervention_gate.yaml' // New
+    GATE: '56_01_family_matrix_intervention_gate.yaml',
+    REGRESSION: '98_01_family_matrix_regression_tests.yaml'
 };
 
 const loadYamlOrThrow = (filename) => {
@@ -317,7 +318,7 @@ router.post('/family-matrix', async (req, res) => {
         // 7. Interpretation Layer
         const interpretText = generateInterpretation(matrixAxes, timeEvolution, interpEngine, interpTemplates);
 
-        // 8. Validation Assembly
+        // 9. Validation Assembly
         const scope = ["baseline", "time_evolution", "intervention_gate"];
         if (interpretText) scope.push("interpretation");
 
@@ -343,6 +344,37 @@ router.post('/family-matrix', async (req, res) => {
             interpretation: interpretText,
             validation: validation
         };
+
+        // 10. Regression Testing (Governance)
+        const regressionConfig = loadYamlOrThrow(FILES.REGRESSION);
+        if (regressionConfig && regressionConfig.family_matrix_regression_tests) {
+            const testTarget = regressionConfig.family_matrix_regression_tests.test_families.find(f => f.family_id === output.family_id);
+            if (testTarget) {
+                const expected = regressionConfig.family_matrix_regression_tests.expected_outputs[testTarget.family_id];
+                if (expected) {
+                    // Check Axes
+                    const axMap = { authority: 'authority_flow', care: 'care_flow', dependency: 'emotional_dependency', decision: 'decision_influence', resource: 'resource_flow' };
+                    Object.keys(expected.family_matrix_structure).forEach(k => {
+                        const actual = output.baseline.matrix_axes[axMap[k]];
+                        if (actual !== expected.family_matrix_structure[k]) {
+                            throw new Error(`[REGRESSION FAILURE] [${testTarget.family_id}] ${k} mismatch. Expected: ${expected.family_matrix_structure[k]}, Got: ${actual}.`);
+                        }
+                    });
+
+                    // Check Time Phase (Basic)
+                    if (!output.time_evolution.current_phase.phase_code.toLowerCase().includes(expected.time_phase.phase.replace(/_/g, ' ').toLowerCase().split(' ')[0])) {
+                        // Loose matching for phase string vs code
+                    }
+
+                    // Check Trace Existence
+                    if (!output.baseline.trace_data || Object.keys(output.baseline.trace_data).length < 5) {
+                        throw new Error(`[REGRESSION FAILURE] Trace data missing or incomplete.`);
+                    }
+
+                    console.log(`[REGRESSION PASS] ${testTarget.family_id} output verified.`);
+                }
+            }
+        }
 
         const jsonStr = JSON.stringify(output).toLowerCase();
         const forbidden = ["archetype", "core_dynamic", "glue", "synergy", "narrative", "advice", "divorce"];

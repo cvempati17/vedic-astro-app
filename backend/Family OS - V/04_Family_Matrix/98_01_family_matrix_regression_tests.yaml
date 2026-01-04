@@ -1,0 +1,132 @@
+family_matrix_regression_tests:
+  metadata:
+    file: 98_01_family_matrix_regression_tests.yaml
+    version: "1.0.0"
+    purpose: >
+      Defines regression test cases to ensure Family Matrix
+      outputs remain stable across code or rule changes.
+    principle: >
+      Known families produce known outputs.
+      Any deviation must be intentional and reviewed.
+
+  test_families:
+    - family_id: FAM_THIYAGRAJAN_001
+      label: Thiyagarajan Family
+    - family_id: FAM_CHANDRA_001
+      label: Chandra Family
+
+  execution_context:
+    support_mode: false
+    emotional_risk_overlay: false
+    conflict_repair_overlay: false
+    interpretation_layer: true
+    trace_layer: true
+
+  ##################################################################
+  # BASELINE EXPECTATIONS
+  ##################################################################
+
+  expected_outputs:
+
+    FAM_THIYAGRAJAN_001:
+
+      family_matrix_structure:
+        authority: 66
+        care: 16
+        dependency: 41
+        decision: 91
+        resource: 38
+
+      interpersonal_flows:
+        Thiyagrajan_to_Nirmala:
+          authority: 73
+          care: 13
+          dependency: 56
+          decision: 89
+          resource: 25
+
+        Thiyagrajan_to_Aditya:
+          authority: 50
+          care: 15
+          dependency: 46
+          decision: 94
+          resource: 48
+
+        Nirmala_to_Aditya:
+          authority: 76
+          care: 20
+          dependency: 23
+          decision: 89
+          resource: 42
+
+      time_phase:
+        phase: Fracture_Risk_Phase
+        cohesion_delta: -17
+        friction_delta: +8
+
+    FAM_CHANDRA_001:
+
+      family_matrix_structure:
+        authority: 56
+        care: 50
+        dependency: 55
+        decision: 71
+        resource: 36
+
+      interpersonal_flows:
+        Chandra_to_Sirisha:
+          authority: 54
+          care: 45
+          dependency: 39
+          decision: 47
+          resource: 37
+
+        Chandra_to_Pragnya:
+          authority: 71
+          care: 41
+          dependency: 55
+          decision: 78
+          resource: 16
+
+        Chandra_to_Veda:
+          authority: 78
+          care: 78
+          dependency: 31
+          decision: 79
+          resource: 22
+
+      time_phase:
+        phase: Strain_Accumulation_Phase
+        cohesion_delta: 0
+        friction_delta: +3
+
+  trace_expectations:
+    require_trace_for_axes:
+      - authority
+      - care
+      - dependency
+      - decision
+      - resource
+
+    require_trace_fields:
+      planet:
+        - planet_name
+        - chart_type
+        - strength_score
+      rule:
+        - rule_id
+        - rule_file
+      axis:
+        - axis_name
+        - contribution_value
+      aggregation:
+        - method
+        - final_score
+
+    forbid_trace_drift:
+      allow_numeric_tolerance: 0
+
+  interpretation_regression:
+    forbid_template_changes_without_version_bump: true
+    require_same_template_ids: true
+    forbid_free_text_generation: true

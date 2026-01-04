@@ -74,3 +74,7 @@ family_matrix_execution_sequence:
 
     - step: 15
       file: 08_03_family_matrix_interpretation_validator.yaml
+
+    - step: 16
+      file: 98_01_family_matrix_regression_tests.yaml
+      blocking: true

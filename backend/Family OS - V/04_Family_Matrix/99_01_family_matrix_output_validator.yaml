@@ -45,6 +45,11 @@ validation_rules:
     forbid_missing_trace: true
     forbid_trace_synthesis: true
 
+  regression_validation:
+    regression_tests_required: true
+    regression_file: 98_01_family_matrix_regression_tests.yaml
+    abort_on_failure: true
+
   forbidden_terms:
     - archetype
     - core_dynamic
