@@ -24,6 +24,14 @@ const FamilyTimeline = ({ members, familyId }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (!members || members.length < 2) return;
+
+            // Check for valid chart data
+            const hasData = members.some(m => m.chart_object && Object.keys(m.chart_object).length > 3);
+            if (!hasData) {
+                setError('Warning: Astrological Data is missing or unlinked. Please ensure you have selected members with Saved Charts in the grid.');
+                setLoading(false);
+                return;
+            }
             setLoading(true);
             try {
                 // Get Start Date (Current Month)
