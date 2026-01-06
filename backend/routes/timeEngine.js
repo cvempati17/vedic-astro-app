@@ -178,7 +178,7 @@ router.post('/calculate', async (req, res) => {
         const natalLayer = { members: {} };
         const memberData = members.map(m => {
             // Normalize Chart Keys
-            let rawChart = m.chart_object.planets || m.chart_object;
+            let rawChart = m.chart_object.planets || m.chart_object.Chartdata || m.chart_object.chartdata || m.chart_object;
             const chart = {};
             if (rawChart) {
                 Object.keys(rawChart).forEach(k => {
