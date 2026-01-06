@@ -178,7 +178,24 @@ router.post('/calculate', async (req, res) => {
         const natalLayer = { members: {} };
         const memberData = members.map(m => {
             // Normalize Chart Keys
-            let rawChart = m.chart_object.planets || m.chart_object.Chartdata || m.chart_object.chartdata || m.chart_object;
+            // Recursive finder for planet data (Robust extraction)
+            const findPlanets = (obj, depth = 0) => {
+                if (!obj || typeof obj !== 'object' || depth > 3) return null;
+                const keys = Object.keys(obj);
+                // Heuristic: Must have Sun and Moon (case-insensitive)
+                const hasSun = keys.some(k => /^sun$/i.test(k));
+                const hasMoon = keys.some(k => /^moon$/i.test(k));
+                if (hasSun && hasMoon) return obj;
+
+                for (let k of keys) {
+                    // unexpected keys like '0', '1' in arrays might cause issues, check plain objects mostly? 
+                    // Arrays are objects in JS, fine to traverse.
+                    const found = findPlanets(obj[k], depth + 1);
+                    if (found) return found;
+                }
+                return null;
+            };
+            let rawChart = findPlanets(m.chart_object) || m.chart_object;
             const chart = {};
             if (rawChart) {
                 Object.keys(rawChart).forEach(k => {
