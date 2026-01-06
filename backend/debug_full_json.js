@@ -151,7 +151,7 @@ async function run() {
     // 4. Timeline
     const timeline = [];
     const start = new Date(); // now
-    for (let i = 0; i < 12; i++) { // Generate 12 months for sample
+    for (let i = 0; i < 15; i++) { // Generate 15 months for sample
         const d = new Date(start); d.setMonth(d.getMonth() + i);
         timeline.push(d.toISOString().slice(0, 7));
     }

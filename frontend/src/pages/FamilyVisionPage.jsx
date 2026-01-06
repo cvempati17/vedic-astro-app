@@ -1122,8 +1122,11 @@ const FamilyVisionPage = ({ onBack }) => {
                                 <div style={{ background: '#12162a', padding: '40px', borderRadius: '10px', border: '1px solid #2a2f4a', color: '#d1d5db' }}>
                                     <FamilyTimeline
                                         members={inputRows.map(r => {
-                                            const c = savedCharts.find(sc => sc._id === r.chartId);
-                                            return c ? { ...c, role: r.relation, id: c._id, chart_object: c } : null;
+                                            const c = savedCharts.find(sc => sc._id === r.chartId || sc.name === r.name);
+                                            if (!c) return null; // Logic: valid chart required
+                                            // Flatten structure if needed
+                                            const rawChart = c.chart_object || c.planets || c;
+                                            return { ...c, role: r.relation, id: c._id || r.memberId, chart_object: rawChart };
                                         }).filter(Boolean)}
                                         familyId={selectedFamilyId || `session_${Date.now()}`}
                                     />

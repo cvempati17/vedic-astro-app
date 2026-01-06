@@ -24,20 +24,43 @@ const FamilyTimeline = ({ members, familyId }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (!members || members.length < 2) return;
+            setLoading(true);
 
-            // Check for valid chart data
-            const hasData = members.some(m => m.chart_object && Object.keys(m.chart_object).length > 3);
+            // Self-Healing: Enrich members if chart data is missing (e.g. only summary passed)
+            const enrichedMembers = await Promise.all(members.map(async m => {
+                const co = m.chart_object || {};
+                const keys = Object.keys(co).map(k => k.toLowerCase());
+                const hasPlanets = keys.includes('sun') || keys.includes('ascendant');
+
+                // If planets missing but ID exists, try to fetch full chart
+                if (!hasPlanets && m.id && m.id.length > 10) {
+                    try {
+                        const res = await axios.get(`${API_URL}/api/charts/${m.id}`);
+                        if (res.data.success && res.data.chart) {
+                            // Found valid chart, extract planets
+                            const fullPlanets = res.data.chart.planets || res.data.chart.chart_object;
+                            return { ...m, chart_object: fullPlanets };
+                        }
+                    } catch (e) {
+                        console.warn("Auto-fetch failed for member:", m.name);
+                    }
+                }
+                return m;
+            }));
+
+            // Validate Enriched Data
+            const hasData = enrichedMembers.some(m => m.chart_object && (m.chart_object.Sun || m.chart_object.sun || Object.keys(m.chart_object).length > 8));
             if (!hasData) {
-                setError('Warning: Astrological Data is missing or unlinked. Please ensure you have selected members with Saved Charts in the grid.');
+                setError(`Data Error: Charts not found. Please ensure members are linked to Saved Charts. Received Keys: ${Object.keys(members[0]?.chart_object || {}).join(', ')}`);
                 setLoading(false);
                 return;
             }
-            setLoading(true);
+
             try {
                 // Get Start Date (Current Month)
                 const start = new Date().toISOString().slice(0, 7); // YYYY-MM
                 const response = await axios.post(`${API_URL}/api/time-engine/calculate`, {
-                    members,
+                    members: enrichedMembers,
                     familyId,
                     startDate: start
                 });
