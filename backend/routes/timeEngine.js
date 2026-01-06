@@ -360,37 +360,33 @@ router.post('/calculate', async (req, res) => {
 
         // Current Transits (Mock - need Real Ephemeris or Fixed for MVP)
         // Fixed for '2026-01': Saturn in Pisces, Jupiter in Gemini, Rahu in Aquarius, Ketu in Leo
-        const currentTransits = {
-            Saturn: 345, // Pisces approx
-            Jupiter: 75, // Gemini approx
+        // Initial Transits (Mock - Jan 2026)
+        const initialTransits = {
+            Saturn: 345, // Pisces
+            Jupiter: 75, // Gemini
             Rahu: 315, // Aquarius
             Ketu: 135  // Leo
         };
+        const TRANSIT_SPEEDS = { Saturn: 1.0, Jupiter: 2.5, Rahu: -1.5, Ketu: -1.5 };
 
-        const checkGate = (axis, chart, asc) => {
+        const checkGate = (axis, chart, asc, transits) => {
             const def = transitMapping.axes[axis];
-            const planets = transitMapping.planets;
             const mapping = def.houses;
-
-            // Logic: Check if Saturn/Jup/Rahu/Ketu interact with houses
-            // Default Open? No, Gate Priority: BLOCK > HOLD > OPEN
-            // Start with Neural/Hold?
-            // "Any BLOCK -> BLOCK".
-
-            let gate = "HOLD"; // Default state
+            let gate = "HOLD"; // Default
             let multiplier = 0.95;
 
             // Check Saturn (Blocker)
-            const saturn = planets.Saturn;
-            const satHouse = getHouseNumber(asc, currentTransits.Saturn);
+            const satPos = transits.Saturn;
+            const satHouse = getHouseNumber(asc, satPos);
             if (mapping.includes(satHouse)) {
                 gate = "BLOCK";
-                multiplier = 0.65; // Base Block
+                multiplier = 0.65;
             }
 
             // Check Jupiter (Opener)
-            const jupHouse = getHouseNumber(asc, currentTransits.Jupiter);
-            if (gate !== "BLOCK") { // Can't override block
+            const jupPos = transits.Jupiter;
+            const jupHouse = getHouseNumber(asc, jupPos);
+            if (gate !== "BLOCK") {
                 if (mapping.includes(jupHouse)) {
                     gate = "OPEN";
                     multiplier = 1.25;
@@ -400,19 +396,19 @@ router.post('/calculate', async (req, res) => {
             return { gate, multiplier, dominant_planet: gate === "BLOCK" ? "Saturn" : (gate === "OPEN" ? "Jupiter" : "Neutral") };
         };
 
-        // Calc Transit for one representative Lagna (Family Lagna? Or Average?)
-        // Constraint: "Universal Timing". Usually per person. 
-        // For Family Organism, we iterate per axis.
-        // Simplified: Use "Family Head" Lagna or Aggregation?
-        // Prompt says "Apply transit_axis_mapping.yaml".
-        // Engine typically computes for the Entity. Family is the Entity.
-        // We need a "Family Ascendant" or use the Head's Ascendant.
-        // I will use Member 1 (Head) Ascendant for Transit reference in this MVP.
         const refAsc = memberData[0].ascendant;
 
         timeline.forEach((t, tIdx) => {
+            // Simulate Movement
+            const transits = {
+                Saturn: normalizeAngle(initialTransits.Saturn + (TRANSIT_SPEEDS.Saturn * tIdx)),
+                Jupiter: normalizeAngle(initialTransits.Jupiter + (TRANSIT_SPEEDS.Jupiter * tIdx)),
+                Rahu: normalizeAngle(initialTransits.Rahu + (TRANSIT_SPEEDS.Rahu * tIdx)),
+                Ketu: normalizeAngle(initialTransits.Ketu + (TRANSIT_SPEEDS.Ketu * tIdx))
+            };
+
             axesList.forEach(axis => {
-                const { gate, multiplier, dominant_planet } = checkGate(axis, {}, refAsc);
+                const { gate, multiplier, dominant_planet } = checkGate(axis, {}, refAsc, transits);
                 const fInt = familyLayer.axes[axis][tIdx].family_intensity;
                 const effInt = Math.min(135, Math.floor(fInt * multiplier));
 
