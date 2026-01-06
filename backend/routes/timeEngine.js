@@ -177,8 +177,17 @@ router.post('/calculate', async (req, res) => {
         // --- STEP 1: NATAL LAYER (Compute Base Strength per Axis) ---
         const natalLayer = { members: {} };
         const memberData = members.map(m => {
-            const chart = m.chart_object.planets || m.chart_object; // Normalize
-            const asc = Number(chart.Ascendant || (typeof chart.ascendant === 'object' ? chart.ascendant.longitude : chart.ascendant)) || 0;
+            // Normalize Chart Keys
+            let rawChart = m.chart_object.planets || m.chart_object;
+            const chart = {};
+            if (rawChart) {
+                Object.keys(rawChart).forEach(k => {
+                    const key = k.charAt(0).toUpperCase() + k.slice(1).toLowerCase();
+                    const val = rawChart[k];
+                    chart[key] = (val && typeof val === 'object' && val.longitude !== undefined) ? Number(val.longitude) : Number(val);
+                });
+            }
+            const asc = chart.Ascendant || 0;
 
             // Calc Base Strengths
             const axisStrengths = {};
@@ -221,6 +230,14 @@ router.post('/calculate', async (req, res) => {
                 // No Yoga Cap
                 if (yBonus === 0 && base > natalDefinitions.caps.no_yoga_cap) {
                     base = natalDefinitions.caps.no_yoga_cap;
+                }
+
+                if (axis.toLowerCase() === 'career') {
+                    console.log(`[DEBUG] Member ${m.id} Career Calc:`);
+                    console.log(`- HStr: ${hStr.toFixed(1)}`);
+                    console.log(`- LStr: ${lStr.toFixed(1)}`);
+                    console.log(`- Base (Pre-Cap): ${base.toFixed(1)}`);
+                    console.log(`- Final Base: ${natalDefinitions.caps.no_yoga_cap} (forced cap if low) or ${Math.min(100, Math.floor(base))}`);
                 }
 
                 axisStrengths[axis] = Math.min(100, Math.floor(base));
@@ -289,6 +306,11 @@ router.post('/calculate', async (req, res) => {
                     if (funcNature.functional_benefic.includes(mdPlan)) mult *= 1.1;
 
                     let intensity = Math.min(100, base * mult);
+
+                    if (axis.toLowerCase() === 'career' && t === timeline[0]) {
+                        console.log(`[DEBUG] Dasha Calc (First Month): Base=${base}, Mult=${mult.toFixed(2)}, YK=${yogakarakas.includes(mdPlan)}, Intensity=${intensity}`);
+                    }
+
                     return { time: t, intensity: Math.floor(intensity), mahadasha: mdPlan, antardasha: runningDasha.ad };
                 });
                 individualDashaLayer[m.id][axis] = curve;
