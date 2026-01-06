@@ -243,7 +243,7 @@ router.post('/calculate', async (req, res) => {
                 axisStrengths[axis] = Math.min(100, Math.floor(base));
             });
 
-            natalLayer.members[m.id] = axisStrengths;
+            natalLayer.members[m.id] = { ...axisStrengths, _debug_chart_keys: Object.keys(chart) };
             return { ...m, axisStrengths, ascendant: asc, chart };
         });
 
