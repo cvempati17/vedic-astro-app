@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import './PalmistryPage.css'; // Reuse existing styles
@@ -177,6 +177,15 @@ const FamilyVisionPage = ({ onBack }) => {
     const [showConsentModal, setShowConsentModal] = useState(false);
     const [currentMembers, setCurrentMembers] = useState([]);
     const [consentChecks, setConsentChecks] = useState({ understand: false, choose: false });
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const deleteNoRef = useRef(null);
+
+    // Focus "No" when delete modal opens
+    useEffect(() => {
+        if (showDeleteModal && deleteNoRef.current) {
+            deleteNoRef.current.focus();
+        }
+    }, [showDeleteModal]);
 
     // Trace View State
     const [traceData, setTraceData] = useState(null);
@@ -403,9 +412,10 @@ const FamilyVisionPage = ({ onBack }) => {
     };
 
     // Handler: Delete Family
-    const handleDeleteFamily = async () => {
+    // Handler: Delete Family
+    const confirmDeleteFamily = async () => {
+        setShowDeleteModal(false);
         if (!selectedFamilyId) return;
-        if (!window.confirm("Are you sure you want to delete this family? This action cannot be undone.")) return;
 
         setLoading(true);
         setStatusMessage('Deleting Family...');
@@ -421,6 +431,7 @@ const FamilyVisionPage = ({ onBack }) => {
                     { id: 3, chartId: '', relation: 'Son' }
                 ]);
                 setStatusMessage('Family deleted.');
+                setReport(null); // Reset view
                 setTimeout(() => setStatusMessage(''), 2000);
             }
         } catch (e) {
@@ -486,13 +497,22 @@ const FamilyVisionPage = ({ onBack }) => {
                         {savedFamilies.map(f => <option key={f._id} value={f._id}>{f.name}</option>)}
                     </select>
                     {selectedFamilyId && (
-                        <button
-                            style={{ ...buttonStyle, marginLeft: '10px', color: '#ef4444', borderColor: '#ef4444', padding: '8px 12px' }}
-                            onClick={handleDeleteFamily}
-                            title="Delete this family"
-                        >
-                            🗑️
-                        </button>
+                        <>
+                            <button
+                                style={{ ...buttonStyle, marginLeft: '10px', color: '#60a5fa', borderColor: '#60a5fa', padding: '8px 12px', fontWeight: 'bold' }}
+                                onClick={handleGenerate}
+                                title="Apply / Refresh Report"
+                            >
+                                ↻ Apply
+                            </button>
+                            <button
+                                style={{ ...buttonStyle, marginLeft: '10px', color: '#ef4444', borderColor: '#ef4444', padding: '8px 12px' }}
+                                onClick={() => setShowDeleteModal(true)}
+                                title="Delete this family"
+                            >
+                                🗑️
+                            </button>
+                        </>
                     )}
                 </div>
             </div>
@@ -1253,6 +1273,30 @@ const FamilyVisionPage = ({ onBack }) => {
                     </div>
                 )}
             </div>
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                    <div style={{ background: '#1f2937', padding: '30px', borderRadius: '10px', border: '1px solid #ef4444', maxWidth: '400px', textAlign: 'center' }}>
+                        <h3 style={{ color: '#ef4444', marginTop: 0 }}>Delete Family?</h3>
+                        <p style={{ color: '#d1d5db', marginBottom: '30px' }}>Are you sure you want to delete this family? This action cannot be undone.</p>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                            <button
+                                ref={deleteNoRef}
+                                style={{ ...buttonStyle, padding: '10px 30px', background: '#374151', border: '1px solid #4b5563' }}
+                                onClick={() => setShowDeleteModal(false)}
+                            >
+                                No
+                            </button>
+                            <button
+                                style={{ ...buttonStyle, padding: '10px 30px', background: '#ef4444', color: '#fff', border: 'none' }}
+                                onClick={confirmDeleteFamily}
+                            >
+                                Yes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
