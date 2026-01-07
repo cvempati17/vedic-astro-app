@@ -103,17 +103,32 @@ const FamilyTimeline = ({ members, familyId }) => {
         const transLayer = data.transit_layer.axes[selectedAxis] || [];
         const guideLayer = data.guidance_layer.axes[selectedAxis] || [];
 
-        // Merge
+        // Merge Family and Individual Data
         return effLayer.map((pt, idx) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
+
+            // Build Individual Data Points
+            const memberPoints = {};
+            if (members && data.individual_dasha_layer) {
+                members.forEach(m => {
+                    const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
+                    if (mLayer && mLayer[idx]) {
+                        memberPoints[`member_${m.id}`] = mLayer[idx].intensity;
+                        // We could also pass individual phase/gate if calculated, 
+                        // but sticking to intensity for now as per instructions.
+                    }
+                });
+            }
+
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity, // 0-135
                 familyBase: pt.family_intensity, // 0-100
                 gate: tr.gate, // OPEN, HOLD, BLOCK
                 guidance_key: gd.guidance_key,
-                dominant_planet: tr.dominant_planet
+                dominant_planet: tr.dominant_planet,
+                ...memberPoints
             };
         });
     };
@@ -149,19 +164,19 @@ const FamilyTimeline = ({ members, familyId }) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload;
             const gate = data.gate; // OPEN, HOLD, BLOCK
-            const intensity = data.intensity;
+            const familyIntensity = data.intensity;
 
             // Resolve Semantics from Governance Layer
             const phaseKey = `FM_PHASE_${gate}`;
             const semantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
 
-            // Fallback colors
-            const color = gateColors[gate] || '#ccc';
+            // Fallback colors for Phase Dot
+            const phaseColor = gateColors[gate] || '#ccc';
 
             return (
                 <div style={{
-                    backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                    border: `1px solid ${color}`,
+                    backgroundColor: 'rgba(31, 41, 55, 0.95)', // Gray 800
+                    border: '1px solid #4b5563', // Neutral Gray 600
                     borderRadius: '8px',
                     padding: '12px',
                     boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
@@ -177,17 +192,29 @@ const FamilyTimeline = ({ members, familyId }) => {
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                         <div style={{
                             width: '10px', height: '10px', borderRadius: '50%',
-                            backgroundColor: color, marginRight: '8px'
+                            backgroundColor: phaseColor, marginRight: '8px'
                         }} />
-                        <span style={{ fontWeight: 'bold', color: color, fontSize: '14px' }}>
+                        <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '14px' }}>
                             {gate} PHASE
                         </span>
                     </div>
 
-                    {/* Intensity */}
-                    <div style={{ marginBottom: '8px', fontSize: '12px', color: '#d1d5db' }}>
-                        Intensity: <strong>{intensity?.toFixed(0) || 0}</strong>
+                    {/* Family Intensity */}
+                    <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Family Intensity:</span>
+                        <strong>{familyIntensity?.toFixed(0)}</strong>
                     </div>
+
+                    {/* Member Intensities (if active) */}
+                    {payload.length > 0 && payload.map((entry, idx) => {
+                        if (entry.dataKey === 'intensity' || entry.dataKey === 'familyBase') return null; // Skip main lines
+                        return (
+                            <div key={idx} style={{ fontSize: '11px', color: '#9ca3af', display: 'flex', justifyContent: 'space-between' }}>
+                                <span>{entry.name}:</span>
+                                <span>{entry.value?.toFixed(0)}</span>
+                            </div>
+                        );
+                    })}
 
                     {/* Semantic Explanation (Read-Only) */}
                     {semantics && (
@@ -279,7 +306,21 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 />
                             ))}
 
-                            {/* Lines */}
+                            {/* Member Lines (Individual Overlay) */}
+                            {members && members.map((m, idx) => (
+                                <Line
+                                    key={m.id}
+                                    type="monotone"
+                                    dataKey={`member_${m.id}`}
+                                    stroke="#9ca3af"
+                                    strokeOpacity={0.4}
+                                    strokeWidth={1}
+                                    dot={false}
+                                    name={m.name || `Member ${idx + 1}`}
+                                    strokeDasharray="3 3"
+                                />
+                            ))}
+
                             <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} />
                             <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} />
                         </LineChart>
@@ -299,7 +340,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             }}>{chartData[0].gate}</span>
                         </div>
                         <div style={{ gridColumn: '1 / -1' }}>
-                            <strong>Guidance:</strong>
+                            <strong>Strategic Context:</strong>
                             <div style={{ marginTop: '5px', fontStyle: 'italic', color: '#e6c87a' }}>
                                 {interpretations && chartData[0].guidance_key ?
                                     (interpretations.guidance[chartData[0].guidance_key.split('.')[0]]?.[chartData[0].guidance_key.split('.')[1]]?.[chartData[0].guidance_key.split('.')[2]] || chartData[0].guidance_key)
