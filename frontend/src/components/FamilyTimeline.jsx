@@ -140,22 +140,22 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     const gateColors = {
         OPEN: '#2ECC71', // Green
-        HOLD: '#F1C40F', // Amber
-        BLOCK: '#E74C3C' // Red
+        HOLD: '#F39C12', // Bronze/Amber (Governance aligned)
+        BLOCK: '#8E44AD' // Purple (Governance aligned)
     };
 
-    // Custom Tooltip Component
+    // Custom Tooltip Component (Read-Only Logic)
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload;
             const gate = data.gate; // OPEN, HOLD, BLOCK
             const intensity = data.intensity;
 
-            // Resolve Semantics
+            // Resolve Semantics from Governance Layer
             const phaseKey = `FM_PHASE_${gate}`;
             const semantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
 
-            // Fallback colors if not found in semantics
+            // Fallback colors
             const color = gateColors[gate] || '#ccc';
 
             return (
@@ -166,7 +166,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                     padding: '12px',
                     boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
                     maxWidth: '300px',
-                    color: '#e6e6e6'
+                    color: '#e6e6e6',
+                    zIndex: 1000
                 }}>
                     <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>
                         <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
@@ -197,7 +198,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             fontSize: '12px',
                             lineHeight: '1.4',
                             fontStyle: 'italic',
-                            color: '#9ca3af'
+                            color: '#e6c87a' // Using Gold/Secondary color for text
                         }}>
                             {semantics.short_explanation}
                         </div>
@@ -207,6 +208,8 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
         return null;
     };
+
+
 
 
     if (loading) return <div style={{ color: '#fff' }}>Loading Time Engine...</div>;
