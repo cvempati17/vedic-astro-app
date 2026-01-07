@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PhaseTraceDrawer from './PhaseTraceDrawer';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ReferenceArea, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 
@@ -22,6 +23,7 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [selectedAxis, setSelectedAxis] = useState('career');
     const [interpretations, setInterpretations] = useState(null);
     const [language, setLanguage] = useState('en');
+    const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null });
 
     // Fetch Interpretations
     useEffect(() => {
@@ -286,9 +288,34 @@ const FamilyTimeline = ({ members, familyId }) => {
 
             {/* Graph */}
             {data && (
-                <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px' }}>
+                <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
+                        Click point to inspect logic
+                    </div>
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <LineChart
+                            data={chartData}
+                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            onClick={(e) => {
+                                if (e && e.activePayload && e.activePayload.length) {
+                                    const pt = e.activePayload[0].payload;
+                                    const t = pt.time;
+                                    // Find Trace Data
+                                    const traceArr = data.trace_layer?.axes?.[selectedAxis];
+                                    const trace = traceArr?.find(tr => tr.time === t);
+
+                                    if (trace) {
+                                        setDrawerState({
+                                            isOpen: true,
+                                            data: trace,
+                                            time: t,
+                                            phase: trace.phase_resolution
+                                        });
+                                    }
+                                }
+                            }}
+                            style={{ cursor: 'pointer' }}
+                        >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
@@ -352,6 +379,16 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
+
+
+            <PhaseTraceDrawer
+                isOpen={drawerState.isOpen}
+                onClose={() => setDrawerState(prev => ({ ...prev, isOpen: false }))}
+                traceData={drawerState.data}
+                axis={selectedAxis}
+                time={drawerState.time}
+                phase={drawerState.phase}
+            />
 
         </div>
     );
