@@ -317,6 +317,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }
                                 }
                             }}
+                            onMouseLeave={() => setHoveredMemberId(null)} // FIX: Safety clear on exit
                             style={{ cursor: 'pointer' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
