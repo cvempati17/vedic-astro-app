@@ -373,7 +373,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            {!frozenPoint && <Tooltip content={<CustomTooltip />} />}
+                            {!frozenPoint && <Tooltip content={<CustomTooltip />} wrapperStyle={{ pointerEvents: 'none' }} />}
 
 
                             {getGateRegions().map((r, i) => (
