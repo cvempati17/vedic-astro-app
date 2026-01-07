@@ -201,16 +201,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
-            {data && data.natal_layer && (
-                <div style={{ marginTop: '20px', padding: '10px', background: '#333', fontSize: '10px', fontFamily: 'monospace' }}>
-                    <strong>Debug Info:</strong><br />
-                    {Object.entries(data.natal_layer.members).map(([id, stats]) => (
-                        <div key={id}>
-                            Member {id}: Keys Found: {stats._debug_chart_keys ? stats._debug_chart_keys.join(', ') : 'NONE'}
-                        </div>
-                    ))}
-                </div>
-            )}
+
         </div>
     );
 };
