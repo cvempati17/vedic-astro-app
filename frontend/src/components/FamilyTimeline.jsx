@@ -101,6 +101,38 @@ const FamilyTimeline = ({ members, familyId }) => {
         fetchData();
     }, [members, familyId]);
 
+    // Deep Link Logic: Handle URL Params on Data Load
+    useEffect(() => {
+        if (!data) return;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("trace") === "open") {
+            const axisParam = params.get("axis");
+            const periodParam = params.get("period");
+
+            if (axisParam && periodParam) {
+                // Sync Axis if needed (Note: State update effectively happens, but we must use passed param for lookup immediately if mismatch)
+                if (axisParam !== selectedAxis) {
+                    setSelectedAxis(axisParam);
+                }
+
+                // Find Trace
+                const traceArr = data.trace_layer?.axes?.[axisParam];
+                const trace = traceArr?.find(tr => tr.time === periodParam);
+
+                if (trace) {
+                    setDrawerState({
+                        isOpen: true,
+                        data: trace,
+                        time: periodParam,
+                        phase: trace.phase_resolution
+                    });
+                    // Clean URL? (Optional - per instructions "You may optionally clean")
+                    // window.history.replaceState(null, "", window.location.pathname);
+                }
+            }
+        }
+    }, [data]); // Run when data loads.
+
     const getAxisData = () => {
         if (!data || !data.effective_intensity_layer) return [];
         const effLayer = data.effective_intensity_layer.axes[selectedAxis] || [];
@@ -119,6 +151,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                     const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
                     if (mLayer && mLayer[idx]) {
                         memberPoints[`member_${m.id}`] = mLayer[idx].intensity;
+                        // Use Member Phase if available, else derive? No, strict backend.
+                        // memberPoints[`phase_${m.id}`] = mLayer[idx].phase; // Future
                     }
                 });
             }
@@ -161,8 +195,16 @@ const FamilyTimeline = ({ members, familyId }) => {
         BLOCK: '#8E44AD' // Purple (Governance aligned)
     };
 
-    // Custom Tooltip Component (Read-Only Logic)
+    // Custom Tooltip Component (Interactable Phase + Compare + "Why?")
     const CustomTooltip = ({ active, payload, label }) => {
+        const [showComparison, setShowComparison] = useState(false);
+
+        // Reset comparison on member change or unmount
+        const activeMemberInfo = hoveredMemberId || focusedMemberId;
+        useEffect(() => {
+            setShowComparison(false);
+        }, [activeMemberInfo]);
+
         if (active && payload && payload.length) {
             const point = payload[0].payload;
             const gate = point.gate; // OPEN, HOLD, BLOCK
@@ -189,39 +231,58 @@ const FamilyTimeline = ({ members, familyId }) => {
                     boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
                     maxWidth: '300px',
                     color: '#e6e6e6',
-                    zIndex: 1000
+                    zIndex: 1000,
+                    pointerEvents: 'auto' // Allow interaction
                 }}>
                     <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>
                         <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
                     </div>
 
-                    {/* Phase Header (Family Context Always Visible) */}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <div style={{
-                            width: '10px', height: '10px', borderRadius: '50%',
-                            backgroundColor: phaseColor, marginRight: '8px'
-                        }} />
-                        <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '14px' }}>
-                            {gate} PHASE
-                        </span>
-                    </div>
+                    {/* Phase Header (Family Context Always Visible at top level?) No, Pic 2 logic */}
+                    {/* Actually Pic 2 logic suggests Member replaces Family. 
+                        But User Prompt says: "Compare others" appears inside tooltip.
+                        And "Why?" appears in both context. */}
 
                     {/* Active Member Context */}
                     {activeMember ? (
-                        <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
-                            <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#e6c87a', marginBottom: '4px' }}>
-                                {activeMember.name}
+                        <>
+                            <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#e6c87a', marginBottom: '4px' }}>
+                                    {activeMember.name}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#d1d5db' }}>
+                                    Intensity: <strong>{memberIntensity?.toFixed(0)}</strong>
+                                </div>
                             </div>
-                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>
-                                Intensity: <strong>{memberIntensity?.toFixed(0)}</strong>
+
+                            {/* Phase Context (Still relevant to member locally? System only calculates Family Phase) */}
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                                <div style={{
+                                    width: '8px', height: '8px', borderRadius: '50%',
+                                    backgroundColor: phaseColor, marginRight: '8px'
+                                }} />
+                                <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '12px' }}>
+                                    {gate} (Family Context)
+                                </span>
                             </div>
-                        </div>
+                        </>
                     ) : (
                         /* Family Context (Default) - Pic 2 Behavior */
-                        <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Family Intensity:</span>
-                            <strong>{familyIntensity?.toFixed(0)}</strong>
-                        </div>
+                        <>
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                                <div style={{
+                                    width: '10px', height: '10px', borderRadius: '50%',
+                                    backgroundColor: phaseColor, marginRight: '8px'
+                                }} />
+                                <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '14px' }}>
+                                    {gate} PHASE
+                                </span>
+                            </div>
+                            <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Family Intensity:</span>
+                                <strong>{familyIntensity?.toFixed(0)}</strong>
+                            </div>
+                        </>
                     )}
 
                     {/* Semantic Explanation (Read-Only) */}
@@ -238,6 +299,66 @@ const FamilyTimeline = ({ members, familyId }) => {
                             {semantics.short_explanation}
                         </div>
                     )}
+
+                    {/* Compare Others Affordance */}
+                    {activeMember && !showComparison && members.length > 1 && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setShowComparison(true); }}
+                            style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', marginTop: '8px', padding: 0 }}
+                        >
+                            Compare others ▸
+                        </button>
+                    )}
+
+                    {/* Expanded Comparison View */}
+                    {showComparison && (
+                        <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #374151' }}>
+                            {members.filter(m => m.id !== activeMemberId).map(m => (
+                                <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#9ca3af', marginBottom: '4px' }}>
+                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4b5563' }} />
+                                    {/* Phase dot neutral since we don't have member phases yet */}
+                                    <span style={{}}>
+                                        {m.name}:
+                                    </span>
+                                    <span style={{ color: '#d1d5db' }}>
+                                        {point[`member_${m.id}`]?.toFixed(0)}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Why? Button (Trace Trigger) */}
+                    {data?.trace_layer && (
+                        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === point.time);
+                                    if (trace) {
+                                        setDrawerState({
+                                            isOpen: true,
+                                            data: trace,
+                                            time: point.time,
+                                            phase: trace.phase_resolution
+                                        });
+                                    }
+                                }}
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    border: '1px solid #4b5563',
+                                    borderRadius: '4px',
+                                    padding: '2px 8px',
+                                    color: '#e5e7eb',
+                                    fontSize: '11px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Using Logic?
+                            </button>
+                        </div>
+                    )}
+
                 </div>
             );
         }
@@ -317,7 +438,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }
                                 }
                             }}
-                            onMouseLeave={() => setHoveredMemberId(null)} // FIX: Safety clear on exit
+                            onMouseLeave={() => setHoveredMemberId(null)} // Safety clear
                             style={{ cursor: 'pointer' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />

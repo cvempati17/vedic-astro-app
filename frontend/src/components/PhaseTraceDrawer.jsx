@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase }) => {
+    const [showToast, setShowToast] = useState(false);
+
     if (!isOpen || !traceData) return null;
 
     // Helper to format rule names
@@ -16,6 +18,19 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase }) => 
         if (str.includes('HIGH')) return '#E74C3C'; // Red (Risk)
         if (str.includes('SUPPRESSED')) return '#F39C12'; // Amber
         return '#9ca3af'; // Grey
+    };
+
+    const handleShare = () => {
+        const params = new URLSearchParams({
+            axis,
+            period: time,
+            trace: 'open'
+        });
+        const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        navigator.clipboard.writeText(url).then(() => {
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+        });
     };
 
     return (
@@ -40,15 +55,23 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase }) => 
             <div style={{ marginBottom: '24px', borderBottom: '1px solid #374151', paddingBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <h2 style={{ margin: 0, color: '#e6c87a', fontSize: '20px' }}>Phase Logic Trace</h2>
-                    <button
-                        onClick={onClose}
-                        style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '24px' }}
-                    >
-                        ×
-                    </button>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button
+                            onClick={handleShare}
+                            style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
+                        >
+                            Share
+                        </button>
+                        <button
+                            onClick={onClose}
+                            style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '24px', lineHeight: '1' }}
+                        >
+                            ×
+                        </button>
+                    </div>
                 </div>
                 <div style={{ color: '#9ca3af', fontSize: '14px' }}>
-                    <strong>{time}</strong> • <span>{axis.toUpperCase()}</span>
+                    <strong>{time}</strong> • <span>{axis ? axis.toUpperCase() : ''}</span>
                 </div>
             </div>
 
@@ -76,46 +99,67 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase }) => 
             </div>
 
             {/* Evaluation Steps */}
-            <h3 style={{ color: '#d1d5db', fontSize: '16px', marginBottom: '16px' }}>Evaluation Sequence</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ flex: 1 }}>
+                <h3 style={{ fontSize: '14px', color: '#9ca3af', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Evaluation Path</h3>
+
                 {traceData.evaluation_steps.map((step, idx) => (
                     <div key={idx} style={{
-                        position: 'relative',
-                        paddingLeft: '24px',
-                        borderLeft: `2px solid ${getOutcomeColor(step.outcome, step.rule)}`
+                        marginBottom: '16px',
+                        paddingLeft: '16px',
+                        borderLeft: `2px solid ${getOutcomeColor(step.outcome || step.risk_level)}`,
+                        position: 'relative'
                     }}>
-                        {/* Dot */}
                         <div style={{
-                            position: 'absolute', left: '-6px', top: '0',
-                            width: '10px', height: '10px', borderRadius: '50%',
-                            backgroundColor: '#111827',
-                            border: `2px solid ${getOutcomeColor(step.outcome, step.rule)}`
+                            position: 'absolute', left: '-5px', top: '0',
+                            width: '8px', height: '8px', borderRadius: '50%',
+                            backgroundColor: '#374151'
                         }} />
 
                         <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>
-                            Step {step.step} • {formatRule(step.rule)}
+                            Step {step.step}: {formatRule(step.rule || step.rule_type)}
                         </div>
 
                         <div style={{ color: '#e5e7eb', fontSize: '14px', marginBottom: '4px' }}>
-                            <strong>Outcome:</strong> <span style={{ color: getOutcomeColor(step.outcome, step.rule) }}>
-                                {String(step.outcome).replace(/_/g, ' ')}
-                            </span>
+                            {step.risk_level ? `Risk Level: ${step.risk_level}` : `Result: ${step.outcome}`}
                         </div>
 
-                        {/* Details */}
-                        <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                            {step.risk_level && <div>Risk Level: {step.risk_level}</div>}
-                            {step.house_hit && <div>House Hit: {step.house_hit}</div>}
-                            {step.suppression_reason && <div style={{ color: '#F39C12' }}>Reason: {step.suppression_reason}</div>}
-                        </div>
+                        {step.threshold && (
+                            <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                                Value: {Math.round(step.intensity)} vs Threshold: {step.threshold}
+                            </div>
+                        )}
+                        {step.description && (
+                            <div style={{ fontSize: '12px', color: '#9ca3af', fontStyle: 'italic', marginTop: '4px' }}>
+                                {step.description}
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
 
-            {/* Footer */}
-            <div style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid #374151', color: '#6b7280', fontSize: '12px', textAlign: 'center' }}>
-                System Trace v1.1.0 • Governance Locked
-            </div>
+            {/* Disclaimer */}
+            <footer style={{ marginTop: '24px', borderTop: '1px solid #374151', paddingTop: '16px', fontSize: '11px', color: '#4b5563', textAlign: 'center' }}>
+                This explanation reflects system evaluation steps. It does not predict future outcomes.
+            </footer>
+
+            {/* Toast */}
+            {showToast && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    background: '#1f2937',
+                    color: '#f3f4f6',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                    zIndex: 3000,
+                    border: '1px solid #374151'
+                }}>
+                    Link copied to clipboard
+                </div>
+            )}
         </div>
     );
 };
