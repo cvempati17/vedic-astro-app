@@ -1,0 +1,40 @@
+meta:
+  axis: wealth
+  version: "1.0"
+  status: "locked"
+  description: "Narrative definitions for the Wealth axis"
+
+wealth:
+  title: "Wealth & Resource Stability"
+
+  description:
+    short: >
+      How resources, income flow, and material stability evolve through time.
+
+    medium: >
+      Wealth describes how a person acquires, manages, and sustains resources
+      over time. This axis reflects income flow, savings behavior, financial
+      responsibility, and the capacity to build material stability.
+      It does not measure luxury, lifestyle, or comparison with others.
+      Instead, it shows when resource-building is supported, when caution
+      is required, and when consolidation is more important than expansion.
+
+    long: >
+      Wealth represents the timing and sustainability of material resources.
+      It reflects how income, assets, and financial responsibility develop
+      through effort, discipline, and opportunity across different life phases.
+      
+      This axis is not a promise of riches, nor a judgment of financial worth.
+      High wealth potential does not guarantee abundance, and restrictive
+      phases do not imply permanent limitation. Instead, this axis shows
+      when financial actions are more likely to stabilize, grow, or require
+      restraint.
+      
+      Wealth timing often moves in cycles. Periods of accumulation may be
+      followed by phases that demand prudence, restructuring, or patience.
+      Expansion without readiness can create strain, just as caution during
+      supportive phases can limit growth.
+      
+      Reading this axis helps align financial decisions with timing —
+      identifying when to invest, when to preserve, and when to focus
+      on strengthening the foundation rather than increasing scale.

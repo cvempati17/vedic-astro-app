@@ -20,6 +20,23 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [selectedAxis, setSelectedAxis] = useState('career');
+    const [interpretations, setInterpretations] = useState(null);
+    const [language, setLanguage] = useState('en');
+
+    // Fetch Interpretations
+    useEffect(() => {
+        const fetchInterpretations = async () => {
+            try {
+                const res = await axios.get(`${API_URL}/api/time-engine/interpretations?lang=${language}`);
+                if (res.data.success) {
+                    setInterpretations(res.data.data);
+                }
+            } catch (e) {
+                console.warn("Failed to fetch interpretations", e);
+            }
+        };
+        fetchInterpretations();
+    }, [language]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,8 +112,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 intensity: pt.effective_intensity, // 0-135
                 familyBase: pt.family_intensity, // 0-100
                 gate: tr.gate, // OPEN, HOLD, BLOCK
-                guidance: gd.state,
-                message: gd.message,
+                guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet
             };
         });
@@ -133,7 +149,19 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     return (
         <div style={{ background: '#0f1220', color: '#e6e6e6', padding: '20px' }}>
-            <h2 style={{ color: '#e6c87a' }}>Family Timeline & Guidance</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ color: '#e6c87a' }}>Family Timeline & Guidance</h2>
+                <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    style={{ background: '#333', color: '#fff', border: 'none', padding: '5px' }}
+                >
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="te">Telugu</option>
+                    <option value="ta">Tamil</option>
+                </select>
+            </div>
 
             {/* Axis Selector */}
             <div style={{ marginBottom: '20px' }}>
@@ -143,8 +171,22 @@ const FamilyTimeline = ({ members, familyId }) => {
                     onChange={(e) => setSelectedAxis(e.target.value)}
                     style={{ background: '#151827', color: '#fff', border: '1px solid #4b5563', padding: '8px' }}
                 >
-                    {AXES.map(a => <option key={a.key} value={a.key}>{a.label}</option>)}
+                    {interpretations ? (
+                        Object.keys(interpretations.axes).map(key => (
+                            <option key={key} value={key}>
+                                {interpretations.axes[key].title || key}
+                            </option>
+                        ))
+                    ) : (
+                        AXES.map(a => <option key={a.key} value={a.key}>{a.label}</option>)
+                    )}
                 </select>
+                {/* Dynamic Description */}
+                {interpretations && interpretations.axes[selectedAxis] && (
+                    <div style={{ marginTop: '10px', color: '#9ca3af', fontSize: '14px', fontStyle: 'italic' }}>
+                        {interpretations.axes[selectedAxis].description.medium}
+                    </div>
+                )}
             </div>
 
             {/* Graph */}
@@ -191,11 +233,14 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 fontWeight: 'bold'
                             }}>{chartData[0].gate}</span>
                         </div>
-                        <div>
-                            <strong>Action:</strong> <span style={{ fontWeight: 'bold' }}>{chartData[0].guidance}</span>
-                        </div>
                         <div style={{ gridColumn: '1 / -1' }}>
-                            <strong>Message:</strong> {chartData[0].message}
+                            <strong>Guidance:</strong>
+                            <div style={{ marginTop: '5px', fontStyle: 'italic', color: '#e6c87a' }}>
+                                {interpretations && chartData[0].guidance_key ?
+                                    (interpretations.guidance[chartData[0].guidance_key.split('.')[0]]?.[chartData[0].guidance_key.split('.')[1]]?.[chartData[0].guidance_key.split('.')[2]] || chartData[0].guidance_key)
+                                    : "Loading..."
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

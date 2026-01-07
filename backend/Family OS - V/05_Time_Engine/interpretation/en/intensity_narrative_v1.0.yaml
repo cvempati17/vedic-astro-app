@@ -1,0 +1,25 @@
+meta:
+  type: intensity_narrative
+  version: "1.0"
+  status: "locked"
+
+low:
+  short: "Energy is quiet."
+  medium: "Energy is present but understated."
+  long: >
+    The momentum is internal. External visibility is low,
+    making this a time for subtle rather than loud actions.
+
+medium:
+  short: "Energy is stable."
+  medium: "Energy is balanced and consistent."
+  long: >
+    The momentum supports steady engagement.
+    Effort translates into results at a sustainable pace.
+
+high:
+  short: "Energy is strong."
+  medium: "Energy is high and noticeable."
+  long: >
+    The momentum is forceful and amplifying.
+    Actions taken now tend to have greater reach and impact.

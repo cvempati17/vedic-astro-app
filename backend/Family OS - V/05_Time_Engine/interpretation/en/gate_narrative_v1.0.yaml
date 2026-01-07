@@ -1,0 +1,32 @@
+meta:
+  type: gate_narrative
+  version: "1.0"
+  status: "locked"
+
+BLOCK:
+  short: "Timing is restrictive."
+  medium: >
+    External conditions slow visible progress.
+    Effort continues, but outcomes require patience.
+  long: >
+    This phase emphasizes endurance and discipline.
+    Pushing for immediate results may create resistance.
+    Staying engaged without forcing outcomes is advised.
+
+HOLD:
+  short: "Preparation phase."
+  medium: >
+    Conditions are forming but not yet ready for execution.
+    Skill-building and internal alignment are favored.
+  long: >
+    This is a consolidation period.
+    Strength gained here determines success in the next window.
+
+OPEN:
+  short: "Execution phase."
+  medium: >
+    Timing supports action and decision-making.
+    Efforts are more likely to translate into results.
+  long: >
+    This window favors application, launch, and commitment.
+    Sustained effort during this period compounds outcomes.

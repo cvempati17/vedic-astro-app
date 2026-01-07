@@ -1,0 +1,44 @@
+meta:
+  axis: emotional_load
+  version: "1.0"
+  status: "locked"
+  description: "Narrative definitions for the Emotional Load axis"
+
+emotional_load:
+  title: "Emotional Load, Stress & Inner Carrying Capacity"
+
+  description:
+    short: >
+      How emotional pressure, stress, and inner responsibility accumulate over time.
+
+    medium: >
+      Emotional Load describes the amount of emotional pressure,
+      mental responsibility, and internal strain a person carries.
+      This axis reflects stress, emotional duty, and the weight of
+      unspoken responsibility within family and personal life.
+      It does not measure emotional strength or weakness,
+      but shows how much is being carried internally at different times.
+
+    long: >
+      Emotional Load represents the accumulation of stress, responsibility,
+      and emotional holding that is often invisible to others.
+      It reflects the inner demands created by caregiving, leadership,
+      unresolved tension, expectations, or prolonged responsibility.
+      
+      This axis is not a judgment of resilience or coping ability.
+      High emotional load does not imply fragility,
+      and low emotional load does not imply detachment.
+      Instead, it reflects timing — when emotional demands intensify,
+      when pressure builds quietly, and when inner resources are stretched.
+      
+      Emotional load often rises during periods of sustained responsibility,
+      delayed resolution, or prolonged endurance.
+      Some phases require holding space for others while managing
+      one’s own uncertainty or fatigue.
+      Other phases allow release, recovery, and redistribution of pressure.
+      
+      Reading this axis helps recognize when rest, boundaries,
+      or support are necessary — and when emotional capacity
+      can be used constructively without leading to exhaustion.
+      Its purpose is awareness, not alarm,
+      enabling sustainable engagement rather than silent overload.

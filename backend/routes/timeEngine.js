@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const { loadYamlOrThrow } = require('../utils/yamlHelper');
+const { loadInterpretationPack } = require('../utils/interpretationLoader');
 
 // --- CONSTANTS ---
 const BASE_PATH = path.join(__dirname, '../Family OS - V/05_Time_Engine');
@@ -441,17 +442,27 @@ router.post('/calculate', async (req, res) => {
                 });
 
                 // Guidance
-                let state = "WAIT";
-                let msg = "Processing...";
-                const baseStr = 50; // Aggregate Base?
+                // Guidance (Keys Only - No Prose)
+                let guidance_key = `current.${gate}.medium`; // Default
 
-                if (baseStr < 40) { state = "REDIRECT"; msg = "Focus elsewhere."; }
-                else if (fInt >= 60 && gate === "BLOCK") { state = "DON'T QUIT"; msg = "Strong promise blocked by transit. Wait."; }
-                else if (fInt >= 60 && gate === "OPEN") { state = "ACT NOW"; msg = "Window open."; }
-                else if (effInt < 45) { state = "BUILD"; msg = "Accumulate strength."; }
+                // Logic mapped to Standard Keys
+                const baseStr = 50;
+
+                if (baseStr < 40) {
+                    guidance_key = "next_window.none.medium";
+                }
+                else if (fInt >= 60 && gate === "BLOCK") {
+                    guidance_key = "current.BLOCK.long";
+                }
+                else if (fInt >= 60 && gate === "OPEN") {
+                    guidance_key = "current.OPEN.long";
+                }
+                else if (effInt < 45) {
+                    guidance_key = "current.HOLD.medium";
+                }
 
                 if (!guidanceLayer.axes[axis]) guidanceLayer.axes[axis] = [];
-                guidanceLayer.axes[axis].push({ time: t, state, message: msg });
+                guidanceLayer.axes[axis].push({ time: t, guidance_key });
             });
         });
 
@@ -468,6 +479,17 @@ router.post('/calculate', async (req, res) => {
 
         res.json({ success: true, data: output });
 
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
+
+router.get('/interpretations', (req, res) => {
+    try {
+        const lang = req.query.lang || 'en';
+        const pack = loadInterpretationPack(lang);
+        res.json({ success: true, data: pack });
     } catch (e) {
         console.error(e);
         res.status(500).json({ success: false, error: e.message });

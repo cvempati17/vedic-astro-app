@@ -1,0 +1,44 @@
+meta:
+  axis: care
+  version: "1.0"
+  status: "locked"
+  description: "Narrative definitions for the Care axis"
+
+care:
+  title: "Care, Support & Nurturing Capacity"
+
+  description:
+    short: >
+      How care, responsibility for others, and emotional support unfold over time.
+
+    medium: >
+      Care describes how a person gives, receives, and sustains emotional
+      and practical support within family and close relationships.
+      This axis reflects nurturing capacity, responsibility toward dependents,
+      and the ability to provide stability and reassurance.
+      It does not measure sacrifice, obligation, or moral duty,
+      but shows how caregiving energy flows and changes with time.
+
+    long: >
+      Care represents the evolving capacity to nurture, support, and hold space
+      for others across different life phases. It includes emotional presence,
+      attentiveness, and practical responsibility toward family members,
+      children, elders, or those who depend on stability and reassurance.
+      
+      This axis is not a measure of love, virtue, or selflessness.
+      High care intensity does not require constant giving,
+      and lower intensity does not imply neglect or absence of concern.
+      Instead, it reflects timing — when caregiving demands increase,
+      when emotional availability is tested,
+      and when balance between self-care and responsibility is essential.
+      
+      Care often moves in cycles. Periods of high demand may require endurance,
+      structure, and boundaries, while quieter phases allow recovery,
+      rebalancing, and restoration. Overextending during demanding phases
+      can lead to exhaustion, just as disengaging during supportive phases
+      can weaken connection.
+      
+      Reading this axis helps align nurturing effort with timing —
+      recognizing when to step in, when to share responsibility,
+      and when preserving one’s own stability is necessary
+      to sustain care over the long term.

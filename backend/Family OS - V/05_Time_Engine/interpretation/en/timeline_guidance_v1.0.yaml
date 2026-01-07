@@ -1,0 +1,49 @@
+meta:
+  type: timeline_guidance
+  version: "1.0"
+  status: "locked"
+
+current:
+  BLOCK:
+    short: "Wait."
+    medium: >
+      This is a waiting phase.
+      Continue effort, but avoid forcing major moves.
+    long: >
+      Conditions resist execution right now.
+      Maintain discipline and prepare for future windows.
+
+  HOLD:
+    short: "Prepare."
+    medium: >
+      Preparation matters more than execution right now.
+    long: >
+      Use this time to align skills and resources.
+      Premature action may lack support.
+
+  OPEN:
+    short: "Act."
+    medium: >
+      This is an appropriate time to act and commit.
+    long: >
+      Conditions favor forward movement.
+      Decisive action aligns well with the timing.
+
+next_window:
+  exists:
+    short: "Window approaching."
+    medium: >
+      A more supportive window is approaching.
+      Preparation now improves outcomes later.
+    long: >
+      An upcoming window offers stronger execution support.
+      Use the current phase to prepare deliberately.
+
+  none:
+    short: "No imminent window."
+    medium: >
+      No clear execution window appears in the near horizon.
+      Focus on strengthening fundamentals.
+    long: >
+      The timeline emphasizes long-term development.
+      Redirect energy toward stability and skill-building.

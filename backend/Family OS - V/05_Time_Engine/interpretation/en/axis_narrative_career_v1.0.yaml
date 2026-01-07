@@ -1,0 +1,40 @@
+meta:
+  axis: career
+  version: "1.0"
+  status: "locked"
+  description: "Narrative definitions for the Career axis"
+
+career:
+  title: "Career & Public Contribution"
+
+  description:
+    short: >
+      How work, responsibility, and contribution express through time.
+
+    medium: >
+      Career describes how a person applies skill, effort, and responsibility
+      in the outer world. It reflects contribution, role, accountability,
+      and visibility over time. This axis does not measure job titles,
+      salary, or status. Instead, it shows when effort can translate
+      into responsibility and recognition, and when progress requires
+      patience and consolidation.
+
+    long: >
+      Career represents the evolving relationship between effort and responsibility.
+      It describes how a person engages with work, leadership, accountability,
+      and public contribution across different phases of life.
+      
+      This axis is not a judgment of success or failure. It does not promise
+      position, income, or recognition. Instead, it reflects timing:
+      when responsibility increases, when effort feels heavy,
+      when results are delayed, and when action can translate more
+      smoothly into outcomes.
+      
+      Career timing often unfolds unevenly. Periods of visible progress
+      may alternate with phases of consolidation, endurance, or preparation.
+      A restrictive phase does not mean absence of ability,
+      just as an open phase does not guarantee ease.
+      
+      Reading this axis requires patience. Its purpose is to help align
+      effort with timing — to know when to act, when to prepare,
+      and when persistence matters more than immediate reward.
