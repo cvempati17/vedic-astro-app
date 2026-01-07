@@ -24,6 +24,8 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [interpretations, setInterpretations] = useState(null);
     const [language, setLanguage] = useState('en');
     const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null });
+    const [focusedMemberId, setFocusedMemberId] = useState(null);
+    const [hoveredMemberId, setHoveredMemberId] = useState(null);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -117,8 +119,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                     const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
                     if (mLayer && mLayer[idx]) {
                         memberPoints[`member_${m.id}`] = mLayer[idx].intensity;
-                        // We could also pass individual phase/gate if calculated, 
-                        // but sticking to intensity for now as per instructions.
                     }
                 });
             }
@@ -164,9 +164,14 @@ const FamilyTimeline = ({ members, familyId }) => {
     // Custom Tooltip Component (Read-Only Logic)
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            const data = payload[0].payload;
-            const gate = data.gate; // OPEN, HOLD, BLOCK
-            const familyIntensity = data.intensity;
+            const point = payload[0].payload;
+            const gate = point.gate; // OPEN, HOLD, BLOCK
+            const familyIntensity = point.intensity;
+
+            // Determine Active Member
+            const activeMemberId = hoveredMemberId || focusedMemberId || null;
+            const activeMember = activeMemberId ? members.find(m => m.id === activeMemberId) : null;
+            const memberIntensity = activeMember ? point[`member_${activeMemberId}`] : null;
 
             // Resolve Semantics from Governance Layer
             const phaseKey = `FM_PHASE_${gate}`;
@@ -190,7 +195,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
                     </div>
 
-                    {/* Phase Header */}
+                    {/* Phase Header (Family Context Always Visible) */}
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                         <div style={{
                             width: '10px', height: '10px', borderRadius: '50%',
@@ -201,22 +206,23 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </span>
                     </div>
 
-                    {/* Family Intensity */}
-                    <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
-                        <span>Family Intensity:</span>
-                        <strong>{familyIntensity?.toFixed(0)}</strong>
-                    </div>
-
-                    {/* Member Intensities (if active) */}
-                    {payload.length > 0 && payload.map((entry, idx) => {
-                        if (entry.dataKey === 'intensity' || entry.dataKey === 'familyBase') return null; // Skip main lines
-                        return (
-                            <div key={idx} style={{ fontSize: '11px', color: '#9ca3af', display: 'flex', justifyContent: 'space-between' }}>
-                                <span>{entry.name}:</span>
-                                <span>{entry.value?.toFixed(0)}</span>
+                    {/* Active Member Context */}
+                    {activeMember ? (
+                        <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                            <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#e6c87a', marginBottom: '4px' }}>
+                                {activeMember.name}
                             </div>
-                        );
-                    })}
+                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>
+                                Intensity: <strong>{memberIntensity?.toFixed(0)}</strong>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Family Intensity (Default) */
+                        <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Family Intensity:</span>
+                            <strong>{familyIntensity?.toFixed(0)}</strong>
+                        </div>
+                    )}
 
                     {/* Semantic Explanation (Read-Only) */}
                     {semantics && (
@@ -237,9 +243,6 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
         return null;
     };
-
-
-
 
     if (loading) return <div style={{ color: '#fff' }}>Loading Time Engine...</div>;
     if (error) return <div style={{ color: '#ef4444' }}>{error}</div>;
@@ -320,7 +323,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
                             <Tooltip content={<CustomTooltip />} />
-                            <Legend />
+
 
                             {/* Gate Backgrounds */}
                             {getGateRegions().map((r, i) => (
@@ -333,25 +336,65 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 />
                             ))}
 
-                            {/* Member Lines (Individual Overlay) */}
-                            {members && members.map((m, idx) => (
-                                <Line
-                                    key={m.id}
-                                    type="monotone"
-                                    dataKey={`member_${m.id}`}
-                                    stroke="#9ca3af"
-                                    strokeOpacity={0.4}
-                                    strokeWidth={1}
-                                    dot={false}
-                                    name={m.name || `Member ${idx + 1}`}
-                                    strokeDasharray="3 3"
-                                />
-                            ))}
+                            {/* Member Lines (Individual Overlay) - Interactive */}
+                            {members && members.map((m, idx) => {
+                                const isFocused = focusedMemberId === m.id;
+                                const isDimmed = focusedMemberId && !isFocused;
+                                const opacity = isDimmed ? 0.25 : 0.8;
+
+                                return (
+                                    <Line
+                                        key={m.id}
+                                        type="monotone"
+                                        dataKey={`member_${m.id}`}
+                                        stroke="#9ca3af"
+                                        strokeOpacity={opacity}
+                                        strokeWidth={1}
+                                        dot={false}
+                                        name={m.name || `Member ${idx + 1}`}
+                                        strokeDasharray="3 3"
+                                        onMouseEnter={() => setHoveredMemberId(m.id)}
+                                        onMouseLeave={() => setHoveredMemberId(null)}
+                                        isAnimationActive={false}
+                                    />
+                                );
+                            })}
 
                             <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} />
                             <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} />
                         </LineChart>
                     </ResponsiveContainer>
+                </div>
+            )}
+
+            {/* Custom Interactive Legend */}
+            {members && (
+                <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
+                    <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
+                    {members.map(m => {
+                        const isFocused = focusedMemberId === m.id;
+                        return (
+                            <button
+                                key={m.id}
+                                onClick={() => setFocusedMemberId(isFocused ? null : m.id)}
+                                style={{
+                                    background: isFocused ? 'rgba(255,255,255,0.1)' : 'transparent',
+                                    border: isFocused ? '1px solid #6b7280' : '1px solid transparent',
+                                    borderRadius: '4px',
+                                    padding: '4px 8px',
+                                    color: isFocused ? '#fff' : '#9ca3af',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    fontSize: '12px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#9ca3af', marginRight: '6px', opacity: 0.8 }} />
+                                {m.name}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
 
@@ -378,8 +421,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                     </div>
                 </div>
             )}
-
-
 
             <PhaseTraceDrawer
                 isOpen={drawerState.isOpen}
