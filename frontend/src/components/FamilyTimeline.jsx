@@ -217,21 +217,11 @@ const FamilyTimeline = ({ members, familyId }) => {
                             </div>
                         </div>
                     ) : (
-                        /* Family Context (Default: Show All Members) */
-                        <>
-                            <div style={{ marginBottom: '8px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
-                                <span>Family Intensity:</span>
-                                <strong>{familyIntensity?.toFixed(0)}</strong>
-                            </div>
-                            <div style={{ marginBottom: '8px', borderTop: '1px solid #374151', paddingTop: '4px' }}>
-                                {members.map(m => (
-                                    <div key={m.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#9ca3af', marginBottom: '2px' }}>
-                                        <span>{m.name}:</span>
-                                        <span style={{ color: '#e5e7eb' }}>{point[`member_${m.id}`]?.toFixed(0)}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
+                        /* Family Context (Default) - Pic 2 Behavior */
+                        <div style={{ marginBottom: '4px', fontSize: '12px', color: '#d1d5db', display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Family Intensity:</span>
+                            <strong>{familyIntensity?.toFixed(0)}</strong>
+                        </div>
                     )}
 
                     {/* Semantic Explanation (Read-Only) */}
