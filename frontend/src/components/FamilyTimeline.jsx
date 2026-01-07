@@ -26,6 +26,7 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null });
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
+    const [frozenPoint, setFrozenPoint] = useState(null);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -47,39 +48,35 @@ const FamilyTimeline = ({ members, familyId }) => {
             if (!members || members.length < 2) return;
             setLoading(true);
 
-            // Self-Healing: Enrich members if chart data is missing (e.g. only summary passed)
+            // Self-Healing
             const enrichedMembers = await Promise.all(members.map(async m => {
                 const co = m.chart_object || {};
                 const keys = Object.keys(co).map(k => k.toLowerCase());
                 const hasPlanets = keys.includes('sun') || keys.includes('ascendant');
 
-                // If planets missing but ID exists, try to fetch full chart
                 if (!hasPlanets && m.id && m.id.length > 10) {
                     try {
                         const res = await axios.get(`${API_URL}/api/charts/${m.id}`);
                         if (res.data.success && res.data.chart) {
-                            // Found valid chart, extract planets
                             const fullPlanets = res.data.chart.planets || res.data.chart.chart_object;
                             return { ...m, chart_object: fullPlanets };
                         }
                     } catch (e) {
-                        console.warn("Auto-fetch failed for member:", m.name);
+                        // silent fail
                     }
                 }
                 return m;
             }));
 
-            // Validate Enriched Data
             const hasData = enrichedMembers.some(m => m.chart_object && (m.chart_object.Sun || m.chart_object.sun || Object.keys(m.chart_object).length > 8));
             if (!hasData) {
-                setError(`Data Error: Charts not found. Please ensure members are linked to Saved Charts. Received Keys: ${Object.keys(members[0]?.chart_object || {}).join(', ')}`);
+                setError(`Data Error: Charts not found.`);
                 setLoading(false);
                 return;
             }
 
             try {
-                // Get Start Date (Current Month)
-                const start = new Date().toISOString().slice(0, 7); // YYYY-MM
+                const start = new Date().toISOString().slice(0, 7);
                 const response = await axios.post(`${API_URL}/api/time-engine/calculate`, {
                     members: enrichedMembers,
                     familyId,
@@ -91,7 +88,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                     setError('Failed to load timeline.');
                 }
             } catch (e) {
-                console.error(e);
                 setError('Error loading timeline: ' + e.message);
             } finally {
                 setLoading(false);
@@ -101,7 +97,7 @@ const FamilyTimeline = ({ members, familyId }) => {
         fetchData();
     }, [members, familyId]);
 
-    // Deep Link Logic: Handle URL Params on Data Load
+    // Deep Link Logic
     useEffect(() => {
         if (!data) return;
         const params = new URLSearchParams(window.location.search);
@@ -110,28 +106,17 @@ const FamilyTimeline = ({ members, familyId }) => {
             const periodParam = params.get("period");
 
             if (axisParam && periodParam) {
-                // Sync Axis if needed (Note: State update effectively happens, but we must use passed param for lookup immediately if mismatch)
                 if (axisParam !== selectedAxis) {
                     setSelectedAxis(axisParam);
                 }
-
-                // Find Trace
                 const traceArr = data.trace_layer?.axes?.[axisParam];
                 const trace = traceArr?.find(tr => tr.time === periodParam);
-
                 if (trace) {
-                    setDrawerState({
-                        isOpen: true,
-                        data: trace,
-                        time: periodParam,
-                        phase: trace.phase_resolution
-                    });
-                    // Clean URL? (Optional - per instructions "You may optionally clean")
-                    // window.history.replaceState(null, "", window.location.pathname);
+                    setDrawerState({ isOpen: true, data: trace, time: periodParam, phase: trace.phase_resolution });
                 }
             }
         }
-    }, [data]); // Run when data loads.
+    }, [data]);
 
     const getAxisData = () => {
         if (!data || !data.effective_intensity_layer) return [];
@@ -139,29 +124,23 @@ const FamilyTimeline = ({ members, familyId }) => {
         const transLayer = data.transit_layer.axes[selectedAxis] || [];
         const guideLayer = data.guidance_layer.axes[selectedAxis] || [];
 
-        // Merge Family and Individual Data
         return effLayer.map((pt, idx) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
-
-            // Build Individual Data Points
             const memberPoints = {};
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
                     const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
                     if (mLayer && mLayer[idx]) {
                         memberPoints[`member_${m.id}`] = mLayer[idx].intensity;
-                        // Use Member Phase if available, else derive? No, strict backend.
-                        // memberPoints[`phase_${m.id}`] = mLayer[idx].phase; // Future
                     }
                 });
             }
-
             return {
                 time: pt.time,
-                intensity: pt.effective_intensity, // 0-135
-                familyBase: pt.family_intensity, // 0-100
-                gate: tr.gate, // OPEN, HOLD, BLOCK
+                intensity: pt.effective_intensity,
+                familyBase: pt.family_intensity,
+                gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
                 ...memberPoints
@@ -171,13 +150,11 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     const chartData = getAxisData();
 
-    // Helper for Reference Areas (Gates)
     const getGateRegions = () => {
         if (!chartData.length) return [];
         const regions = [];
         let start = 0;
         let currentGate = chartData[0]?.gate;
-
         for (let i = 1; i < chartData.length; i++) {
             if (chartData[i].gate !== currentGate) {
                 regions.push({ start: chartData[start].time, end: chartData[i - 1].time, gate: currentGate });
@@ -190,24 +167,24 @@ const FamilyTimeline = ({ members, familyId }) => {
     };
 
     const gateColors = {
-        OPEN: '#2ECC71', // Green
-        HOLD: '#F39C12', // Bronze/Amber (Governance aligned)
-        BLOCK: '#8E44AD' // Purple (Governance aligned)
+        OPEN: '#2ECC71',
+        HOLD: '#F39C12',
+        BLOCK: '#8E44AD'
     };
 
-    // Custom Tooltip Component (Interactable Phase + Compare + "Why?")
-    const CustomTooltip = ({ active, payload, label }) => {
+    // Custom Tooltip Component
+    const CustomTooltip = ({ active, payload, label, isFrozen }) => {
         const [showComparison, setShowComparison] = useState(false);
 
-        // Reset comparison on member change or unmount
+        // Reset comparison logic
         const activeMemberInfo = hoveredMemberId || focusedMemberId;
         useEffect(() => {
-            setShowComparison(false);
-        }, [activeMemberInfo]);
+            if (!isFrozen) setShowComparison(false); // Only reset if NOT interacting in frozen mode
+        }, [activeMemberInfo, isFrozen]);
 
         if (active && payload && payload.length) {
             const point = payload[0].payload;
-            const gate = point.gate; // OPEN, HOLD, BLOCK
+            const gate = point.gate;
             const familyIntensity = point.intensity;
 
             // Determine Active Member
@@ -215,35 +192,36 @@ const FamilyTimeline = ({ members, familyId }) => {
             const activeMember = activeMemberId ? members.find(m => m.id === activeMemberId) : null;
             const memberIntensity = activeMember ? point[`member_${activeMemberId}`] : null;
 
-            // Resolve Semantics from Governance Layer
             const phaseKey = `FM_PHASE_${gate}`;
             const semantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
-
-            // Fallback colors for Phase Dot
             const phaseColor = gateColors[gate] || '#ccc';
 
             return (
                 <div style={{
-                    backgroundColor: 'rgba(31, 41, 55, 0.95)', // Gray 800
-                    border: '1px solid #4b5563', // Neutral Gray 600
+                    backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                    border: '1px solid #4b5563',
                     borderRadius: '8px',
                     padding: '12px',
                     boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
                     maxWidth: '300px',
                     color: '#e6e6e6',
                     zIndex: 1000,
-                    pointerEvents: 'auto' // Allow interaction
+                    pointerEvents: 'auto',
+                    position: 'relative'
                 }}>
-                    <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>
+                    {isFrozen && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setFrozenPoint(null); }}
+                            style={{ position: 'absolute', top: '4px', right: '4px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer' }}
+                        >
+                            ✕
+                        </button>
+                    )}
+
+                    <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px', paddingRight: '16px' }}>
                         <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
                     </div>
 
-                    {/* Phase Header (Family Context Always Visible at top level?) No, Pic 2 logic */}
-                    {/* Actually Pic 2 logic suggests Member replaces Family. 
-                        But User Prompt says: "Compare others" appears inside tooltip.
-                        And "Why?" appears in both context. */}
-
-                    {/* Active Member Context */}
                     {activeMember ? (
                         <>
                             <div style={{ marginBottom: '8px', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
@@ -254,26 +232,17 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     Intensity: <strong>{memberIntensity?.toFixed(0)}</strong>
                                 </div>
                             </div>
-
-                            {/* Phase Context (Still relevant to member locally? System only calculates Family Phase) */}
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    backgroundColor: phaseColor, marginRight: '8px'
-                                }} />
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: phaseColor, marginRight: '8px' }} />
                                 <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '12px' }}>
                                     {gate} (Family Context)
                                 </span>
                             </div>
                         </>
                     ) : (
-                        /* Family Context (Default) - Pic 2 Behavior */
                         <>
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                <div style={{
-                                    width: '10px', height: '10px', borderRadius: '50%',
-                                    backgroundColor: phaseColor, marginRight: '8px'
-                                }} />
+                                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: phaseColor, marginRight: '8px' }} />
                                 <span style={{ fontWeight: 'bold', color: phaseColor, fontSize: '14px' }}>
                                     {gate} PHASE
                                 </span>
@@ -285,22 +254,12 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </>
                     )}
 
-                    {/* Semantic Explanation (Read-Only) */}
                     {semantics && (
-                        <div style={{
-                            marginTop: '8px',
-                            paddingTop: '8px',
-                            borderTop: '1px solid #374151',
-                            fontSize: '12px',
-                            lineHeight: '1.4',
-                            fontStyle: 'italic',
-                            color: '#e6c87a' // Using Gold/Secondary color for text
-                        }}>
+                        <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #374151', fontSize: '12px', lineHeight: '1.4', fontStyle: 'italic', color: '#e6c87a' }}>
                             {semantics.short_explanation}
                         </div>
                     )}
 
-                    {/* Compare Others Affordance */}
                     {activeMember && !showComparison && members.length > 1 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); setShowComparison(true); }}
@@ -310,13 +269,11 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </button>
                     )}
 
-                    {/* Expanded Comparison View */}
                     {showComparison && (
                         <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #374151' }}>
                             {members.filter(m => m.id !== activeMemberId).map(m => (
                                 <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#9ca3af', marginBottom: '4px' }}>
                                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4b5563' }} />
-                                    {/* Phase dot neutral since we don't have member phases yet */}
                                     <span style={{}}>
                                         {m.name}:
                                     </span>
@@ -328,7 +285,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </div>
                     )}
 
-                    {/* Why? Button (Trace Trigger) */}
                     {data?.trace_layer && (
                         <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
@@ -336,77 +292,44 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     e.stopPropagation();
                                     const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === point.time);
                                     if (trace) {
-                                        setDrawerState({
-                                            isOpen: true,
-                                            data: trace,
-                                            time: point.time,
-                                            phase: trace.phase_resolution
-                                        });
+                                        setDrawerState({ isOpen: true, data: trace, time: point.time, phase: trace.phase_resolution });
                                     }
                                 }}
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.1)',
-                                    border: '1px solid #4b5563',
-                                    borderRadius: '4px',
-                                    padding: '2px 8px',
-                                    color: '#e5e7eb',
-                                    fontSize: '11px',
-                                    cursor: 'pointer'
-                                }}
+                                style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '2px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
                             >
                                 Using Logic?
                             </button>
                         </div>
                     )}
-
                 </div>
             );
         }
         return null;
     };
 
+
     if (loading) return <div style={{ color: '#fff' }}>Loading Time Engine...</div>;
     if (error) return <div style={{ color: '#ef4444' }}>{error}</div>;
+
+    const currentDisplayPoint = frozenPoint ? frozenPoint.payload[0].payload : (chartData.length > 0 ? chartData[0] : null);
 
     return (
         <div style={{ background: '#0f1220', color: '#e6e6e6', padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: '#e6c87a' }}>Family Timeline & Guidance</h2>
-                <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    style={{ background: '#333', color: '#fff', border: 'none', padding: '5px' }}
-                >
-                    <option value="en">English</option>
-                    <option value="hi">Hindi</option>
-                    <option value="te">Telugu</option>
-                    <option value="ta">Tamil</option>
+                <select value={language} onChange={(e) => setLanguage(e.target.value)} style={{ background: '#333', color: '#fff', border: 'none', padding: '5px' }}>
+                    <option value="en">English</option> <option value="hi">Hindi</option> <option value="te">Telugu</option> <option value="ta">Tamil</option>
                 </select>
             </div>
 
-            {/* Axis Selector */}
             <div style={{ marginBottom: '20px' }}>
                 <label style={{ marginRight: '10px' }}>Select Life Axis:</label>
-                <select
-                    value={selectedAxis}
-                    onChange={(e) => setSelectedAxis(e.target.value)}
-                    style={{ background: '#151827', color: '#fff', border: '1px solid #4b5563', padding: '8px' }}
-                >
-                    {interpretations ? (
-                        Object.keys(interpretations.axes).map(key => (
-                            <option key={key} value={key}>
-                                {interpretations.axes[key].title || key}
-                            </option>
-                        ))
-                    ) : (
-                        AXES.map(a => <option key={a.key} value={a.key}>{a.label}</option>)
-                    )}
+                <select value={selectedAxis} onChange={(e) => setSelectedAxis(e.target.value)} style={{ background: '#151827', color: '#fff', border: '1px solid #4b5563', padding: '8px' }}>
+                    {interpretations ? Object.keys(interpretations.axes).map(key => <option key={key} value={key}>{interpretations.axes[key].title || key}</option>)
+                        : AXES.map(a => <option key={a.key} value={a.key}>{a.label}</option>)}
                 </select>
-                {/* Dynamic Description */}
                 {interpretations && interpretations.axes[selectedAxis] && (
-                    <div style={{ marginTop: '10px', color: '#9ca3af', fontSize: '14px', fontStyle: 'italic' }}>
-                        {interpretations.axes[selectedAxis].description.medium}
-                    </div>
+                    <div style={{ marginTop: '10px', color: '#9ca3af', fontSize: '14px', fontStyle: 'italic' }}>{interpretations.axes[selectedAxis].description.medium}</div>
                 )}
             </div>
 
@@ -414,74 +337,61 @@ const FamilyTimeline = ({ members, familyId }) => {
             {data && (
                 <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
                     <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
-                        Click point to inspect logic
+                        {frozenPoint ? "Interactive Mode (Click X to resume)" : "Click point to freeze & interact"}
                     </div>
+
+                    {/* Frozen Tooltip Overlay */}
+                    {frozenPoint && (
+                        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 20 }}>
+                            <div style={{ position: 'absolute', left: frozenPoint.x, top: frozenPoint.y, pointerEvents: 'auto' }}>
+                                <CustomTooltip active={true} payload={frozenPoint.payload} label={frozenPoint.label} isFrozen={true} />
+                            </div>
+                        </div>
+                    )}
+
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                             data={chartData}
                             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                             onClick={(e) => {
                                 if (e && e.activePayload && e.activePayload.length) {
-                                    const pt = e.activePayload[0].payload;
-                                    const t = pt.time;
-                                    // Find Trace Data
-                                    const traceArr = data.trace_layer?.axes?.[selectedAxis];
-                                    const trace = traceArr?.find(tr => tr.time === t);
-
-                                    if (trace) {
-                                        setDrawerState({
-                                            isOpen: true,
-                                            data: trace,
-                                            time: t,
-                                            phase: trace.phase_resolution
+                                    if (frozenPoint && frozenPoint.label === e.activePayload[0].payload.time) {
+                                        setFrozenPoint(null);
+                                    } else {
+                                        setFrozenPoint({
+                                            x: e.activeCoordinate.x,
+                                            y: e.activeCoordinate.y,
+                                            payload: e.activePayload,
+                                            label: e.activePayload[0].payload.time
                                         });
                                     }
                                 }
                             }}
-                            onMouseLeave={() => setHoveredMemberId(null)} // Safety clear
+                            onMouseLeave={() => setHoveredMemberId(null)}
                             style={{ cursor: 'pointer' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            <Tooltip content={<CustomTooltip />} />
+                            {!frozenPoint && <Tooltip content={<CustomTooltip />} />}
 
 
-                            {/* Gate Backgrounds */}
                             {getGateRegions().map((r, i) => (
-                                <ReferenceArea
-                                    key={i}
-                                    x1={r.start}
-                                    x2={r.end}
-                                    fill={gateColors[r.gate] || '#333'}
-                                    fillOpacity={0.15}
-                                />
+                                <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
                             ))}
 
-                            {/* Member Lines (Individual Overlay) - Interactive */}
                             {members && members.map((m, idx) => {
                                 const isFocused = focusedMemberId === m.id;
                                 const isDimmed = focusedMemberId && !isFocused;
                                 const opacity = isDimmed ? 0.25 : 0.8;
-
                                 return (
                                     <Line
-                                        key={m.id}
-                                        type="monotone"
-                                        dataKey={`member_${m.id}`}
-                                        stroke="#9ca3af"
-                                        strokeOpacity={opacity}
-                                        strokeWidth={1}
-                                        dot={false}
-                                        name={m.name || `Member ${idx + 1}`}
-                                        strokeDasharray="3 3"
-                                        onMouseEnter={() => setHoveredMemberId(m.id)}
-                                        onMouseLeave={() => setHoveredMemberId(null)}
-                                        isAnimationActive={false}
+                                        key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
+                                        name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
+                                        onMouseEnter={() => setHoveredMemberId(m.id)} onMouseLeave={() => setHoveredMemberId(null)} isAnimationActive={false}
                                     />
                                 );
                             })}
-
                             <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} />
                             <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} />
                         </LineChart>
@@ -497,20 +407,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                         const isFocused = focusedMemberId === m.id;
                         return (
                             <button
-                                key={m.id}
-                                onClick={() => setFocusedMemberId(isFocused ? null : m.id)}
-                                style={{
-                                    background: isFocused ? 'rgba(255,255,255,0.1)' : 'transparent',
-                                    border: isFocused ? '1px solid #6b7280' : '1px solid transparent',
-                                    borderRadius: '4px',
-                                    padding: '4px 8px',
-                                    color: isFocused ? '#fff' : '#9ca3af',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    fontSize: '12px',
-                                    transition: 'all 0.2s'
-                                }}
+                                key={m.id} onClick={() => setFocusedMemberId(isFocused ? null : m.id)}
+                                style={{ background: isFocused ? 'rgba(255,255,255,0.1)' : 'transparent', border: isFocused ? '1px solid #6b7280' : '1px solid transparent', borderRadius: '4px', padding: '4px 8px', color: isFocused ? '#fff' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '12px', transition: 'all 0.2s' }}
                             >
                                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#9ca3af', marginRight: '6px', opacity: 0.8 }} />
                                 {m.name}
@@ -520,22 +418,18 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
-            {/* Guidance Panel */}
-            {data && chartData.length > 0 && (
+            {data && chartData.length > 0 && currentDisplayPoint && (
                 <div style={{ marginTop: '20px', padding: '15px', background: '#1f2937', borderRadius: '8px', borderLeft: '4px solid #e6c87a' }}>
-                    <h3 style={{ margin: '0 0 10px 0', color: '#e6c87a' }}>Current Guidance ({chartData[0].time})</h3>
+                    <h3 style={{ margin: '0 0 10px 0', color: '#e6c87a' }}>Current Guidance ({currentDisplayPoint.time})</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                         <div>
-                            <strong>Status:</strong> <span style={{
-                                color: gateColors[chartData[0].gate] || '#fff',
-                                fontWeight: 'bold'
-                            }}>{chartData[0].gate}</span>
+                            <strong>Status:</strong> <span style={{ color: gateColors[currentDisplayPoint.gate] || '#fff', fontWeight: 'bold' }}>{currentDisplayPoint.gate}</span>
                         </div>
                         <div style={{ gridColumn: '1 / -1' }}>
                             <strong>Strategic Context:</strong>
                             <div style={{ marginTop: '5px', fontStyle: 'italic', color: '#e6c87a' }}>
-                                {interpretations && chartData[0].guidance_key ?
-                                    (interpretations.guidance[chartData[0].guidance_key.split('.')[0]]?.[chartData[0].guidance_key.split('.')[1]]?.[chartData[0].guidance_key.split('.')[2]] || chartData[0].guidance_key)
+                                {interpretations && currentDisplayPoint.guidance_key ?
+                                    (interpretations.guidance[currentDisplayPoint.guidance_key.split('.')[0]]?.[currentDisplayPoint.guidance_key.split('.')[1]]?.[currentDisplayPoint.guidance_key.split('.')[2]] || currentDisplayPoint.guidance_key)
                                     : "Loading..."
                                 }
                             </div>
