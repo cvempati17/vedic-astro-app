@@ -144,6 +144,71 @@ const FamilyTimeline = ({ members, familyId }) => {
         BLOCK: '#E74C3C' // Red
     };
 
+    // Custom Tooltip Component
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            const data = payload[0].payload;
+            const gate = data.gate; // OPEN, HOLD, BLOCK
+            const intensity = data.intensity;
+
+            // Resolve Semantics
+            const phaseKey = `FM_PHASE_${gate}`;
+            const semantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
+
+            // Fallback colors if not found in semantics
+            const color = gateColors[gate] || '#ccc';
+
+            return (
+                <div style={{
+                    backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                    border: `1px solid ${color}`,
+                    borderRadius: '8px',
+                    padding: '12px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+                    maxWidth: '300px',
+                    color: '#e6e6e6'
+                }}>
+                    <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>
+                        <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
+                    </div>
+
+                    {/* Phase Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <div style={{
+                            width: '10px', height: '10px', borderRadius: '50%',
+                            backgroundColor: color, marginRight: '8px'
+                        }} />
+                        <span style={{ fontWeight: 'bold', color: color, fontSize: '14px' }}>
+                            {gate} PHASE
+                        </span>
+                    </div>
+
+                    {/* Intensity */}
+                    <div style={{ marginBottom: '8px', fontSize: '12px', color: '#d1d5db' }}>
+                        Intensity: <strong>{intensity?.toFixed(0) || 0}</strong>
+                    </div>
+
+                    {/* Semantic Explanation (Read-Only) */}
+                    {semantics && (
+                        <div style={{
+                            marginTop: '8px',
+                            paddingTop: '8px',
+                            borderTop: '1px solid #374151',
+                            fontSize: '12px',
+                            lineHeight: '1.4',
+                            fontStyle: 'italic',
+                            color: '#9ca3af'
+                        }}>
+                            {semantics.short_explanation}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        return null;
+    };
+
+
     if (loading) return <div style={{ color: '#fff' }}>Loading Time Engine...</div>;
     if (error) return <div style={{ color: '#ef4444' }}>{error}</div>;
 
@@ -197,10 +262,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            <Tooltip
-                                contentStyle={{ background: '#1f2937', border: '1px solid #4b5563', color: '#fff' }}
-                                labelStyle={{ color: '#e6c87a' }}
-                            />
+                            <Tooltip content={<CustomTooltip />} />
                             <Legend />
 
                             {/* Gate Backgrounds */}
