@@ -1,0 +1,169 @@
+version: "1.0.0"
+
+file_type: "life_axis_phase_semantics"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - time_evolution_engine
+    - emotional_risk_overlay
+    - ui_hover_tooltip
+    - current_guidance_panel
+    - report_generator
+
+description: >
+  Defines canonical semantic meaning, behavioral guidance, and
+  user-facing explanations for life-axis phases: BLOCK, HOLD, and OPEN.
+  This file contains interpretation only.
+  No thresholds, calculations, or temporal logic are permitted.
+
+# IMPORTANT:
+# Phase meanings are invariant across time and life axes.
+# Any contradiction must be resolved in logic layers,
+# not by redefining these semantics.
+
+# ---------------------------------------------------
+# PHASE DEFINITIONS
+# ---------------------------------------------------
+
+phases:
+
+  FM_PHASE_BLOCK:
+    label: "BLOCK"
+
+    short_explanation: >
+      Conditions resist execution. Effort does not convert efficiently
+      into visible or lasting outcomes.
+
+    long_explanation: >
+      BLOCK represents a timing-based restriction, not a lack of ability
+      or potential. The environment is not ready to receive or reward
+      effort on this axis. External resistance, delays, or misalignment
+      are likely if outcomes are forced. This phase favors preparation,
+      consolidation, and internal alignment rather than visible action.
+
+    interpretation_notes:
+      - BLOCK does not mean failure.
+      - BLOCK does not mean inactivity.
+      - BLOCK indicates low return on outward effort.
+
+    behavioral_guidance:
+      focus_on:
+        - skill building
+        - learning and preparation
+        - structural planning
+        - emotional regulation
+      avoid:
+        - forcing outcomes
+        - high-risk commitments
+        - premature launches
+        - emotional overinvestment
+
+    mindset_reframe: >
+      This is a loading phase. What is built internally now
+      becomes usable later when conditions open.
+
+    ui:
+      color: "purple"
+      icon: "lock"
+      emphasis_level: "high"
+
+  # ---------------------------------------------------
+
+  FM_PHASE_HOLD:
+    label: "HOLD"
+
+    short_explanation: >
+      Stable but non-expansive conditions. Progress is possible,
+      but growth is incremental.
+
+    long_explanation: >
+      HOLD represents a usable but contained period. Effort produces
+      results in proportion to discipline and consistency, but major
+      breakthroughs or rapid expansion are unlikely. This phase rewards
+      reliability, responsibility, and steady execution rather than
+      aggressive scaling.
+
+    interpretation_notes:
+      - HOLD is neutral, not negative.
+      - HOLD supports maintenance and credibility.
+      - HOLD favors patience over acceleration.
+
+    behavioral_guidance:
+      focus_on:
+        - consistent execution
+        - reliability and follow-through
+        - system and habit building
+        - reputation strengthening
+      avoid:
+        - impatience
+        - over-scaling
+        - unnecessary risk-taking
+
+    mindset_reframe: >
+      This is a stabilizing phase. What is maintained and refined
+      here becomes the foundation for later expansion.
+
+    ui:
+      color: "brown"
+      icon: "pause"
+      emphasis_level: "medium"
+
+  # ---------------------------------------------------
+
+  FM_PHASE_OPEN:
+    label: "OPEN"
+
+    short_explanation: >
+      Conditions actively support execution, visibility, and growth.
+
+    long_explanation: >
+      OPEN represents alignment between personal capability and external
+      opportunity. Effort compounds, visibility increases, and strategic
+      risks are more likely to be rewarded. This phase supports leadership,
+      initiative, and outward contribution. However, OPEN does not remove
+      the need for judgment or discipline.
+
+    interpretation_notes:
+      - OPEN amplifies effort but does not replace responsibility.
+      - OPEN is conditional and time-bound.
+      - OPEN should be used intentionally, not impulsively.
+
+    behavioral_guidance:
+      focus_on:
+        - launches and initiatives
+        - leadership and visibility
+        - scaling and expansion
+        - strategic risk-taking
+      avoid:
+        - hesitation
+        - underutilizing capability
+        - excessive caution
+
+    mindset_reframe: >
+      This is an opportunity phase. What is initiated now
+      has a higher chance of traction and recognition.
+
+    ui:
+      color: "green"
+      icon: "unlock"
+      emphasis_level: "high"
+
+# ---------------------------------------------------
+# GLOBAL SEMANTIC GUARDAILS
+# ---------------------------------------------------
+
+semantic_rules:
+  - Phase meanings must not vary by axis or time.
+  - UI text must be sourced directly from this file.
+  - No module may override or reinterpret phase meaning locally.
+  - Behavioral guidance is advisory, not prescriptive.
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

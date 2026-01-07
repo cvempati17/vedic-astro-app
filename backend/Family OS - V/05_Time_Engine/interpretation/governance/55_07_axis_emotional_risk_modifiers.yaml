@@ -1,0 +1,156 @@
+version: "1.0.0"
+
+file_type: "axis_emotional_risk_modifiers"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - emotional_risk_overlay
+    - time_phase_thresholds
+    - interpretation_layer
+    - ui_trace_view
+    - report_generator
+
+description: >
+  Defines axis-specific sensitivity modifiers that determine how strongly
+  HIGH Emotional Risk suppresses expansion (OPEN) for each life axis.
+  This file provides interpretive weighting only.
+  It must not redefine Emotional Risk scores, thresholds, or phase logic.
+
+# ---------------------------------------------------
+# CORE PRINCIPLES (NON-NEGOTIABLE)
+# ---------------------------------------------------
+
+principles:
+  - Emotional Risk thresholds are global and invariant
+  - Axis modifiers adjust sensitivity, not risk level
+  - Modifiers affect OPEN suppression only
+  - Modifiers must never create BLOCK phases
+  - All modifiers must be explainable in plain language
+
+# ---------------------------------------------------
+# MODIFIER SCALE (LOCKED)
+# ---------------------------------------------------
+
+modifier_scale:
+  high_sensitivity: 1.2   # Emotionally sensitive axis
+  neutral: 1.0            # Default sensitivity
+  resilient: 0.8          # Emotionally resilient axis
+
+allowed_values:
+  - 0.8
+  - 1.0
+  - 1.2
+
+# ---------------------------------------------------
+# AXIS-SPECIFIC MODIFIERS (v1.0 CANONICAL)
+# ---------------------------------------------------
+
+axis_modifiers:
+
+  CAREER_PUBLIC_CONTRIBUTION:
+    modifier: 0.8
+    sensitivity_band: "RESILIENT"
+    rationale: >
+      Career execution tolerates emotional load better than
+      interpersonal domains. Elevated emotional risk may
+      slow expansion, but does not immediately destabilize
+      outward contribution or responsibility.
+
+  RELATIONSHIPS_PARTNERSHIP:
+    modifier: 1.2
+    sensitivity_band: "HIGH"
+    rationale: >
+      Relationship dynamics are highly sensitive to emotional
+      volatility. Elevated emotional risk strongly suppresses
+      expansion to prevent instability or misalignment.
+
+  FAMILY_DYNAMICS:
+    modifier: 1.1
+    sensitivity_band: "MODERATE_HIGH"
+    rationale: >
+      Family systems are moderately sensitive to emotional
+      instability, especially during periods of change or
+      role redefinition.
+
+  HEALTH_WELLBEING:
+    modifier: 1.2
+    sensitivity_band: "HIGH"
+    rationale: >
+      Emotional volatility directly impacts wellbeing and
+      recovery. Stronger safety gating is required before
+      allowing expansion on this axis.
+
+  WEALTH_MATERIAL_SECURITY:
+    modifier: 0.9
+    sensitivity_band: "MODERATE_LOW"
+    rationale: >
+      Financial systems can tolerate emotional stress when
+      structure is present, though prolonged volatility
+      still warrants caution.
+
+# ---------------------------------------------------
+# APPLICATION RULES (AUTHORITATIVE)
+# ---------------------------------------------------
+
+application:
+  applies_only_when:
+    emotional_risk_level: "HIGH"
+
+  affects:
+    - open_suppression_strictness
+
+  never_affects:
+    - emotional_risk_score
+    - emotional_risk_thresholds
+    - intensity_values
+    - block_hold_resolution
+    - family_level_distribution
+
+notes: >
+  Axis modifiers influence how conservatively the system
+  suppresses OPEN under HIGH Emotional Risk.
+  Suppression remains binary (OPEN suppressed or not).
+  No fractional phases or probabilities are permitted.
+
+# ---------------------------------------------------
+# TRACE & UI SEMANTICS
+# ---------------------------------------------------
+
+trace_semantics:
+  show_axis_sensitivity: true
+  copy_templates:
+
+    high_sensitivity: >
+      This axis is highly sensitive to emotional volatility.
+      Elevated emotional risk more strongly suppresses
+      expansion to protect stability.
+
+    moderate_sensitivity: >
+      This axis has moderate sensitivity to emotional
+      volatility. Safety considerations apply during
+      elevated emotional risk.
+
+    resilient: >
+      This axis is relatively resilient to emotional load.
+      Elevated emotional risk has a weaker suppressive
+      effect on expansion.
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - Modifiers must not be recalculated dynamically
+  - Frontend must not interpret numeric modifier values
+  - All explanations must be sourced from this file
+  - Adding a new axis requires MAJOR version bump
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

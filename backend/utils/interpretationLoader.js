@@ -70,6 +70,29 @@ const loadInterpretationPack = (lang = 'en') => {
         pack.guidance = rest;
     }
 
+    const governanceFiles = {
+        phase_semantics: '55_04_life_axis_phase_semantics.yaml',
+        history_confidence: '55_05_historical_context_confidence.yaml',
+        family_comparison: '55_06_family_level_phase_comparison_semantics.yaml',
+        axis_modifiers: '55_07_axis_emotional_risk_modifiers.yaml',
+        drift_semantics: '55_08_family_timeline_drift_semantics.yaml'
+    };
+
+    pack.governance = {};
+    const governanceDir = path.join(BASE_DIR, 'governance');
+
+    Object.entries(governanceFiles).forEach(([key, filename]) => {
+        const filePath = path.join(governanceDir, filename);
+        if (fs.existsSync(filePath)) {
+            try {
+                const data = loadYamlOrThrow(filePath);
+                pack.governance[key] = data;
+            } catch (e) {
+                console.error(`[ERROR] Failed to load governance file ${filename}: ${e.message}`);
+            }
+        }
+    });
+
     return pack;
 };
 

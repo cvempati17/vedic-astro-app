@@ -1,0 +1,224 @@
+version: "1.0.0"
+
+file_type: "export_schema"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - report_generator
+    - pdf_exporter
+    - data_snapshot_service
+
+description: >
+  Defines the canonical export schema for all user-facing
+  reports and downloadable artifacts.
+  This schema governs structure, ordering, and inclusion
+  rules only. It must not introduce logic, predictions,
+  or recommendations.
+
+# ---------------------------------------------------
+# GLOBAL EXPORT PRINCIPLES (NON-NEGOTIABLE)
+# ---------------------------------------------------
+
+principles:
+  - Exports are read-only snapshots
+  - No future prediction is permitted
+  - No advice or instructions are permitted
+  - Interpretation must reference locked semantics
+  - Individual context is authoritative over group context
+
+# ---------------------------------------------------
+# EXPORT METADATA (REQUIRED)
+# ---------------------------------------------------
+
+metadata:
+  required_fields:
+    - export_id
+    - generated_at
+    - timezone
+    - subject_type
+    - subject_identifier
+    - schema_version
+
+  field_descriptions:
+    export_id: "Unique identifier for this export instance"
+    generated_at: "ISO timestamp of export generation"
+    timezone: "Timezone used for date interpretation"
+    subject_type: "individual | family"
+    subject_identifier: "Member ID or Family ID"
+    schema_version: "Must equal this schema version"
+
+# ---------------------------------------------------
+# ALLOWED EXPORT SECTIONS (ORDERED)
+# ---------------------------------------------------
+
+sections:
+
+  - section_id: "overview"
+    required: true
+    description: >
+      High-level contextual information identifying the
+      subject and scope of the export.
+
+  - section_id: "current_phase_summary"
+    required: true
+    description: >
+      Snapshot of the current phase state for the selected
+      axis and period.
+
+  - section_id: "why_this_phase"
+    required: false
+    description: >
+      Explainable trace describing how the current phase
+      was resolved.
+
+  - section_id: "open_suppression_explanation"
+    required: false
+    condition: "open_suppressed == true"
+    description: >
+      Explanation shown only when OPEN was suppressed
+      due to Emotional Risk or safety gates.
+
+  - section_id: "what_allows_open_next"
+    required: false
+    description: >
+      Read-only explanatory conditions required for OPEN.
+      No actions or timelines allowed.
+
+  - section_id: "phase_comparison"
+    required: false
+    description: >
+      Side-by-side comparison between current phase and
+      next possible or last OPEN phase.
+
+  - section_id: "historical_context"
+    required: false
+    description: >
+      Past OPEN context and confidence decay annotation.
+
+  - section_id: "family_level_comparison"
+    required: false
+    condition: "subject_type == family"
+    description: >
+      Distribution-based family phase comparison.
+
+  - section_id: "disclaimers"
+    required: true
+    description: >
+      Mandatory safety and interpretation disclaimers.
+
+# ---------------------------------------------------
+# SECTION SCHEMAS (CANONICAL)
+# ---------------------------------------------------
+
+section_schemas:
+
+  overview:
+    fields:
+      - axis_label
+      - period_label
+      - subject_name
+      - context_note
+
+  current_phase_summary:
+    fields:
+      - phase_key
+      - phase_label
+      - effective_intensity
+      - emotional_risk_level
+      - confidence
+
+  why_this_phase:
+    fields:
+      - decision_summary
+      - trace_steps
+      - resolution_rule
+
+  open_suppression_explanation:
+    fields:
+      - suppressed_phase
+      - suppression_reason
+      - emotional_risk_level
+      - reassurance_text
+
+  what_allows_open_next:
+    fields:
+      - satisfied_conditions
+      - limiting_conditions
+      - non_actionable_conditions
+    constraints:
+      - no_actions
+      - no_timelines
+
+  phase_comparison:
+    fields:
+      - current_phase
+      - comparison_phase
+      - comparison_rows
+      - insight_summary
+
+  historical_context:
+    fields:
+      - last_open_period
+      - months_since_end
+      - confidence_band
+      - confidence_explanation
+
+  family_level_comparison:
+    fields:
+      - phase_distribution
+      - current_member_position
+      - distribution_interpretation
+      - emotional_risk_context
+
+  disclaimers:
+    fields:
+      - independence_disclaimer
+      - non_prediction_disclaimer
+      - non_advice_disclaimer
+
+# ---------------------------------------------------
+# CONTENT RESTRICTIONS
+# ---------------------------------------------------
+
+restrictions:
+  forbidden_content:
+    - predictions
+    - recommendations
+    - action verbs ("do", "avoid", "try")
+    - future dates or countdowns
+    - probabilistic language
+
+  required_language:
+    - explanatory
+    - neutral
+    - non-judgmental
+
+# ---------------------------------------------------
+# SEMANTIC DEPENDENCIES
+# ---------------------------------------------------
+
+semantic_sources:
+  phase_meaning: "55_04_life_axis_phase_semantics.yaml"
+  phase_thresholds: "55_01_time_phase_thresholds.yaml"
+  emotional_risk_thresholds: "55_03_emotional_risk_thresholds.yaml"
+  family_comparison_semantics: "55_06_family_level_phase_comparison_semantics.yaml"
+  historical_confidence: "55_05_historical_context_confidence.yaml"
+
+# ---------------------------------------------------
+# FINAL SAFETY FOOTER (MANDATORY)
+# ---------------------------------------------------
+
+mandatory_footer: >
+  This export reflects contextual conditions at the time
+  of generation. It does not predict future outcomes and
+  does not provide instructions or guarantees.
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

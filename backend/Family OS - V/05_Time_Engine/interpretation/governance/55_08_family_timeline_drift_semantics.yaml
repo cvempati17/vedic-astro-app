@@ -1,0 +1,142 @@
+version: "1.0.0"
+
+file_type: "family_timeline_drift_semantics"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - family_matrix_engine
+    - time_evolution_engine
+    - emotional_risk_overlay
+    - ui_family_drift_view
+    - report_generator
+
+description: >
+  Defines canonical semantics, explanatory copy, annotations, and guardrails
+  for the Family Timeline Drift View. This file provides interpretation-only
+  meaning for visualizing convergence and divergence of family members'
+  phase states over time. It must not introduce calculations, predictions,
+  thresholds, or recommendations.
+
+# ---------------------------------------------------
+# CORE PRINCIPLES (NON-NEGOTIABLE)
+# ---------------------------------------------------
+
+principles:
+  - Drift is descriptive, not evaluative
+  - Individual phases remain authoritative
+  - No family-wide phase or score may be computed
+  - Past-only visualization; no future implication
+  - Visual explanations must remain neutral and non-judgmental
+
+# ---------------------------------------------------
+# VIEW HEADER SEMANTICS
+# ---------------------------------------------------
+
+header:
+  title: "Family Timeline Drift"
+  subtitle_template: >
+    Axis: {{axis_label}} · Period: {{period_start}}–{{period_end}}
+
+  description: >
+    This view shows how individual family members' phase states
+    move over time. It highlights convergence and divergence
+    without implying outcomes or responsibility.
+
+# ---------------------------------------------------
+# AXES & BANDS (SEMANTIC ONLY)
+# ---------------------------------------------------
+
+phase_bands:
+  order:
+    - OPEN
+    - HOLD
+    - BLOCK
+
+  labels:
+    OPEN: "OPEN"
+    HOLD: "HOLD"
+    BLOCK: "BLOCK"
+
+  description: >
+    Phase bands represent execution conditions, not effort
+    or personal capability.
+
+# ---------------------------------------------------
+# MEMBER REPRESENTATION SEMANTICS
+# ---------------------------------------------------
+
+members:
+  representation:
+    style: "thin_line_or_dots"
+    dominance: "none"
+    color_policy: "neutral_distinct"
+    show_names_toggle: true
+
+  hover_template: >
+    Member: {{member_name}}
+    Period: {{period_label}}
+    Phase: {{phase_label}}
+    Emotional Risk: {{emotional_risk_level}}
+
+# ---------------------------------------------------
+# DRIFT ANNOTATIONS (AUTHORITATIVE)
+# ---------------------------------------------------
+
+annotations:
+
+  convergence:
+    condition: ">= 70% members share phase for >= 6 months"
+    label: "Convergence"
+    template: >
+      Family phases converged during this period.
+
+  divergence:
+    condition: "members span all three phases"
+    label: "Divergence"
+    template: >
+      Family phases diverged during this period.
+
+  transition:
+    condition: ">= 2 members change phase in same window"
+    label: "Transition"
+    template: >
+      Multiple members transitioned phases here.
+
+# ---------------------------------------------------
+# EMOTIONAL RISK OVERLAY (READ-ONLY)
+# ---------------------------------------------------
+
+emotional_risk_overlay:
+  condition: ">= 2 members high risk"
+  visual_cue: "thin_amber_underline"
+  template: >
+    Elevated emotional risk present for multiple members.
+
+# ---------------------------------------------------
+# MANDATORY SAFEGUARDS
+# ---------------------------------------------------
+
+safeguards:
+  footer: >
+    Family drift reflects timing differences, not relationship quality
+    or individual effort.
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - No aggregation or scoring permitted
+  - No arrows or progress indicators allowed
+  - Drift view must be strictly past-focused
+  - All annotations must use locked templates
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

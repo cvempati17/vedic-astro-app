@@ -1,0 +1,175 @@
+version: "1.0.0"
+
+file_type: "family_level_phase_comparison_semantics"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - family_matrix_engine
+    - time_evolution_engine
+    - emotional_risk_overlay
+    - ui_family_comparison_view
+    - report_generator
+
+description: >
+  Defines canonical semantics, explanatory copy, and interpretation
+  templates for family-level phase comparison.
+  This file provides contextual meaning only and must not introduce
+  aggregation logic, thresholds, or phase resolution rules.
+
+# ---------------------------------------------------
+# CORE PRINCIPLES (NON-NEGOTIABLE)
+# ---------------------------------------------------
+
+principles:
+  - Family comparison is contextual, not diagnostic
+  - Individual phases remain authoritative
+  - No family-wide phase label is permitted
+  - Distribution must never be averaged or scored
+  - Comparison must never imply hierarchy or judgment
+
+# ---------------------------------------------------
+# VIEW HEADER SEMANTICS
+# ---------------------------------------------------
+
+header:
+  title: "Family-Level Phase Comparison"
+  subtitle_template: >
+    Axis: {{axis_label}} · Period: {{period_label}}
+
+  description: >
+    This view shows how the same phase category appears
+    across family members for the selected period.
+
+# ---------------------------------------------------
+# PHASE DISTRIBUTION SEMANTICS
+# ---------------------------------------------------
+
+distribution:
+  section_title: "Phase Distribution"
+
+  description: >
+    This distribution shows how different execution
+    conditions are currently expressed across family
+    members. It reflects timing context, not effort
+    or personal capability.
+
+  phase_labels:
+    BLOCK: "BLOCK"
+    HOLD: "HOLD"
+    OPEN: "OPEN"
+
+# ---------------------------------------------------
+# CURRENT MEMBER POSITION
+# ---------------------------------------------------
+
+current_member:
+  label: "You are here"
+
+  position_templates:
+    in_block: >
+      This places you within the BLOCK group for this
+      axis and period.
+
+    in_hold: >
+      This places you within the middle of the family
+      distribution for this axis and period.
+
+    in_open: >
+      This places you within the OPEN group for this
+      axis and period.
+
+# ---------------------------------------------------
+# DISTRIBUTION INTERPRETATION TEMPLATES
+# ---------------------------------------------------
+
+distribution_interpretation:
+
+  mixed_distribution:
+    condition: "multiple_phases_present"
+    template: >
+      Different family members are experiencing different
+      execution conditions. This suggests individualized
+      timing rather than a shared family-wide phase.
+
+  majority_block:
+    condition: "block_majority"
+    template: >
+      Multiple family members are in BLOCK phases. This
+      indicates broader environmental resistance affecting
+      the family during this period.
+
+  majority_hold:
+    condition: "hold_majority"
+    template: >
+      Most family members are in HOLD phases. This suggests
+      a period focused on stability, maintenance, and
+      steady execution across the family.
+
+  majority_open:
+    condition: "open_majority"
+    template: >
+      Several family members are in OPEN phases. This
+      suggests supportive conditions across the family,
+      though individual experiences still vary.
+
+# ---------------------------------------------------
+# EMOTIONAL RISK CONTEXT (OPTIONAL OVERLAY)
+# ---------------------------------------------------
+
+emotional_risk_context:
+  section_title: "Emotional Risk Context"
+
+  trigger_condition: "high_risk_count >= 2"
+
+  template: >
+    Elevated emotional risk is present for multiple family
+    members. Expansion suppression may be observed across
+    individual charts during this period.
+
+  disclaimer: >
+    Emotional Risk affects expansion permission only and
+    does not create BLOCK phases.
+
+# ---------------------------------------------------
+# SAFETY & GOVERNANCE FOOTERS
+# ---------------------------------------------------
+
+footers:
+
+  independence_disclaimer: >
+    Family-level comparison provides contextual insight only.
+    Each member’s phase is evaluated independently.
+
+  non_judgment_disclaimer: >
+    Phase differences reflect timing and conditions,
+    not personal merit, effort, or value.
+
+# ---------------------------------------------------
+# UI PRESENTATION HINTS (NON-BINDING)
+# ---------------------------------------------------
+
+ui_hints:
+  show_all_phases_even_if_zero: true
+  allow_member_name_toggle: true
+  default_view: "distribution"
+  emphasize_neutrality: true
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - No family phase may be computed or displayed
+  - No averaging or scoring of members is allowed
+  - UI must not infer interpretation beyond templates
+  - All copy must be sourced from this file
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

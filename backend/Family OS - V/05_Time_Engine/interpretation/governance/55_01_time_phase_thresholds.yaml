@@ -1,0 +1,117 @@
+version: "1.0.0"
+
+file_type: "time_phase_thresholds"
+
+status: "LOCKED"
+
+governance:
+  authority: "time_evolution_engine"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - family_matrix_engine
+    - interpretation_layer
+    - ui_hover_tooltip
+    - current_guidance_panel
+
+description: >
+  Defines canonical threshold rules and resolution order for determining
+  life-axis phases (BLOCK, HOLD, OPEN) over time.
+  This file governs numeric gating, rule precedence, and hysteresis behavior.
+  Semantic meaning of phases is explicitly excluded and defined elsewhere.
+
+# ---------------------------------------------------
+# NUMERIC INTENSITY BANDS (GLOBAL DEFAULTS)
+# ---------------------------------------------------
+
+intensity_bands:
+  low:
+    min: 0
+    max: 49
+    description: "Strong resistance. Effort conversion is poor."
+  medium:
+    min: 50
+    max: 69
+    description: "Usable but constrained. Incremental progress possible."
+  high:
+    min: 70
+    max: 100
+    description: "Supportive conditions. Alignment possible."
+
+# ---------------------------------------------------
+# PHASE THRESHOLDS (ELIGIBILITY ONLY)
+# ---------------------------------------------------
+
+thresholds:
+  hold_min: 60        # Minimum intensity to allow HOLD
+  open_min: 80        # Minimum intensity to allow OPEN
+
+# ---------------------------------------------------
+# PHASE RESOLUTION ORDER (CRITICAL)
+# ---------------------------------------------------
+# Resolution is rule-first, intensity-second.
+# Ordering below is authoritative and must not be changed.
+
+resolution_order:
+  - BLOCK
+  - OPEN
+  - HOLD
+
+# ---------------------------------------------------
+# RULE OVERRIDES
+# ---------------------------------------------------
+
+rules:
+  blocking_rules_override: true
+  expansion_requires_rule: true
+
+  blocking_rules:
+    - TIME_COMPRESSION
+    - PROMISE_DELIVERY_MISMATCH
+    - FAMILY_BASE_SUPPRESSION
+    - ACTIVE_CONFLICT_OVERRIDE
+    - GOVERNANCE_RESTRICTION
+
+  expansion_enabling_rules:
+    - TIME_WINDOW_ALIGNMENT
+    - AXIS_REINFORCEMENT
+    - FAMILY_BASE_AMPLIFICATION
+    - LOW_EMOTIONAL_RISK
+
+# ---------------------------------------------------
+# HYSTERESIS (ANTI-FLICKER GUARDAIL)
+# ---------------------------------------------------
+# Prevents rapid phase oscillation due to small intensity changes.
+
+hysteresis:
+  enabled: true
+
+  transitions:
+    open_to_hold_below: 75
+    hold_to_block_below: 55
+
+notes: >
+  Phase determination MUST follow this sequence:
+  1. If any blocking rule is active → BLOCK
+  2. Else if intensity >= open_min AND expansion rule active → OPEN
+  3. Else if intensity >= hold_min → HOLD
+  4. Else → BLOCK
+
+  Intensity alone can never produce OPEN.
+  Phase semantics (meanings, behaviors, UI text) are defined in
+  55_04_life_axis_phase_semantics.yaml.
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - Frontend must not infer phase from intensity or color
+  - UI must consume phase_key emitted by engine
+  - No module may redefine thresholds locally
+  - Any semantic change requires MAJOR version bump
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

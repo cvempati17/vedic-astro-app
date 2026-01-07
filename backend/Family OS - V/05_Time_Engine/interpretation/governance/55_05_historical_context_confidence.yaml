@@ -1,0 +1,129 @@
+version: "1.0.0"
+
+file_type: "historical_context_confidence"
+
+status: "LOCKED"
+
+governance:
+  authority: "interpretation_layer"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - ui_phase_comparison_view
+    - ui_historical_context_view
+    - report_generator
+    - export_schema
+
+description: >
+  Defines canonical rules for contextual confidence decay
+  of historical OPEN phases over time.
+  This file governs explanatory relevance only.
+  It must never influence phase resolution, thresholds,
+  emotional risk evaluation, or future prediction.
+
+# ---------------------------------------------------
+# CORE PRINCIPLES (NON-NEGOTIABLE)
+# ---------------------------------------------------
+
+principles:
+  - Confidence decay reflects relevance, not correctness
+  - Past OPEN phases do not expire, but their context ages
+  - Decay must be deterministic and explainable
+  - No continuous curves or probabilistic models permitted
+  - Confidence decay is interpretation-only
+
+# ---------------------------------------------------
+# TIME BUCKET MODEL (AUTHORITATIVE)
+# ---------------------------------------------------
+
+time_buckets:
+  recent:
+    max_months_since_end: 12
+    confidence_weight: 1.00
+    confidence_band: "HIGH"
+    description: >
+      The OPEN phase is recent and provides strong
+      contextual relevance for understanding current
+      conditions.
+
+  intermediate:
+    min_months_since_end: 13
+    max_months_since_end: 36
+    confidence_weight: 0.60
+    confidence_band: "MODERATE"
+    description: >
+      The OPEN phase provides partial contextual relevance.
+      Conditions have evolved since this period.
+
+  distant:
+    min_months_since_end: 37
+    confidence_weight: 0.30
+    confidence_band: "LOW"
+    description: >
+      The OPEN phase reflects a different contextual era.
+      Current conditions are evaluated independently.
+
+# ---------------------------------------------------
+# UI PRESENTATION SEMANTICS
+# ---------------------------------------------------
+
+ui_semantics:
+  show_confidence_band_label: true
+  apply_opacity_scaling: true
+  show_numeric_weight: false
+
+  allowed_visual_cues:
+    - opacity
+    - subtle annotation
+    - info tooltip
+
+  forbidden_visual_cues:
+    - progress bars
+    - decay curves
+    - countdowns
+    - warning colors
+
+# ---------------------------------------------------
+# EXPLANATORY COPY TEMPLATES
+# ---------------------------------------------------
+
+copy_templates:
+
+  high_confidence:
+    template: >
+      This OPEN period is recent and provides strong
+      context for understanding current conditions.
+
+  moderate_confidence:
+    template: >
+      This OPEN period provides partial context.
+      Conditions have evolved since then.
+
+  low_confidence:
+    template: >
+      This OPEN period reflects a different contextual
+      phase. Current conditions are evaluated independently.
+
+# ---------------------------------------------------
+# MANDATORY SAFETY FOOTER
+# ---------------------------------------------------
+
+safety_footer: >
+  Confidence decay reflects changing conditions, not
+  a reduction in ability, experience, or potential.
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - Confidence decay must not affect phase resolution
+  - Confidence decay must not affect OPEN eligibility
+  - Confidence decay must not affect emotional risk
+  - Frontend must not compute decay buckets
+  - All copy must be sourced from this file
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------

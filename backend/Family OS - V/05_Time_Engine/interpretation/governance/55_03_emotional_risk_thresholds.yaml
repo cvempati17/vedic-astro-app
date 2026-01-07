@@ -1,0 +1,115 @@
+version: "1.0.0"
+
+file_type: "emotional_risk_thresholds"
+
+status: "LOCKED"
+
+governance:
+  authority: "emotional_risk_overlay"
+  source_of_truth: true
+  mutable: false
+  breaking_change_requires_major_version: true
+  dependent_modules:
+    - emotional_risk_overlay
+    - time_phase_thresholds
+    - interpretation_layer
+    - ui_hover_tooltip
+    - current_guidance_panel
+
+description: >
+  Defines canonical numeric thresholds and resolution rules for Emotional Risk
+  classification (LOW, MODERATE, HIGH).
+  Emotional Risk represents instability, emotional load, or volatility that
+  can suppress expansion but must never directly create BLOCK phases.
+
+# ---------------------------------------------------
+# EMOTIONAL RISK SCORE RANGE
+# ---------------------------------------------------
+# Emotional Risk Score is normalized to 0–100.
+# Higher score = higher instability / volatility.
+
+score_range:
+  min: 0
+  max: 100
+
+# ---------------------------------------------------
+# EMOTIONAL RISK LEVEL THRESHOLDS
+# ---------------------------------------------------
+
+thresholds:
+  low:
+    min: 0
+    max: 34
+    label: "LOW"
+    description: >
+      Emotional state is stable. Stress is manageable.
+      No restriction on expansion decisions.
+
+  moderate:
+    min: 35
+    max: 64
+    label: "MODERATE"
+    description: >
+      Emotional load is elevated but contained.
+      Expansion is allowed only if other enabling rules are strong.
+
+  high:
+    min: 65
+    max: 100
+    label: "HIGH"
+    description: >
+      Emotional volatility or overload is significant.
+      Expansion must be suppressed to prevent destabilization.
+
+# ---------------------------------------------------
+# PHASE INTERACTION RULES (AUTHORITATIVE)
+# ---------------------------------------------------
+
+phase_interaction:
+  affects_phase: OPEN
+
+  rules:
+    when_low:
+      allow_open: true
+
+    when_moderate:
+      allow_open_if:
+        requires_strong_expansion_rules: true
+
+    when_high:
+      suppress_open: true
+      downgrade_to: HOLD
+
+  never:
+    - force_block
+    - alter_intensity
+    - override_blocking_rules
+
+# ---------------------------------------------------
+# RESOLUTION ORDER GUARDAIL
+# ---------------------------------------------------
+# Emotional Risk is evaluated ONLY after:
+# - Blocking rules
+# - Intensity eligibility
+# - Expansion enabling rules
+
+evaluation_order_position: 3
+
+notes: >
+  Emotional Risk is a safety overlay, not a punitive signal.
+  It can only restrict expansion (OPEN) and must never downgrade
+  directly to BLOCK or modify intensity values.
+
+# ---------------------------------------------------
+# NON-NEGOTIABLE CONSTRAINTS
+# ---------------------------------------------------
+
+constraints:
+  - Emotional Risk levels must be computed only by the overlay
+  - Frontend must not derive risk levels from raw signals
+  - UI must consume emotional_risk_level emitted by engine
+  - Thresholds must not vary by axis without MAJOR version bump
+
+# ---------------------------------------------------
+# END OF FILE
+# ---------------------------------------------------
