@@ -206,7 +206,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                     maxWidth: '300px',
                     color: '#e6e6e6',
                     zIndex: 1000,
-                    pointerEvents: 'auto',
+                    pointerEvents: isFrozen ? 'auto' : 'none', // FIX: Allow click-through to freeze, then interact
                     position: 'relative'
                 }}>
                     {isFrozen && (
