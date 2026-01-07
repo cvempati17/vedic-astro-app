@@ -373,7 +373,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            {!frozenPoint && <Tooltip content={<CustomTooltip />} wrapperStyle={{ pointerEvents: 'none' }} />}
+                            {!frozenPoint && <Tooltip content={<CustomTooltip />} wrapperStyle={{ pointerEvents: 'none' }} cursor={{ stroke: '#9ca3af', strokeWidth: 1, pointerEvents: 'none' }} isAnimationActive={false} />}
 
 
                             {getGateRegions().map((r, i) => (
@@ -389,11 +389,21 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
                                         name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
                                         onMouseEnter={() => setHoveredMemberId(m.id)} onMouseLeave={() => setHoveredMemberId(null)} isAnimationActive={false}
+                                        activeDot={false} interaction="none"
                                     />
                                 );
                             })}
-                            <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} />
-                            <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                            <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} isAnimationActive={false} activeDot={false} />
+                            <Line
+                                type="monotone"
+                                dataKey="intensity"
+                                stroke="#e6c87a"
+                                strokeWidth={3}
+                                name="Effective Intensity"
+                                dot={{ r: 4 }}
+                                activeDot={{ r: 8, pointerEvents: 'none' }}
+                                isAnimationActive={false}
+                            />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
