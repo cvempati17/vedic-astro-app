@@ -415,7 +415,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 <div
                     style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative', cursor: 'pointer' }}
                     onClick={() => {
-                        // Fallback Click Handler: Use last known payload if Recharts onClick missed it
+                        // Container Click Handler: Use last known payload to FREEZE
                         if (!frozenPoint && lastPayloadRef.current) {
                             setFrozenPoint({
                                 x: 0,
@@ -428,7 +428,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                     }}
                 >
                     <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
-                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Anywhere in Chart to Freeze"}
+                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Grid to Freeze Context"}
                     </div>
 
                     {/* Frozen Tooltip Overlay */}
@@ -457,22 +457,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     lastPayloadRef.current = e.activePayload;
                                 }
                             }}
-                            onClick={(e) => {
-                                e && e.stopPropagation(); // Handle it here
-                                if (e && e.activePayload && e.activePayload.length) {
-                                    if (frozenPoint && frozenPoint.label === e.activePayload[0].payload.time) {
-                                        setFrozenPoint(null);
-                                    } else {
-                                        setFrozenPoint({
-                                            x: e.activeCoordinate.x,
-                                            y: e.activeCoordinate.y,
-                                            payload: e.activePayload,
-                                            label: e.activePayload[0].payload.time,
-                                            activeMemberId: hoveredMemberId || focusedMemberId
-                                        });
-                                    }
-                                }
-                            }}
+                            // Removed LineChart onClick - letting bubble up to Container
                             style={{ cursor: 'pointer' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
