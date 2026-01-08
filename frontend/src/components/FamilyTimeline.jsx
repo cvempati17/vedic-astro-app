@@ -259,7 +259,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         width: '300px',
                         color: '#e6e6e6',
                         zIndex: 1000,
-                        pointerEvents: isFrozen ? 'auto' : 'none', // Pass-through when hover, interact when locked
+                        pointerEvents: 'auto', // Allow catching the tooltip
                         position: 'relative',
                         cursor: isFrozen ? 'default' : 'pointer'
                     }}
@@ -451,7 +451,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }
                                 }
                             }}
-                            onMouseLeave={() => setHoveredMemberId(null)}
                             style={{ cursor: 'pointer' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
@@ -478,7 +477,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     <Line
                                         key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
                                         name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
-                                        onMouseEnter={() => setHoveredMemberId(m.id)} onMouseLeave={() => setHoveredMemberId(null)} isAnimationActive={false}
+                                        onMouseEnter={() => setHoveredMemberId(m.id)} isAnimationActive={false}
                                         activeDot={false}
                                     />
                                 );
