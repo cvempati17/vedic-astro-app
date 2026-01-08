@@ -147,18 +147,29 @@ const FamilyTimeline = ({ members, familyId }) => {
             const trace = exactTrace || lastTrace;
 
             const memberPoints = {};
+            let sumIntensity = 0;
+            let countMembers = 0;
+
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
                     const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
                     if (mLayer && mLayer[idx]) {
-                        memberPoints[`member_${m.id}`] = mLayer[idx].intensity;
+                        const val = mLayer[idx].intensity;
+                        memberPoints[`member_${m.id}`] = val;
+                        sumIntensity += val;
+                        countMembers++;
                     }
                 });
             }
+
+            // DYNAMIC FAMILY SCORE: Average of active members
+            // This reflects the true changing energy (48-92) vs static baseline (74)
+            const dynamicFamilyMean = countMembers > 0 ? (sumIntensity / countMembers) : (pt.family_intensity || 0);
+
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity,
-                familyBase: trace.family_intensity !== undefined ? trace.family_intensity : (pt.family_intensity || 0),
+                familyBase: dynamicFamilyMean, // Use Calculated Dynamic Mean
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
