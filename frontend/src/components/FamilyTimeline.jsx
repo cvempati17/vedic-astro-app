@@ -155,19 +155,16 @@ const FamilyTimeline = ({ members, familyId }) => {
 
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
-                    // ROBUST ID LOOKUP: Try direct, string, or fallback
-                    const memberObj = data.individual_dasha_layer[m.id]
-                        || data.individual_dasha_layer[String(m.id)]
-                        || data.individual_dasha_layer[Number(m.id)];
-
-                    // CRITCIAL FIX: Access the specific AXIS array from the member object
-                    // Previous error: accessed memberObj[idx] directly instead of memberObj[selectedAxis][idx]
-                    const mLayer = memberObj?.[selectedAxis];
+                    // Revert to simple, proven access pattern (checking both String/Number IDs)
+                    // We check [m.id] and [String(m.id)] to be safe, but access [selectedAxis] directly.
+                    const layerObj = data.individual_dasha_layer[m.id] || data.individual_dasha_layer[String(m.id)];
+                    const mLayer = layerObj?.[selectedAxis];
 
                     if (mLayer && mLayer[idx]) {
                         const val = mLayer[idx].intensity;
                         memberPoints[`member_${m.id}`] = val;
-                        // Only add to sum if value is valid number
+
+                        // Calculate Sum
                         if (typeof val === 'number') {
                             sumIntensity += val;
                             countMembers++;
@@ -176,13 +173,13 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
             }
 
-            // Prefer Trace Layer Value (Engine Logic) > Summation > Static Fallback
-            // This ensures we get the "48-92" values if they exist in trace_layer
+            // FORCE DYNAMIC CALCULATION
+            // Issue was Trace Layer having static 74. We now prioritize the calculated Mean.
             let familyVal = 74;
-            if (trace && trace.family_intensity !== undefined && trace.family_intensity !== null) {
-                familyVal = trace.family_intensity;
-            } else if (countMembers > 0) {
+            if (countMembers > 0) {
                 familyVal = sumIntensity / countMembers;
+            } else if (trace && trace.family_intensity !== undefined && trace.family_intensity !== null) {
+                familyVal = trace.family_intensity;
             } else {
                 familyVal = pt.family_intensity || 74;
             }
