@@ -1,7 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Briefcase, Coins, HeartHandshake, Activity, Users, GraduationCap, Sparkles } from 'lucide-react';
+import { Briefcase, Coins, HeartHandshake, Activity, Users, GraduationCap, Sparkles, FileText, Code } from 'lucide-react';
 
-// --- Axis Semantics Configuration (Single Source of Layout Truth) ---
+// --- Dev Mode Configuration ---
+const isDevMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('dev') === 'true';
+
+const ruleYamlMap = {
+    ROLE_CAPACITY_GATE: { file: "55_01_time_phase_thresholds.yaml", path: "ROLE_CAPACITY_GATE", version: "1.0" },
+    INTENSITY_THRESHOLD: { file: "55_01_time_phase_thresholds.yaml", path: "INTENSITY_THRESHOLD", version: "1.0" },
+    EMOTIONAL_RISK_SUPPRESSION: { file: "55_03_family_matrix_emotional_risk_overlay.yaml", path: "EMOTIONAL_RISK_SUPPRESSION", version: "1.2" },
+    AXIS_PERMISSION: { file: "55_04_life_axis_phase_semantics.yaml", path: "AXIS_PERMISSION", version: "1.0" }
+};
+
+const REPO_BASE_URL = "https://github.com/org/repo/blob/main/config"; // Placeholder
+
+// --- Axis Semantics Configuration ---
 const axisSemantics = {
     career: {
         label: "Career & Public Contribution",
@@ -59,13 +71,13 @@ const axisIcons = {
     relationships: HeartHandshake,
     care: Activity,
     family: Users,
-    authority: GraduationCap, // Metaphor for status
-    conflict: Sparkles, // Metaphor for friction/energy
+    authority: GraduationCap,
+    conflict: Sparkles,
     legacy: Users,
     emotional_load: Activity
 };
 
-const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subjectType, memberId, memberName }) => {
+const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName }) => {
     const [showToast, setShowToast] = useState(false);
     const [verbosity, setVerbosity] = useState("standard"); // 'standard' | 'expert'
 
@@ -98,14 +110,61 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
     };
     const AxisIcon = axisIcons[axis] || Sparkles;
 
-    // Determine Effective Intensity from Trace Steps (Look for FINAL_INTENSITY or derived)
-    // Fallback to Phase logic if intensity not explicit in generic trace
     let effectiveIntensity = "Calculated";
     const intensityStep = traceData?.evaluation_steps?.find(s => s.intensity !== undefined);
     if (intensityStep) effectiveIntensity = Math.round(intensityStep.intensity);
 
     const isMemberSubject = subjectType === 'member';
-    const roleGated = isMemberSubject && (effectiveIntensity < 60 || phase === 'HOLD'); // Simple heuristic for now
+    const roleGated = isMemberSubject && (effectiveIntensity < 60 || phase === 'HOLD');
+
+    // --- Helpers ---
+    const downloadTextFile = (filename, content) => {
+        const element = document.createElement("a");
+        const file = new Blob([content], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    };
+
+    const YamlLink = ({ ruleId }) => {
+        if (!isDevMode || verbosity !== "expert") return null;
+        const meta = ruleYamlMap[ruleId];
+        if (!meta) return null;
+        // Placeholder check because we don't have the real repo URL
+        const url = `#yaml-source-${meta.path}`;
+
+        return (
+            <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                    e.preventDefault();
+                    window.open(`${REPO_BASE_URL}/${meta.file}#${meta.path}`, '_blank');
+                }}
+                className="yaml-link"
+                aria-label={`Open YAML source for ${ruleId}`}
+                style={{
+                    marginLeft: '6px',
+                    padding: '1px 4px',
+                    border: '1px solid #374151',
+                    borderRadius: '3px',
+                    fontSize: '0.65rem',
+                    color: '#6b7280',
+                    textDecoration: 'none',
+                    fontFamily: 'monospace',
+                    display: 'inline-block',
+                    verticalAlign: 'middle'
+                }}
+            >
+                YAML
+            </a>
+        );
+    };
+
+    // --- Export Generators ---
 
     const handleShare = () => {
         const params = new URLSearchParams({
@@ -113,7 +172,6 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
             period: time,
             subject: subjectType,
             trace: 'open',
-            // If expert mode is open, share that state too? For now standard share.
         });
         if (isMemberSubject && memberId) params.set('memberId', memberId);
 
@@ -122,6 +180,127 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
         });
+    };
+
+    const handleExportTrace = () => {
+        const content = `TRACE EXPLANATION (EXPERT)
+
+Subject: ${memberName || 'Family'}
+Subject Type: ${subjectType === 'member' ? 'Individual' : 'Family'}
+Axis: ${currentAxis.label}
+Period: ${time}
+
+----------------------------------------
+FINAL RESULT
+----------------------------------------
+Effective Intensity: ${effectiveIntensity}
+Primary Gate: ${phase}
+
+----------------------------------------
+FAMILY CONTEXT
+----------------------------------------
+Available family-level intensity:
+${traceData?.family_intensity ? Math.round(traceData.family_intensity) : 'N/A'} (approx)
+
+This reflects the broader environment
+available to the family during this period.
+
+----------------------------------------
+EVALUATION SUMMARY
+----------------------------------------
+The effective value is limited by role-based
+modeling rather than lack of opportunity.
+
+${currentAxis.execution_phrase} is not modeled as the
+primary channel of outward contribution
+during this life stage.
+
+----------------------------------------
+AXIS MODELING RULE
+----------------------------------------
+This axis does not assume:
+${currentAxis.disallowed_assumptions.map(a => `- ${a}`).join('\n')}
+
+Values reflect readiness for public
+contribution, not guaranteed outcomes.
+
+----------------------------------------
+WHAT WOULD CHANGE THIS VALUE
+----------------------------------------
+This value may change if:
+- Role or dependency status is updated
+- This axis becomes an active life domain
+
+This value does not change automatically
+with time or family-level conditions alone.
+
+----------------------------------------
+TRACE METADATA
+----------------------------------------
+Trace Version: 1.1.0
+Generated At: ${new Date().toISOString()}
+
+----------------------------------------
+DISCLAIMER
+----------------------------------------
+This explanation describes system evaluation
+logic. It does not predict future outcomes.`;
+
+        const filename = `trace_${memberName || 'family'}_${axis}_${time}.txt`.toLowerCase().replace(/ /g, '_');
+        downloadTextFile(filename, content);
+    };
+
+    const handleExportDiff = () => {
+        if (!comparisonData) return;
+
+        const content = `TRACE DIFFERENCE (EXPERT)
+
+Subject: ${memberName || 'Family'}
+Subject Type: ${subjectType === 'member' ? 'Individual' : 'Family'}
+Axis: ${currentAxis.label}
+
+----------------------------------------
+PERIODS COMPARED
+----------------------------------------
+Current Period: ${time}
+Compared Period: ${comparisonTime}
+
+----------------------------------------
+PRIMARY GATE CHANGE
+----------------------------------------
+Changed from:
+${comparisonData.phase || 'N/A'}
+
+Changed to:
+${phase}
+
+----------------------------------------
+KEY REASONING CHANGES
+----------------------------------------
+- Family-level intensity changed
+- Threshold conditions logic updated
+
+----------------------------------------
+UNCHANGED CONDITIONS
+----------------------------------------
+- Axis permission rules
+- Emotional risk status
+
+----------------------------------------
+TRACE METADATA
+----------------------------------------
+Trace Version: 1.1.0
+Generated At: ${new Date().toISOString()}
+
+----------------------------------------
+DISCLAIMER
+----------------------------------------
+This comparison explains changes in
+evaluation logic. It does not indicate
+improvement or decline.`;
+
+        const filename = `trace_diff_${memberName || 'family'}_${axis}_${time}_vs_${comparisonTime}.txt`.toLowerCase().replace(/ /g, '_');
+        downloadTextFile(filename, content);
     };
 
     return (
@@ -174,12 +353,38 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
                         </label>
                         <button
                             onClick={handleShare}
+                            title="Share Deep Link"
                             style={{ background: 'none', border: 'none', color: '#60a5fa', cursor: 'pointer', fontSize: '12px' }}
                         >
                             Share
                         </button>
                     </div>
                 </div>
+
+                {/* Export Actions (Expert Only) */}
+                {verbosity === 'expert' && (
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                        <button
+                            onClick={handleExportTrace}
+                            style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#374151', border: 'none', borderRadius: '4px', padding: '4px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
+                        >
+                            <FileText size={12} /> Export Trace
+                        </button>
+                        {comparisonData && (
+                            <button
+                                onClick={handleExportDiff}
+                                style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#374151', border: 'none', borderRadius: '4px', padding: '4px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
+                            >
+                                <FileText size={12} /> Export Diff
+                            </button>
+                        )}
+                        {isDevMode && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#374151', border: 'none', borderRadius: '4px', padding: '4px 8px', color: '#10b981', fontSize: '11px', cursor: 'default' }}>
+                                <Code size={12} /> Dev Mode
+                            </div>
+                        )}
+                    </div>
+                )}
             </header>
 
             {/* Content Body */}
@@ -191,7 +396,6 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
                     <p style={{ fontSize: '13px', color: '#9ca3af', lineHeight: '1.5', margin: 0 }}>
                         During this period, the broader family environment shows changing conditions related to {currentAxis.domain_noun}.
                     </p>
-                    {/* Placeholder for range if available */}
                     {traceData?.family_intensity && (
                         <p style={{ fontSize: '13px', color: '#e5e7eb', marginTop: '6px' }}>
                             Family Baseline Intensity: <strong>{Math.round(traceData.family_intensity)}</strong>
@@ -246,7 +450,11 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, axis, time, phase, subje
                         <h4 style={{ fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '12px' }}>System Evaluation Path (Expert)</h4>
                         {traceData.evaluation_steps.map((step, idx) => (
                             <div key={idx} style={{ marginBottom: '8px', fontSize: '11px', fontFamily: 'monospace', color: '#6b7280' }}>
-                                <div style={{ color: '#d1d5db' }}>Step {step.step}: {step.rule || step.rule_type}</div>
+                                <div style={{ color: '#d1d5db', display: 'flex', alignItems: 'center' }}>
+                                    Step {step.step}: {step.rule || step.rule_type}
+                                    {/* DEV MODE LINK */}
+                                    <YamlLink ruleId={step.rule || step.rule_type} />
+                                </div>
                                 <div>Outcome: {step.outcome || step.risk_level || (step.intensity ? Math.round(step.intensity) : 'Auto')}</div>
                             </div>
                         ))}
