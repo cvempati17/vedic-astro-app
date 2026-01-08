@@ -77,9 +77,26 @@ const axisIcons = {
     emotional_load: Activity
 };
 
-const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier, debugKeys }) => {
+const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier, debugKeys, rawPoint }) => {
     const [showToast, setShowToast] = useState(false);
     const [verbosity, setVerbosity] = useState("standard"); // 'standard' | 'expert'
+
+    // Self-Correcting Lookup
+    let displayIntensity = intensity;
+    if (displayIntensity === undefined && rawPoint && memberId) {
+        // Try strict
+        if (rawPoint[`member_${memberId}`] !== undefined) displayIntensity = rawPoint[`member_${memberId}`];
+        // Try fuzzy
+        else {
+            const keys = Object.keys(rawPoint);
+            const match = keys.find(k => k.includes('member_') && k.includes(String(memberId)));
+            if (match) displayIntensity = rawPoint[match];
+        }
+    }
+    // Family Fallback
+    if (displayIntensity === undefined && rawPoint && subjectType !== 'member') {
+        displayIntensity = rawPoint.familyBase;
+    }
 
     // Focus Management
     const closeRef = useRef(null);
@@ -111,8 +128,8 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, ti
     const AxisIcon = axisIcons[axis] || Sparkles;
 
     let effectiveIntensity = "Calculated";
-    if (intensity !== undefined) {
-        effectiveIntensity = Math.round(intensity);
+    if (displayIntensity !== undefined) {
+        effectiveIntensity = Math.round(displayIntensity);
     } else {
         const intensityStep = traceData?.evaluation_steps?.find(s => s.intensity !== undefined);
         if (intensityStep) effectiveIntensity = Math.round(intensityStep.intensity);
@@ -435,22 +452,22 @@ improvement or decline.`;
                 </section>
 
                 {/* Debug for Missing Data */}
-                {intensity === undefined && (
+                {displayIntensity === undefined && (
                     <section style={{ marginBottom: '20px', padding: '12px', background: '#3f1f1f', borderRadius: '6px', border: '1px solid #ef4444' }}>
                         <h4 style={{ fontSize: '12px', color: '#ef4444', textTransform: 'uppercase', margin: '0 0 8px 0' }}>Data Lookup Failed</h4>
                         <div style={{ fontSize: '11px', color: '#fca5a5', fontFamily: 'monospace' }}>
-                            <div>Target Member ID: {memberId}</div>
-                            <div>Expected Key: member_{String(memberId)}</div>
+                            <div>Target Member ID: {memberId || 'Family'}</div>
+                            <div>Status: {rawPoint ? 'Raw Data Available' : 'No Raw Data'}</div>
                             <div style={{ marginTop: '8px', wordBreak: 'break-all' }}>
-                                <strong>Available Keys:</strong><br />
-                                {debugKeys ? debugKeys.join(', ') : 'No Keys Passed'}
+                                <strong>Keys in Raw Point:</strong><br />
+                                {rawPoint ? Object.keys(rawPoint).join(', ') : (debugKeys ? debugKeys.join(', ') : 'No Keys')}
                             </div>
                         </div>
                     </section>
                 )}
 
                 {/* Section 4: Calculation Logic (New) */}
-                {intensity !== undefined && multiplier !== undefined && (
+                {displayIntensity !== undefined && multiplier !== undefined && (
                     <section style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed #374151' }}>
                         <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', margin: '0 0 8px 0' }}>Calculation Logic</h4>
 
@@ -463,7 +480,7 @@ improvement or decline.`;
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>BASE (DASHA)</div>
                                 <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e5e7eb' }}>
-                                    {Math.round(intensity / multiplier)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
+                                    {Math.round(displayIntensity / multiplier)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
                                 </div>
                             </div>
                             <div style={{ color: '#6b7280', padding: '0 8px' }}>×</div>
@@ -477,7 +494,7 @@ improvement or decline.`;
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>FINAL SCORE</div>
                                 <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e6c87a' }}>
-                                    {Math.round(intensity)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
+                                    {Math.round(displayIntensity)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
                                 </div>
                             </div>
                         </div>
