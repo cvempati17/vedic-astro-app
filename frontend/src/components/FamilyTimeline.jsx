@@ -154,41 +154,33 @@ const FamilyTimeline = ({ members, familyId }) => {
             let countMembers = 0;
 
             if (members && data.individual_dasha_layer) {
-                const dashaKeys = Object.keys(data.individual_dasha_layer);
-
                 members.forEach(m => {
-                    // ULTRA-ROBUST ID MATCHING
-                    // Find the key that matches String(m.id) to handle ObjectId vs String mismatches
-                    const matchedKey = dashaKeys.find(k => String(k) === String(m.id));
-                    const layerObj = matchedKey ? data.individual_dasha_layer[matchedKey] : null;
+                    // Revert to simple, direct access which matches the Backend Schema exactly (Layer -> ID -> Axis -> Array)
+                    const mData = data.individual_dasha_layer[m.id] || data.individual_dasha_layer[String(m.id)];
+                    const mLayer = mData?.[selectedAxis];
 
-                    if (layerObj) {
-                        // ULTRA-ROBUST AXIS MATCHING
-                        // Find key that matches 'career' vs 'Career'
-                        const layerKeys = Object.keys(layerObj);
-                        const matchedAxis = layerKeys.find(k => k.toLowerCase() === selectedAxis.toLowerCase());
-                        const mLayer = matchedAxis ? layerObj[matchedAxis] : null;
+                    if (mLayer && mLayer[idx]) {
+                        const rawVal = mLayer[idx].intensity;
 
-                        if (mLayer && mLayer[idx]) {
-                            const val = mLayer[idx].intensity;
-                            memberPoints[`member_${m.id}`] = val;
+                        // CRITICAL LOGIC FIX: Apply Transit Multiplier
+                        // The backend sends raw dasha (flat). To get the dynamic '48-92' values,
+                        // we must apply the effective transit multiplier for this month.
+                        const multiplier = pt.transit_multiplier || 1.0;
+                        const dynamicVal = rawVal * multiplier;
 
-                            // Calculate Sum
-                            if (typeof val === 'number') {
-                                sumIntensity += val;
-                                countMembers++;
-                            }
-                        }
+                        memberPoints[`member_${m.id}`] = dynamicVal;
+
+                        sumIntensity += dynamicVal;
+                        countMembers++;
                     }
                 });
             }
 
-            // FORCE DYNAMIC CALCULATION
+            // Dynamic Family Energy Calculation
+            // Aggregates the transit-adjusted member intensities
             let familyVal = 74;
             if (countMembers > 0) {
                 familyVal = sumIntensity / countMembers;
-            } else if (trace && trace.family_intensity !== undefined && trace.family_intensity !== null) {
-                familyVal = trace.family_intensity;
             } else {
                 familyVal = pt.family_intensity || 74;
             }
