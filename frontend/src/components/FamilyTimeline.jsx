@@ -192,6 +192,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
+                transit_multiplier: pt.transit_multiplier, // Pass through for Drawer Analysis
                 ...memberPoints
             };
         });
@@ -328,7 +329,22 @@ const FamilyTimeline = ({ members, familyId }) => {
                             onClick={() => {
                                 const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
                                 if (trace) {
-                                    const currentVal = subjectId ? pt[`member_${subjectId}`] : pt.familyBase;
+                                    // Robust Lookup for Intensity
+                                    let currentVal = undefined;
+                                    if (subjectId) {
+                                        // Try exact match
+                                        if (pt[`member_${subjectId}`] !== undefined) {
+                                            currentVal = pt[`member_${subjectId}`];
+                                        } else {
+                                            // Try fuzzy match
+                                            const keys = Object.keys(pt);
+                                            const match = keys.find(k => k.includes(`member_`) && k.includes(String(subjectId)));
+                                            if (match) currentVal = pt[match];
+                                        }
+                                    } else {
+                                        currentVal = pt.familyBase;
+                                    }
+
                                     setDrawerState({
                                         isOpen: true,
                                         data: trace,
@@ -338,7 +354,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         memberId: subjectMember.id,
                                         memberName: subjectMember.name,
                                         comparisonData: null,
-                                        intensity: currentVal,
+                                        intensity: currentVal, // Now robust
                                         multiplier: pt.transit_multiplier || 1.0
                                     });
                                 }
