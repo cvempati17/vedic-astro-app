@@ -199,26 +199,32 @@ const FamilyTimeline = ({ members, familyId }) => {
             return (
                 <div style={{
                     backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                    border: '1px solid #4b5563',
+                    border: isFrozen ? '1px solid #e6c87a' : '1px solid #4b5563', // Highlights when frozen
                     borderRadius: '8px',
                     padding: '12px',
                     boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
                     maxWidth: '300px',
                     color: '#e6e6e6',
                     zIndex: 1000,
-                    pointerEvents: isFrozen ? 'auto' : 'none', // FIX: Allow click-through to freeze, then interact
+                    pointerEvents: isFrozen ? 'auto' : 'none', // Ensure pass-through when not frozen
                     position: 'relative'
                 }}>
                     {isFrozen && (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setFrozenPoint(null); }}
-                            style={{ position: 'absolute', top: '4px', right: '4px', color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer' }}
-                        >
-                            ✕
-                        </button>
+                        <div style={{
+                            display: 'flex', justifyContent: 'space-between', marginBottom: '8px',
+                            borderBottom: '1px solid #374151', paddingBottom: '4px'
+                        }}>
+                            <span style={{ fontSize: '10px', color: '#e6c87a', fontWeight: 'bold' }}>LOCKED</span>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); setFrozenPoint(null); }}
+                                style={{ color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', lineHeight: 1 }}
+                            >
+                                ✕
+                            </button>
+                        </div>
                     )}
 
-                    <div style={{ marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px', paddingRight: '16px' }}>
+                    <div style={{ marginBottom: '8px', borderBottom: isFrozen ? 'none' : '1px solid #374151', paddingBottom: '4px' }}>
                         <strong style={{ color: '#9ca3af', fontSize: '12px' }}>{label}</strong>
                     </div>
 
@@ -260,6 +266,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </div>
                     )}
 
+                    {/* Interactive Elements only visible if interacting or prompt available? They are always visible but clickable only if frozen */}
                     {activeMember && !showComparison && members.length > 1 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); setShowComparison(true); }}
@@ -337,13 +344,17 @@ const FamilyTimeline = ({ members, familyId }) => {
             {data && (
                 <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
                     <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
-                        {frozenPoint ? "Interactive Mode (Click X to resume)" : "Click point to freeze & interact"}
+                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Vertical Line to Freeze & Interact"}
                     </div>
 
                     {/* Frozen Tooltip Overlay */}
                     {frozenPoint && (
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 20 }}>
-                            <div style={{ position: 'absolute', left: frozenPoint.x, top: frozenPoint.y, pointerEvents: 'auto' }}>
+                            {/* We use the same CustomTooltip but positioned based on frozenPoint. 
+                                However, to match Recharts 'position={{y:0}}' logic, we should probably render it at Top Fixed Y. 
+                                Recharts doesn't expose coordinate easily here. 
+                                We will rely on Recharts coordinate from click event. */}
+                            <div style={{ position: 'absolute', left: frozenPoint.x, top: 0, pointerEvents: 'auto' }}>
                                 <CustomTooltip active={true} payload={frozenPoint.payload} label={frozenPoint.label} isFrozen={true} />
                             </div>
                         </div>
@@ -373,7 +384,13 @@ const FamilyTimeline = ({ members, familyId }) => {
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            {!frozenPoint && <Tooltip content={<CustomTooltip />} wrapperStyle={{ pointerEvents: 'none' }} cursor={{ stroke: '#9ca3af', strokeWidth: 1, pointerEvents: 'none' }} isAnimationActive={false} />}
+                            {!frozenPoint && <Tooltip
+                                content={<CustomTooltip />}
+                                wrapperStyle={{ pointerEvents: 'none' }}
+                                cursor={{ stroke: '#9ca3af', strokeWidth: 1, pointerEvents: 'none' }}
+                                isAnimationActive={false}
+                                position={{ y: 0 }}
+                            />}
 
 
                             {getGateRegions().map((r, i) => (
@@ -389,7 +406,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
                                         name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
                                         onMouseEnter={() => setHoveredMemberId(m.id)} onMouseLeave={() => setHoveredMemberId(null)} isAnimationActive={false}
-                                        activeDot={false} interaction="none"
+                                        activeDot={false}
                                     />
                                 );
                             })}
@@ -409,7 +426,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
-            {/* Custom Interactive Legend */}
+            {/* Legend & Guidance ... (unchanged logic) */}
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
