@@ -536,6 +536,10 @@ const FamilyTimeline = ({ members, familyId }) => {
                 subjectType={drawerState.subjectType}
                 memberId={drawerState.memberId}
                 memberName={drawerState.memberName}
+                intensity={drawerState.intensity}
+                multiplier={drawerState.multiplier}
+                debugKeys={drawerState.debugKeys}
+                rawPoint={drawerState.rawPoint}
             />
 
         </div>
