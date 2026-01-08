@@ -418,8 +418,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                     {/* Frozen Tooltip Overlay */}
                     {frozenPoint && (
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 20 }}>
-                            {/* Render Fixed at Top Y=0, X = frozen X */}
-                            <div style={{ position: 'absolute', left: frozenPoint.x, top: 0, pointerEvents: 'auto' }}>
+                            {/* Render Centered Fixed Card when Frozen */}
+                            <div style={{ position: 'absolute', left: '50%', top: '20px', transform: 'translateX(-50%)', pointerEvents: 'auto' }}>
                                 <CustomTooltip
                                     active={true}
                                     payload={frozenPoint.payload}
