@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PhaseTraceDrawer from './PhaseTraceDrawer';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ReferenceArea, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -29,9 +29,9 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
-    const [frozenPoint, setFrozenPoint] = useState(null);
 
-    const lastPayloadRef = useRef(null);
+    // REPLACEMENT FOR FROZEN POINT: Active Point State (Sticky)
+    const [activePoint, setActivePoint] = useState(null);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -89,6 +89,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
+                    if (response.data.data?.effective_intensity_layer?.axes[selectedAxis]?.length > 0) {
+                        // Set initial point? No, let user hover.
+                    }
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -109,7 +112,6 @@ const FamilyTimeline = ({ members, familyId }) => {
         if (params.get("trace") === "open") {
             const axisParam = params.get("axis");
             const periodParam = params.get("period");
-            const subjectParam = params.get("subject");
             const memberIdParam = params.get("memberId");
 
             if (axisParam && periodParam) {
@@ -118,18 +120,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                 }
                 const traceArr = data.trace_layer?.axes?.[axisParam];
                 const trace = traceArr?.find(tr => tr.time === periodParam);
-
-                // Note: Ideally filter trace by subject in backend response, but strict lookup is okay
                 if (trace) {
-                    setDrawerState({
-                        isOpen: true,
-                        data: trace,
-                        time: periodParam,
-                        phase: trace.phase_resolution,
-                        subjectType: subjectParam || 'family',
-                        memberId: memberIdParam,
-                        memberName: 'Loading context...' // Placeholder until manual interaction updates it
-                    });
+                    setDrawerState({ isOpen: true, data: trace, time: periodParam, phase: trace.phase_resolution, subjectType: memberIdParam ? 'member' : 'family', memberId: memberIdParam });
                 }
             }
         }
@@ -201,194 +193,106 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
     };
 
-    // --- Custom Tooltip (The Heart of Pic 2) ---
-    const CustomTooltip = ({ active, payload, label, isFrozen, setFrozenPoint, activeMemberId }) => {
+    // --- HUD COMPONENT - RENDERED MANUALLY ---
+    const InfoHUD = () => {
+        if (!activePoint) return <div style={{ position: 'absolute', top: 10, right: 10, color: '#6b7280', fontSize: '12px' }}>Hover chart to see details</div>;
+
+        const pt = activePoint.payload;
+        const gate = pt.gate;
+        const subjectId = hoveredMemberId || focusedMemberId;
+        const subjectMember = subjectId ? members.find(m => m.id === subjectId) : null;
+
+        const phaseKey = `FM_PHASE_${gate}`;
+        const genericSemantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
+        const specificText = axisSpecificSemantics[selectedAxis]?.[gate];
+        const explanationText = specificText || genericSemantics?.short_explanation;
+        const phaseColor = gateColors[gate] || '#ccc';
+
+        // Time Context
+        const dateStr = pt.time;
+        const nowStr = new Date().toISOString().slice(0, 7);
+        let timeContext = "";
+        if (dateStr > nowStr) timeContext = "(Future)";
+        if (dateStr < nowStr) timeContext = "(Historical)";
+
         const [showComparison, setShowComparison] = useState(false);
 
-        // Reset comparison when subject changes
-        useEffect(() => {
-            setShowComparison(false);
-        }, [activeMemberId]);
-
-        if (active && payload && payload.length) {
-            const point = payload[0].payload;
-            const gate = point.gate;
-            const familyIntensity = point.intensity;
-
-            // Resolve Subject: Passed activeMemberId (if frozen or hover)
-            const subjectMember = activeMemberId ? members.find(m => m.id === activeMemberId) : null;
-            const memberIntensity = subjectMember ? point[`member_${activeMemberId}`] : null;
-
-            // Semantics
-            const phaseKey = `FM_PHASE_${gate}`;
-            const genericSemantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
-
-            // 1. Axis-Specific Copy Logic
-            const specificText = axisSpecificSemantics[selectedAxis]?.[gate];
-            const explanationText = specificText || genericSemantics?.short_explanation;
-
-            const phaseColor = gateColors[gate] || '#ccc';
-
-            // 2. Time Context Logic
-            const dateStr = point.time; // YYYY-MM
-            const nowStr = new Date().toISOString().slice(0, 7);
-            let timeContext = "";
-            if (dateStr > nowStr) timeContext = "(Future)";
-            if (dateStr < nowStr) timeContext = "(Historical)";
-            // If equal, empty string or could be (Current)
-
-            return (
-                <div
-                    onClick={(e) => {
-                        // Click-to-Lock Logic (only when NOT frozen)
-                        if (!isFrozen && setFrozenPoint) {
-                            e.stopPropagation();
-                            setFrozenPoint({
-                                x: 0, // Not used for rendering in fixed position mode, but needed for state
-                                y: 0,
-                                payload: payload,
-                                label: label,
-                                activeMemberId: activeMemberId // LOCK THE CONTEXT
-                            });
-                        }
-                    }}
-                    style={{
-                        backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                        border: isFrozen ? '1px solid #e6c87a' : '1px solid #4b5563',
-                        borderRadius: '8px',
-                        padding: '12px',
-                        boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-                        width: '300px',
-                        color: '#e6e6e6',
-                        zIndex: 1000,
-                        pointerEvents: isFrozen ? 'auto' : 'none', // Pass-through on hover so Chart catches the click
-                        position: 'relative',
-                        cursor: isFrozen ? 'default' : 'none'
-                    }}
-                >
-                    {isFrozen && (
-                        <div style={{
-                            display: 'flex', justifyContent: 'space-between', marginBottom: '8px',
-                            borderBottom: '1px solid #374151', paddingBottom: '4px'
-                        }}>
-                            <span style={{ fontSize: '10px', color: '#e6c87a', fontWeight: 'bold' }}>LOCKED</span>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setFrozenPoint(null); }}
-                                style={{ color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', lineHeight: 1 }}
-                            >
-                                ✕
-                            </button>
-                        </div>
-                    )}
-
-                    <div style={{ marginBottom: '8px', fontSize: '11px', color: '#9ca3af', borderBottom: isFrozen ? 'none' : '1px solid #374151', paddingBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
-                        <span>{label}</span>
-                        {timeContext && <span style={{ fontStyle: 'italic', opacity: 0.7 }}>{timeContext}</span>}
-                    </div>
-
-                    {/* --- CONTEXT SWITCHING (PIC 2) --- */}
-                    {subjectMember ? (
-                        // SUBJECT VIEW
-                        <>
-                            <div style={{ marginBottom: '8px' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a', marginBottom: '2px' }}>
-                                    {subjectMember.name}
-                                </div>
-                                <div style={{ fontSize: '12px', color: '#d1d5db', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span>Intensity: <strong>{memberIntensity?.toFixed(0)}</strong></span>
-                                    {/* Phase Dot for Context */}
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: phaseColor }} />
-                                </div>
-                            </div>
-
-                            {/* Short Explanation */}
-                            {explanationText && (
-                                <div style={{ fontSize: '12px', lineHeight: '1.4', fontStyle: 'italic', color: '#9ca3af', marginBottom: '8px' }}>
-                                    {explanationText}
-                                </div>
-                            )}
-
-                            {/* "Compare family members" Affordance */}
-                            {!showComparison && members.length > 1 && (
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setShowComparison(true); }}
-                                    style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', padding: 0 }}
-                                >
-                                    Compare family members ▸
-                                </button>
-                            )}
-
-                            {/* Expanded Comparison */}
-                            {showComparison && (
-                                <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #374151' }}>
-                                    {members.filter(m => m.id !== subjectMember.id).map(m => {
-                                        const val = point[`member_${m.id}`];
-                                        return (
-                                            <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: '#d1d5db', marginBottom: '4px' }}>
-                                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4b5563' }} />
-                                                <span style={{ flex: 1 }}>{m.name}</span>
-                                                <span style={{ fontWeight: 'bold' }}>{val?.toFixed(0)}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        // FAMILY CONTEXT VIEW (Default)
-                        <>
-                            <div style={{ marginBottom: '8px' }}>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6', marginBottom: '2px' }}>
-                                    Family Context
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#d1d5db' }}>
-                                    <span>Family Intensity: <strong>{familyIntensity?.toFixed(0)}</strong></span>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: phaseColor }} />
-                                </div>
-                            </div>
-                            <div style={{ fontSize: '12px', color: phaseColor, fontWeight: 'bold' }}>
-                                {gate} PHASE
-                            </div>
-                        </>
-                    )}
-
-                    {/* "Why?" Trace Trigger */}
-                    {data?.trace_layer && (
-                        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    // Open Trace Drawer with specific context
-                                    const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === point.time);
-                                    if (trace) {
-                                        setDrawerState({
-                                            isOpen: true,
-                                            data: trace,
-                                            time: point.time,
-                                            phase: trace.phase_resolution,
-                                            subjectType: subjectMember ? 'member' : 'family',
-                                            memberId: subjectMember?.id,
-                                            memberName: subjectMember?.name || 'Family Context'
-                                        });
-                                    }
-                                }}
-                                style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '2px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
-                            >
-                                Why?
-                            </button>
-                        </div>
-                    )}
+        return (
+            <div style={{
+                position: 'absolute',
+                top: 10,
+                left: '50%', // Center horizontally
+                transform: 'translateX(-50%)',
+                width: '320px',
+                background: 'rgba(31, 41, 55, 0.95)',
+                border: '1px solid #4b5563',
+                borderRadius: '8px',
+                padding: '12px',
+                zIndex: 50,
+                color: '#e6e6e6',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+                pointerEvents: 'auto' // Must be clickable
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px', fontSize: '11px', color: '#9ca3af' }}>
+                    <span>{pt.time}</span>
+                    <span style={{ fontStyle: 'italic', opacity: 0.7 }}>{timeContext}</span>
                 </div>
-            );
-        }
-        return null;
-    };
 
+                {subjectMember ? (
+                    // Subject View
+                    <>
+                        <div style={{ marginBottom: '8px' }}>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a' }}>{subjectMember.name}</div>
+                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>Intensity: <strong>{pt[`member_${subjectId}`]?.toFixed(0)}</strong> <span style={{ width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', backgroundColor: phaseColor }} /></div>
+                        </div>
+                        {explanationText && <div style={{ fontSize: '12px', lineHeight: '1.4', fontStyle: 'italic', color: '#9ca3af', marginBottom: '8px' }}>{explanationText}</div>}
+
+                        {!showComparison && members.length > 1 && (
+                            <button onClick={() => setShowComparison(true)} style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', padding: 0 }}>Compare family members ▸</button>
+                        )}
+                        {showComparison && (
+                            <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #374151' }}>
+                                {members.filter(m => m.id !== subjectMember.id).map(m => (
+                                    <div key={m.id} style={{ display: 'flex', gap: '8px', fontSize: '11px', color: '#d1d5db' }}>
+                                        <span style={{ flex: 1 }}>{m.name}</span><strong>{pt[`member_${m.id}`]?.toFixed(0)}</strong>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    // Family View
+                    <>
+                        <div style={{ marginBottom: '8px' }}>
+                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</div>
+                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>Intensity: <strong>{pt.intensity?.toFixed(0)}</strong> <span style={{ width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', backgroundColor: phaseColor }} /></div>
+                        </div>
+                        <div style={{ fontSize: '12px', color: phaseColor, fontWeight: 'bold' }}>{gate} PHASE</div>
+                    </>
+                )}
+
+                {/* Always Show Why Button */}
+                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
+                    <button
+                        onClick={() => {
+                            const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
+                            if (trace) {
+                                setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: subjectMember ? 'member' : 'family', memberId: subjectMember?.id, memberName: subjectMember?.name });
+                            }
+                        }}
+                        style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '2px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
+                    >
+                        Why?
+                    </button>
+                </div>
+            </div>
+        );
+    };
 
     if (loading) return <div style={{ color: '#fff' }}>Loading Time Engine...</div>;
     if (error) return <div style={{ color: '#ef4444' }}>{error}</div>;
 
-    const currentDisplayPoint = frozenPoint ? frozenPoint.payload[0].payload : (chartData.length > 0 ? chartData[0] : null);
+    const currentDisplayPoint = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
 
     return (
         <div style={{ background: '#0f1220', color: '#e6e6e6', padding: '20px' }}>
@@ -410,67 +314,33 @@ const FamilyTimeline = ({ members, familyId }) => {
                 )}
             </div>
 
-            {/* Graph Container with Fallback Click */}
             {data && (
-                <div
-                    style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative', cursor: 'pointer' }}
-                    onClick={() => {
-                        // Container Click Handler: Use last known payload to FREEZE
-                        if (!frozenPoint && lastPayloadRef.current) {
-                            setFrozenPoint({
-                                x: 0,
-                                y: 0,
-                                payload: lastPayloadRef.current,
-                                label: lastPayloadRef.current[0].payload.time,
-                                activeMemberId: hoveredMemberId || focusedMemberId
-                            });
-                        }
-                    }}
-                >
-                    <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
-                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Grid to Freeze Context"}
-                    </div>
-
-                    {/* Frozen Tooltip Overlay */}
-                    {frozenPoint && (
-                        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 20 }}>
-                            {/* Render Centered Fixed Card when Frozen */}
-                            <div style={{ position: 'absolute', left: '50%', top: '20px', transform: 'translateX(-50%)', pointerEvents: 'auto' }}>
-                                <CustomTooltip
-                                    active={true}
-                                    payload={frozenPoint.payload}
-                                    label={frozenPoint.label}
-                                    isFrozen={true}
-                                    setFrozenPoint={setFrozenPoint}
-                                    activeMemberId={frozenPoint.activeMemberId} // PASS LOCKED CONTEXT
-                                />
-                            </div>
-                        </div>
-                    )}
+                <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
+                    {/* HUD - Fixed Tooltip Replacement */}
+                    <InfoHUD />
 
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                             data={chartData}
                             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                             onMouseMove={(e) => {
-                                if (e && e.activePayload) {
-                                    lastPayloadRef.current = e.activePayload;
+                                if (e && e.activePayload && e.activePayload.length) {
+                                    // Make this Sticky: update activePoint, never clear it unless leaving component? 
+                                    // Actually, just updating is enough. HUD won't move, just content updates.
+                                    setActivePoint({
+                                        payload: e.activePayload[0].payload,
+                                        label: e.activePayload[0].payload.time
+                                    });
                                 }
                             }}
-                            // Removed LineChart onClick - letting bubble up to Container
-                            style={{ cursor: 'pointer' }}
+                            onMouseLeave={() => { /* Don't clear activePoint to keep it sticky/inspectable */ }}
+                            style={{ cursor: 'crosshair' }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                             <XAxis dataKey="time" stroke="#9ca3af" />
                             <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
-                            {!frozenPoint && <Tooltip
-                                content={(props) => <CustomTooltip {...props} setFrozenPoint={setFrozenPoint} activeMemberId={hoveredMemberId || focusedMemberId} />}
-                                wrapperStyle={{ pointerEvents: 'none' }}
-                                cursor={{ stroke: '#9ca3af', strokeWidth: 1, pointerEvents: 'none' }}
-                                isAnimationActive={false}
-                                position={{ y: 0 }}
-                            />}
 
+                            {/* NO TOOLTIP COMPONENT - HUD handles it */}
 
                             {getGateRegions().map((r, i) => (
                                 <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
@@ -490,16 +360,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 );
                             })}
                             <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} isAnimationActive={false} activeDot={false} />
-                            <Line
-                                type="monotone"
-                                dataKey="intensity"
-                                stroke="#e6c87a"
-                                strokeWidth={3}
-                                name="Effective Intensity"
-                                dot={{ r: 4 }}
-                                activeDot={{ r: 8, pointerEvents: 'none' }}
-                                isAnimationActive={false}
-                            />
+                            <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} isAnimationActive={false} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
