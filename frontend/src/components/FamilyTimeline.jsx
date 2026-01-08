@@ -125,7 +125,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                         time: periodParam,
                         phase: trace.phase_resolution,
                         subjectType: subjectParam || 'family',
-                        memberId: memberIdParam
+                        memberId: memberIdParam,
+                        memberName: 'Loading context...' // Placeholder until manual interaction updates it
                     });
                 }
             }
@@ -186,6 +187,18 @@ const FamilyTimeline = ({ members, familyId }) => {
         BLOCK: '#8E44AD'
     };
 
+    // --- Axis Specific Semantics (Frontend Override for Polish) ---
+    const axisSpecificSemantics = {
+        wealth: {
+            HOLD: "Resource stability is supported, but expansion is limited. Conservation and steady management are favored over aggressive growth.",
+            BLOCK: "External resource flow may be restricted. Focus on consolidating existing assets rather than seeking new gains.",
+            OPEN: "Conditions favor material expansion and conversion. Strategic investments and resource acquisition are supported."
+        },
+        career: {
+            HOLD: "Professional momentum is stable but slow. Focus on reliable performance rather than seeking promotion or visibility.",
+        }
+    };
+
     // --- Custom Tooltip (The Heart of Pic 2) ---
     const CustomTooltip = ({ active, payload, label, isFrozen, setFrozenPoint, activeMemberId }) => {
         const [showComparison, setShowComparison] = useState(false);
@@ -206,8 +219,21 @@ const FamilyTimeline = ({ members, familyId }) => {
 
             // Semantics
             const phaseKey = `FM_PHASE_${gate}`;
-            const semantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
+            const genericSemantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
+
+            // 1. Axis-Specific Copy Logic
+            const specificText = axisSpecificSemantics[selectedAxis]?.[gate];
+            const explanationText = specificText || genericSemantics?.short_explanation;
+
             const phaseColor = gateColors[gate] || '#ccc';
+
+            // 2. Time Context Logic
+            const dateStr = point.time; // YYYY-MM
+            const nowStr = new Date().toISOString().slice(0, 7);
+            let timeContext = "";
+            if (dateStr > nowStr) timeContext = "(Future)";
+            if (dateStr < nowStr) timeContext = "(Historical)";
+            // If equal, empty string or could be (Current)
 
             return (
                 <div
@@ -230,7 +256,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         borderRadius: '8px',
                         padding: '12px',
                         boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-                        width: '280px',
+                        width: '300px',
                         color: '#e6e6e6',
                         zIndex: 1000,
                         pointerEvents: isFrozen ? 'auto' : 'none', // Pass-through when hover, interact when locked
@@ -253,8 +279,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                         </div>
                     )}
 
-                    <div style={{ marginBottom: '8px', fontSize: '11px', color: '#9ca3af', borderBottom: isFrozen ? 'none' : '1px solid #374151', paddingBottom: '4px' }}>
-                        {label}
+                    <div style={{ marginBottom: '8px', fontSize: '11px', color: '#9ca3af', borderBottom: isFrozen ? 'none' : '1px solid #374151', paddingBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>{label}</span>
+                        {timeContext && <span style={{ fontStyle: 'italic', opacity: 0.7 }}>{timeContext}</span>}
                     </div>
 
                     {/* --- CONTEXT SWITCHING (PIC 2) --- */}
@@ -273,19 +300,19 @@ const FamilyTimeline = ({ members, familyId }) => {
                             </div>
 
                             {/* Short Explanation */}
-                            {semantics && (
+                            {explanationText && (
                                 <div style={{ fontSize: '12px', lineHeight: '1.4', fontStyle: 'italic', color: '#9ca3af', marginBottom: '8px' }}>
-                                    {semantics.short_explanation}
+                                    {explanationText}
                                 </div>
                             )}
 
-                            {/* "Compare others" Affordance */}
+                            {/* "Compare family members" Affordance */}
                             {!showComparison && members.length > 1 && (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setShowComparison(true); }}
                                     style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', padding: 0 }}
                                 >
-                                    Compare others ▸
+                                    Compare family members ▸
                                 </button>
                             )}
 
