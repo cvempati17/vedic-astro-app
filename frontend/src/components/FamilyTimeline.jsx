@@ -357,7 +357,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         intensity: currentVal, // Now robust
                                         multiplier: pt.transit_multiplier || 1.0,
                                         debugKeys: Object.keys(pt), // PASS KEYS FOR DEBUGGING
-                                        rawPoint: pt // PASS RAW OBJECT FOR FAILSAFE
+                                        rawPoint: pt, // PASS RAW OBJECT FOR FAILSAFE
+                                        transitPlanet: pt.dominant_planet // PASS CONTEXT
                                     });
                                 }
                             }}
@@ -540,6 +541,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 multiplier={drawerState.multiplier}
                 debugKeys={drawerState.debugKeys}
                 rawPoint={drawerState.rawPoint}
+                transitPlanet={drawerState.transitPlanet}
             />
 
         </div>

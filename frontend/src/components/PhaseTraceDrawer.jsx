@@ -77,7 +77,11 @@ const axisIcons = {
     emotional_load: Activity
 };
 
-const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier, debugKeys, rawPoint }) => {
+const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier, debugKeys, rawPoint, transitPlanet }) => {
+
+    // ... (rest of code) ...
+
+
     const [showToast, setShowToast] = useState(false);
     const [verbosity, setVerbosity] = useState("standard"); // 'standard' | 'expert'
 
@@ -482,12 +486,16 @@ improvement or decline.`;
                                 <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e5e7eb' }}>
                                     {Math.round(displayIntensity / multiplier)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
                                 </div>
+                                <div style={{ fontSize: '9px', color: '#6b7280', marginTop: '4px' }}>Source: Period Cycle</div>
                             </div>
                             <div style={{ color: '#6b7280', padding: '0 8px' }}>×</div>
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>TRANSIT MULT</div>
                                 <div style={{ fontWeight: 'bold', fontSize: '16px', color: multiplier < 1 ? '#ef4444' : (multiplier > 1 ? '#10b981' : '#d1d5db') }}>
                                     {multiplier.toFixed(2)}x
+                                </div>
+                                <div style={{ fontSize: '9px', color: multiplier < 1 ? '#991b1b' : (multiplier > 1 ? '#065f46' : '#6b7280'), marginTop: '4px' }}>
+                                    Impact: {transitPlanet || 'Transit'} {multiplier > 1 ? 'Boost' : (multiplier < 1 ? 'Drag' : 'Neutral')}
                                 </div>
                             </div>
                             <div style={{ color: '#6b7280', padding: '0 8px' }}>=</div>
