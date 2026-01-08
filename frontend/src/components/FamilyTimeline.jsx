@@ -24,13 +24,17 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [interpretations, setInterpretations] = useState(null);
     const [language, setLanguage] = useState('en');
 
-    // Trace Drawer State (Context)
+    // Trace Drawer State
     const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null, subjectType: null, memberId: null });
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
-
     const [activePoint, setActivePoint] = useState(null);
+
+    // Sync: Clear hovered member when focused member changes (Fix Sync Issue)
+    useEffect(() => {
+        setHoveredMemberId(null);
+    }, [focusedMemberId]);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -177,7 +181,6 @@ const FamilyTimeline = ({ members, familyId }) => {
         BLOCK: '#8E44AD'
     };
 
-    // --- Axis Specific Semantics (Frontend Override for Polish) ---
     const axisSpecificSemantics = {
         wealth: {
             HOLD: "Resource stability is supported, but expansion is limited. Conservation and steady management are favored over aggressive growth.",
@@ -189,7 +192,7 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
     };
 
-    // --- HUD COMPONENT - HEADER BAR STYLE ---
+    // --- HUD COMPONENT ---
     const InfoHUD = () => {
         const pt = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
         if (!pt) return null;
@@ -204,7 +207,6 @@ const FamilyTimeline = ({ members, familyId }) => {
         const explanationText = specificText || genericSemantics?.short_explanation;
         const phaseColor = gateColors[gate] || '#ccc';
 
-        // Time Context
         const dateStr = pt.time;
         const nowStr = new Date().toISOString().slice(0, 7);
         let timeContext = "";
@@ -212,6 +214,9 @@ const FamilyTimeline = ({ members, familyId }) => {
         if (dateStr < nowStr) timeContext = "(Historical)";
 
         const [showComparison, setShowComparison] = useState(false);
+
+        // Reset comparison on global updates
+        useEffect(() => { setShowComparison(false); }, [subjectId, pt.time]);
 
         return (
             <div style={{
@@ -228,25 +233,36 @@ const FamilyTimeline = ({ members, familyId }) => {
                 gap: '15px',
                 minHeight: '60px'
             }}>
-                {/* Left: Time & Phase */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#e6e6e6' }}>{pt.time} <span style={{ fontSize: '12px', fontWeight: 'normal', opacity: 0.7 }}>{timeContext}</span></div>
                     <div style={{ fontSize: '11px', fontWeight: 'bold', color: phaseColor }}>{gate} PHASE</div>
                 </div>
 
-                {/* Center: Context Info */}
                 <div style={{ flex: 1, padding: '0 10px', borderLeft: '1px solid #4b5563', borderRight: '1px solid #4b5563' }}>
                     {subjectMember ? (
-                        // Subject
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a' }}>{subjectMember.name}</span>
                                 <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Intensity: {pt[`member_${subjectId}`]?.toFixed(0)}</span>
                             </div>
                             {explanationText && <div style={{ fontSize: '11px', color: '#9ca3af', fontStyle: 'italic', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '400px' }}>{explanationText}</div>}
+
+                            {/* Compare Link */}
+                            {!showComparison && members.length > 1 && (
+                                <button onClick={() => setShowComparison(true)} style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '10px', cursor: 'pointer', padding: 0, marginTop: '4px' }}>Compare family members ▸</button>
+                            )}
+                            {/* Comparison View */}
+                            {showComparison && (
+                                <div style={{ marginTop: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                    {members.filter(m => m.id !== subjectMember.id).map(m => (
+                                        <div key={m.id} style={{ fontSize: '10px', color: '#d1d5db', background: 'rgba(0,0,0,0.3)', padding: '2px 4px', borderRadius: '3px' }}>
+                                            {m.name}: <strong>{pt[`member_${m.id}`]?.toFixed(0)}</strong>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) : (
-                        // Family
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</span>
@@ -257,9 +273,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                     )}
                 </div>
 
-                {/* Right: Actions */}
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                    {!subjectMember && <span style={{ fontSize: '10px', color: '#6b7280' }}>Hover Line for Trace</span>}
+                    {/* Why Button */}
                     {subjectMember && (
                         <button
                             onClick={() => {
@@ -268,9 +283,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name });
                                 }
                             }}
-                            style={{ background: '#2563eb', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '6px 12px', color: '#e5e7eb', fontSize: '12px', cursor: 'pointer' }}
                         >
-                            Analyze Trace
+                            Why?
                         </button>
                     )}
                 </div>
@@ -305,7 +320,6 @@ const FamilyTimeline = ({ members, familyId }) => {
 
             {data && (
                 <>
-                    {/* INFO HEADER BAR (HUD) */}
                     <InfoHUD />
 
                     <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
@@ -314,6 +328,15 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 data={chartData}
                                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                                 onMouseMove={(e) => {
+                                    if (e && e.activePayload && e.activePayload.length) {
+                                        setActivePoint({
+                                            payload: e.activePayload[0].payload,
+                                            label: e.activePayload[0].payload.time
+                                        });
+                                    }
+                                }}
+                                onClick={(e) => {
+                                    // Forcible click update for robustness
                                     if (e && e.activePayload && e.activePayload.length) {
                                         setActivePoint({
                                             payload: e.activePayload[0].payload,
@@ -353,7 +376,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </>
             )}
 
-            {/* Legend */}
+            {/* Legend - Updated with clear button visual feedback */}
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
