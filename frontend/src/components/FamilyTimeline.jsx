@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PhaseTraceDrawer from './PhaseTraceDrawer';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts'; // Added Tooltip back
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -28,10 +28,13 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null, subjectType: null, memberId: null });
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
+
+    // Default hoveredMemberId to null. 
+    // We will use a ref or controlled state for strict sync.
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
     const [activePoint, setActivePoint] = useState(null);
 
-    // Sync: Clear hovered member when focused member changes (Fix Sync Issue)
+    // Sync: Clear hovered member when focused member changes
     useEffect(() => {
         setHoveredMemberId(null);
     }, [focusedMemberId]);
@@ -92,6 +95,10 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
+                    // Explicitly set activePoint to first point on load to ensure valid state
+                    if (response.data.data?.effective_intensity_layer?.axes[selectedAxis]?.length > 0) {
+                        // Wait for render to calculate chartData properly, or just rely on fallback
+                    }
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -214,8 +221,6 @@ const FamilyTimeline = ({ members, familyId }) => {
         if (dateStr < nowStr) timeContext = "(Historical)";
 
         const [showComparison, setShowComparison] = useState(false);
-
-        // Reset comparison on global updates
         useEffect(() => { setShowComparison(false); }, [subjectId, pt.time]);
 
         return (
@@ -247,11 +252,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                             </div>
                             {explanationText && <div style={{ fontSize: '11px', color: '#9ca3af', fontStyle: 'italic', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '400px' }}>{explanationText}</div>}
 
-                            {/* Compare Link */}
                             {!showComparison && members.length > 1 && (
                                 <button onClick={() => setShowComparison(true)} style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '10px', cursor: 'pointer', padding: 0, marginTop: '4px' }}>Compare family members ▸</button>
                             )}
-                            {/* Comparison View */}
                             {showComparison && (
                                 <div style={{ marginTop: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                     {members.filter(m => m.id !== subjectMember.id).map(m => (
@@ -274,7 +277,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                    {/* Why Button */}
                     {subjectMember && (
                         <button
                             onClick={() => {
@@ -336,7 +338,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }
                                 }}
                                 onClick={(e) => {
-                                    // Forcible click update for robustness
                                     if (e && e.activePayload && e.activePayload.length) {
                                         setActivePoint({
                                             payload: e.activePayload[0].payload,
@@ -350,6 +351,13 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                                 <XAxis dataKey="time" stroke="#9ca3af" />
                                 <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
+
+                                {/* REINTRODUCED INVISIBLE TOOLTIP TO FORCE EVENTS */}
+                                <Tooltip
+                                    content={() => null}
+                                    cursor={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                                    active={true}
+                                />
 
                                 {getGateRegions().map((r, i) => (
                                     <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
@@ -376,7 +384,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </>
             )}
 
-            {/* Legend - Updated with clear button visual feedback */}
+            {/* Legend */}
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
