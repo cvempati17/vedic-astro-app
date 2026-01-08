@@ -139,11 +139,9 @@ const FamilyTimeline = ({ members, familyId }) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
 
-            // Try to find exact match
+            // Forward Fill Trace Logic to find family_intensity
             const exactTrace = traceLayer.find(t => t.time === pt.time);
             if (exactTrace) lastTrace = exactTrace;
-
-            // Use exact or fall back to last known (forward fill)
             const trace = exactTrace || lastTrace;
 
             const memberPoints = {};
@@ -162,14 +160,21 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
             }
 
-            // DYNAMIC FAMILY SCORE: Average of active members
-            // This reflects the true changing energy (48-92) vs static baseline (74)
-            const dynamicFamilyMean = countMembers > 0 ? (sumIntensity / countMembers) : (pt.family_intensity || 0);
+            // Prefer Trace Layer Value (Engine Logic) > Summation > Static Fallback
+            // This ensures we get the "48-92" values if they exist in trace_layer
+            let familyVal = 74;
+            if (trace && trace.family_intensity !== undefined) {
+                familyVal = trace.family_intensity;
+            } else if (countMembers > 0) {
+                familyVal = sumIntensity / countMembers;
+            } else {
+                familyVal = pt.family_intensity || 74;
+            }
 
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity,
-                familyBase: dynamicFamilyMean, // Use Calculated Dynamic Mean
+                familyBase: familyVal,
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
@@ -227,7 +232,7 @@ const FamilyTimeline = ({ members, familyId }) => {
 
         let subjectId = null;
         if (hoveringFamilyLine) {
-            subjectId = null;
+            subjectId = null; // Explicit Family View
         } else {
             subjectId = hoveredMemberId || focusedMemberId;
         }
@@ -296,7 +301,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</span>
-                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {Math.round(pt.familyBase)}</span>
+                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Family Energy: {Math.round(pt.familyBase)}</span>
                             </div>
                             <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>Aggregate family timeline view. Select a member to see specifics.</div>
                         </div>
@@ -376,12 +381,23 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
                                 ))}
 
+                                {/* ORDER FIX: Family Base FIRST (Background), Members SECOND (Foreground) */}
+                                <Line
+                                    type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" strokeWidth={2} dot={false}
+                                    name="Family Base" isAnimationActive={false} activeDot={false}
+                                    onMouseEnter={() => {
+                                        setHoveringFamilyLine(true);
+                                        setHoveredMemberId(null);
+                                    }}
+                                    onMouseLeave={() => setHoveringFamilyLine(false)}
+                                />
+
                                 {members && members.map((m, idx) => {
                                     const isFocused = focusedMemberId === m.id;
                                     const isDimmed = focusedMemberId && !isFocused;
                                     const opacity = isDimmed ? 0.3 : 1;
                                     const width = isFocused ? 3 : 1;
-                                    const color = MEMBER_COLORS[idx % MEMBER_COLORS.length]; // Stable Color
+                                    const color = MEMBER_COLORS[idx % MEMBER_COLORS.length];
 
                                     return (
                                         <Line
@@ -398,16 +414,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         />
                                     );
                                 })}
-
-                                <Line
-                                    type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" strokeWidth={2} dot={false}
-                                    name="Family Base" isAnimationActive={false} activeDot={false}
-                                    onMouseEnter={() => {
-                                        setHoveringFamilyLine(true);
-                                        setHoveredMemberId(null);
-                                    }}
-                                    onMouseLeave={() => setHoveringFamilyLine(false)}
-                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
@@ -479,7 +485,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 isOpen={drawerState.isOpen}
                 onClose={() => setDrawerState(prev => ({ ...prev, isOpen: false }))}
                 traceData={drawerState.data}
-                comparisonData={drawerState.comparisonData} // Pass it if we have it
+                comparisonData={drawerState.comparisonData}
                 axis={selectedAxis}
                 time={drawerState.time}
                 phase={drawerState.phase}
