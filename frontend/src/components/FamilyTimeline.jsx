@@ -156,9 +156,13 @@ const FamilyTimeline = ({ members, familyId }) => {
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
                     // ROBUST ID LOOKUP: Try direct, string, or fallback
-                    const mLayer = data.individual_dasha_layer[m.id]
+                    const memberObj = data.individual_dasha_layer[m.id]
                         || data.individual_dasha_layer[String(m.id)]
                         || data.individual_dasha_layer[Number(m.id)];
+
+                    // CRITCIAL FIX: Access the specific AXIS array from the member object
+                    // Previous error: accessed memberObj[idx] directly instead of memberObj[selectedAxis][idx]
+                    const mLayer = memberObj?.[selectedAxis];
 
                     if (mLayer && mLayer[idx]) {
                         const val = mLayer[idx].intensity;
