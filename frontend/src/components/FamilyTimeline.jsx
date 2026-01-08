@@ -259,9 +259,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                         width: '300px',
                         color: '#e6e6e6',
                         zIndex: 1000,
-                        pointerEvents: 'auto', // Allow catching the tooltip
+                        pointerEvents: isFrozen ? 'auto' : 'none', // Pass-through on hover so Chart catches the click
                         position: 'relative',
-                        cursor: isFrozen ? 'default' : 'pointer'
+                        cursor: isFrozen ? 'default' : 'none'
                     }}
                 >
                     {isFrozen && (
