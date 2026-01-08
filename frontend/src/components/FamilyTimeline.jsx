@@ -154,27 +154,36 @@ const FamilyTimeline = ({ members, familyId }) => {
             let countMembers = 0;
 
             if (members && data.individual_dasha_layer) {
+                const dashaKeys = Object.keys(data.individual_dasha_layer);
+
                 members.forEach(m => {
-                    // Revert to simple, proven access pattern (checking both String/Number IDs)
-                    // We check [m.id] and [String(m.id)] to be safe, but access [selectedAxis] directly.
-                    const layerObj = data.individual_dasha_layer[m.id] || data.individual_dasha_layer[String(m.id)];
-                    const mLayer = layerObj?.[selectedAxis];
+                    // ULTRA-ROBUST ID MATCHING
+                    // Find the key that matches String(m.id) to handle ObjectId vs String mismatches
+                    const matchedKey = dashaKeys.find(k => String(k) === String(m.id));
+                    const layerObj = matchedKey ? data.individual_dasha_layer[matchedKey] : null;
 
-                    if (mLayer && mLayer[idx]) {
-                        const val = mLayer[idx].intensity;
-                        memberPoints[`member_${m.id}`] = val;
+                    if (layerObj) {
+                        // ULTRA-ROBUST AXIS MATCHING
+                        // Find key that matches 'career' vs 'Career'
+                        const layerKeys = Object.keys(layerObj);
+                        const matchedAxis = layerKeys.find(k => k.toLowerCase() === selectedAxis.toLowerCase());
+                        const mLayer = matchedAxis ? layerObj[matchedAxis] : null;
 
-                        // Calculate Sum
-                        if (typeof val === 'number') {
-                            sumIntensity += val;
-                            countMembers++;
+                        if (mLayer && mLayer[idx]) {
+                            const val = mLayer[idx].intensity;
+                            memberPoints[`member_${m.id}`] = val;
+
+                            // Calculate Sum
+                            if (typeof val === 'number') {
+                                sumIntensity += val;
+                                countMembers++;
+                            }
                         }
                     }
                 });
             }
 
             // FORCE DYNAMIC CALCULATION
-            // Issue was Trace Layer having static 74. We now prioritize the calculated Mean.
             let familyVal = 74;
             if (countMembers > 0) {
                 familyVal = sumIntensity / countMembers;
