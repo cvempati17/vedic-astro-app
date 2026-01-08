@@ -89,9 +89,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
-                    if (response.data.data?.effective_intensity_layer?.axes[selectedAxis]?.length > 0) {
-                        // Set initial point? No, let user hover.
-                    }
+                    // Do not set activePoint here, let it fallback to [0] in render
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -193,11 +191,12 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
     };
 
-    // --- HUD COMPONENT - RENDERED MANUALLY ---
+    // --- HUD COMPONENT (Always Visible) ---
     const InfoHUD = () => {
-        if (!activePoint) return <div style={{ position: 'absolute', top: 10, right: 10, color: '#6b7280', fontSize: '12px' }}>Hover chart to see details</div>;
+        // Fallback: Use activePoint OR the first data point. Never hide.
+        const pt = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
+        if (!pt) return null; // Only if NO data at all
 
-        const pt = activePoint.payload;
         const gate = pt.gate;
         const subjectId = hoveredMemberId || focusedMemberId;
         const subjectMember = subjectId ? members.find(m => m.id === subjectId) : null;
