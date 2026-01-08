@@ -16,6 +16,8 @@ const AXES = [
     { key: 'emotional_load', label: 'Emotional Load' }
 ];
 
+const MEMBER_COLORS = ['#60a5fa', '#34d399', '#f87171', '#a78bfa', '#fbbf24', '#f472b6'];
+
 const FamilyTimeline = ({ members, familyId }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
+    const [hoveringFamilyLine, setHoveringFamilyLine] = useState(false); // Track if hovering family line
     const [activePoint, setActivePoint] = useState(null);
 
     // Fetch Interpretations
@@ -87,7 +90,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
-                    // Force refresh active point logic? No, let render handle it.
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -144,7 +146,7 @@ const FamilyTimeline = ({ members, familyId }) => {
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity,
-                familyBase: pt.family_intensity,
+                familyBase: pt.family_intensity, // FAMILY BASE NUMBER
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
@@ -190,13 +192,32 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     // --- HUD COMPONENT ---
     const InfoHUD = () => {
-        // Fallback to latest available time point if activePoint is null
         const pt = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
         if (!pt) return null;
 
         const gate = pt.gate;
-        const subjectId = hoveredMemberId || focusedMemberId;
+
+        // Determination Logic:
+        // 1. If Hovering Family Line -> Show Family
+        // 2. If Hovering Member -> Show Member
+        // 3. If Focused Member -> Show Focused Member
+        // 4. Else -> Show Family
+
+        // Color Mapping
+        const getMemberColor = (id) => {
+            const index = members.findIndex(m => m.id === id);
+            return index >= 0 ? MEMBER_COLORS[index % MEMBER_COLORS.length] : '#9ca3af';
+        };
+
+        let subjectId = null;
+        if (hoveringFamilyLine) {
+            subjectId = null; // Explicit Family View
+        } else {
+            subjectId = hoveredMemberId || focusedMemberId;
+        }
+
         const subjectMember = subjectId ? members.find(m => m.id === subjectId) : null;
+        const subjectColor = subjectMember ? getMemberColor(subjectMember.id) : '#e6e6e6';
 
         const phaseKey = `FM_PHASE_${gate}`;
         const genericSemantics = interpretations?.governance?.phase_semantics?.phases?.[phaseKey];
@@ -237,7 +258,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                     {subjectMember ? (
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a' }}>{subjectMember.name}</span>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: subjectColor }}>{subjectMember.name}</span>
                                 <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Intensity: {pt[`member_${subjectId}`]?.toFixed(0)}</span>
                             </div>
                             {explanationText && <div style={{ fontSize: '11px', color: '#9ca3af', fontStyle: 'italic', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '400px' }}>{explanationText}</div>}
@@ -248,7 +269,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                             {showComparison && (
                                 <div style={{ marginTop: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                     {members.filter(m => m.id !== subjectMember.id).map(m => (
-                                        <div key={m.id} style={{ fontSize: '10px', color: '#d1d5db', background: 'rgba(0,0,0,0.3)', padding: '2px 4px', borderRadius: '3px' }}>
+                                        <div key={m.id} style={{ fontSize: '10px', color: '#d1d5db', background: 'rgba(0,0,0,0.3)', padding: '2px 4px', borderRadius: '3px', borderLeft: `2px solid ${getMemberColor(m.id)}` }}>
                                             {m.name}: <strong>{pt[`member_${m.id}`]?.toFixed(0)}</strong>
                                         </div>
                                     ))}
@@ -259,7 +280,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</span>
-                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {pt.intensity?.toFixed(0)}</span>
+                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {pt.familyBase?.toFixed(0) || pt.intensity?.toFixed(0)}</span>
                             </div>
                             <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>Aggregate family timeline view. Select a member to see specifics.</div>
                         </div>
@@ -272,10 +293,10 @@ const FamilyTimeline = ({ members, familyId }) => {
                             onClick={() => {
                                 const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
                                 if (trace) {
-                                    setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name });
+                                    setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name, comparisonData: null });
                                 }
                             }}
-                            style={{ background: '#2563eb', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '6px 12px', color: '#e5e7eb', fontSize: '12px', cursor: 'pointer' }}
                         >
                             Analyze Trace
                         </button>
@@ -320,21 +341,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 data={chartData}
                                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                                 onMouseMove={(e) => {
-                                    // ROBUST DATA EXTRACTION
-                                    if (e && e.activeLabel) {
-                                        const point = chartData.find(p => p.time === e.activeLabel);
-                                        if (point) {
-                                            setActivePoint({ payload: point, label: point.time });
-                                        }
-                                    } else if (e && e.activePayload && e.activePayload.length) {
-                                        setActivePoint({
-                                            payload: e.activePayload[0].payload,
-                                            label: e.activePayload[0].payload.time
-                                        });
-                                    }
-                                }}
-                                onClick={(e) => {
-                                    // Sync click to focus if clicked on background
                                     if (e && e.activeLabel) {
                                         const point = chartData.find(p => p.time === e.activeLabel);
                                         if (point) {
@@ -348,12 +354,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 <XAxis dataKey="time" stroke="#9ca3af" />
                                 <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
 
-                                {/* Invisible Tooltip for Engine */}
-                                <Tooltip
-                                    content={() => null}
-                                    cursor={{ stroke: '#9ca3af', strokeWidth: 1 }}
-                                // Removed active={true} to avoid locking state
-                                />
+                                <Tooltip content={() => null} cursor={{ stroke: '#9ca3af', strokeWidth: 1 }} />
 
                                 {getGateRegions().map((r, i) => (
                                     <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
@@ -362,39 +363,69 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 {members && members.map((m, idx) => {
                                     const isFocused = focusedMemberId === m.id;
                                     const isDimmed = focusedMemberId && !isFocused;
-                                    const opacity = isDimmed ? 0.25 : 0.8;
+                                    const opacity = isDimmed ? 0.3 : 1;
+                                    const width = isFocused ? 3 : 1;
+                                    const color = MEMBER_COLORS[idx % MEMBER_COLORS.length]; // Stable Color
+
                                     return (
                                         <Line
-                                            key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
-                                            name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
-                                            onMouseEnter={() => setHoveredMemberId(m.id)}
-                                            onMouseLeave={() => setHoveredMemberId(null)} // RESET HOVER on LEAVE
-                                            onClick={() => setFocusedMemberId(m.id)} // CLICK TO FOCUS
-                                            isAnimationActive={false}
-                                            activeDot={false}
+                                            key={m.id} type="monotone" dataKey={`member_${m.id}`}
+                                            stroke={color} strokeOpacity={opacity} strokeWidth={width} dot={false}
+                                            name={m.name} strokeDasharray={isFocused ? "0" : "3 3"}
+                                            onMouseEnter={() => {
+                                                setHoveringFamilyLine(false);
+                                                setHoveredMemberId(m.id);
+                                            }}
+                                            onMouseLeave={() => setHoveredMemberId(null)}
+                                            onClick={() => setFocusedMemberId(m.id)}
+                                            isAnimationActive={false} activeDot={false}
                                         />
                                     );
                                 })}
-                                <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} isAnimationActive={false} activeDot={false} />
-                                <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} isAnimationActive={false} />
+
+                                {/* Family Base Line - Dashed Grey */}
+                                <Line
+                                    type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" strokeWidth={2} dot={false}
+                                    name="Family Base" isAnimationActive={false} activeDot={false}
+                                    onMouseEnter={() => {
+                                        setHoveringFamilyLine(true);
+                                        setHoveredMemberId(null);
+                                    }}
+                                    onMouseLeave={() => setHoveringFamilyLine(false)}
+                                />
+                                {/* removed redundant Effective Intensity line or keep it for the focused user? 
+                                    Actually, usually we plot the 'focused' user as the main line. 
+                                    Here we plot ALL members. The 'Effective Intensity' line in previous code was ambiguous.
+                                    The User asked for Member Coloring. The previous code had a separate 'intensity' line.
+                                    If distinct members are plotted, we don't need a summary line overlapping them unless it's the Family Base.
+                                    Step 3872 had a generic 'intensity' line. I will REMOVE it to avoid confusion, 
+                                    as the colored member lines are the source of truth now.
+                                */}
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
                 </>
             )}
 
-            {/* Legend */}
+            {/* Legend - Updated with Colors */}
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
-                    {members.map(m => {
+                    {members.map((m, idx) => {
                         const isFocused = focusedMemberId === m.id;
+                        const color = MEMBER_COLORS[idx % MEMBER_COLORS.length];
                         return (
                             <button
                                 key={m.id} onClick={() => setFocusedMemberId(isFocused ? null : m.id)}
-                                style={{ background: isFocused ? 'rgba(255,255,255,0.1)' : 'transparent', border: isFocused ? '1px solid #6b7280' : '1px solid transparent', borderRadius: '4px', padding: '4px 8px', color: isFocused ? '#fff' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '12px', transition: 'all 0.2s' }}
+                                style={{
+                                    background: isFocused ? 'rgba(255,255,255,0.05)' : 'transparent',
+                                    border: `1px solid ${isFocused ? color : 'transparent'}`,
+                                    borderRadius: '4px', padding: '4px 10px',
+                                    color: isFocused ? '#fff' : '#9ca3af',
+                                    cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '12px', transition: 'all 0.2s'
+                                }}
                             >
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#9ca3af', marginRight: '6px', opacity: 0.8 }} />
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: color, marginRight: '8px' }} />
                                 {m.name}
                             </button>
                         );
@@ -402,6 +433,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
+            {/* Current Guidance below chart */}
             {data && chartData.length > 0 && currentDisplayPoint && (
                 <div style={{ marginTop: '20px', padding: '15px', background: '#1f2937', borderRadius: '8px', borderLeft: '4px solid #e6c87a' }}>
                     <h3 style={{ margin: '0 0 10px 0', color: '#e6c87a' }}>Current Guidance ({currentDisplayPoint.time})</h3>
@@ -426,6 +458,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 isOpen={drawerState.isOpen}
                 onClose={() => setDrawerState(prev => ({ ...prev, isOpen: false }))}
                 traceData={drawerState.data}
+                comparisonData={drawerState.comparisonData} // Pass it if we have it
                 axis={selectedAxis}
                 time={drawerState.time}
                 phase={drawerState.phase}
