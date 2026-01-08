@@ -130,10 +130,13 @@ const FamilyTimeline = ({ members, familyId }) => {
         const effLayer = data.effective_intensity_layer.axes[selectedAxis] || [];
         const transLayer = data.transit_layer.axes[selectedAxis] || [];
         const guideLayer = data.guidance_layer.axes[selectedAxis] || [];
+        const traceLayer = data.trace_layer?.axes?.[selectedAxis] || [];
 
         return effLayer.map((pt, idx) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
+            const trace = traceLayer[idx] || {};
+
             const memberPoints = {};
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
@@ -146,7 +149,7 @@ const FamilyTimeline = ({ members, familyId }) => {
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity,
-                familyBase: pt.family_intensity, // FAMILY BASE NUMBER
+                familyBase: trace.family_intensity !== undefined ? trace.family_intensity : pt.family_intensity,
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
