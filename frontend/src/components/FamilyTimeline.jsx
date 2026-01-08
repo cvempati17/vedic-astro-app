@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PhaseTraceDrawer from './PhaseTraceDrawer';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ReferenceArea, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
@@ -30,6 +30,8 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
     const [frozenPoint, setFrozenPoint] = useState(null);
+
+    const lastPayloadRef = useRef(null);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -408,11 +410,25 @@ const FamilyTimeline = ({ members, familyId }) => {
                 )}
             </div>
 
-            {/* Graph */}
+            {/* Graph Container with Fallback Click */}
             {data && (
-                <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
+                <div
+                    style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative', cursor: 'pointer' }}
+                    onClick={() => {
+                        // Fallback Click Handler: Use last known payload if Recharts onClick missed it
+                        if (!frozenPoint && lastPayloadRef.current) {
+                            setFrozenPoint({
+                                x: 0,
+                                y: 0,
+                                payload: lastPayloadRef.current,
+                                label: lastPayloadRef.current[0].payload.time,
+                                activeMemberId: hoveredMemberId || focusedMemberId
+                            });
+                        }
+                    }}
+                >
                     <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '12px', color: '#6b7280', zIndex: 10 }}>
-                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Vertical Line to Freeze & Interact"}
+                        {frozenPoint ? "Interactive Mode (LOCKED)" : "Click Anywhere in Chart to Freeze"}
                     </div>
 
                     {/* Frozen Tooltip Overlay */}
@@ -436,7 +452,13 @@ const FamilyTimeline = ({ members, familyId }) => {
                         <LineChart
                             data={chartData}
                             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            onMouseMove={(e) => {
+                                if (e && e.activePayload) {
+                                    lastPayloadRef.current = e.activePayload;
+                                }
+                            }}
                             onClick={(e) => {
+                                e && e.stopPropagation(); // Handle it here
                                 if (e && e.activePayload && e.activePayload.length) {
                                     if (frozenPoint && frozenPoint.label === e.activePayload[0].payload.time) {
                                         setFrozenPoint(null);
@@ -446,7 +468,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                                             y: e.activeCoordinate.y,
                                             payload: e.activePayload,
                                             label: e.activePayload[0].payload.time,
-                                            activeMemberId: hoveredMemberId || focusedMemberId // CAPTURE CONTEXT
+                                            activeMemberId: hoveredMemberId || focusedMemberId
                                         });
                                     }
                                 }
