@@ -400,6 +400,22 @@ const FamilyTimeline = ({ members, familyId }) => {
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
+
+                    {/* Family Overview Button */}
+                    <button
+                        onClick={() => setFocusedMemberId(null)}
+                        style={{
+                            background: focusedMemberId === null ? 'rgba(255,255,255,0.05)' : 'transparent',
+                            border: `1px solid ${focusedMemberId === null ? '#6b7280' : 'transparent'}`,
+                            borderRadius: '4px', padding: '4px 10px',
+                            color: focusedMemberId === null ? '#fff' : '#9ca3af',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '12px', transition: 'all 0.2s'
+                        }}
+                    >
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6b7280', marginRight: '8px', border: '1px dashed #fff' }} />
+                        Family Overview
+                    </button>
+
                     {members.map((m, idx) => {
                         const isFocused = focusedMemberId === m.id;
                         const color = MEMBER_COLORS[idx % MEMBER_COLORS.length];
