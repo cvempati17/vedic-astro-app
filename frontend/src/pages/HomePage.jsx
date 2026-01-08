@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InputForm from '../components/InputForm';
 
-const HomePage = ({ onCalculate, initialData, onBack, onOpenSettings }) => {
+const HomePage = ({ onCalculate, initialData, onBack, onOpenSettings, isLoading }) => {
     const { t } = useTranslation();
 
     return (
@@ -29,7 +29,7 @@ const HomePage = ({ onCalculate, initialData, onBack, onOpenSettings }) => {
             <main className="app-main">
                 <div className="card input-card">
                     <h2>{t('home.enterDetails', 'Enter Birth Details')}</h2>
-                    <InputForm onCalculate={onCalculate} initialData={initialData} />
+                    <InputForm onCalculate={onCalculate} initialData={initialData} isLoading={isLoading} />
                 </div>
             </main>
         </>

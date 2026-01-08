@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CitySearch from './CitySearch';
 
-const InputForm = ({ onCalculate, initialData }) => {
+const InputForm = ({ onCalculate, initialData, isLoading }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState(initialData || {
         name: '',
@@ -177,8 +177,23 @@ const InputForm = ({ onCalculate, initialData }) => {
             </div>
 
             <div className="button-group" style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" className="submit-btn" onClick={handleSaveAndGenerate} style={{ background: '#10b981', flex: 1 }}>{t('inputForm.saveAndGenerate')}</button>
-                <button type="submit" className="submit-btn" style={{ flex: 1 }}>{t('inputForm.generate')}</button>
+                <button
+                    type="button"
+                    className="submit-btn"
+                    onClick={handleSaveAndGenerate}
+                    disabled={isLoading}
+                    style={{ background: isLoading ? '#6b7280' : '#10b981', flex: 1, cursor: isLoading ? 'wait' : 'pointer' }}
+                >
+                    {isLoading ? 'Saving...' : t('inputForm.saveAndGenerate')}
+                </button>
+                <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isLoading}
+                    style={{ flex: 1, opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'wait' : 'pointer' }}
+                >
+                    {isLoading ? 'Generating...' : t('inputForm.generate')}
+                </button>
             </div>
         </form>
     );

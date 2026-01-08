@@ -52,6 +52,7 @@ function App() {
   const [resultsReturnPage, setResultsReturnPage] = useState('saved-charts');
   const [settingsReturnPage, setSettingsReturnPage] = useState('saved-charts');
   const [btrNewPageState, setBtrNewPageState] = useState(null);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   // ValueStream Widget Integration
   React.useEffect(() => {
@@ -121,6 +122,7 @@ function App() {
 
   const handleCalculate = async (data, shouldSave = false, returnPage = 'saved-charts') => {
     try {
+      setIsCalculating(true);
       setResultsReturnPage(returnPage);
       const response = await fetch(`${API_URL}/api/calculate`, {
         method: 'POST',
@@ -163,7 +165,9 @@ function App() {
               if (!saveResponse.ok) {
                 const errorData = await saveResponse.json();
                 console.error('Failed to save chart to backend:', errorData);
-                alert(`Save Failed: ${errorData.error || saveResponse.statusText}`);
+                console.error('Failed to save chart to backend:', errorData);
+                // alert(`Save Failed: ${errorData.error || saveResponse.statusText}`);
+                console.warn('Backend save failed, saved locally instead.');
                 // Fallback to local? Or just error? Let's fallback for safety.
                 saveLocally(data, responseData.data);
               } else {
@@ -185,6 +189,8 @@ function App() {
       }
     } catch (err) {
       alert(t('errors.network'));
+    } finally {
+      setIsCalculating(false);
     }
   };
 
@@ -261,6 +267,7 @@ function App() {
             initialData={editingChart}
             onBack={() => setCurrentPage('saved-charts')}
             onOpenSettings={() => { setSettingsReturnPage('saved-charts'); setCurrentPage('settings'); }}
+            isLoading={isCalculating}
           />
         )}
 
