@@ -328,7 +328,19 @@ const FamilyTimeline = ({ members, familyId }) => {
                             onClick={() => {
                                 const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
                                 if (trace) {
-                                    setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name, comparisonData: null });
+                                    const currentVal = subjectId ? pt[`member_${subjectId}`] : pt.familyBase;
+                                    setDrawerState({
+                                        isOpen: true,
+                                        data: trace,
+                                        time: pt.time,
+                                        phase: trace.phase_resolution,
+                                        subjectType: 'member',
+                                        memberId: subjectMember.id,
+                                        memberName: subjectMember.name,
+                                        comparisonData: null,
+                                        intensity: currentVal,
+                                        multiplier: pt.transit_multiplier || 1.0
+                                    });
                                 }
                             }}
                             style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '6px 12px', color: '#e5e7eb', fontSize: '12px', cursor: 'pointer' }}

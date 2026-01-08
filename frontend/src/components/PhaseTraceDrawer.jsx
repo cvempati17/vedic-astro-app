@@ -77,7 +77,7 @@ const axisIcons = {
     emotional_load: Activity
 };
 
-const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName }) => {
+const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier }) => {
     const [showToast, setShowToast] = useState(false);
     const [verbosity, setVerbosity] = useState("standard"); // 'standard' | 'expert'
 
@@ -430,7 +430,32 @@ improvement or decline.`;
                     </p>
                 </section>
 
-                {/* Section 4: Final Outcome */}
+                {/* Section 4: Calculation Logic (New) */}
+                {intensity !== undefined && multiplier !== undefined && (
+                    <section style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed #374151' }}>
+                        <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', margin: '0 0 12px 0' }}>Calculation Logic</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px', color: '#d1d5db' }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Base (Dasha)</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{Math.round(intensity / multiplier)}</div>
+                            </div>
+                            <div style={{ color: '#6b7280' }}>×</div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Transit Mult</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: multiplier < 1 ? '#ef4444' : (multiplier > 1 ? '#10b981' : '#d1d5db') }}>
+                                    {multiplier.toFixed(2)}
+                                </div>
+                            </div>
+                            <div style={{ color: '#6b7280' }}>=</div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Final</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e6c87a' }}>{Math.round(intensity)}</div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* Section 5: Final Outcome */}
                 <section style={{ marginBottom: '24px', padding: '12px', background: '#1f2937', borderRadius: '6px', border: '1px solid #374151' }}>
                     <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', margin: '0 0 8px 0' }}>Final Outcome</h4>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
