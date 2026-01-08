@@ -103,6 +103,11 @@ const FamilyTimeline = ({ members, familyId }) => {
         fetchData();
     }, [members, familyId]);
 
+    // Sync: Clear hovered member when focused member changes
+    useEffect(() => {
+        setHoveredMemberId(null);
+    }, [focusedMemberId]);
+
     // Deep Link Logic
     useEffect(() => {
         if (!data) return;
@@ -150,12 +155,19 @@ const FamilyTimeline = ({ members, familyId }) => {
 
             if (members && data.individual_dasha_layer) {
                 members.forEach(m => {
-                    const mLayer = data.individual_dasha_layer[m.id]?.[selectedAxis];
+                    // ROBUST ID LOOKUP: Try direct, string, or fallback
+                    const mLayer = data.individual_dasha_layer[m.id]
+                        || data.individual_dasha_layer[String(m.id)]
+                        || data.individual_dasha_layer[Number(m.id)];
+
                     if (mLayer && mLayer[idx]) {
                         const val = mLayer[idx].intensity;
                         memberPoints[`member_${m.id}`] = val;
-                        sumIntensity += val;
-                        countMembers++;
+                        // Only add to sum if value is valid number
+                        if (typeof val === 'number') {
+                            sumIntensity += val;
+                            countMembers++;
+                        }
                     }
                 });
             }
@@ -163,7 +175,7 @@ const FamilyTimeline = ({ members, familyId }) => {
             // Prefer Trace Layer Value (Engine Logic) > Summation > Static Fallback
             // This ensures we get the "48-92" values if they exist in trace_layer
             let familyVal = 74;
-            if (trace && trace.family_intensity !== undefined) {
+            if (trace && trace.family_intensity !== undefined && trace.family_intensity !== null) {
                 familyVal = trace.family_intensity;
             } else if (countMembers > 0) {
                 familyVal = sumIntensity / countMembers;
