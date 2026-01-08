@@ -111,8 +111,12 @@ const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, ti
     const AxisIcon = axisIcons[axis] || Sparkles;
 
     let effectiveIntensity = "Calculated";
-    const intensityStep = traceData?.evaluation_steps?.find(s => s.intensity !== undefined);
-    if (intensityStep) effectiveIntensity = Math.round(intensityStep.intensity);
+    if (intensity !== undefined) {
+        effectiveIntensity = Math.round(intensity);
+    } else {
+        const intensityStep = traceData?.evaluation_steps?.find(s => s.intensity !== undefined);
+        if (intensityStep) effectiveIntensity = Math.round(intensityStep.intensity);
+    }
 
     const isMemberSubject = subjectType === 'member';
     const roleGated = isMemberSubject && (effectiveIntensity < 60 || phase === 'HOLD');
