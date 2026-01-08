@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PhaseTraceDrawer from './PhaseTraceDrawer';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts'; // Added Tooltip back
+import { LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -28,16 +28,8 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [drawerState, setDrawerState] = useState({ isOpen: false, data: null, time: null, phase: null, subjectType: null, memberId: null });
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
-
-    // Default hoveredMemberId to null. 
-    // We will use a ref or controlled state for strict sync.
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
     const [activePoint, setActivePoint] = useState(null);
-
-    // Sync: Clear hovered member when focused member changes
-    useEffect(() => {
-        setHoveredMemberId(null);
-    }, [focusedMemberId]);
 
     // Fetch Interpretations
     useEffect(() => {
@@ -95,10 +87,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
-                    // Explicitly set activePoint to first point on load to ensure valid state
-                    if (response.data.data?.effective_intensity_layer?.axes[selectedAxis]?.length > 0) {
-                        // Wait for render to calculate chartData properly, or just rely on fallback
-                    }
+                    // Force refresh active point logic? No, let render handle it.
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -201,6 +190,7 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     // --- HUD COMPONENT ---
     const InfoHUD = () => {
+        // Fallback to latest available time point if activePoint is null
         const pt = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
         if (!pt) return null;
 
@@ -285,9 +275,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name });
                                 }
                             }}
-                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '6px 12px', color: '#e5e7eb', fontSize: '12px', cursor: 'pointer' }}
+                            style={{ background: '#2563eb', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}
                         >
-                            Why?
+                            Analyze Trace
                         </button>
                     )}
                 </div>
@@ -330,7 +320,13 @@ const FamilyTimeline = ({ members, familyId }) => {
                                 data={chartData}
                                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                                 onMouseMove={(e) => {
-                                    if (e && e.activePayload && e.activePayload.length) {
+                                    // ROBUST DATA EXTRACTION
+                                    if (e && e.activeLabel) {
+                                        const point = chartData.find(p => p.time === e.activeLabel);
+                                        if (point) {
+                                            setActivePoint({ payload: point, label: point.time });
+                                        }
+                                    } else if (e && e.activePayload && e.activePayload.length) {
                                         setActivePoint({
                                             payload: e.activePayload[0].payload,
                                             label: e.activePayload[0].payload.time
@@ -338,25 +334,25 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }
                                 }}
                                 onClick={(e) => {
-                                    if (e && e.activePayload && e.activePayload.length) {
-                                        setActivePoint({
-                                            payload: e.activePayload[0].payload,
-                                            label: e.activePayload[0].payload.time
-                                        });
+                                    // Sync click to focus if clicked on background
+                                    if (e && e.activeLabel) {
+                                        const point = chartData.find(p => p.time === e.activeLabel);
+                                        if (point) {
+                                            setActivePoint({ payload: point, label: point.time });
+                                        }
                                     }
                                 }}
-                                onMouseLeave={() => { /* Persist active point */ }}
                                 style={{ cursor: 'crosshair' }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
                                 <XAxis dataKey="time" stroke="#9ca3af" />
                                 <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
 
-                                {/* REINTRODUCED INVISIBLE TOOLTIP TO FORCE EVENTS */}
+                                {/* Invisible Tooltip for Engine */}
                                 <Tooltip
                                     content={() => null}
                                     cursor={{ stroke: '#9ca3af', strokeWidth: 1 }}
-                                    active={true}
+                                // Removed active={true} to avoid locking state
                                 />
 
                                 {getGateRegions().map((r, i) => (
@@ -371,7 +367,10 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         <Line
                                             key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
                                             name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
-                                            onMouseEnter={() => setHoveredMemberId(m.id)} isAnimationActive={false}
+                                            onMouseEnter={() => setHoveredMemberId(m.id)}
+                                            onMouseLeave={() => setHoveredMemberId(null)} // RESET HOVER on LEAVE
+                                            onClick={() => setFocusedMemberId(m.id)} // CLICK TO FOCUS
+                                            isAnimationActive={false}
                                             activeDot={false}
                                         />
                                     );
