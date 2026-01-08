@@ -338,7 +338,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                                             time: point.time,
                                             phase: trace.phase_resolution,
                                             subjectType: subjectMember ? 'member' : 'family',
-                                            memberId: subjectMember?.id
+                                            memberId: subjectMember?.id,
+                                            memberName: subjectMember?.name || 'Family Context'
                                         });
                                     }
                                 }}
@@ -517,7 +518,9 @@ const FamilyTimeline = ({ members, familyId }) => {
                 axis={selectedAxis}
                 time={drawerState.time}
                 phase={drawerState.phase}
-            // We will add subjectType and memberName in next step update of PhaseTraceDrawer
+                subjectType={drawerState.subjectType}
+                memberId={drawerState.memberId}
+                memberName={drawerState.memberName}
             />
 
         </div>
