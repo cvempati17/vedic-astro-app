@@ -355,7 +355,8 @@ const FamilyTimeline = ({ members, familyId }) => {
                                         memberName: subjectMember.name,
                                         comparisonData: null,
                                         intensity: currentVal, // Now robust
-                                        multiplier: pt.transit_multiplier || 1.0
+                                        multiplier: pt.transit_multiplier || 1.0,
+                                        debugKeys: Object.keys(pt) // PASS KEYS FOR DEBUGGING
                                     });
                                 }
                             }}

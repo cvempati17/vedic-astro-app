@@ -77,7 +77,7 @@ const axisIcons = {
     emotional_load: Activity
 };
 
-const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier }) => {
+const PhaseTraceDrawer = ({ isOpen, onClose, traceData, comparisonData, axis, time, comparisonTime, phase, subjectType, memberId, memberName, intensity, multiplier, debugKeys }) => {
     const [showToast, setShowToast] = useState(false);
     const [verbosity, setVerbosity] = useState("standard"); // 'standard' | 'expert'
 
@@ -433,6 +433,21 @@ improvement or decline.`;
                         Values reflect readiness for {currentAxis.execution_phrase}, not guaranteed outcomes.
                     </p>
                 </section>
+
+                {/* Debug for Missing Data */}
+                {intensity === undefined && (
+                    <section style={{ marginBottom: '20px', padding: '12px', background: '#3f1f1f', borderRadius: '6px', border: '1px solid #ef4444' }}>
+                        <h4 style={{ fontSize: '12px', color: '#ef4444', textTransform: 'uppercase', margin: '0 0 8px 0' }}>Data Lookup Failed</h4>
+                        <div style={{ fontSize: '11px', color: '#fca5a5', fontFamily: 'monospace' }}>
+                            <div>Target Member ID: {memberId}</div>
+                            <div>Expected Key: member_{String(memberId)}</div>
+                            <div style={{ marginTop: '8px', wordBreak: 'break-all' }}>
+                                <strong>Available Keys:</strong><br />
+                                {debugKeys ? debugKeys.join(', ') : 'No Keys Passed'}
+                            </div>
+                        </div>
+                    </section>
+                )}
 
                 {/* Section 4: Calculation Logic (New) */}
                 {intensity !== undefined && multiplier !== undefined && (
