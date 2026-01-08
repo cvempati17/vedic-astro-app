@@ -30,7 +30,6 @@ const FamilyTimeline = ({ members, familyId }) => {
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
 
-    // REPLACEMENT FOR FROZEN POINT: Active Point State (Sticky)
     const [activePoint, setActivePoint] = useState(null);
 
     // Fetch Interpretations
@@ -89,7 +88,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                 });
                 if (response.data.success) {
                     setData(response.data.data);
-                    // Do not set activePoint here, let it fallback to [0] in render
                 } else {
                     setError('Failed to load timeline.');
                 }
@@ -191,11 +189,10 @@ const FamilyTimeline = ({ members, familyId }) => {
         }
     };
 
-    // --- HUD COMPONENT (Always Visible) ---
+    // --- HUD COMPONENT - HEADER BAR STYLE ---
     const InfoHUD = () => {
-        // Fallback: Use activePoint OR the first data point. Never hide.
         const pt = activePoint ? activePoint.payload : (chartData.length > 0 ? chartData[0] : null);
-        if (!pt) return null; // Only if NO data at all
+        if (!pt) return null;
 
         const gate = pt.gate;
         const subjectId = hoveredMemberId || focusedMemberId;
@@ -218,71 +215,64 @@ const FamilyTimeline = ({ members, familyId }) => {
 
         return (
             <div style={{
-                position: 'absolute',
-                top: 10,
-                left: '50%', // Center horizontally
-                transform: 'translateX(-50%)',
-                width: '320px',
-                background: 'rgba(31, 41, 55, 0.95)',
+                marginBottom: '10px',
+                background: 'rgba(31, 41, 55, 0.4)',
                 border: '1px solid #4b5563',
                 borderRadius: '8px',
-                padding: '12px',
-                zIndex: 50,
+                padding: '10px 15px',
                 color: '#e6e6e6',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-                pointerEvents: 'auto' // Must be clickable
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '15px',
+                minHeight: '60px'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', borderBottom: '1px solid #374151', paddingBottom: '4px', fontSize: '11px', color: '#9ca3af' }}>
-                    <span>{pt.time}</span>
-                    <span style={{ fontStyle: 'italic', opacity: 0.7 }}>{timeContext}</span>
+                {/* Left: Time & Phase */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#e6e6e6' }}>{pt.time} <span style={{ fontSize: '12px', fontWeight: 'normal', opacity: 0.7 }}>{timeContext}</span></div>
+                    <div style={{ fontSize: '11px', fontWeight: 'bold', color: phaseColor }}>{gate} PHASE</div>
                 </div>
 
-                {subjectMember ? (
-                    // Subject View
-                    <>
-                        <div style={{ marginBottom: '8px' }}>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a' }}>{subjectMember.name}</div>
-                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>Intensity: <strong>{pt[`member_${subjectId}`]?.toFixed(0)}</strong> <span style={{ width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', backgroundColor: phaseColor }} /></div>
-                        </div>
-                        {explanationText && <div style={{ fontSize: '12px', lineHeight: '1.4', fontStyle: 'italic', color: '#9ca3af', marginBottom: '8px' }}>{explanationText}</div>}
-
-                        {!showComparison && members.length > 1 && (
-                            <button onClick={() => setShowComparison(true)} style={{ background: 'none', border: 'none', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', padding: 0 }}>Compare family members ▸</button>
-                        )}
-                        {showComparison && (
-                            <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #374151' }}>
-                                {members.filter(m => m.id !== subjectMember.id).map(m => (
-                                    <div key={m.id} style={{ display: 'flex', gap: '8px', fontSize: '11px', color: '#d1d5db' }}>
-                                        <span style={{ flex: 1 }}>{m.name}</span><strong>{pt[`member_${m.id}`]?.toFixed(0)}</strong>
-                                    </div>
-                                ))}
+                {/* Center: Context Info */}
+                <div style={{ flex: 1, padding: '0 10px', borderLeft: '1px solid #4b5563', borderRight: '1px solid #4b5563' }}>
+                    {subjectMember ? (
+                        // Subject
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6c87a' }}>{subjectMember.name}</span>
+                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Intensity: {pt[`member_${subjectId}`]?.toFixed(0)}</span>
                             </div>
-                        )}
-                    </>
-                ) : (
-                    // Family View
-                    <>
-                        <div style={{ marginBottom: '8px' }}>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</div>
-                            <div style={{ fontSize: '12px', color: '#d1d5db' }}>Intensity: <strong>{pt.intensity?.toFixed(0)}</strong> <span style={{ width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', backgroundColor: phaseColor }} /></div>
+                            {explanationText && <div style={{ fontSize: '11px', color: '#9ca3af', fontStyle: 'italic', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '400px' }}>{explanationText}</div>}
                         </div>
-                        <div style={{ fontSize: '12px', color: phaseColor, fontWeight: 'bold' }}>{gate} PHASE</div>
-                    </>
-                )}
+                    ) : (
+                        // Family
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</span>
+                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {pt.intensity?.toFixed(0)}</span>
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>Aggregate family timeline view. Select a member to see specifics.</div>
+                        </div>
+                    )}
+                </div>
 
-                {/* Always Show Why Button */}
-                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <button
-                        onClick={() => {
-                            const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
-                            if (trace) {
-                                setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: subjectMember ? 'member' : 'family', memberId: subjectMember?.id, memberName: subjectMember?.name });
-                            }
-                        }}
-                        style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #4b5563', borderRadius: '4px', padding: '2px 8px', color: '#e5e7eb', fontSize: '11px', cursor: 'pointer' }}
-                    >
-                        Why?
-                    </button>
+                {/* Right: Actions */}
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    {!subjectMember && <span style={{ fontSize: '10px', color: '#6b7280' }}>Hover Line for Trace</span>}
+                    {subjectMember && (
+                        <button
+                            onClick={() => {
+                                const trace = data.trace_layer?.axes?.[selectedAxis]?.find(t => t.time === pt.time);
+                                if (trace) {
+                                    setDrawerState({ isOpen: true, data: trace, time: pt.time, phase: trace.phase_resolution, subjectType: 'member', memberId: subjectMember.id, memberName: subjectMember.name });
+                                }
+                            }}
+                            style={{ background: '#2563eb', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+                        >
+                            Analyze Trace
+                        </button>
+                    )}
                 </div>
             </div>
         );
@@ -314,55 +304,53 @@ const FamilyTimeline = ({ members, familyId }) => {
             </div>
 
             {data && (
-                <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
-                    {/* HUD - Fixed Tooltip Replacement */}
+                <>
+                    {/* INFO HEADER BAR (HUD) */}
                     <InfoHUD />
 
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart
-                            data={chartData}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                            onMouseMove={(e) => {
-                                if (e && e.activePayload && e.activePayload.length) {
-                                    // Make this Sticky: update activePoint, never clear it unless leaving component? 
-                                    // Actually, just updating is enough. HUD won't move, just content updates.
-                                    setActivePoint({
-                                        payload: e.activePayload[0].payload,
-                                        label: e.activePayload[0].payload.time
-                                    });
-                                }
-                            }}
-                            onMouseLeave={() => { /* Don't clear activePoint to keep it sticky/inspectable */ }}
-                            style={{ cursor: 'crosshair' }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
-                            <XAxis dataKey="time" stroke="#9ca3af" />
-                            <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
+                    <div style={{ height: '400px', background: '#151827', padding: '10px', borderRadius: '8px', position: 'relative' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart
+                                data={chartData}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                                onMouseMove={(e) => {
+                                    if (e && e.activePayload && e.activePayload.length) {
+                                        setActivePoint({
+                                            payload: e.activePayload[0].payload,
+                                            label: e.activePayload[0].payload.time
+                                        });
+                                    }
+                                }}
+                                onMouseLeave={() => { /* Persist active point */ }}
+                                style={{ cursor: 'crosshair' }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" stroke="#2e324a" />
+                                <XAxis dataKey="time" stroke="#9ca3af" />
+                                <YAxis domain={[0, 140]} stroke="#9ca3af" label={{ value: 'Effective Intensity', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} />
 
-                            {/* NO TOOLTIP COMPONENT - HUD handles it */}
+                                {getGateRegions().map((r, i) => (
+                                    <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
+                                ))}
 
-                            {getGateRegions().map((r, i) => (
-                                <ReferenceArea key={i} x1={r.start} x2={r.end} fill={gateColors[r.gate] || '#333'} fillOpacity={0.15} />
-                            ))}
-
-                            {members && members.map((m, idx) => {
-                                const isFocused = focusedMemberId === m.id;
-                                const isDimmed = focusedMemberId && !isFocused;
-                                const opacity = isDimmed ? 0.25 : 0.8;
-                                return (
-                                    <Line
-                                        key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
-                                        name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
-                                        onMouseEnter={() => setHoveredMemberId(m.id)} isAnimationActive={false}
-                                        activeDot={false}
-                                    />
-                                );
-                            })}
-                            <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} isAnimationActive={false} activeDot={false} />
-                            <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} isAnimationActive={false} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+                                {members && members.map((m, idx) => {
+                                    const isFocused = focusedMemberId === m.id;
+                                    const isDimmed = focusedMemberId && !isFocused;
+                                    const opacity = isDimmed ? 0.25 : 0.8;
+                                    return (
+                                        <Line
+                                            key={m.id} type="monotone" dataKey={`member_${m.id}`} stroke="#9ca3af" strokeOpacity={opacity} strokeWidth={1} dot={false}
+                                            name={m.name || `Member ${idx + 1}`} strokeDasharray="3 3"
+                                            onMouseEnter={() => setHoveredMemberId(m.id)} isAnimationActive={false}
+                                            activeDot={false}
+                                        />
+                                    );
+                                })}
+                                <Line type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" name="Family Base (Promise)" dot={false} strokeWidth={2} isAnimationActive={false} activeDot={false} />
+                                <Line type="monotone" dataKey="intensity" stroke="#e6c87a" strokeWidth={3} name="Effective Intensity" dot={{ r: 4 }} activeDot={{ r: 8 }} isAnimationActive={false} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </>
             )}
 
             {/* Legend */}
