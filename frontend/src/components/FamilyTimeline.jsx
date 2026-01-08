@@ -130,15 +130,21 @@ const FamilyTimeline = ({ members, familyId }) => {
         const effLayer = data.effective_intensity_layer.axes[selectedAxis] || [];
         const transLayer = data.transit_layer.axes[selectedAxis] || [];
         const guideLayer = data.guidance_layer.axes[selectedAxis] || [];
-        // ROBUST: Ensure we access the correct trace point by Time
         const traceLayer = data.trace_layer?.axes?.[selectedAxis] || [];
+
+        // Forward-fill helper for sparse trace data
+        let lastTrace = {};
 
         return effLayer.map((pt, idx) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
 
-            // ROBUST: Find by time to avoid index misalignment
-            const trace = traceLayer.find(t => t.time === pt.time) || {};
+            // Try to find exact match
+            const exactTrace = traceLayer.find(t => t.time === pt.time);
+            if (exactTrace) lastTrace = exactTrace;
+
+            // Use exact or fall back to last known (forward fill)
+            const trace = exactTrace || lastTrace;
 
             const memberPoints = {};
             if (members && data.individual_dasha_layer) {
