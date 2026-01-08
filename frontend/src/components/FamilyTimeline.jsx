@@ -31,7 +31,7 @@ const FamilyTimeline = ({ members, familyId }) => {
 
     const [focusedMemberId, setFocusedMemberId] = useState(null);
     const [hoveredMemberId, setHoveredMemberId] = useState(null);
-    const [hoveringFamilyLine, setHoveringFamilyLine] = useState(false); // Track if hovering family line
+    const [hoveringFamilyLine, setHoveringFamilyLine] = useState(false);
     const [activePoint, setActivePoint] = useState(null);
 
     // Fetch Interpretations
@@ -130,12 +130,15 @@ const FamilyTimeline = ({ members, familyId }) => {
         const effLayer = data.effective_intensity_layer.axes[selectedAxis] || [];
         const transLayer = data.transit_layer.axes[selectedAxis] || [];
         const guideLayer = data.guidance_layer.axes[selectedAxis] || [];
+        // ROBUST: Ensure we access the correct trace point by Time
         const traceLayer = data.trace_layer?.axes?.[selectedAxis] || [];
 
         return effLayer.map((pt, idx) => {
             const tr = transLayer[idx] || {};
             const gd = guideLayer[idx] || {};
-            const trace = traceLayer[idx] || {};
+
+            // ROBUST: Find by time to avoid index misalignment
+            const trace = traceLayer.find(t => t.time === pt.time) || {};
 
             const memberPoints = {};
             if (members && data.individual_dasha_layer) {
@@ -149,7 +152,7 @@ const FamilyTimeline = ({ members, familyId }) => {
             return {
                 time: pt.time,
                 intensity: pt.effective_intensity,
-                familyBase: trace.family_intensity !== undefined ? trace.family_intensity : pt.family_intensity,
+                familyBase: trace.family_intensity !== undefined ? trace.family_intensity : (pt.family_intensity || 0),
                 gate: tr.gate,
                 guidance_key: gd.guidance_key,
                 dominant_planet: tr.dominant_planet,
@@ -200,13 +203,6 @@ const FamilyTimeline = ({ members, familyId }) => {
 
         const gate = pt.gate;
 
-        // Determination Logic:
-        // 1. If Hovering Family Line -> Show Family
-        // 2. If Hovering Member -> Show Member
-        // 3. If Focused Member -> Show Focused Member
-        // 4. Else -> Show Family
-
-        // Color Mapping
         const getMemberColor = (id) => {
             const index = members.findIndex(m => m.id === id);
             return index >= 0 ? MEMBER_COLORS[index % MEMBER_COLORS.length] : '#9ca3af';
@@ -214,7 +210,7 @@ const FamilyTimeline = ({ members, familyId }) => {
 
         let subjectId = null;
         if (hoveringFamilyLine) {
-            subjectId = null; // Explicit Family View
+            subjectId = null;
         } else {
             subjectId = hoveredMemberId || focusedMemberId;
         }
@@ -283,7 +279,7 @@ const FamilyTimeline = ({ members, familyId }) => {
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#e6e6e6' }}>Family Context</span>
-                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {pt.familyBase?.toFixed(0) || pt.intensity?.toFixed(0)}</span>
+                                <span style={{ fontSize: '12px', background: '#374151', padding: '1px 5px', borderRadius: '4px' }}>Avg Intensity: {Math.round(pt.familyBase)}</span>
                             </div>
                             <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>Aggregate family timeline view. Select a member to see specifics.</div>
                         </div>
@@ -386,7 +382,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     );
                                 })}
 
-                                {/* Family Base Line - Dashed Grey */}
                                 <Line
                                     type="monotone" dataKey="familyBase" stroke="#6b7280" strokeDasharray="5 5" strokeWidth={2} dot={false}
                                     name="Family Base" isAnimationActive={false} activeDot={false}
@@ -396,21 +391,12 @@ const FamilyTimeline = ({ members, familyId }) => {
                                     }}
                                     onMouseLeave={() => setHoveringFamilyLine(false)}
                                 />
-                                {/* removed redundant Effective Intensity line or keep it for the focused user? 
-                                    Actually, usually we plot the 'focused' user as the main line. 
-                                    Here we plot ALL members. The 'Effective Intensity' line in previous code was ambiguous.
-                                    The User asked for Member Coloring. The previous code had a separate 'intensity' line.
-                                    If distinct members are plotted, we don't need a summary line overlapping them unless it's the Family Base.
-                                    Step 3872 had a generic 'intensity' line. I will REMOVE it to avoid confusion, 
-                                    as the colored member lines are the source of truth now.
-                                */}
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
                 </>
             )}
 
-            {/* Legend - Updated with Colors */}
             {members && (
                 <div style={{ display: 'flex', gap: '15px', marginTop: '10px', padding: '10px', background: '#111827', borderRadius: '8px', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '12px' }}>Focus Member:</span>
@@ -436,7 +422,6 @@ const FamilyTimeline = ({ members, familyId }) => {
                 </div>
             )}
 
-            {/* Current Guidance below chart */}
             {data && chartData.length > 0 && currentDisplayPoint && (
                 <div style={{ marginTop: '20px', padding: '15px', background: '#1f2937', borderRadius: '8px', borderLeft: '4px solid #e6c87a' }}>
                     <h3 style={{ margin: '0 0 10px 0', color: '#e6c87a' }}>Current Guidance ({currentDisplayPoint.time})</h3>
