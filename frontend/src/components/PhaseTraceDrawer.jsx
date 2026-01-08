@@ -437,23 +437,33 @@ improvement or decline.`;
                 {/* Section 4: Calculation Logic (New) */}
                 {intensity !== undefined && multiplier !== undefined && (
                     <section style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed #374151' }}>
-                        <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', margin: '0 0 12px 0' }}>Calculation Logic</h4>
+                        <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', margin: '0 0 8px 0' }}>Calculation Logic</h4>
+
+                        {/* Formula Text */}
+                        <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '12px', fontFamily: 'monospace' }}>
+                            Formula: Dasha Base × Transit Multiplier = Final
+                        </div>
+
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px', color: '#d1d5db' }}>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Base (Dasha)</div>
-                                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{Math.round(intensity / multiplier)}</div>
-                            </div>
-                            <div style={{ color: '#6b7280' }}>×</div>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Transit Mult</div>
-                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: multiplier < 1 ? '#ef4444' : (multiplier > 1 ? '#10b981' : '#d1d5db') }}>
-                                    {multiplier.toFixed(2)}
+                                <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>BASE (DASHA)</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e5e7eb' }}>
+                                    {Math.round(intensity / multiplier)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
                                 </div>
                             </div>
-                            <div style={{ color: '#6b7280' }}>=</div>
+                            <div style={{ color: '#6b7280', padding: '0 8px' }}>×</div>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ color: '#9ca3af', fontSize: '11px' }}>Final</div>
-                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e6c87a' }}>{Math.round(intensity)}</div>
+                                <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>TRANSIT MULT</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: multiplier < 1 ? '#ef4444' : (multiplier > 1 ? '#10b981' : '#d1d5db') }}>
+                                    {multiplier.toFixed(2)}x
+                                </div>
+                            </div>
+                            <div style={{ color: '#6b7280', padding: '0 8px' }}>=</div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ color: '#9ca3af', fontSize: '10px', marginBottom: '4px' }}>FINAL SCORE</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#e6c87a' }}>
+                                    {Math.round(intensity)} <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'normal' }}>pts</span>
+                                </div>
                             </div>
                         </div>
                     </section>
